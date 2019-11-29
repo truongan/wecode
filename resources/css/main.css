@@ -1,0 +1,288 @@
+blockquote {
+	border-left: 4px solid #DDD;
+	padding: 0 15px;
+	color: #777;
+	margin: 10px;
+}
+
+/********************************************/
+
+div.countdown {
+	padding: 0 8px;
+	background-color: #ff6d00;
+}
+
+div.time_block {
+	color: #f0f0f0;
+	float: left;
+	line-height: 40px;
+	padding: 0px 2px;
+}
+nav > a.navbar-brand{
+	line-height: 20px;
+}
+span.countdown_num {
+	font-size:1.15em;
+}
+
+span.time_label {
+	font-size: 70%;
+}
+
+div.top_object.top_left .top_menu{
+	left: 0;
+}
+
+div#extra_time {
+	display: none;
+	background-color: #c0392b;
+}
+
+div#extra_time span {
+	font-weight: bold;
+}
+
+div#extra_time i {
+	float: left;
+	line-height: 40px;
+	margin-right: 6px;
+}
+
+
+#mainNav{
+	padding:  0px 0.5em 0px 1em;
+}
+
+
+
+/*********************************************/
+
+/* sidebar colors */
+
+.color1 {color: #C52E26!important;}
+.color2 {color: #EE3A23!important;}
+.color3 {color: #FAA31B!important;}
+.color4 {color: #FAE80B!important;}
+.color5 {color: #CCDB29!important;}
+.color6 {color: #0DB297!important;}
+.color7 {color: #35C0CB!important;}
+.color8 {color: #22478A!important;}
+.color9 {color: #543680!important;}
+.color10 {color: #991B4A!important;}
+.color11 {color: #439427 !important;}
+.color12 {color: #3f78ba !important;}
+
+
+@media (min-width: 992px) {
+	.color-dashboard {border-color: #C52E26!important;}
+	.color-notifications {border-color: #EE3A23!important;}
+	.color-settings {border-color: #FAA31B!important;}
+	.color-users {border-color: #FAE80B!important;}
+	.color-problem_list {border-color: #CCDB29!important;}
+	.color-assignments {border-color: #0DB297!important;}
+	.color-problems {border-color: #35C0CB!important;}
+	.color-submit {border-color: #22478A!important;}
+	.color-all_submissions {border-color: #543680!important;}
+	.color-scoreboard {border-color: #991B4A!important;}
+
+	.color-dashboard.selected  {background-color: #C52E26!important;border-color: #C52E26!important;}
+	.color-notifications.selected  {background-color: #EE3A23!important;border-color: #EE3A23!important;}
+	.color-settings.selected  {background-color: #FAA31B!important;border-color: #FAA31B!important;}
+	.color-users.selected  {background-color: #FAE80B!important;border-color: #FAE80B!important;}
+	.color-problem_list.selected  {background-color: #CCDB29!important;border-color: #CCDB29!important;}
+	.color-assignments.selected  {background-color: #0DB297!important;border-color: #0DB297!important;}
+	.color-problems.selected  {background-color: #35C0CB!important;border-color: #35C0CB!important;}
+	.color-submit.selected  {background-color: #22478A!important;border-color: #22478A!important;}
+	.color-all_submissions.selected  {background-color: #543680!important;border-color: #543680!important;}
+	.color-scoreboard.selected  {background-color: #991B4A!important;border-color: #991B4A!important;}
+
+	#mainNav{
+		/*fix some theme add border to navbar*/
+		border-top: none!important;
+		border-left: none!important;
+		border-right: none!important;
+
+		border-bottom: 5px solid ;
+	}
+	.navbar-brand, .nav-link{
+		/* to fix some theme adding padding */
+		padding-top: 0rem!important;
+		padding-bottom: 0rem!important;
+	}
+	.navbar-sidenav{
+		/* background-color:#F2F2EA!important; */
+		/* box-shadow: #a9a9a9 4px 4px 4px; */
+		border-top: 5px solid #ffffff;
+	}
+	.navbar-sidenav > li.selected > .nav-link {
+		font-weight: bold;
+		color: #FFF!important;
+	}
+	.nav-item{
+		margin-right: 0!important; /* to counter-act wierd lux theme */
+	}
+
+	.navbar-sidenav  .nav-link, .sidenav-toggler .nav-link{
+		/* color: #595959 !important; */
+		padding: 0.75rem!important;
+	}
+
+	.navbar-sidenav li{
+		border-left: 5px solid #000;
+		border-bottom: 1px solid rgba(0,0,0,0.2) !important ;
+	}
+	.navbar-sidenav li:hover{
+		/* background-color: #FAFAFA */
+	}
+
+	.navbar-sidenav, .sidenav-toggler {
+		/* background-color:#696966!important; */
+		box-shadow: #a9a9a9 2px 2px 2px;
+	}
+
+
+	.sidenav-toggled .sidenav-bottom{
+		display: none!important;
+	}
+	.navbar-sidenav .sidenav-bottom{
+		display:block;
+		font-size: 0.75em;
+	}
+}
+
+.sidenav-bottom{
+	display: none;
+}
+
+/*********************************************/
+
+div.content-wrapper {
+	z-index: 0;
+	/* color: #595959; */
+	/* background-color: #f6f6f4; */
+}
+
+div#page_title {
+   padding: 10px 20px;
+   font-size: 1.25em;
+   position: relative;
+}
+
+
+span.title_menu_item {
+	font-size: 0.65em;
+	margin-left: 10px;
+	font-weight: normal;
+	vertical-align: middle;
+
+}
+
+
+div.content-wrapper div#main_content {
+	padding: 18px 15px 0px 15px;
+	overflow-x: auto;
+}
+
+/***************************************/
+
+.pointer {
+	cursor: pointer;
+}
+
+
+#ui-datepicker-div {
+	font-size: 0.75em !important;
+}
+
+/********************************************/
+ .wecode_table{
+	 width: 100%;
+ }
+
+ .wecode_table td, .wecode_table th {
+
+ 	text-align: center;
+ }
+
+/*****************************************************************/
+
+textarea.add_text {
+	font-size: 0.75em;
+	font-family: monospace;
+}
+
+
+/******* Dashboard *******/
+
+.shj_widget {
+	height: auto;
+	/* background-color: white; */
+	border: 1px solid #e3e3e3;
+	border-radius: 3px;
+	box-shadow: rgba(0, 0, 0, 0.3) 0 0 6px -2px;
+}
+
+#calendar h2{
+	font-size: 1.35em;
+}
+#calendar{
+	height: 100%;
+	padding: 10px;
+}
+
+.widget_title {
+	line-height: 30px;
+	padding: 0 6px 0 10px;
+	border-bottom: 1px solid #e3e3e3;
+	border-top-right-radius: 3px;
+	border-top-left-radius: 3px;
+	/* background: #fbfbfb; */
+	background: linear-gradient(top, #fbfbfb 0%, #f1f1f1 100%);
+}
+
+.widget_title i {
+	vertical-align: 0;
+	margin-right: 4px;
+}
+
+/******* notifications ************/
+
+div.notif {
+	padding: 7px;
+	border-bottom: 1px solid #CCC;
+	padding: 10px;
+	border: 1px solid #CCC;
+	border-radius: 3px;
+	margin: 20px 0;
+}
+
+div.notif > div.notif_title {
+	border-bottom: 1px solid #bbb;
+}
+
+div.notif_title {
+	font-size: 1em;
+	padding: 0 5px 0 5px;
+	font-weight: bold;
+	margin-bottom: 5px;
+}
+
+.notif_meta {
+	font-size: 0.6em;
+}
+
+div.notif_text {
+	padding:0 5px;
+	overflow: hidden;
+}
+
+
+/*  problems page */
+
+div.problems_widget {
+	/* background-color: #FCFCFC; */
+	border: 2px dashed #DDD;
+	box-shadow: 0 0 6px -2px #AAA;
+	margin: 15px 0 15px 15px;
+	padding: 10px;
+}
