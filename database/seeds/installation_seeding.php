@@ -45,13 +45,21 @@ class installation_seeding extends Seeder
 
         DB::table('languages')->insert(
             [
-['id' => 1,  'extension' => 	'c', 'default_time_limit' =>  	500, 'default_memory_limit' => 	50000 , 'sorting' => 20, 'name' => 	'C' ],
-['id' => 2,  'extension' => 	'cpp', 'default_time_limit' =>  	500, 'default_memory_limit' => 	50000 , 'sorting' => 10, 'name' => 	'C++' ],
-['id' => 3,  'extension' => 	'java', 'default_time_limit' =>  	500, 'default_memory_limit' => 	50000 , 'sorting' => 30, 'name' => 	'Java' ],
-['id' => 4,  'extension' => 	'py3', 'default_time_limit' =>  	500, 'default_memory_limit' => 	50000 , 'sorting' => 40, 'name' => 	'Python 3' ],
-['id' => 5,  'extension' => 	'py2', 'default_time_limit' =>  	500, 'default_memory_limit' => 	50000 , 'sorting' => 50, 'name' => 	'Python 2' ],
-['id' => 6,  'extension' => 	'pas', 'default_time_limit' =>  	500, 'default_memory_limit' => 	50000 , 'sorting' => 60, 'name' => 	'Free Pascal' ],
-['id' => 7,  'extension' => 	'numpy', 'default_time_limit' =>  	500, 'default_memory_limit' => 	50000 , 'sorting' => 70, 'name' => 	'numpy-mp' ],
+                ['id' => 1,  'extension' => 	'c', 'default_time_limit' =>  	500, 'default_memory_limit' => 	50000 , 'sorting' => 20, 'name' => 	'C' ],
+                ['id' => 2,  'extension' => 	'cpp', 'default_time_limit' =>  	500, 'default_memory_limit' => 	50000 , 'sorting' => 10, 'name' => 	'C++' ],
+                ['id' => 3,  'extension' => 	'java', 'default_time_limit' =>  	500, 'default_memory_limit' => 	50000 , 'sorting' => 30, 'name' => 	'Java' ],
+                ['id' => 4,  'extension' => 	'py3', 'default_time_limit' =>  	500, 'default_memory_limit' => 	50000 , 'sorting' => 40, 'name' => 	'Python 3' ],
+                ['id' => 5,  'extension' => 	'py2', 'default_time_limit' =>  	500, 'default_memory_limit' => 	50000 , 'sorting' => 50, 'name' => 	'Python 2' ],
+                ['id' => 6,  'extension' => 	'pas', 'default_time_limit' =>  	500, 'default_memory_limit' => 	50000 , 'sorting' => 60, 'name' => 	'Free Pascal' ],
+                ['id' => 7,  'extension' => 	'numpy', 'default_time_limit' =>  	500, 'default_memory_limit' => 	50000 , 'sorting' => 70, 'name' => 	'numpy-mp' ],
+            ]
+        );
+        DB::table('roles')->insert(
+            [
+                ['name' =>  'admin', 'id' => 1 ],
+                ['name' =>  'head_instructor', 'id' => 2 ],
+                ['name' =>  'instructor', 'id' => 3 ],
+                ['name' =>  'student', 'id' => '4' ],
             ]
         );
     }

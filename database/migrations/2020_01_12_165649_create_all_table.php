@@ -16,16 +16,19 @@ class CreateAllTable extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->char('username', 20);
-            $table->char('password', 100);
-            $table->char('display_name', 40);
-            $table->char('email', 40);
-            $table->char('role', 20);
-            $table->char('passchange_key', 60);
-            $table->dateTime('passchange_time');
+            $table->char('password', 255);
+            $table->char('display_name', 240);
+            $table->char('email', 240);
+            $table->unsignedInteger('role_id');
+            $table->char('remember_token', 100);
             $table->dateTime('first_login_time');
             $table->dateTime('last_login_time');
             $table->unsignedSmallInteger('selected_assigment');  
             $table->timestamps();
+        });
+        Schema::create('roles', function (Blueprint $table) {
+            $table->Increments('id');
+            $table->char('name', 50);
         });
         Schema::create('languages', function (Blueprint $table) {
             $table->bigIncrements('id');
