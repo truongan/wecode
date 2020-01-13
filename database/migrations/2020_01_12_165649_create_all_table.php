@@ -17,13 +17,13 @@ class CreateAllTable extends Migration
             $table->bigIncrements('id');
             $table->char('username', 20);
             $table->char('password', 255);
-            $table->char('display_name', 240);
+            $table->char('display_name', 240)->default('');
             $table->char('email', 240);
             $table->unsignedInteger('role_id');
-            $table->char('remember_token', 100);
-            $table->dateTime('first_login_time');
-            $table->dateTime('last_login_time');
-            $table->unsignedSmallInteger('selected_assigment');  
+            $table->rememberToken();
+            $table->dateTime('first_login_time')->nullable();
+            $table->dateTime('last_login_time')->nullable();
+            $table->unsignedSmallInteger('selected_assigment')->nullable();  
             $table->timestamps();
         });
         Schema::create('roles', function (Blueprint $table) {
@@ -140,7 +140,5 @@ class CreateAllTable extends Migration
         Schema::dropIfExists('problem_language');
         Schema::dropIfExists('notifications');
         Schema::dropIfExists('scoreboard');
-
-
     }
 }
