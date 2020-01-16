@@ -20,5 +20,13 @@ class UsersTableSeeder extends Seeder
             'password' => Hash::make('1234567890'),
             'role_id' => '1' //Admin
         ]);
+        DB::table('users')->insert([
+            'username' => 'testing',
+            'email' => 'test@def.com',
+            'display_name' => 'Tao la student',
+            // 'email' => Str::random(10).'@gmail.com',
+            'password' => Hash::make('1234567890'),
+            'role_id' => '4' //student
+        ]);
     }
 }
