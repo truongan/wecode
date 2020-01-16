@@ -49,7 +49,8 @@ class CreateAllTable extends Migration
             $table->timestamps();
         });
         Schema::create('settings', function (Blueprint $table) {
-            $table->char('key', 50);
+            $table->bigIncrements('id');
+            $table->char('key', 50)->unique();
             $table->text('value');
             $table->timestamps();
         });
