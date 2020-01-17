@@ -16,57 +16,57 @@
                     <span class="nav-link-text">Dashboard</span>
                 </a>
                 </li>
-                <li class="nav-item color-notifications{{ ($selected=="notifications") ? "selected" : ""}}">
+                <li class="nav-item color-notifications {{ ($selected=="notifications") ? "selected" : ""}}">
                     <a class="nav-link" href="{{ url('notifications') }}">
                         <i class="fa fa-fw fa-bell fa-lg"></i>
                         <span class="nav-link-text">Notifications</span>
                     </a>
                 </li>
                 {{-- {% if user.level == 3 %} --}}
-                <li class="nav-item color-settings{{ ($selected=="settings") ? "selected" : ""}}" >
+                <li class="nav-item color-settings {{ ($selected=="settings") ? "selected" : ""}}" >
                     <a class="nav-link" href="{{ url('settings') }}">
                         <i class="fa fa-fw fa-sliders-h fa-lg"></i>
                         <span class="nav-link-text">Settings</span>
                     </a>
                 </li>
-                <li class="nav-item color-users{{ ($selected=="users") ? "selected" : ""}}">
+                <li class="nav-item color-users {{ ($selected=="users") ? "selected" : ""}}">
                     <a class="nav-link" href="{{ url('users') }}">
                         <i class="fa fa-fw fa-users fa-lg"></i>
                         <span class="nav-link-text">Users</span>
                     </a>
                 </li>
-                <li class="nav-item color-problem_list{{ ($selected=="problems") ? "selected" : ""}}">
+                <li class="nav-item color-problem_list {{ ($selected=="problem_list") ? "selected" : ""}}">
                     <a class="nav-link" href="{{ url('problems') }}">
                         <i class="fas fa-fw fa-clipboard-list fa-lg"></i>
                         <span class="nav-link-text">Problem List</span>
                     </a>
                 </li>
                 {{-- {% endif %} --}}
-                <li class="nav-item color-assignments{{ ($selected=="assignments") ? "selected" : ""}}">
+                <li class="nav-item color-assignments {{ ($selected=="assignments") ? "selected" : ""}}">
                     <a class="nav-link" href="{{ url('assignments') }}">
                         <i class="fa fa-fw fa-folder-open fa-lg"></i>
                         <span class="nav-link-text">Assignments</span>
                     </a>
                 </li>
-                <li class="nav-item color-problems{{ ($selected=="view_problem") ? "selected" : ""}}">
+                <li class="nav-item color-problems {{ ($selected=="problems") ? "selected" : ""}}">
                     <a class="nav-link" href="{{ url('view_problem') }}">
                         <i class="fa fa-fw fa-puzzle-piece fa-lg"></i>
                         <span class="nav-link-text">Problems</span>
                     </a>
                 </li>
-                <li class="nav-item color-submit{{ ($selected=="submit") ? "selected" : ""}}">
+                <li class="nav-item color-submit {{ ($selected=="submit") ? "selected" : ""}}">
                     <a class="nav-link" href="{{ url('submit') }}">
                         <i class="fas fa-fw fa-code fa-lg"></i>
                         <span class="nav-link-text">Code Editor</span>
                     </a>
                 </li>
-                <li class="nav-item color-all_submissions{{ ($selected=="submissions") ? "selected" : ""}}">
+                <li class="nav-item color-all_submissions {{ ($selected=="all_submissions") ? "selected" : ""}}">
                     <a class="nav-link" href="{{ url('submissions/') }}">
                         <i class="fa fa-fw fa-bars fa-lg"></i>
                         <span class="nav-link-text">Submissions</span>
                     </a>
                 </li>
-                <li class="nav-item color-scoreboard{{ ($selected=="scoreboard") ? "selected" : ""}}">
+                <li class="nav-item color-scoreboard {{ ($selected=="scoreboard") ? "selected" : ""}}">
                     <a class="nav-link" href="{{ url('scoreboard') }}">
                         <i class="fa fa-fw fa-star fa-lg"></i>
                         <span class="nav-link-text">Scoreboard</span>
