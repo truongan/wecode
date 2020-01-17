@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
-@section('title')
-Ở đây là title
-@endsection
+@section('icon', 'fas fa-star')
+
+@section('title', 'Scoreboard')
 
 @section('content')
 Nội dung ghi ở đây nè :3
