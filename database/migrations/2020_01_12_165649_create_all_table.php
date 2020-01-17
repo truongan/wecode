@@ -15,10 +15,10 @@ class CreateAllTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->char('username', 20);
+            $table->char('username', 20)->unique();
             $table->char('password', 255);
-            $table->char('display_name', 240)->default('');
-            $table->char('email', 240);
+            $table->char('display_name', 240)->nullable()->unique();
+            $table->char('email', 240)->unique();
             $table->unsignedInteger('role_id');
             $table->rememberToken();
             $table->dateTime('first_login_time')->nullable();
@@ -49,7 +49,8 @@ class CreateAllTable extends Migration
             $table->timestamps();
         });
         Schema::create('settings', function (Blueprint $table) {
-            $table->char('key', 50);
+            $table->bigIncrements('id');
+            $table->char('key', 50)->unique();
             $table->text('value');
             $table->timestamps();
         });
