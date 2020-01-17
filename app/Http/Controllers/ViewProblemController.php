@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class SettingController extends Controller
+class ViewProblemController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -24,6 +24,6 @@ class SettingController extends Controller
     public function index()
     {
 
-        return view('settings', ['selected' => 'settings']);
+        return view('view_problem', ['selected' => 'problems']);
     }
 }
