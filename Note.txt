@@ -1,0 +1,11 @@
+User controller:
+	Index
+	(Add có 2 chức năng 
+		Nếu add là nhận kết quả từ form thì nó thêm user rồi hiện view kết quả
+		Nếu add không phải phương thức post thì sẽ hiện form để add user
+		Tương đương trong laravel đc tách thành store và create)
+	Create (get)
+	Store (post)
+	Destroy (Delete trong Code cũ)
+	Update (profile cũ)
+	Edit (profile cũ)
