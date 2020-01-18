@@ -104,6 +104,5 @@ class UserController extends Controller
         $user = User::find($user->id);
         $user->delete();
         return redirect('users');  
-
-
+    }
 }
