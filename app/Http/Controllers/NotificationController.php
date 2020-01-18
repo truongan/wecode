@@ -50,6 +50,12 @@ class NotificationController extends Controller
         return view('notifications', ['selected' => 'notifications']);
     }
 
+    public function get(Request $request)
+    {
+        $notification = Notifications::find($request->id);
+        return view('notifications', ['selected' => 'notifications']);
+    }
+    
     public function index()
     {
         return view('notifications', ['selected' => 'notifications']);
