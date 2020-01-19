@@ -59,7 +59,7 @@ class installation_seeding extends Seeder
                 ['name' =>  'admin', 'id' => 1 ],
                 ['name' =>  'head_instructor', 'id' => 2 ],
                 ['name' =>  'instructor', 'id' => 3 ],
-                ['name' =>  'student', 'id' => '4' ],
+                ['name' =>  'student', 'id' => 4 ],
             ]
         );
     }

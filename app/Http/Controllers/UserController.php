@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Illuminate\Http\Request;
+use Hash;
 
 class UserController extends Controller
 {
@@ -18,7 +19,7 @@ class UserController extends Controller
         $this->middleware('auth');
     }
 
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -27,7 +28,18 @@ class UserController extends Controller
     public function index()
     {
         //
-        return view('user.list',['users'=>User::all()]); 
+        return view('users.list',['users'=>User::all()]); 
+    }
+
+    /**
+     * Show the profile for the given user.
+     *
+     * @param  int  $id
+     * @return View
+     */
+    public function show($id)
+    {
+        return view('users.show', ['user' => User::findOrFail($id)]);
     }
 
     /**
@@ -38,7 +50,7 @@ class UserController extends Controller
     public function create()
     {
         //
-        return view('user.create');
+        return view('users.create');
     }
 
     /**
@@ -54,8 +66,8 @@ class UserController extends Controller
         $user->username=$request->username;
         $user->password=bcrypt($request->password);
         $user->display_name=$request->username;
-        $user->email=$request->username;
-        $user->role_id=0;
+        $user->email=$request->email;
+        $user->role_id=4;
         $user->first_login_time=date('Y-m-d H:i:s');
         $user->last_login_time=date('Y-m-d H:i:s');
         $user->selected_assigment=0;
@@ -73,7 +85,7 @@ class UserController extends Controller
     public function edit(User $user)
     {
         //
-        return view('user.edit', compact('user'));
+        return view('users.edit', compact('user'));
     }
 
     /**
@@ -87,7 +99,11 @@ class UserController extends Controller
     {
         //
         $user->username=$request->username;
-        $user->password=bcrypt($request->password);
+        $user->display_name=$request->display_name;
+        if ($request->password!="")
+        {
+            $user->password=Hash::make($request->password);
+        }
         $user->save();
         return redirect('users');
     }
@@ -104,6 +120,6 @@ class UserController extends Controller
         $user = User::find($user->id);
         $user->delete();
         return redirect('users');  
-
+    }
 
 }
