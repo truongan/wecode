@@ -30,4 +30,5 @@ th {
   </tr>
   @endforeach
 </table>
+<a href="{{ route('users.create', $user) }}" class = "btn btn-success">Create</a>
 </html>
