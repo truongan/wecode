@@ -64,13 +64,12 @@ class UserController extends Controller
         //
         $user=new User;
         $user->username=$request->username;
-        $user->password=bcrypt($request->password);
+        $user->password=Hash::make($request->password);
         $user->display_name=$request->username;
         $user->email=$request->email;
-        $user->role_id=4;
-        $user->first_login_time=date('Y-m-d H:i:s');
-        $user->last_login_time=date('Y-m-d H:i:s');
-        $user->selected_assigment=0;
+        if ($request->role_id!="")
+            $user->role_id=$request->role_id;
+        else $user->role_id=4;
         $user->save();
         return redirect('users');
     }
@@ -101,9 +100,7 @@ class UserController extends Controller
         $user->username=$request->username;
         $user->display_name=$request->display_name;
         if ($request->password!="")
-        {
             $user->password=Hash::make($request->password);
-        }
         $user->save();
         return redirect('users');
     }
