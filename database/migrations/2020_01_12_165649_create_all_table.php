@@ -131,6 +131,7 @@ class CreateAllTable extends Migration
     public function down()
     {
         Schema::dropIfExists('users');
+        Schema::dropIfExists('roles');
         Schema::dropIfExists('languages');
         Schema::dropIfExists('problems');
         Schema::dropIfExists('settings');

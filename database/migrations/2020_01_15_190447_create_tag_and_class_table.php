@@ -28,6 +28,20 @@ class CreateTagAndClassTable extends Migration
             $table->bigIncrements('id');
             $table->timestamps();
         });
+        Schema::create('class_user', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->bigInteger('class_id');
+            $table->bigInteger('user_id');
+            $table->timestamps();
+            $table->index(['class_id','user_id']);
+        });
+        Schema::create('assignment_class', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->bigInteger('assignment_id');
+            $table->bigInteger('class_id');
+            $table->timestamps();
+            $table->index(['class_id','assignment_id']);
+        });
     }
 
     /**
@@ -38,6 +52,9 @@ class CreateTagAndClassTable extends Migration
     public function down()
     {
         Schema::dropIfExists('tags');
+        Schema::dropIfExists('problem_tag');
         Schema::dropIfExists('classes');
+        Schema::dropIfExists('assignment_class');
+        Schema::dropIfExists('class_user');
     }
 }
