@@ -53,6 +53,13 @@ class UserController extends Controller
         return view('users.create');
     }
 
+    public function add()
+    {
+        //
+        return view('users.add');
+    }
+
+
     /**
      * Store a newly created resource in storage.
      *
