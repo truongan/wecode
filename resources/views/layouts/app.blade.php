@@ -41,5 +41,30 @@
         </div>
     
     </div>
+    {{-- <script type="text/javascript" src="{{ asset('assets/js/jquery-3.2.1.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/popper.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
+
+    <script type="text/javascript" src="{{ asset('assets/js/moment.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/jquery.cookie.js') }}"></script>
+    <script type='text/javascript' src="{{ asset('assets/sbadmin/js/sb-admin.min.js') }}"></script>
+
+    <script	src="{{ asset('assets/js/notify.min.js') }}"></script> --}}
+
+    {{-- <script type="text/javascript">
+        shj={};
+        shj.site_url = '{{ rtrim(site_url(),'/')|e('js') }}/';
+        shj.base_url = '{{ rtrim(base_url(),'/')|e('js') }}/';
+        shj.csrf_token = $.cookie('csrf_cookie');
+        shj.offset = moment('{{ shj_now_str() }}').diff(moment());
+        shj.time = moment();
+        shj.finish_time = moment("{{ user.selected_assignment.finish_time|raw }}");
+        shj.extra_time = moment.duration({{ user.selected_assignment.extra_time|raw }}, 'seconds');
+        shj.color_scheme = 'github';
+    </script> --}}
+
+    
+    {{-- <script type="text/javascript" src="{{ asset('assets/js/shj_functions.js') }}"></script> --}}
+    @yield('body_end')
 </body>
 </html>

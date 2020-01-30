@@ -61,7 +61,7 @@ class UserController extends Controller
     public function add()
     {
         //
-        return view('users.add');
+        return view('users.add', ['selected' => 'users']);
     }
 
 
