@@ -14,7 +14,7 @@ class installation_seeding extends Seeder
         //
         DB::table('settings')->insert(
             array(
-                array('key' => 'site_name',               'value' => '_sitenametobereplace_'),
+                array('key' => 'site_name',              'value' => '_sitenametobereplace_'),
                 array('key' => 'timezone',               'value' => 'Asia/Ho_Chi_Minh'),
                 array('key' => 'tester_path',            'value' => base_path() . '/tester'),
                 array('key' => 'assignments_root',       'value' => base_path() . '/assignments'),

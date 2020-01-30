@@ -28,6 +28,7 @@ class UserController extends Controller
     public function index()
     {
         //
+        // var_dump(User::all());die();
         return view('users.list',['users'=>User::all(), 'selected' => 'users']); 
     }
 
@@ -52,7 +53,11 @@ class UserController extends Controller
         //
         return view('users.create');
     }
-
+    
+    /**
+     * Show the form for creating adding multiple users 
+     * @return \Illuminate\Http\Response
+     */
     public function add()
     {
         //
