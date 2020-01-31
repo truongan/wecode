@@ -64,6 +64,21 @@ class UserController extends Controller
         return view('users.add', ['selected' => 'users']);
     }
 
+    public function delete()
+	{
+		if ( ! $this->input->is_ajax_request() )
+			show_404();
+		$user_id = $this->input->post('user_id');
+		if ( ! is_numeric($user_id) )
+			$json_result = array('done' => 0, 'message' => 'Input Error');
+		elseif ($this->user_model->delete_user($user_id))
+			$json_result = array('done' => 1);
+		else
+			$json_result = array('done' => 0, 'message' => 'Deleting User Failed');
+
+		$this->output->set_header('Content-Type: application/json; charset=utf-8');
+		echo json_encode($json_result);
+	}
 
     /**
      * Store a newly created resource in storage.

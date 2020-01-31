@@ -10,7 +10,7 @@
 @endsection
 
 @section('body_end')
-{{-- <script type='text/javascript' src="{{ base_url('assets/js/taboverride.min.js') }}"></script>
+<script type='text/javascript' src="{{ asset('assets/js/taboverride.min.js') }}"></script>
 <script>
 	$(document).ready(function(){
 		tabOverride.set(document.getElementsByTagName('textarea'));
@@ -21,7 +21,8 @@
 		$("#add_users_button").click(function(){
 			$("#loading").css('display','inline');
 			$.post(
-					'{{ site_url("users/add") }}',
+					'{{ url("users/add") }}', 
+					// Chỗ ni bỏ cái đường link dẫn tới hàm add á nha
 			{
 				send_mail: ($("#send_mail").is(":checked")?1:0),
 				delay: $("#delay").val(),
@@ -34,7 +35,7 @@
 			);
 		});
 	});
-</script> --}}
+</script>
 @endsection
 
 @section('content')
@@ -53,19 +54,18 @@
 
 <div class="form-group col-12">
     <textarea name="new_users" id="new_users" rows="15" class="form-control add_text">
-# Lines starting with a # sign are comments.
-# Each line (except comments) represents a user.
-# The syntax of each line is:
-#
-# USERNAME, EMAIL, PASSWORD, ROLE, DISPLAY_NAME
-#
-# Roles: admin head_instructor instructor student
-# You can use RANDOM[n] for password to generate random n-digit password.
-</textarea>
+	# Lines starting with a # sign are comments.
+	# Each line (except comments) represents a user.
+	# The syntax of each line is:
+	#
+	# USERNAME, EMAIL, PASSWORD, ROLE, DISPLAY_NAME
+	#
+	# Roles: admin head_instructor instructor student
+	# You can use RANDOM[n] for password to generate random n-digit password.
+	</textarea>
 </div>
 
 <div class="form-group col-12">
-
     <input type="submit" class="btn btn-primary" id="add_users_button" value="Add Users"/>
     <span id="loading" style="display: none;"><img src="{{ asset('assets/images/loading.gif') }}" /> Adding users... Please wait</span>
 </div>
