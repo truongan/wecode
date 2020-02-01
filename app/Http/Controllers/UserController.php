@@ -51,6 +51,7 @@ class UserController extends Controller
     public function create()
     {
         //
+       
         return view('users.create');
     }
     
@@ -58,10 +59,17 @@ class UserController extends Controller
      * Show the form for creating adding multiple users 
      * @return \Illuminate\Http\Response
      */
-    public function add()
+    public function add(Request $request)
     {
-        //
-        return view('users.add', ['selected' => 'users']);
+        if ($request->has(['new_users'])) {
+            // nếu data lên thì sẽ xử lý cục data có name new_users 
+            // hiện tại data lên thì nó sẽ return về view_problem
+            return view('view_problem', ['selected' => 'problems']);
+        }
+        else
+            // nếu k phải phuong thức add thì nó cứ để view add 
+            return view('users.add', ['selected' => 'users']);
+        
     }
 
     public function delete()

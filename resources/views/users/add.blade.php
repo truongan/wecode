@@ -16,19 +16,19 @@
 		tabOverride.set(document.getElementsByTagName('textarea'));
 	});
 </script>
-<script>
+<script> 
 	$(document).ready(function(){
 		$("#add_users_button").click(function(){
 			$("#loading").css('display','inline');
 			$.post(
-					'{{ url("users/add") }}', 
+					'{!! route('users.add') !!}', 
 					// Chỗ ni bỏ cái đường link dẫn tới hàm add á nha
-			{
-				send_mail: ($("#send_mail").is(":checked")?1:0),
-				delay: $("#delay").val(),
-				new_users:$("#new_users").val(),
-				wcj_csrf_name: shj.csrf_token
-			},
+					{
+						send_mail: ($("#send_mail").is(":checked")?1:0),
+						delay: $("#delay").val(),
+						new_users:$("#new_users").val(),
+						wcj_csrf_name: shj.csrf_token
+					},
 					function(data) {
 						$("#main_content").html(data);
 					}
