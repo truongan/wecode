@@ -21,9 +21,10 @@
 		$("#add_users_button").click(function(){
 			$("#loading").css('display','inline');
 			$.post(
-					'{!! route('users.add') !!}', 
-					// Chỗ ni bỏ cái đường link dẫn tới hàm add á nha
+					'/users/adds', 
+					// Chỗ ni bỏ cái đường link dẫn tới hàm add
 					{
+						'_token': $('meta[name=csrf-token]').attr('content'),
 						send_mail: ($("#send_mail").is(":checked")?1:0),
 						delay: $("#delay").val(),
 						new_users:$("#new_users").val(),
@@ -54,17 +55,17 @@
 
 <div class="form-group col-12">
     <textarea name="new_users" id="new_users" rows="15" class="form-control add_text">
-	# Lines starting with a # sign are comments.
+# Lines starting with a # sign are comments.
 	# Each line (except comments) represents a user.
-	# The syntax of each line is:
-	#
-	# USERNAME, EMAIL, PASSWORD, ROLE, DISPLAY_NAME
-	#
-	# Roles: admin head_instructor instructor student
-	# You can use RANDOM[n] for password to generate random n-digit password.
-	</textarea>
+# The syntax of each line is:
+#
+# USERNAME, EMAIL, PASSWORD, ROLE, DISPLAY_NAME
+#
+# Roles: admin head_instructor instructor student
+# You can use RANDOM[n] for password to generate random n-digit password.
+</textarea>
 </div>
-
+<meta name="csrf-token" content="{!! Session::token() !!}">
 <div class="form-group col-12">
     <input type="submit" class="btn btn-primary" id="add_users_button" value="Add Users"/>
     <span id="loading" style="display: none;"><img src="{{ asset('assets/images/loading.gif') }}" /> Adding users... Please wait</span>
