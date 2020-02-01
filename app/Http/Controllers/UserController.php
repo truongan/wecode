@@ -51,6 +51,7 @@ class UserController extends Controller
     public function create()
     {
         //
+       
         return view('users.create');
     }
     
@@ -58,12 +59,34 @@ class UserController extends Controller
      * Show the form for creating adding multiple users 
      * @return \Illuminate\Http\Response
      */
-    public function add()
+    public function add(Request $request)
     {
-        //
-        return view('users.add');
+        if ($request->has(['new_users'])) {
+            
+            // nếu data lên thì sẽ xử lý cục data có name new_users 
+            // hiện tại data lên thì nó sẽ return về add_result
+            return view('users.add_result');
+        }
+        else
+            // nếu k phải phuong thức add thì nó cứ để view add 
+            return view('users.add', ['selected' => 'users']);
     }
 
+    public function delete()
+	{
+		if ( ! $this->input->is_ajax_request() )
+			show_404();
+		$user_id = $this->input->post('user_id');
+		if ( ! is_numeric($user_id) )
+			$json_result = array('done' => 0, 'message' => 'Input Error');
+		elseif ($this->user_model->delete_user($user_id))
+			$json_result = array('done' => 1);
+		else
+			$json_result = array('done' => 0, 'message' => 'Deleting User Failed');
+
+		$this->output->set_header('Content-Type: application/json; charset=utf-8');
+		echo json_encode($json_result);
+	}
 
     /**
      * Store a newly created resource in storage.

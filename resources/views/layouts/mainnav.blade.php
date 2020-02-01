@@ -1,5 +1,5 @@
 <nav id="mainNav" class="mainNav navbar navbar-expand-lg navbar-dark fixed-top color-{{ $selected }} bg-dark">
-        <a  class="navbar-brand" href="{{ url('/') }}">
+        <a  class="navbar-brand" href="{{ url('/home') }}">
             <img src="{{ asset('images/logo.png') }}" height="30px" />
             {{ env('APP_NAME') }}
         </a>
