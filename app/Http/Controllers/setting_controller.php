@@ -30,6 +30,7 @@ class setting_controller extends Controller
         foreach($t as $setting){
             $data[$setting->key] = $setting->value;
         }
+        // $data['selected'] = 'settings';
         // var_dump($data);die();
         return view('settings', $data);
     }

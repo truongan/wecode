@@ -1,4 +1,5 @@
-{{ $selected='settings' }}@extends('layouts.app')
+@php($selected = 'settings')
+@extends('layouts.app')
 
 @section('icon', 'fas fa-sliders-h')
 
@@ -18,7 +19,6 @@
 @endif
 
 @if(! ($defc ?? '') )
-
 	<div class="alert alert-danger">"Tester path" is not correct.</div>
 @endif 
 
