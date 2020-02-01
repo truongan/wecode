@@ -21,5 +21,8 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/users/add', 'UserController@add')->name('users.add');
 
+Route::get('/settings', 'setting_controller@index')->name('settings.index');
+Route::post('/settings', 'setting_controller@update')->name('settings.update');
+
 //Resource route phải được  ghi cuối cùng, nếu không các route sau dính tới /usres sẽ ăn shit 
 Route::resource('users','UserController');
