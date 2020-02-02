@@ -48,7 +48,6 @@
           <td>
             <a title="Profile" href="{{ route('users.show', $user) }}" class = "fas fa-address-book fa-lg color0"></a>
             <a title="Edit" href="{{ route('users.edit', $user) }}"><i class="fas fa-user-edit fa-lg color9"></i></a>
-            <a title="Delete User" href="{{ route('users.destroy', $user) }}"><i title="Delete User" class="fa fa-user-times fa-lg color2"></i></a>
             <a title="Submissions" href="{{ url('submissions/all/user/'.$user->username) }}"><i class="fa fa-bars fa-lg color12"></i></a>
             <span title="Delete User" class="delete-btn delete_user pointer"><i title="Delete User" class="fa fa-user-times fa-lg color2"></i></span>
             <span title="Delete Submissions" class="delete-btn delete_submissions pointer"><i class="fa fa-times-circle fa-lg color1"></i></span>
@@ -63,6 +62,7 @@
 @endsection
 
 @section('body_end')
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <div class="modal fade" id="user_delete" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -94,9 +94,8 @@ $(document).ready(function(){
 		var row = $(this).parents('tr');
 		var user_id = row.data('id');
 		var username = row.children('#un').html();
-
+    var token = $("meta[name='csrf-token']").attr("content");
 		var del_submssion = $(this).hasClass('delete_submissions');
-
 		if (del_submssion) $(".modal-title").html("Are you sure you want to delete this user's SUBMISSIONS?");
 		else $(".modal-title").html("Are you sure you want to delete this user?");
 
@@ -105,27 +104,29 @@ $(document).ready(function(){
 		$(".confirm-user-delete").click(function(){
 			console.log(del_submssion);
 			$.ajax({
-				type: 'POST',
-				url: (del_submssion ? shj.site_url+'users/delete_submissions' : shj.site_url+'users/delete'),
+				url: (del_submssion ? 'users/delete_submissions' : 'users/'+user_id),
+        type: 'DELETE',
 				data: {
 					user_id: user_id,
-					wcj_csrf_name: shj.csrf_token
+					// wcj_csrf_name: shj.csrf_token,
+          "_token": token,
 				},
 				error: shj.loading_error,
-				success: function(response){
-					if (response.done)
-					{
-						if (!del_submssion){
-							row.animate({backgroundColor: '#FF7676'},1000, function(){row.remove();});
-							$.notify('User '+username+' deleted.', {position: 'bottom right', className: 'success', autoHideDelay: 5000});
-						} else {
-							$.notify('All of User '+username+'\'s submissions deleted.', {position: 'bottom right', className: 'success', autoHideDelay: 5000});
-						}
-						$("#user_delete").modal("hide");
-					}
-					else
-						shj.loading_failed(response.message);
-				}
+				success: function (response){
+            console.log(response.done);
+            if (response.done)
+            {
+              if (!del_submssion){
+                row.animate({backgroundColor: '#FF7676'},1000, function(){row.remove();});
+                $.notify('User '+username+' deleted.', {position: 'bottom right', className: 'success', autoHideDelay: 5000});
+              } else {
+                $.notify('All of User '+username+'\'s submissions deleted.', {position: 'bottom right', className: 'success', autoHideDelay: 5000});
+              }
+              $("#user_delete").modal("hide");
+            }
+            else
+              shj.loading_failed(response.message);
+        }
 			});
 		});
 		$("#user_delete").modal("show");
