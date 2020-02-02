@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Setting;
 use Illuminate\Http\Request;
 
-class SettingController extends Controller
+class setting_controller extends Controller
 {
+    //
     /**
      * Create a new controller instance.
      *
@@ -23,7 +25,17 @@ class SettingController extends Controller
      */
     public function index()
     {
+        $t = Setting::all();
+        $data;
+        foreach($t as $setting){
+            $data[$setting->key] = $setting->value;
+        }
+        // $data['selected'] = 'settings';
+        // var_dump($data);die();
+        return view('settings', $data);
+    }
+    
+    public function update(Request $request){
 
-        return view('settings', ['selected' => 'settings']);
     }
 }
