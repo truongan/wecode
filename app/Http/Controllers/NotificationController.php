@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Notification;
 
 class NotificationController extends Controller
 {
@@ -54,8 +55,9 @@ class NotificationController extends Controller
 		// $this->form_validation->set_rules('text', 'text', ''); /* todo: xss clean */
 
 		// if($this->form_validation->run()){
-		// 	if ($this->input->post('id') === NULL)
-		// 		$this->notifications_model->add_notification($this->input->post('title'), $this->input->post('text'));
+		    if ($request['id'] === NULL)
+            	Notification::create($request->input());
+        // var_dump($request->input());die();
 		// 	else
 		// 		$this->notifications_model->update_notification($this->input->post('id'), $this->input->post('title'), $this->input->post('text'));
 		// 	redirect('notifications');
