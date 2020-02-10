@@ -3,61 +3,110 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Notification;
 
 class NotificationController extends Controller
 {
     /**
-     * Create a new controller instance.
+     * Display a listing of the resource.
      *
-     * @return void
+     * @return \Illuminate\Http\Response
      */
-    public function __construct()
+    public function index()
     {
-        $this->middleware('auth');
+        //
+        return view('notifications.list');
     }
 
     /**
-     * Show the application dashboard.
+     * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Contracts\Support\Renderable
+     * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Notification $notifications)
+    public function create()
     {
-        $notifications->title = $request->title;
-        $notifications->text = $request->text;
-        $notifications->dataTime = dataTime('time');
-        $notifications->timestamps();
-        $notifications->save();
-        return view('notifications', ['selected' => 'notifications']);
+        //
+        return view('notifications.create');
     }
 
-    public function add(Request $request)
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
     {
-        $notifications = new Notification;
-        $notifications->title = $request->title;
-        $notifications->text = $request->text;
-        $notifications->dataTime = dataTime('time');
-        $notifications->timestamps();
-        $notifications->save();
-        return view('notifications', ['selected' => 'notifications']);
+        //
+        // echo ($this->);
+        // if ( $this->user->level <=1) // permission denied
+		// 	show_404();
+
+		// $this->form_validation->set_rules('title', 'title', 'trim');
+		// $this->form_validation->set_rules('text', 'text', ''); /* todo: xss clean */
+
+		// if($this->form_validation->run()){
+		// 	if ($this->input->post('id') === NULL)
+		// 		$this->notifications_model->add_notification($this->input->post('title'), $this->input->post('text'));
+		// 	else
+		// 		$this->notifications_model->update_notification($this->input->post('id'), $this->input->post('title'), $this->input->post('text'));
+		// 	redirect('notifications');
+		// }
+
+		// $data = array(
+		// 	'all_assignments' => $this->assignment_model->all_assignments(),
+		// 	'notif_edit' => $this->notif_edit
+		// );
+
+		// if ($this->notif_edit !== FALSE)
+		// 	$data['title'] = 'Edit Notification';
+
+
+        // $this->twig->display('pages/admin/add_notification.twig', $data);
+        return view('notifications.add');
     }
 
-    public function destroy(Notification $notification)
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
     {
-        $notification = Notification::find($notification->id);
-        $notification->delete();
-        return view('notifications', ['selected' => 'notifications']);
+        //
     }
 
-    public function get(Request $request)
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
     {
-        $notification = Notifications::find($request->id);
-        return view('notifications', ['selected' => 'notifications']);
+        //
     }
-    
-    public function index()
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
     {
-        return view('notifications', ['selected' => 'notifications']);
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        //
     }
 }
