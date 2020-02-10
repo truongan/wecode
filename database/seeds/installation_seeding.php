@@ -40,6 +40,7 @@ class installation_seeding extends Seeder
                 array('key' => 'results_per_page_final', 'value' => '80'),
                 array('key' => 'week_start',             'value' => '1'),
                 array('key' => 'theme',             'value' => 'default'),
+                ['key'=> 'concurent_queue_process', 'value'=> '2'],
             )
         );
 

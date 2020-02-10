@@ -22,26 +22,17 @@
                         <span class="nav-link-text">Notifications</span>
                     </a>
                 </li>
-                {{-- {% if user.level == 3 %} --}}
-                <li class="nav-item color-settings {{ ($selected=="settings") ? "selected" : ""}}" >
-                    <a class="nav-link" href="{{ url('settings') }}">
-                        <i class="fa fa-fw fa-sliders-h fa-lg"></i>
-                        <span class="nav-link-text">Settings</span>
-                    </a>
-                </li>
-                <li class="nav-item color-users {{ ($selected=="users") ? "selected" : ""}}">
-                    <a class="nav-link" href="{{ url('users') }}">
-                        <i class="fa fa-fw fa-users fa-lg"></i>
-                        <span class="nav-link-text">Users</span>
-                    </a>
-                </li>
-                <li class="nav-item color-problem_list {{ ($selected=="problem_list") ? "selected" : ""}}">
-                    <a class="nav-link" href="{{ url('problems') }}">
-                        <i class="fas fa-fw fa-clipboard-list fa-lg"></i>
-                        <span class="nav-link-text">Problem List</span>
-                    </a>
-                </li>
-                {{-- {% endif %} --}}
+                @if ( in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
+                    
+                    <li class="nav-item color-settings {{ ($selected=="settings") ? "selected" : ""}}" >
+                        <a class="nav-link" href="{{ route('admin.index') }}">
+                            <i class="fa fa-fw fa-sliders-h fa-lg"></i>
+                            <span class="nav-link-text">Admin panel</span>
+                        </a>
+                    </li>
+
+                @endif
+
                 <li class="nav-item color-assignments {{ ($selected=="assignments") ? "selected" : ""}}">
                     <a class="nav-link" href="{{ url('assignments') }}">
                         <i class="fa fa-fw fa-folder-open fa-lg"></i>

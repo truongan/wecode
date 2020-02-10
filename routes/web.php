@@ -16,7 +16,7 @@ Route::get('/', function () {
 });
 
 Auth::routes();
-
+Route::view('/admin','admin.admin')->name('admin.index');
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/settings', 'setting_controller@index')->name('settings.index');
