@@ -240,6 +240,10 @@ class User extends Authenticatable
             return FALSE; //success
         }
 	}
+
+	function lops(){
+		return $this->belongsToMany('App\Lop');
+	}
 }
 
 //---------------------------------------------------------------------------------------------------------

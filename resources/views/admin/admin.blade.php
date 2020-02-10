@@ -28,7 +28,7 @@
   </a>
 </div>
 <div class="card text-left ">
-  <a href="{{ route('users.index') }}">
+  <a href="{{ route('lops.index') }}">
     <div class="card-body">
       <h4 class="card-title">Classes</h4>
       <p class="card-text">Manage classes and users enrollment</p>

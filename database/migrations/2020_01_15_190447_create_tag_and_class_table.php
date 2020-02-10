@@ -21,11 +21,13 @@ class CreateTagAndClassTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('problem_id');
             $table->bigInteger('tag_id');
+            $table->text('text');
             $table->timestamps();
             $table->index(['problem_id','tag_id']);
         });
         Schema::create('lops', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->text('name');
             $table->timestamps();
         });
         Schema::create('lop_user', function (Blueprint $table) {
@@ -54,6 +56,7 @@ class CreateTagAndClassTable extends Migration
         Schema::dropIfExists('tags');
         Schema::dropIfExists('problem_tag');
         Schema::dropIfExists('lops');
+        Schema::dropIfExists('classes');
         Schema::dropIfExists('assignment_class');
         Schema::dropIfExists('class_user');
     }
