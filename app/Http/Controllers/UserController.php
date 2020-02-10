@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Hash;
 
 class UserController extends Controller
@@ -16,7 +17,9 @@ class UserController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth'); // phải login
+		if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
+            abort(404);
     }
 
 
@@ -28,7 +31,6 @@ class UserController extends Controller
     public function index()
     {
         //
-        // var_dump(User::all());die();
         return view('users.list',['users'=>User::all(), 'selected' => 'users']); 
     }
 
@@ -51,7 +53,6 @@ class UserController extends Controller
     public function create()
     {
         //
-       
         return view('users.create');
     }
     
@@ -61,20 +62,18 @@ class UserController extends Controller
      */
     public function add(Request $request)
     {
-        if ($request->has(['new_users'])) {
-            // bỏ khúc này thì đc á 
-            // nghĩa là nó k hiểu đc cục data mình truyền qua định dang cuc data array() 
-            //truyền qua nó lỗi
-            $ok = User::add_users(
-                $request['new_users'],
-                $request['send_mail'],
-				$request['delay']
-            );
-            // thế cái all() e nó sao ?? đnaanyg suy nghĩ :V:)) nãy cô bảo cái all tui mới để cái all():)) troll v<3<3<
-            // tới đây đc r để  cái này thử
-            // echo($ok); //chạy cho em xem l         
-            return view('users.add_result', ['ok' => array($ok)]);//, 'error' => $error]);
-        }
+        // $this->form_validation->set_rules('new_users', 'New Users', 'required');
+		// if ($this->form_validation->run())
+		// {
+            if ($request->has(['new_users'])) {
+                $ok = User::add_users(
+                    $request['new_users'],
+                    $request['send_mail'],
+                    $request['delay']
+                );        
+                return view('users.add_result', ['ok' => array($ok)]);//, 'error' => $error]);
+            }
+        // }
         else
             // nếu k phải phuong thức add thì nó cứ để view add 
             return view('users.add', ['selected' => 'users']);
