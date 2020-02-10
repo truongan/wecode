@@ -18,8 +18,8 @@ class UserController extends Controller
     public function __construct()
     {
         $this->middleware('auth'); // phải login
-		if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
-            abort(404);
+		// if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
+        //     abort(404);
     }
 
 

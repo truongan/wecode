@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Notification;
 
 class NotificationController extends Controller
 {
@@ -25,7 +26,7 @@ class NotificationController extends Controller
     public function index()
     {
         //
-        return view('notifications.list');
+        return view('notifications.list', ['notifications'=>Notification::all()]);
     }
 
     /**
@@ -36,6 +37,8 @@ class NotificationController extends Controller
     public function create()
     {
         //
+        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
+            abort(404);
         return view('notifications.create');
     }
 
@@ -54,24 +57,12 @@ class NotificationController extends Controller
 		// $this->form_validation->set_rules('text', 'text', ''); /* todo: xss clean */
 
 		// if($this->form_validation->run()){
-		// 	if ($this->input->post('id') === NULL)
-		// 		$this->notifications_model->add_notification($this->input->post('title'), $this->input->post('text'));
+		    if ($request['id'] === NULL)
+            	Notification::create($request->input());
 		// 	else
 		// 		$this->notifications_model->update_notification($this->input->post('id'), $this->input->post('title'), $this->input->post('text'));
-		// 	redirect('notifications');
-		// }
-
-		// $data = array(
-		// 	'all_assignments' => $this->assignment_model->all_assignments(),
-		// 	'notif_edit' => $this->notif_edit
-		// );
-
-		// if ($this->notif_edit !== FALSE)
-		// 	$data['title'] = 'Edit Notification';
-
-
-        // $this->twig->display('pages/admin/add_notification.twig', $data);
-        return view('notifications.list');
+			return redirect('notifications');
+		// }        
     }
 
     /**
@@ -94,6 +85,10 @@ class NotificationController extends Controller
     public function edit($id)
     {
         //
+        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
+            abort(404);
+        $notification = Notification::find($id);
+        return view('notifications.edit', ['notification'=>$notification]);
     }
 
     /**
@@ -106,6 +101,19 @@ class NotificationController extends Controller
     public function update(Request $request, $id)
     {
         //
+        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
+            abort(404);
+
+		// $this->form_validation->set_rules('title', 'title', 'trim');
+		// $this->form_validation->set_rules('text', 'text', ''); /* todo: xss clean */
+
+		// if($this->form_validation->run()){
+            $notification = Notification::find($id);
+            $notification->title = $request['title'];
+            $notification->text = $request['text'];
+            $notification->save();
+            return redirect('notifications');
+		// }
     }
 
     /**
@@ -116,6 +124,18 @@ class NotificationController extends Controller
      */
     public function destroy($id)
     {
-        //
+        // if ( ! $this->input->is_ajax_request() )
+        // 	show_404();
+        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
+			$json_result = array('done' => 0, 'message' => 'Permission Denied');
+		elseif ($id === NULL)
+			$json_result = array('done' => 0, 'message' => 'Input Error');
+		else
+		{
+			Notification::destroy($id);
+			$json_result = array('done' => 1);
+		}
+        header('Content-Type: application/json; charset=utf-8');
+		return ($json_result);
     }
 }
