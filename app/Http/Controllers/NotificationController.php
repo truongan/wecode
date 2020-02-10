@@ -57,11 +57,8 @@ class NotificationController extends Controller
 		// $this->form_validation->set_rules('text', 'text', ''); /* todo: xss clean */
 
 		// if($this->form_validation->run()){
-		    if ($request['id'] === NULL)
-            	Notification::create($request->input());
-		// 	else
-		// 		$this->notifications_model->update_notification($this->input->post('id'), $this->input->post('title'), $this->input->post('text'));
-			return redirect('notifications');
+            Notification::create($request->input());
+		    return redirect('notifications');
 		// }        
     }
 
