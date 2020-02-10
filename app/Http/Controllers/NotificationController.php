@@ -3,9 +3,20 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class NotificationController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -36,10 +47,8 @@ class NotificationController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        // echo ($this->);
-        // if ( $this->user->level <=1) // permission denied
-		// 	show_404();
+        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
+            abort(404);
 
 		// $this->form_validation->set_rules('title', 'title', 'trim');
 		// $this->form_validation->set_rules('text', 'text', ''); /* todo: xss clean */
@@ -62,7 +71,7 @@ class NotificationController extends Controller
 
 
         // $this->twig->display('pages/admin/add_notification.twig', $data);
-        return view('notifications.add');
+        return view('notifications.list');
     }
 
     /**
