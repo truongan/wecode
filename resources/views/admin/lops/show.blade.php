@@ -6,10 +6,7 @@
 @section('title', 'lops')
 
 @section('title_menu')
-    {{-- Nếu là admin thì hiển thị --}}
-
     <span class="title_menu_item"><a href="{{ route('lops.create') }}"><i class="fa fa-plus color11"></i>Add class</a></span>
-
 @endsection
 
 @section('content')

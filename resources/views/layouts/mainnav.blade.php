@@ -147,7 +147,11 @@
                             <div class="">
                                 <div class="name h4"><i class="fa fa-fw fa-user"></i>  user.username </div>
                                 <div class="d-inline-flex">
-                                    <a href="{{ url('logout') }}" class="btn btn-danger mr-2"><i class="fa fa-fw fa-sign-out"></i> Sign Out</a>
+                                    <form action="{{route('logout')}}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="btn btn-danger mr-2">Sign out</button>
+                                    </form>
+                                    {{-- <a href="{{ url('logout') }}" class="btn btn-danger mr-2"><i class="fa fa-fw fa-sign-out"></i> Sign Out</a> --}}
                                     <a href="{{ url('profile') }}" class="btn btn-info"><i class="fa fa-fw fa-wrench"></i> Profile</a>
                                 </div>
                             </div>

@@ -15,7 +15,7 @@ $(document).ready(function(){
 @endsection
 
 @section('content')
-<form action="{{route('lops.store')}" method="POST">
+<form action="{{route('lops.store')}}" method="POST">
 @csrf
     <div class="form-group">
       <label for="name">Class name</label>
