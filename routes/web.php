@@ -17,7 +17,7 @@ Route::get('/', function () {
 
 Auth::routes();
 Route::view('/admin','admin.admin')->name('admin.index');
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', 'home_controller@index')->name('home');
 
 Route::get('/settings', 'setting_controller@index')->name('settings.index');
 Route::post('/settings', 'setting_controller@update')->name('settings.update');
@@ -27,5 +27,6 @@ Route::post('/users/adds', 'UserController@add')->name('users.add');
 Route::delete('users/{id}', 'UserController@destroy')->name('users.destroy');
 //Resource route phải được  ghi cuối cùng, nếu không các route sau dính tới /usres sẽ ăn shit 
 Route::resource('users','UserController');
-Route::resource('notifications','NotificationController');
+Route::resource('notifications','notification_controller');
+Route::resource('lops','lop_controller');
 Route::resource('lops','lop_controller');

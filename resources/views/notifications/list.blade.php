@@ -82,8 +82,8 @@ $(document).ready(function () {
 @if ($notifications->all()==[])
 <p style="text-align: center;">Nothing yet...</p>
 @endif
-@foreach ($notifications as $notification)
-	<div class="col-md-6 col-xl-4">
+	@foreach ($notifications as $notification)
+	<div class="">
 		<div class="notif" id="number{{ $notification->id }}" data-id="{{ $notification->id }}"> 
 			<div class="notif_title">
 				<a href="notifications#number{{ $notification->id }}">{{ $notification->title }}</a>
@@ -95,10 +95,11 @@ $(document).ready(function () {
 					@endif
 				</div>
 			</div>
-			<div class="notif_text">
+			{{-- <div class="notif_text">
 				{!! $notification->text !!}
-			</div>
+			</div> --}}
 		</div>
 	</div>
-@endforeach
+	@endforeach
+
 @endsection
