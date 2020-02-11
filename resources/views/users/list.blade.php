@@ -57,7 +57,7 @@
     </table>
   </div>
 </div>
-<span><a href="{{ route('users.create') }}"><i class="fa fa-user-plus color11"></i> Add 1 User</a></span>
+{{-- <span><a href="{{ route('users.create') }}"><i class="fa fa-user-plus color11"></i> Add 1 User</a></span> --}}
 
 @endsection
 
