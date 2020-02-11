@@ -69,10 +69,15 @@ class User extends Authenticatable
         if ($query == FALSE) 
             return FALSE;
         if ($query->count() == 0)
-            return FALSE;
+			return FALSE;
         return FALSE;
     }
-
+	public static function duplication_display_name($display_name){
+		$query = User::where('display_name','=',$display_name)->first();
+		if ($query)
+			return TRUE;
+		return FALSE;
+	}
     public static function add_user($username, $email, $password, $role, $display_name="")
     {
 		$name = ['username'=>$username];
@@ -82,22 +87,31 @@ class User extends Authenticatable
 		if ($validator->fails()) {
 			return 'Username may only contain alpha-numeric characters.';
 		}
+		
 		if (strlen($username) < 3 OR strlen($username) > 20 OR strlen($password) < 6 OR strlen($password) > 200)
 			return 'Username or password length error.';
+		
 		if (User::have_user($username))
 			return 'User with this username exists.';
+		
 		if (User::have_email($email))
 			return 'User with this email exists.';
+	
 		if (strtolower($username) !== $username)
 			return 'Username must be lowercase.';
+		
 		$roles = array('admin', 'head_instructor', 'instructor', 'student');
 		if ( ! in_array($role, $roles))
 			return 'Users role is not valid.';
+		
+		if (User::duplication_display_name($display_name))
+			return 'User with this display_name exists.';
+		
 		$user = [
 			'username' => $username,
 			'email' => $email,
 			'password' => Hash::make($password),
-			'role_id' => 1,
+			'role_id' => 4,
 			'display_name' => $display_name
 		];
 		
