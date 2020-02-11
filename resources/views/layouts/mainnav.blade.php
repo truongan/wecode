@@ -145,13 +145,12 @@
                                 {{-- <div class="gravatar"><img src="https://www.gravatar.com/avatar/{{ md5(user.email) }}?s=70&d=identicon" /></div> --}}
                             </div>
                             <div class="">
-                                <div class="name h4"><i class="fa fa-fw fa-user"></i>  user.username </div>
+                                <div class="name h4"><i class="fa fa-fw fa-user"></i>  {{Auth::user()->username}} </div>
                                 <div class="d-inline-flex">
                                     <form action="{{route('logout')}}" method="POST">
                                     @csrf
                                     <button type="submit" class="btn btn-danger mr-2">Sign out</button>
                                     </form>
-                                    {{-- <a href="{{ url('logout') }}" class="btn btn-danger mr-2"><i class="fa fa-fw fa-sign-out"></i> Sign Out</a> --}}
                                     <a href="{{ url('profile') }}" class="btn btn-info"><i class="fa fa-fw fa-wrench"></i> Profile</a>
                                 </div>
                             </div>
