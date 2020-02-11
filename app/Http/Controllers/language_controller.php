@@ -12,9 +12,14 @@ class language_controller extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
-        //
+        return view('languages.show_languages',['Language'=>Language::all()]); 
     }
 
     /**
@@ -46,7 +51,7 @@ class language_controller extends Controller
      */
     public function show(Language $language)
     {
-        //
+        return view('languages.show_languages',['Language'=>Language::all()]); 
     }
 
     /**
@@ -82,4 +87,5 @@ class language_controller extends Controller
     {
         //
     }
+    
 }
