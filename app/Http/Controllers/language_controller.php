@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Language;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class language_controller extends Controller
 {
@@ -27,9 +28,11 @@ class language_controller extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
+            abort(404);
+        return view('languages.create');
     }
 
     /**
@@ -40,7 +43,10 @@ class language_controller extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
+            abort(404);
+        Language::create($request->input());
+        return view('languages.show_languages',['Language'=>Language::all()]); 
     }
 
     /**
@@ -86,6 +92,12 @@ class language_controller extends Controller
     public function destroy(Language $language)
     {
         //
+    }
+
+    public function get_language_order_by_sorting()
+    {
+        $result = Language::order_languages();
+        return view('languages.order',['result'=>$result]);
     }
     
 }
