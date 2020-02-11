@@ -55,7 +55,7 @@ class NotificationController extends Controller
 
 		// $this->form_validation->set_rules('title', 'title', 'trim');
 		// $this->form_validation->set_rules('text', 'text', ''); /* todo: xss clean */
-
+        // var_dump($request['text']);die();
 		// if($this->form_validation->run()){
             Notification::create($request->input());
 		    return redirect('notifications');

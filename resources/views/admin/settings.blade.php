@@ -1,7 +1,7 @@
 @php($selected = 'settings')
 @extends('layouts.app')
 
-@section('icon', 'fas fa-sliders-h')
+@section('icon', 'fas fa-cogs')
 
 @section('title', 'Settings')
 

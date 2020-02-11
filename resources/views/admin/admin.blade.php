@@ -1,9 +1,9 @@
 @php($selected = 'settings')
 @extends('layouts.app')
 
-@section('icon', 'fas fa-folder-open')
+@section('icon', 'fas fa-sliders-h')
 
-@section('title', 'Assignments')
+@section('title', 'Admin panel')
 
 @section('title_menu')
 	{{-- Nếu là admin thì hiển thị --}}
@@ -11,61 +11,62 @@
 @endsection
 
 @section('content')
-<div class="card text-left ">
-  <a href="{{ route('settings.index') }}">
-    <div class="card-body">
-      <h4 class="card-title">Settings</h4>
-      <p class="card-text">General system settings</p>
+<div class="card-group">
+  <div class="m-3">
+    <div class="card" style="width: 18rem;">
+      <i class="text-center card-img-top fas fa-cogs fa-8x p-4"></i>
+      <div class="card-body bg-light">
+        <h5 class="card-title">SETTING</h5>
+        <p  class="card-text">Chỉnh sửa và ...</p>
+        <a href="{{ route('settings.index') }}" class="stretched-link"></a>
+      </div>
     </div>
-  </a>
-</div>
-<div class="card text-left ">
-  <a href="{{ route('users.index') }}">
-    <div class="card-body">
-      <h4 class="card-title">Users</h4>
-      <p class="card-text">Manage users</p>
+  </div>
+    
+  <div class="m-3">
+    <div class="card" style="width: 18rem;">
+      <i class="text-center card-img-top fas fa-users fa-8x p-4"></i>
+      <div class="card-body bg-light">
+        <h5 class="card-title">USERS</h5>
+        <p  class="card-text">Quản lý người dùng</p>
+        <a href="{{ route('users.index') }}" class="stretched-link"></a>
+      </div>
     </div>
-  </a>
-</div>
-<div class="card text-left ">
-  <a href="{{ route('lops.index') }}">
-    <div class="card-body">
-      <h4 class="card-title">Classes</h4>
-      <p class="card-text">Manage classes and users enrollment</p>
+  </div>
+
+  <div class="m-3">
+    <div class="card" style="width: 18rem;">
+      <i class="text-center card-img-top fas fa-school fa-8x p-4"></i>
+      <div class="card-body bg-light">
+        <h5 class="card-title">CLASSES</h5>
+        <p  class="card-text">Quản lý lớp học</p>
+        <a href="{{ route('lops.index') }}" class="stretched-link"></a>
+      </div>
     </div>
-  </a>
-</div>
-<div class="card text-left ">
-  <a href="{{ route('users.index') }}">
-    <div class="card-body">
-      <h4 class="card-title">Problem lists</h4>
-      <p class="card-text">Mangae problems</p>
+  </div>
+
+  <div class="m-3">
+    <div class="card" style="width: 18rem;">
+      <i class="text-center card-img-top fas fa-language fa-8x p-4"></i>
+      <div class="card-body bg-light">
+        <h5 class="card-title">Language</h5>
+        <p  class="card-text">Thiết lập ngôn ngữ lập trình</p>
+        <a href="#" class="stretched-link"></a>
+      </div>
     </div>
-  </a>
-</div>
-<div class="card text-left ">
-  <a href="{{ route('users.index') }}">
-    <div class="card-body">
-      <h4 class="card-title">Class</h4>
-      <p class="card-text">Manage classes and users enrollment</p>
+  </div>
+
+  <div class="m-3">
+    <div class="card" style="width: 18rem;">
+      <i class="text-center card-img-top fas fa-list fa-8x p-4"></i>
+      <div class="card-body bg-light">
+        <h5 class="card-title">PROBLEM LIST</h5>
+        <p  class="card-text">Chỉnh sửa và ...</p>
+        <a href="{{ route('users.index') }}" class="stretched-link"></a>
+      </div>
     </div>
-  </a>
+  </div>
 </div>
-<div class="card text-left ">
-  <a href="{{ route('users.index') }}">
-    <div class="card-body">
-      <h4 class="card-title">Class</h4>
-      <p class="card-text">Manage classes and users enrollment</p>
-    </div>
-  </a>
-</div>
-<div class="card text-left ">
-  <a href="{{ route('users.index') }}">
-    <div class="card-body">
-      <h4 class="card-title">Class</h4>
-      <p class="card-text">Manage classes and users enrollment</p>
-    </div>
-  </a>
-</div>
+
 
 @endsection
