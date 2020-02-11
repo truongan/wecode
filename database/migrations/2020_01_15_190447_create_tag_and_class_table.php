@@ -15,19 +15,20 @@ class CreateTagAndClassTable extends Migration
     {
         Schema::create('tags', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->text('text');
             $table->timestamps();
         });
         Schema::create('problem_tag', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('problem_id');
             $table->bigInteger('tag_id');
-            $table->text('text');
             $table->timestamps();
             $table->index(['problem_id','tag_id']);
         });
         Schema::create('lops', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->text('name');
+            $table->boolean('open');
             $table->timestamps();
         });
         Schema::create('lop_user', function (Blueprint $table) {
@@ -59,5 +60,8 @@ class CreateTagAndClassTable extends Migration
         Schema::dropIfExists('classes');
         Schema::dropIfExists('assignment_class');
         Schema::dropIfExists('class_user');
+        Schema::dropIfExists('lop_user');
+        Schema::dropIfExists('assignment_lop');
+
     }
 }

@@ -62,18 +62,18 @@ class UserController extends Controller
      */
     public function add(Request $request)
     {
-        // $this->form_validation->set_rules('new_users', 'New Users', 'required');
-		// if ($this->form_validation->run())
-		// {
-            if ($request->has(['new_users'])) {
-                $ok = User::add_users(
-                    $request['new_users'],
-                    $request['send_mail'],
-                    $request['delay']
-                );        
-                return view('users.add_result', ['ok' => array($ok)]);//, 'error' => $error]);
-            }
-        // }
+        if ($request->has(['new_users'])) {
+            
+            $all = User::add_users(
+                $request['new_users'],
+                $request['send_mail'],
+				$request['delay']
+            );
+            $ok = $all['users_ok'];
+            $error = $all['users_error'];
+         
+            return view('users.add_result', ['ok' => $ok,'error' => $error]);//, 'error' => $error]);
+        }
         else
             // nếu k phải phuong thức add thì nó cứ để view add 
             return view('users.add', ['selected' => 'users']);

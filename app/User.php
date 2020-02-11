@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 use Illuminate\Database\Eloquent\Model;
 use Hash;
-
+use Illuminate\Support\Facades\Validator;
 
 class User extends Authenticatable
 {
@@ -69,34 +69,53 @@ class User extends Authenticatable
         if ($query == FALSE) 
             return FALSE;
         if ($query->count() == 0)
-            return FALSE;
+			return FALSE;
         return FALSE;
     }
-
+	public static function duplication_display_name($display_name){
+		$query = User::where('display_name','=',$display_name)->first();
+		if ($query)
+			return TRUE;
+		return FALSE;
+	}
     public static function add_user($username, $email, $password, $role, $display_name="")
     {
-        // if ( ! $this->validate($username, ['filename' => 'alpha_num']))
-		// 	return 'Username may only contain alpha-numeric characters.';
+		$name = ['username'=>$username];
+		$validator = Validator::make($name, [
+            'username' => ['alpha_dash'],
+		]);
+		if ($validator->fails()) {
+			return 'Username may only contain alpha-numeric characters.';
+		}
+		
 		if (strlen($username) < 3 OR strlen($username) > 20 OR strlen($password) < 6 OR strlen($password) > 200)
 			return 'Username or password length error.';
+		
 		if (User::have_user($username))
 			return 'User with this username exists.';
+		
 		if (User::have_email($email))
 			return 'User with this email exists.';
+	
 		if (strtolower($username) !== $username)
 			return 'Username must be lowercase.';
+		
 		$roles = array('admin', 'head_instructor', 'instructor', 'student');
 		if ( ! in_array($role, $roles))
 			return 'Users role is not valid.';
+		
+		if (User::duplication_display_name($display_name))
+			return 'User with this display_name exists.';
+		
 		$user = [
 			'username' => $username,
 			'email' => $email,
 			'password' => Hash::make($password),
-			'role_id' => 1,
+			'role_id' => 4,
 			'display_name' => $display_name
 		];
 		
-        DB::table('users')->insert($user);
+		DB::table('users')->insert($user);
 	
 		return TRUE; //success
     }
@@ -119,9 +138,9 @@ class User extends Authenticatable
         
         $lines = preg_split('/\r?\n|\n?\r/', $text);
         
-        $users_ok = collect(['']);
+        $users_ok = collect([]);
 		
-		$users_error = collect(['']);
+		$users_error = collect([]);
         
 		// loop over lines of $text :
 		foreach ($lines as $line)
@@ -148,9 +167,9 @@ class User extends Authenticatable
 			$result = User::add_user($parts[0], $parts[1], $parts[2], $parts[3], $parts[4]);
 			$a = array($parts[0], $parts[1], $parts[2], $parts[3], $parts[4]);
 			if ($result === TRUE)
-				$users_ok = collect($a);
+				$users_ok->push($a);
 			else
-				$users_error =  collect($a);
+				$users_error->push($a);
 		} // end of loop
 
 		// if ($send_mail)
@@ -199,8 +218,8 @@ class User extends Authenticatable
 		//return array($users_ok,$users_error);
 		// $users_ok = collect(['sentest', 'trankimsen16819982@gmail.com', '123456789', '1', 'tester']);
 		//$users_ok = array();//k phải lỗi này
-	
-		return $users_ok;
+		
+		return ['users_ok'=>$users_ok,'users_error'=>$users_error];
 	}
     
     function submissions()
