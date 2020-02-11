@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Lop;
-use App\User;
 use Illuminate\Http\Request;
 
-class lop_controller extends Controller
+class assignment_controller extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +14,7 @@ class lop_controller extends Controller
     public function index()
     {
         //
-        return view('admin.lops.list', ['lops' => Lop::all()]);
+        $this->middleware('auth');
     }
 
     /**
@@ -27,7 +25,6 @@ class lop_controller extends Controller
     public function create()
     {
         //
-        return view('admin.lops.create');
     }
 
     /**
@@ -39,27 +36,15 @@ class lop_controller extends Controller
     public function store(Request $request)
     {
         //
-        $new = Lop::create($request->input());
-        $usernames = preg_split("/[\s,]+/", $request->input('user_list'));
-        // var_dump($usernames);die();
-        if($usernames != []){
-            $users = User::WhereIn('username', $usernames)->get();
-            $userids = $users->reduce(function($carry, $i){
-                array_push($carry, $i);
-                return $carry;
-            }, []);
-
-            $new->users()->sync($userids);
-        }
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Lop  $lop
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Lop $lop)
+    public function show($id)
     {
         //
     }
@@ -67,10 +52,10 @@ class lop_controller extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Lop  $lop
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Lop $lop)
+    public function edit($id)
     {
         //
     }
@@ -79,10 +64,10 @@ class lop_controller extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Lop  $lop
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Lop $lop)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -90,10 +75,10 @@ class lop_controller extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Lop  $lop
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Lop $lop)
+    public function destroy($id)
     {
         //
     }
