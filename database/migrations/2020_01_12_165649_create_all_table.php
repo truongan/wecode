@@ -113,7 +113,6 @@ class CreateAllTable extends Migration
             $table->bigIncrements('id');
             $table->char('title',200);
             $table->text('text');
-            $table->dateTime('time');
             $table->timestamps();
         });
         Schema::create('scoreboard', function (Blueprint $table) {

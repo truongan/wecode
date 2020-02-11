@@ -32,7 +32,7 @@ class setting_controller extends Controller
         }
         // $data['selected'] = 'settings';
         // var_dump($data);die();
-        return view('settings', $data);
+        return view('admin.settings', $data);
     }
     
     public function update(Request $request){

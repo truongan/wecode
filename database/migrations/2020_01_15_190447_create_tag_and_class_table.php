@@ -21,26 +21,28 @@ class CreateTagAndClassTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('problem_id');
             $table->bigInteger('tag_id');
+            $table->text('text');
             $table->timestamps();
             $table->index(['problem_id','tag_id']);
         });
-        Schema::create('classes', function (Blueprint $table) {
+        Schema::create('lops', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->text('name');
             $table->timestamps();
         });
-        Schema::create('class_user', function (Blueprint $table) {
+        Schema::create('lop_user', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('class_id');
+            $table->bigInteger('lop_id');
             $table->bigInteger('user_id');
             $table->timestamps();
-            $table->index(['class_id','user_id']);
+            $table->index(['lop_id','user_id']);
         });
-        Schema::create('assignment_class', function (Blueprint $table) {
+        Schema::create('assignment_lop', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('assignment_id');
-            $table->bigInteger('class_id');
+            $table->bigInteger('lop_id');
             $table->timestamps();
-            $table->index(['class_id','assignment_id']);
+            $table->index(['lop_id','assignment_id']);
         });
     }
 
@@ -53,6 +55,7 @@ class CreateTagAndClassTable extends Migration
     {
         Schema::dropIfExists('tags');
         Schema::dropIfExists('problem_tag');
+        Schema::dropIfExists('lops');
         Schema::dropIfExists('classes');
         Schema::dropIfExists('assignment_class');
         Schema::dropIfExists('class_user');
