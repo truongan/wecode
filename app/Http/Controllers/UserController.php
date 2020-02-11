@@ -62,18 +62,15 @@ class UserController extends Controller
     public function add(Request $request)
     {
         if ($request->has(['new_users'])) {
-            // bỏ khúc này thì đc á 
-            // nghĩa là nó k hiểu đc cục data mình truyền qua định dang cuc data array() 
-            //truyền qua nó lỗi
-            $ok = User::add_users(
+            
+            $all = User::add_users(
                 $request['new_users'],
                 $request['send_mail'],
 				$request['delay']
             );
-            // thế cái all() e nó sao ?? đnaanyg suy nghĩ :V:)) nãy cô bảo cái all tui mới để cái all():)) troll v<3<3<
-            // tới đây đc r để  cái này thử
-            // echo($ok); //chạy cho em xem l         
-            return view('users.add_result', ['ok' => array($ok)]);//, 'error' => $error]);
+            $ok = $all['users_ok'];
+            $error = $all['users_error'];
+            return view('users.add_result', ['ok' => $ok,'error' => $error]);//, 'error' => $error]);
         }
         else
             // nếu k phải phuong thức add thì nó cứ để view add 
