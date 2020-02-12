@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Language;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class language_controller extends Controller
 {
@@ -22,7 +23,7 @@ class language_controller extends Controller
     {
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
             abort(404);
-        return view('languages.list',['Language'=>Language::all()]); 
+        return view('languages.list',['Language'=>Language::order_languages()]); 
     }
 
     /**
@@ -70,7 +71,7 @@ class language_controller extends Controller
      */
     public function edit(Language $language)
     {
-        //
+        return view('languages.edit', compact('language'));
     }
 
     /**
@@ -82,7 +83,12 @@ class language_controller extends Controller
      */
     public function update(Request $request, Language $language)
     {
-        //
+        $language->name = $request->name;
+        $language->extension=$request->extension;
+        $language->default_time_limit=$request->default_time_limit;
+        $language->sorting=$request->sorting;
+        $language->save();
+        return view('languages.list',['Language'=>Language::order_languages()]); 
     }
 
     /**
@@ -91,19 +97,15 @@ class language_controller extends Controller
      * @param  \App\Language  $language
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
-            abort(404);
-        if ($id!=NULL)
-            Language::destroy($id);
-        return view('problems.list',['problems'=>Language::all()]);  
-    }
-
-    public function get_language_order_by_sorting()
-    {
-        $result = Language::order_languages();
-        return view('languages.order',['result'=>$result]);
+        var_dump($request);
+        die();
+        // if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
+        //     abort(404);
+        // if ($id!=NULL)
+        //     Language::destroy($id);
+        return view('problems.list',['problems'=>Language::order_languages()]);  
     }
     
 }

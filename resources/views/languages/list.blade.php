@@ -32,7 +32,7 @@
         <td>{{$item->sorting}}</td>
         <td>
           <a title="Edit" href="{{ route('languages.edit', $item->id) }}"><i class="fas fa-edit fa-lg color9"></i></a>
-          <span title="Delete Language" class="delete-btn delete_language pointer"><i class="fa fa-times-circle fa-lg color1"></i></span>
+          <span title="Delete Language" class="delete-btn delete_language pointer" href="{{ route('languages.destroy', $item->id) }}"><i class="fa fa-times-circle fa-lg color1"></i></span>
         </td>
       </tr>
       @endforeach
