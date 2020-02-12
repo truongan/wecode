@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@php($selected="settings")
 @section('icon', 'fas fa-user-plus')
 
 @section('title', ' Add Users')

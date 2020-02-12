@@ -4,6 +4,37 @@
 
 @section('title', 'Users')
 
+@section('other_assets')
+  <link rel='stylesheet' type='text/css' href='https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css'/>
+  {{-- <style>
+
+tbody{
+	/* turn tbody to block so it can have separate scroll */
+	display: block;
+	height: calc(100vh - 187px);
+	overflow: scroll;
+}
+tr{
+	/* turn every row to a flex row to distribute column evenly */
+	display: flex;
+}
+td, th{
+	/* distribute column evenly */
+	flex: 1 auto;
+	width: 1px;
+	word-wrap: break-word;
+}
+thead tr:after {
+	/* add one character after thead to align it with tbody */
+	content: '';
+	overflow-y: scroll;
+	visibility: hidden;
+	height: 0;
+  }
+  
+</style> --}}
+@endsection
+
 @section('title_menu')
     {{-- Nếu là admin thì hiển thị --}}
   <span class="title_menu_item"><a href="https://github.com/truongan/wecode-judge/blob/docs/v1.4/users.md" target="_blank"><i class="fa fa-question-circle color6"></i> Help</a></span>
@@ -14,28 +45,22 @@
 @section('content')
 <div class="row">
   <div class="col">
-    {{-- {% if deleted_user %}
-      <p class="shj_ok">User deleted successfully.</p>
-    {% endif %}
-    {% if deleted_submissions %}
-      <p class="shj_ok">Submissions of selected user deleted successfully.</p>
-    {% endif %} --}}
-    <div style="height:15px"></div>
-    <table class="wecode_table table table-striped table-bordered">
-      <thead class="thead-dark">
-        <tr>
-          <th>#</th>
-          <th>User ID</th>
-          <th>Username</th>
-          <th>Display Name</th>
-          <th>Email</th>
-          <th>Role</th>
-          <th>First Login</th>
-          <th>Last Login</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      @foreach ($users as $user)
+    <div class="table-responsive">
+      <table class="table table-striped table-bordered">
+        <thead class="thead-dark">
+          <tr>
+            <th>#</th>
+            <th>User ID</th>
+            <th>Username</th>
+            <th>Display Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>First Login</th>
+            <th>Last Login</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        @foreach ($users as $user)
         <tr data-id="{{$user->id}}">
           <td> {{$loop->iteration}} </td>
           <td> {{$user->id}} </td>
@@ -54,9 +79,11 @@
           </td>
         </tr>
         @endforeach
-    </table>
+      </table>
+    </div>
   </div>
 </div>
+
 {{-- <span><a href="{{ route('users.create') }}"><i class="fa fa-user-plus color11"></i> Add 1 User</a></span> --}}
 
 @endsection
@@ -69,28 +96,33 @@
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLongTitle">Are you sure you want to delete this user?</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+        <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <div style="text-align: center;">Loading<br><img src="{{ asset('assets/images/loading.gif') }}"/></div>
+        <div class="text-center">
+          <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+        </div>
       </div>
-	  <div class="modal-footer">
+      <div class="modal-footer">
         <button type="button" class="btn btn-danger confirm-user-delete">yes, DELETE user</button>
-		<button type="button" class="btn btn-primary" data-dismiss="modal">NO, DON'T delete</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">NO, DON'T delete</button>
       </div>
     </div>
   </div>
 </div>
-
 </div>
+<script type='text/javascript' src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script type='text/javascript' src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
 <script>
 /**
  * "Users" page
  */
 $(document).ready(function(){
+  {{-- jQuery.noConflict(); --}}
 	$('.delete-btn').click(function(){
-    jQuery.noConflict();
 		var row = $(this).parents('tr');
 		var user_id = row.data('id');
 		var username = row.children('#un').html();
@@ -130,6 +162,11 @@ $(document).ready(function(){
 			});
 		});
 		$("#user_delete").modal("show");
+	});
+
+  $("table").DataTable({
+		"pageLength": 50,
+		"lengthMenu": [ [20, 50, 100, 200, -1], [20, 50, 100, 200, "All"] ]
 	});
 });
 

@@ -76,7 +76,7 @@ class UserController extends Controller
         }
         else
             // nếu k phải phuong thức add thì nó cứ để view add 
-            return view('users.add', ['selected' => 'users']);
+            return view('users.add');
     }
 
     /**
