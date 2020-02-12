@@ -32,3 +32,6 @@ Route::resource('users','UserController');
 Route::resource('notifications','NotificationController');
 Route::resource('lops','lop_controller');
 Route::resource('languages','language_controller');
+Route::resource('tags','tag_controller');
+Route::resource('problemtags','problem_tag_controller');
+Route::resource('problems','problem_controller');

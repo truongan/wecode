@@ -2,27 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Language;
+use App\Problemtag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class language_controller extends Controller
+class problem_tag_controller extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
     public function index()
     {
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
             abort(404);
-        return view('languages.show_languages',['Language'=>Language::all()]); 
+        return view('problemtags.show',['Problemtags'=>Problemtag::all()]); 
     }
 
     /**
@@ -30,11 +29,9 @@ class language_controller extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
+    public function create()
     {
-        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
-            abort(404);
-        return view('languages.create');
+        //
     }
 
     /**
@@ -45,30 +42,27 @@ class language_controller extends Controller
      */
     public function store(Request $request)
     {
-        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
-            abort(404);
-        Language::create($request->input());
-        return view('languages.show_languages',['Language'=>Language::all()]); 
+        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Language  $language
+     * @param  \App\Problemtag  $problemtag
      * @return \Illuminate\Http\Response
      */
-    public function show(Language $language)
+    public function show(Problemtag $problemtag)
     {
-        return view('languages.show_languages',['Language'=>Language::all()]); 
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Language  $language
+     * @param  \App\Problemtag  $problemtag
      * @return \Illuminate\Http\Response
      */
-    public function edit(Language $language)
+    public function edit(Problemtag $problemtag)
     {
         //
     }
@@ -77,10 +71,10 @@ class language_controller extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Language  $language
+     * @param  \App\Problemtag  $problemtag
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Language $language)
+    public function update(Request $request, Problemtag $problemtag)
     {
         //
     }
@@ -88,18 +82,11 @@ class language_controller extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Language  $language
+     * @param  \App\Problemtag  $problemtag
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Language $language)
+    public function destroy(Problemtag $problemtag)
     {
         //
     }
-
-    public function get_language_order_by_sorting()
-    {
-        $result = Language::order_languages();
-        return view('languages.order',['result'=>$result]);
-    }
-    
 }
