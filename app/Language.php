@@ -16,4 +16,5 @@ class Language extends Model
 
         return ['languages' => collect($result)];
     }
+
 }

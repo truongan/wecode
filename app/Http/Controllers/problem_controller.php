@@ -2,27 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Language;
+use App\Problem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class language_controller extends Controller
+class problem_controller extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
     public function index()
     {
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
             abort(404);
-        return view('languages.show_languages',['Language'=>Language::all()]); 
+        return view('problems.show',['problem'=>Problem::all()]); 
     }
 
     /**
@@ -30,11 +25,9 @@ class language_controller extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
+    public function create()
     {
-        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
-            abort(404);
-        return view('languages.create');
+        //
     }
 
     /**
@@ -45,30 +38,27 @@ class language_controller extends Controller
      */
     public function store(Request $request)
     {
-        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
-            abort(404);
-        Language::create($request->input());
-        return view('languages.show_languages',['Language'=>Language::all()]); 
+        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Language  $language
+     * @param  \App\Problem  $problem
      * @return \Illuminate\Http\Response
      */
-    public function show(Language $language)
+    public function show(Problem $problem)
     {
-        return view('languages.show_languages',['Language'=>Language::all()]); 
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Language  $language
+     * @param  \App\Problem  $problem
      * @return \Illuminate\Http\Response
      */
-    public function edit(Language $language)
+    public function edit(Problem $problem)
     {
         //
     }
@@ -77,10 +67,10 @@ class language_controller extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Language  $language
+     * @param  \App\Problem  $problem
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Language $language)
+    public function update(Request $request, Problem $problem)
     {
         //
     }
@@ -88,18 +78,11 @@ class language_controller extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Language  $language
+     * @param  \App\Problem  $problem
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Language $language)
+    public function destroy(Problem $problem)
     {
         //
     }
-
-    public function get_language_order_by_sorting()
-    {
-        $result = Language::order_languages();
-        return view('languages.order',['result'=>$result]);
-    }
-    
 }
