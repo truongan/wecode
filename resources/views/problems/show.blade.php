@@ -1,1 +1,3 @@
-this is page problem.blade.php
+@foreach ($result as $item)
+    {{$item}}
+@endforeach

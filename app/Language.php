@@ -14,7 +14,7 @@ class Language extends Model
                 ->orderBy('sorting', 'asc')
                 ->get();
 
-        return ['languages' => collect($result)];
+        return collect($result);
     }
 
 }
