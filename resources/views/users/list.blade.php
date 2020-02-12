@@ -89,7 +89,6 @@ thead tr:after {
 @endsection
 
 @section('body_end')
-<meta name="csrf-token" content="{{ csrf_token() }}">
 <div class="modal fade" id="user_delete" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -107,8 +106,8 @@ thead tr:after {
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger confirm-user-delete">yes, DELETE user</button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal">NO, DON'T delete</button>
+        <button type="button" class="btn btn-danger confirm-user-delete">YES</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">NO</button>
       </div>
     </div>
   </div>
@@ -133,18 +132,17 @@ $(document).ready(function(){
 		$(".modal-body").html('User ID: '+user_id+'<br>Username: '+username+'<br><i class="splashy-warning_triangle"></i> All submissions of this user will be deleted.');
 		$(".confirm-user-delete").off();
 		$(".confirm-user-delete").click(function(){
-			console.log(del_submssion);
+      console.log(del_submssion);
 			$.ajax({
-				url: (del_submssion ? 'users/delete_submissions' : 'users/'+user_id),
-        type: 'DELETE',
+				url: (del_submssion ? ('users/delete_submissions/'+user_id) : ('users/'+user_id)),
+        type: (del_submssion ? 'POST' : 'DELETE'),
 				data: {
 					user_id: user_id,
 					// wcj_csrf_name: shj.csrf_token,
-          "_token": token,
+          "_token": "{{ csrf_token() }}",
 				},
 				error: shj.loading_error,
 				success: function (response){
-            console.log(response.done);
             if (response.done)
             {
               if (!del_submssion){
