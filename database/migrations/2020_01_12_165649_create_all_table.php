@@ -113,6 +113,8 @@ class CreateAllTable extends Migration
             $table->bigIncrements('id');
             $table->char('title',200);
             $table->text('text');
+            $table->text('description');
+            $table->unsignedInteger('author');
             $table->timestamps();
         });
         Schema::create('scoreboard', function (Blueprint $table) {

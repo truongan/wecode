@@ -22,6 +22,10 @@ $(document).ready(function(){
 		<input id="form_title" name="title" type="text" class="sharif_input"/>
 	</p>
 	<p class="input_p">
+		<label for="notif_text" class="tiny">Description:</label><br><br>
+		<input type="text" name="description"></>
+	</p>
+	<p class="input_p">
 		<label for="notif_text" class="tiny">Text:</label><br><br>
 		<textarea id="notif_text" name="text"></textarea>
 	</p>

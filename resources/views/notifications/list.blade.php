@@ -5,6 +5,14 @@
 
 @section('title', 'Notifications')
 
+@section('other_assets')
+<style>
+	#more {
+		display: none;
+	}
+</style>
+@endsection
+
 @section('title_menu')
 @if ( in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
     <span class="title_menu_item"><a href="{{ route('notifications.create') }}"><i class="fa fa-plus color10"></i> New</a></span>
@@ -71,9 +79,7 @@ $(document).ready(function () {
 		$("#notification_delete").modal("show");
 	});
 
-
 });
-
 </script>
 @endsection
 
@@ -85,20 +91,19 @@ $(document).ready(function () {
 	<div class="">
 		<div class="notif" id="number{{ $notification->id }}" data-id="{{ $notification->id }}"> 
 			<div class="notif_title">
-				<a href="notifications#number{{ $notification->id }}">{{ $notification->title }}</a>
+			<a href="{{ route('notifications.show', $notification->id) }}">{{ $notification->title }} - Author: {{$notification->author}}</a>
 				<div class="notif_meta">
 					{{ $notification->created_at }}
 					@if ( in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
 						<a href="notifications/{{ $notification->id }}/edit">Edit</a>
-						<span class="pointer del_n">Delete</span>
+						<span class="pointer del_n text-danger">Delete</span>
 					@endif
 				</div>
 			</div>
-			{{-- <div class="notif_text">
-				{!! $notification->text !!}
-			</div> --}}
+			<div class="notif_text">
+				{{ $notification->description }}
+			</div>
 		</div>
 	</div>
 	@endforeach
-
 @endsection
