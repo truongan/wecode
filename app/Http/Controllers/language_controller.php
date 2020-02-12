@@ -22,7 +22,7 @@ class language_controller extends Controller
     {
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
             abort(404);
-        return view('languages.show_languages',['Language'=>Language::all()]); 
+        return view('languages.list',['Language'=>Language::all()]); 
     }
 
     /**
@@ -48,7 +48,7 @@ class language_controller extends Controller
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
             abort(404);
         Language::create($request->input());
-        return view('languages.show_languages',['Language'=>Language::all()]); 
+        return view('languages.list',['Language'=>Language::all()]); 
     }
 
     /**
@@ -59,7 +59,7 @@ class language_controller extends Controller
      */
     public function show(Language $language)
     {
-        return view('languages.show_languages',['Language'=>Language::all()]); 
+        return view('languages.list',['Language'=>Language::all()]); 
     }
 
     /**
@@ -91,9 +91,13 @@ class language_controller extends Controller
      * @param  \App\Language  $language
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Language $language)
+    public function destroy($id)
     {
-        //
+        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
+            abort(404);
+        if ($id!=NULL)
+            Language::destroy($id);
+        return view('problems.list',['problems'=>Language::all()]);  
     }
 
     public function get_language_order_by_sorting()
