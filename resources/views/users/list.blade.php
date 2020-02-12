@@ -69,7 +69,7 @@ thead tr:after {
           <td>{{$user->email}}</td>
           <td>{{$user->role->name}}</td>
           <td>{{ $user->first_login_time ? $user->first_login_time : 'Never'}}</td>
-          <td>{{ $user->last_login_time ? $user.last_login_time : 'Never'}}</td>
+          <td>{{ $user->last_login_time ? $user->last_login_time : 'Never'}}</td>
           <td>
             <a title="Profile" href="{{ route('users.show', $user) }}" class = "fas fa-address-book fa-lg color0"></a>
             <a title="Edit" href="{{ route('users.edit', $user) }}"><i class="fas fa-user-edit fa-lg color9"></i></a>
