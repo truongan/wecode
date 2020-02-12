@@ -9,9 +9,6 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
-
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
@@ -20,9 +17,9 @@
     <!-- Styles -->
 	<link rel="stylesheet" type='text/css' href="{{ asset('css/bootstrap/default.min.css') }}">
     <link rel="stylesheet" type='text/css' href="{{ asset('assets/sbadmin/css/sb-admin.css') }}">
-    <link rel="stylesheet" type='text/css' href="{{ asset('css/fullcalendar/fullcalendar.min.css') }}">
     <link href="{{ asset('css/main.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/fontawesome-free-5.3.1-web/css/all.css') }}" rel="stylesheet">
+    @yield('other_assets')
 </head>
 <body id="body" class="fixed-nav ">
     @yield('mainnav', View::make('layouts.mainnav', ['selected' => $selected]))

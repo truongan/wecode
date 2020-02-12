@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Notification;
 
-class HomeController extends Controller
+class home_controller extends Controller
 {
     /**
      * Create a new controller instance.

@@ -4,6 +4,10 @@
 
 @section('title', 'Dashboard')
 
+@section('other_assets')
+<link rel="stylesheet" type='text/css' href="{{ asset('css/fullcalendar/fullcalendar.min.css') }}">
+@endsection
+
 @section('body_end')
 <script type='text/javascript' src="{{ asset('assets/fullcalendar/fullcalendar.js') }}"></script>
 <script type='text/javascript' src="{{ asset('assets/js/jquery.autoellipsis-1.0.10.min.js') }}"></script>
