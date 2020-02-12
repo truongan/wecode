@@ -47,11 +47,11 @@
 
   <div class="m-3">
     <div class="card" style="width: 18rem;">
-      <i class="text-center card-img-top fas fa-language fa-8x p-4"></i>
+      <i class="text-center card-img-top fas fa-laptop-code fa-8x p-4"></i>
       <div class="card-body bg-light">
         <h5 class="card-title">Language</h5>
         <p  class="card-text">Thiết lập ngôn ngữ lập trình</p>
-        <a href="#" class="stretched-link"></a>
+        <a href="{{ route('languages.index') }}" class="stretched-link"></a>
       </div>
     </div>
   </div>
