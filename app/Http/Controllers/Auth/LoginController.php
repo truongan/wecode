@@ -53,7 +53,7 @@ class LoginController extends Controller
             Auth::user()->save();
             return redirect()->intended('home');
         } else {
-            return redirect()->intended('login');
+            return back()->withInput();
         }
     }
     
