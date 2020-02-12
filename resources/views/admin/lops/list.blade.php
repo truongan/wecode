@@ -3,7 +3,7 @@
 
 @section('icon', 'fas fa-school')
 
-@section('title', 'lops')
+@section('title', 'Classes')
 
 @section('title_menu')
     {{-- Nếu là admin thì hiển thị --}}

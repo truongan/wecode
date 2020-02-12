@@ -25,7 +25,10 @@ Route::post('/settings', 'setting_controller@update')->name('settings.update');
 Route::get('/users/add', 'UserController@add')->name('users.add');
 Route::post('/users/adds', 'UserController@add')->name('users.add');
 Route::delete('users/{id}', 'UserController@destroy')->name('users.destroy');
+
+Route::get('/languages/order', 'language_controller@get_language_order_by_sorting');
 //Resource route phải được  ghi cuối cùng, nếu không các route sau dính tới /usres sẽ ăn shit 
 Route::resource('users','UserController');
 Route::resource('notifications','NotificationController');
 Route::resource('lops','lop_controller');
+Route::resource('languages','language_controller');

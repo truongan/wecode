@@ -11,7 +11,7 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav bg-dark navbar-sidenav color-{{ $selected }}" id="exampleAccordion">
                 <li class="nav-item color-dashboard {{ ($selected=="dashboard") ? "selected" : ""}}">
-                <a class="nav-link" href="{{ url('dashboard') }}">
+                <a class="nav-link" href="{{ url('home') }}">
                     <i class="fa fa-fw fa-tachometer-alt fa-lg"></i>
                     <span class="nav-link-text">Dashboard</span>
                 </a>

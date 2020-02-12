@@ -31,7 +31,7 @@ class UserController extends Controller
     public function index()
     {
         //
-        return view('users.list',['users'=>User::all(), 'selected' => 'users']); 
+        return view('users.list',['users'=>User::all(), 'selected' => 'settings']); 
     }
 
     /**
