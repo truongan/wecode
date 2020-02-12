@@ -43,7 +43,6 @@ MathJax.Hub.Config({
  */
 $(document).ready(function () {
 	$('.del_n').click(function () {
-        jQuery.noConflict();
 		var notif = $(this).parents('.notif');
 		var id = $(notif).data('id');
 
@@ -91,7 +90,7 @@ $(document).ready(function () {
 					{{ $notification->created_at }}
 					@if ( in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
 						<a href="notifications/{{ $notification->id }}/edit">Edit</a>
-						<span class="anchor del_n">Delete</span>
+						<span class="pointer del_n">Delete</span>
 					@endif
 				</div>
 			</div>

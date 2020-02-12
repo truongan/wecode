@@ -121,7 +121,6 @@ thead tr:after {
  * "Users" page
  */
 $(document).ready(function(){
-  {{-- jQuery.noConflict(); --}}
 	$('.delete-btn').click(function(){
 		var row = $(this).parents('tr');
 		var user_id = row.data('id');
