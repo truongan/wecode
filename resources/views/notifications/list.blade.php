@@ -105,6 +105,8 @@ $(document).ready(function () {
 				{{ $notification->description }}
 			</div>
 		</div>
+		
 	</div>
 	@endforeach
+	{!! $notifications->render()!!}
 @endsection
