@@ -17,7 +17,6 @@
 
 <div class="row">
   <div class="col">
-    <div style="height:15px"></div>
     <table class="wecode_table table table-striped table-bordered">
       <thead class="thead-dark">
         <tr>

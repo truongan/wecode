@@ -1,26 +1,41 @@
+@php($selected = 'settings')
+@extends('layouts.app')
+
+@section('icon', 'fas fa-plus')
+
+@section('title', 'New Language')
+
+@section('content')
 <form method="POST"  action="{!! route('languages.store') !!}">
 	<input type="hidden"  name ="_token" value="{!! csrf_token() !!}"/>
-	<p class="input_p">
-		<label for="form_title" class="tiny">name:</label>
-		<input id="form_title" name="name" type="text" class="sharif_input"/>
-	</p>
-	<p class="input_p">
-		<label for="notif_text" class="tiny">extension:</label><br><br>
-		<textarea id="notif_text" name="extension"></textarea>
-    </p>
-    <p class="input_p">
-		<label for="notif_text" class="tiny">sorting:</label><br><br>
-		<textarea id="notif_text" name="sorting"></textarea>
-    </p>
-    <p class="input_p">
-		<label for="notif_text" class="tiny">default_time_limit:</label><br><br>
-		<textarea id="notif_text" name="default_time_limit"></textarea>
-    </p>
-    <p class="input_p">
-		<label for="notif_text" class="tiny">default_memory_limit:</label><br><br>
-		<textarea id="notif_text" name="default_memory_limit"></textarea>
-	</p>
-	<p class="input_p">
-		<input type="submit" value="Add" class="sharif_input"/>
-	</p>
+
+	<table class="table w-50">
+		<tr>
+					<td>Name:</td>
+					<td>	<input class="form-control" type="text" name="name">	</td>
+		</tr>
+		<tr>
+					<td>Extension:</td>
+					<td>	<input class="form-control" type="text" name="extension">	</td>
+		</tr>
+		<tr>
+					<td>Sorting:</td>
+					<td>	<input class="form-control" type="text" name="sorting">	</td>
+		</tr>
+		<tr>
+					<td>Default_time_limit:</td>
+					<td>	<input class="form-control" type="text" name="default_time_limit">	</td>
+		</tr>
+		<tr>
+					<td>Default_memory_limit:</td>
+					<td>	<input class="form-control" type="text" name="default_memory_limit">	</td>
+		</tr>
+	
+		
+	</table>
+	<br>
+	<div class="d-flex justify-content-center w-50">
+		<input type="submit" value="Add" class="form-control btn btn-primary"/>
+	</div>
 </form>	
+@endsection

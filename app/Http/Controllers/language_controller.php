@@ -49,7 +49,7 @@ class language_controller extends Controller
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
             abort(404);
         Language::create($request->input());
-        return view('languages.list',['Language'=>Language::all()]); 
+        return redirect('languages'); 
     }
 
     /**
@@ -71,7 +71,7 @@ class language_controller extends Controller
      */
     public function edit(Language $language)
     {
-        return view('languages.edit', compact('language'));
+        return view('languages.edit', ['language' => $language]);
     }
 
     /**
@@ -97,15 +97,19 @@ class language_controller extends Controller
      * @param  \App\Language  $language
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request)
+    public function destroy($id)
     {
-        var_dump($request);
-        die();
-        // if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
-        //     abort(404);
-        // if ($id!=NULL)
-        //     Language::destroy($id);
-        return view('problems.list',['problems'=>Language::order_languages()]);  
+        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
+            abort(404);
+        elseif ($id === NULL)
+			$json_result = array('done' => 0, 'message' => 'Input Error');
+        else
+        {
+            Language::destroy($id);
+            $json_result = array('done' => 1);
+        }
+        header('Content-Type: application/json; charset=utf-8');  
+        return ($json_result);
     }
     
 }
