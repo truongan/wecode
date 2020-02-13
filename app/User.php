@@ -111,7 +111,7 @@ class User extends Authenticatable
 			'username' => $username,
 			'email' => $email,
 			'password' => Hash::make($password),
-			'role_id' => 4,
+			'role_id' => $role,
 			'display_name' => $display_name
 		];
 		
