@@ -58,11 +58,11 @@
 
   <div class="m-3">
     <div class="card" style="width: 18rem;">
-      <i class="text-center card-img-top fas fa-list fa-8x p-4"></i>
+      <i class="text-center card-img-top fas fa-clipboard-list fa-8x p-4"></i>
       <div class="card-body bg-light">
         <h5 class="card-title">PROBLEM LIST</h5>
         <p  class="card-text">Chỉnh sửa và ...</p>
-        <a href="{{ route('users.index') }}" class="stretched-link"></a>
+        <a href="{{ route('problems.index') }}" class="stretched-link"></a>
       </div>
     </div>
   </div>

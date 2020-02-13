@@ -3,7 +3,7 @@
 
 @section('icon', 'fas fa-plus')
 
-@section('title', 'New Language')
+@section('title', 'Edit Language')
 
 @section('content')
 <form method="POST"  action="{!! route('languages.update',$language) !!}">
