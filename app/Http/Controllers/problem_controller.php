@@ -28,7 +28,7 @@ class problem_controller extends Controller
      */
     public function create()
     {
-        //
+        return view('problems.create');
     }
 
     /**
@@ -39,7 +39,10 @@ class problem_controller extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
+        var_dump($request);
+        die();
+        return redirect('/');
     }
 
     /**
@@ -105,21 +108,6 @@ class problem_controller extends Controller
     //         Problem::destroy($id);
     //     return view('problems.list',['problems'=>Problem::all()]);  
     // }
-
-    // public function add()
-    // {
-    //     edit(NULL);
-    //     return view('problems.add');
-    // }
-
-    public function add_problem(Request $request)
-    {
-        // if (!$request->has($request['file']))
-        // {
-        //     return view('problems.list',['problems'=>Problem::all()]); 
-        // }
-        return view('languages.list');
-    }
     
     // private function unload_zip_test_file($assignments_root, $problem_dir, $u_data){
 	// 	// Create a temp directory
