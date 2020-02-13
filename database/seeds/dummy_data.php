@@ -24,5 +24,14 @@ class dummy_data extends Seeder
                 'role_id' => $i % 4 + 1 //student
             ]);
         }
+        for ($i=1; $i < 10; $i++) { 
+            DB::table('problems')->insert([
+                'name' => 'problem' . $i,
+                'is_upload_only' => true,
+                'diff_cmd' => $i,
+                'diff_arg' => $i,
+                'admin_note' => 'fake_data'
+            ]);
+        }
     }
 }
