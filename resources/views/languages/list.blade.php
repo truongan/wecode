@@ -6,6 +6,7 @@
 
 @section('title_menu')
 <span class="title_menu_item"><a href="https://github.com/truongan/wecode-judge/blob/docs/v1.4/users.md" target="_blank"><i class="fa fa-question-circle color6"></i> Help</a></span>
+<span class="title_menu_item"><a href="{{ url('languages/create') }}"><i class="fa fa-plus color10"></i> Add</a></span>
 @endsection
 
 @section('content')

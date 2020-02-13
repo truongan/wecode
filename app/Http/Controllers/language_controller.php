@@ -71,7 +71,7 @@ class language_controller extends Controller
      */
     public function edit(Language $language)
     {
-        return view('languages.edit', compact('language'));
+        return view('languages.edit', ['language' => $language]);
     }
 
     /**
