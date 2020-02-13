@@ -39,7 +39,7 @@ class lop_controller extends Controller
     public function store(Request $request)
     {
         //
-        var_dump($request->input());die();
+        // var_dump($request->input());die();
         $a = $request->only('name');
         $a['open'] = $request->input('open') === 'on';
 
