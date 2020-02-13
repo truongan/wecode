@@ -26,7 +26,8 @@ class notification_controller extends Controller
     public function index()
     {
         //
-        return view('notifications.list', ['notifications'=>Notification::all()]);
+        $notification = Notification::latest()->paginate(5);
+        return view('notifications.list', ['notifications'=>$notification]);
     }
 
     /**

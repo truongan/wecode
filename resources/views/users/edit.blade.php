@@ -60,11 +60,11 @@ Users - {{$user->username}}
 		<div class="form-group form-row">
 		  <label for="form_role" class="col-4">User Role:</label>
 		  <div class="col-8">
-			<select id="form_role" name="role" class="form-control custom-select">
-			  <option value="admin" {{ $user->role_id=='1' ? "selected":"" }} >admin</option>
-			  <option value="head_instructor" {{ $user->role_id=='2' ? "selected":"" }} >head_instructor</option>
-			  <option value="instructor" {{ $user->role_id=='3' ? "selected":"" }} >instructor</option>
-			  <option value="student" {{ $user->role_id=='4' ? "selected":"" }} >student</option>
+			<select id="form_role" name="role_id" class="form-control custom-select">
+			  <option value="1" {{ $user->role_id=='1' ? "selected":"" }} >admin</option>
+			  <option value="2" {{ $user->role_id=='2' ? "selected":"" }} >head_instructor</option>
+			  <option value="3" {{ $user->role_id=='3' ? "selected":"" }} >instructor</option>
+			  <option value="4" {{ $user->role_id=='4' ? "selected":"" }} >student</option>
 			</select>
 			{{-- {{ form_error('role', '<div class="form-text text-danger">', '</div>') }} --}}
 		  </div>
