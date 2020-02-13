@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Lop;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class lop_controller extends Controller
 {
@@ -124,8 +125,19 @@ class lop_controller extends Controller
      * @param  \App\Lop  $lop
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Lop $lop)
+    public function destroy($id)
     {
-        //
+        // 
+        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
+            abort(404);
+        elseif ($id === NULL)
+			$json_result = array('done' => 0, 'message' => 'Input Error');
+        else
+        {
+            Lop::destroy($id);
+            $json_result = array('done' => 1);
+        }
+        header('Content-Type: application/json; charset=utf-8');  
+        return ($json_result);
     }
 }

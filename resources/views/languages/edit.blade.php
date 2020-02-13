@@ -23,15 +23,15 @@
 			</tr>
 			<tr>
 						<td>Sorting:</td>
-						<td>	<input class="form-control" type="text" name="sorting" value="{{$language->sorting}}">	</td>
+						<td>	<input class="form-control" type="number" name="sorting" value="{{$language->sorting}}">	</td>
 			</tr>
 			<tr>
 						<td>Default_time_limit:</td>
-						<td>	<input class="form-control" type="text" name="default_time_limit" value="{{$language->default_time_limit}}">	</td>
+						<td>	<input class="form-control" type="number" name="default_time_limit" value="{{$language->default_time_limit}}">	</td>
 			</tr>
 			<tr>
 						<td>Default_memory_limit:</td>
-						<td>	<input class="form-control" type="text" name="default_memory_limit" value="{{$language->default_memory_limit}}">	</td>
+						<td>	<input class="form-control" type="number" name="default_memory_limit" value="{{$language->default_memory_limit}}">	</td>
 			</tr>
 		
 			

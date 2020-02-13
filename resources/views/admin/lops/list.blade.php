@@ -40,11 +40,64 @@
           <td>
             <a title="Profile" href="{{ route('lops.show', $lop->id) }}" class = "fas fa-address-book fa-lg color0"></a>
             <a title="Edit" href="{{ route('lops.edit', $lop->id) }}"><i class="fas fa-edit fa-lg color9"></i></a>
+            <span title="Delete lop" class="delete-btn del_n delete_lop pointer" href="{{ route('lops.destroy', $lop->id) }}"><i class="fa fa-times-circle fa-lg color1"></i></span>
           </td>
         </tr>
         @endforeach
     </table>
   </div>
 </div>
+<div class="modal fade" id="lop_delete" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Are you sure you want to delete this class?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger confirm-lop-delete">YES</button>
+    <button type="button" class="btn btn-primary" data-dismiss="modal">NO</button>
+      </div>
+    </div>
+  </div>
+</div>
+@endsection
 
+@section('body_end')
+<script>
+/**
+* Notifications
+*/
+$(document).ready(function () {
+$('.del_n').click(function () {
+  var row = $(this).parents('tr');
+	var id = row.data('id');
+  $(".confirm-lop-delete").off();
+  $(".confirm-lop-delete").click(function(){
+    $("#lop_delete").modal("hide");
+    $.ajax({
+      type: 'DELETE',
+      url: 'lops/'+id,
+      data: {
+                  '_token': "{{ csrf_token() }}",
+      },
+      error: shj.loading_error,
+      success: function (response) {
+        if (response.done) {
+          row.animate({backgroundColor: '#FF7676'},100, function(){row.remove();});
+          $.notify('lop deleted'	, {position: 'bottom right', className: 'success', autoHideDelay: 5000});
+          $("#lop_delete").modal("hide");
+        }
+        else
+          shj.loading_failed(response.message);
+      }
+    });
+  });
+  $("#lop_delete").modal("show");
+});
+
+});
+</script>
 @endsection

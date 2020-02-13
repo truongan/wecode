@@ -14,11 +14,6 @@
 
 
 <div class="row">
-<form action="{{route('lops.destroy', $lop->id)}}" method="POST">
-	@method('DELETE')
-	@csrf
-	<button type="submit" class="btn btn-danger">Delete</button>
-</form><br/>
   	<form action="{{route('lops.update', $lop->id)}}" method="POST">
 	@method('PUT')
 	@csrf
