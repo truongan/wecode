@@ -65,10 +65,10 @@ $(document).ready(function () {
 				error: shj.loading_error,
 				success: function (response) {
 					if (response.done) {
-						notif.animate({backgroundColor: '#FF7676'}, 1000, function () {
+						notif.animate({backgroundColor: '#FF7676'}, 100, function () {
 							notif.remove();
 						});
-						$.notify('Notification deleted'	, {position: 'bottom right', className: 'success', autoHideDelay: 5900});
+						$.notify('Notification deleted'	, {position: 'bottom right', className: 'success', autoHideDelay: 5000});
                         $("#notification_delete").modal("hide");
 					}
 					else

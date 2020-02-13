@@ -146,7 +146,7 @@ $(document).ready(function(){
             if (response.done)
             {
               if (!del_submssion){
-                row.animate({backgroundColor: '#FF7676'},1000, function(){row.remove();});
+                row.animate({backgroundColor: '#FF7676'},100, function(){row.remove();});
                 $.notify('User '+username+' deleted.', {position: 'bottom right', className: 'success', autoHideDelay: 5000});
               } else {
                 $.notify('All of User '+username+'\'s submissions deleted.', {position: 'bottom right', className: 'success', autoHideDelay: 5000});
