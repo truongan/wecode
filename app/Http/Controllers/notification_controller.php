@@ -59,6 +59,7 @@ class notification_controller extends Controller
 		// if($this->form_validation->run()){
             $notification = $request->input();
             $notification['author'] = Auth::user()->id;
+            $notification['last_author'] = $notification['author'];
             Notification::create($notification);
 		    return redirect('notifications');
 		// }        
@@ -73,7 +74,8 @@ class notification_controller extends Controller
     public function show($id)
     {
         //
-        return view('notifications.show', ['notification' => Notification::findOrFail($id)]);
+        $notification = Notification::findOrFail($id);
+        return view('notifications.show', ['notification' => $notification, 'author' => $notification->user->username]);
     }
 
     /**
@@ -111,6 +113,7 @@ class notification_controller extends Controller
             $notification = Notification::find($id);
             $notification->title = $request['title'];
             $notification->text = $request['text'];
+            $notification->last_author = Auth::user()->id;
             $notification->save();
             return redirect('notifications');
 		// }

@@ -115,6 +115,7 @@ class CreateAllTable extends Migration
             $table->text('text');
             $table->text('description');
             $table->unsignedInteger('author');
+            $table->unsignedInteger('last_author');
             $table->timestamps();
         });
         Schema::create('scoreboard', function (Blueprint $table) {
