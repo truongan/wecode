@@ -51,12 +51,11 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         $a = 'regex:/'.  Setting::get('registration_code') . "/";
-        // var_dump($a);
-        // var_dump($data);die();
-        
+
         return Validator::make($data, [
             'registration_code' => [$a],
-            'username' => ['required', 'string', 'max:255', 'unique:App\User,username'],
+            'username' => ['required', 'string', 'max:50', 'unique:users'],
+            'display_name' => ['nullable', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
@@ -73,6 +72,7 @@ class RegisterController extends Controller
         return User::create([
             'username' => $data['username'],
             'email' => $data['email'],
+            'display_name' => $data['display_name'],
             'password' => Hash::make($data['password']),
             'role_id' => Role::where('name','student')->first()->id,
         ]);
