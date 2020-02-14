@@ -18,6 +18,8 @@ Route::get('/', function () {
 Auth::routes();
 Route::view('/admin','admin.admin')->name('admin.index');
 Route::get('/home', 'home_controller@index')->name('home');
+Route::get('/htmleditor', 'html_editor_controller@index');
+Route::post('/htmleditor/autosave', 'html_editor_controller@autosave');
 
 Route::get('/settings', 'setting_controller@index')->name('settings.index');
 Route::post('/settings', 'setting_controller@update')->name('settings.update');

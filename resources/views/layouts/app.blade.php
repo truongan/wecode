@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ $settings['site_name'] }}</title>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -15,7 +15,7 @@
 	<link rel="icon" href="{{ asset('assets/images/favicon.ico') }}">
 
     <!-- Styles -->
-	<link rel="stylesheet" type='text/css' href="{{ asset('css/bootstrap/default.min.css') }}">
+	<link rel="stylesheet" type='text/css' href="{{ asset('css/bootstrap/' . $settings['theme']  . '.min.css') }}">
     <link rel="stylesheet" type='text/css' href="{{ asset('assets/sbadmin/css/sb-admin.css') }}">
     <link href="{{ asset('css/main.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/fontawesome-free-5.3.1-web/css/all.css') }}" rel="stylesheet">
