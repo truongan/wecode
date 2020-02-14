@@ -22,15 +22,15 @@ $(document).ready(function(){
 		<input id="form_title" name="title" type="text" class="sharif_input"/>
 	</p>
 	<p class="input_p">
-		<label for="notif_text" class="tiny">Description:</label><br><br>
+		<label for="notif_text" class="tiny">Description:</label>
 		<input type="text" name="description"></>
 	</p>
 	<p class="input_p">
-		<label for="notif_text" class="tiny">Text:</label><br><br>
+		<label for="notif_text" class="tiny">Text:</label>
 		<textarea id="notif_text" name="text"></textarea>
 	</p>
 	<p class="input_p">
-		<input type="submit" value="Add" class="sharif_input"/>
+		<input type="submit" value="Add" class="btn btn-primary"/>
 	</p>
 </form>	
 @endsection

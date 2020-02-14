@@ -123,10 +123,10 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         //
-        $user->username=$request->username;
         $user->display_name=$request->display_name;
         if ($request->password!="")
             $user->password=Hash::make($request->password);
+        $user->role_id = $request->role_id;
         $user->save();
         return redirect('users');
     }

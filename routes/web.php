@@ -26,11 +26,9 @@ Route::get('/users/add', 'UserController@add')->name('users.add');
 Route::post('/users/adds', 'UserController@add')->name('users.add');
 Route::delete('users/{id}', 'UserController@destroy')->name('users.destroy');
 
-Route::get('/problems/add_prolem', 'problem_controller@add_problem');
-Route::get('/problems/show', 'problem_controller@index');
-Route::get('/problems/show/{id}', 'problem_controller@show');
-Route::get('/problems/add_problem', 'problem_controller@add_problem');
 
+Route::get('/problems/show/{id}', 'problem_controller@show');
+// Route::get('/problems/add', 'problem_controller@create')->name('problems.create');
 
 //Resource route phải được  ghi cuối cùng, nếu không các route sau dính tới /usres sẽ ăn shit 
 Route::resource('users','UserController');
