@@ -17,4 +17,8 @@ class Language extends Model
         return collect($result);
     }
 
+    public function get_id()
+    {
+        return $this->belongsToMany('App\Problem');
+    }
 }

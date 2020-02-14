@@ -101,7 +101,7 @@ class CreateAllTable extends Migration
             $table->unsignedBigInteger('language_id');
             $table->timestamps();
         });
-        Schema::create('problem_language', function (Blueprint $table) {
+        Schema::create('language_problem', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('language_id');
             $table->unsignedBigInteger('problem_id');
@@ -141,7 +141,7 @@ class CreateAllTable extends Migration
         Schema::dropIfExists('assignments');
         Schema::dropIfExists('problem_assignment');
         Schema::dropIfExists('submissions');
-        Schema::dropIfExists('problem_language');
+        Schema::dropIfExists('language_problem');
         Schema::dropIfExists('notifications');
         Schema::dropIfExists('scoreboard');
     }

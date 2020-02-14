@@ -28,6 +28,8 @@ Route::delete('users/{id}', 'UserController@destroy')->name('users.destroy');
 
 
 Route::get('/problems/show/{id}', 'problem_controller@show');
+Route::get('/problems/test', 'problem_controller@test');
+
 // Route::get('/problems/add', 'problem_controller@create')->name('problems.create');
 
 //Resource route phải được  ghi cuối cùng, nếu không các route sau dính tới /usres sẽ ăn shit 

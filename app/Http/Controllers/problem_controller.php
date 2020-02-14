@@ -158,48 +158,55 @@ class problem_controller extends Controller
 	// 	// Remove temp directory
 	// 	shell_exec("rm -rf $tmp_dir");
     // }
-    public function get_directory_path($id = NULL){
-		if ($id === NULL) return NULL;
-		$assignments_root = rtrim(Setting::get('assignments_root'),'/');
-		$problem_dir = $assignments_root . "/problems/".$id;
-		return $problem_dir;
-    }
+    // public function get_directory_path($id = NULL){
+	// 	if ($id === NULL) return NULL;
+	// 	$assignments_root = rtrim(Setting::get('assignments_root'),'/');
+	// 	$problem_dir = $assignments_root . "/problems/".$id;
+	// 	return $problem_dir;
+    // }
 
-    public function get_description($id = NULL){
-		$problem_dir = $this->get_directory_path($id);
-		$result =  array(
-			'description' => '<p>Description not found</p>',
-			'has_pdf' => glob("$problem_dir/*.pdf") != FALSE
-			,'has_template' => glob("$problem_dir/template.cpp") != FALSE
-		);
+    // public function get_description($id = NULL){
+	// 	$problem_dir = $this->get_directory_path($id);
+	// 	$result =  array(
+	// 		'description' => '<p>Description not found</p>',
+	// 		'has_pdf' => glob("$problem_dir/*.pdf") != FALSE
+	// 		,'has_template' => glob("$problem_dir/template.cpp") != FALSE
+	// 	);
 		
-		$path = "$problem_dir/desc.html";
+	// 	$path = "$problem_dir/desc.html";
 
-		if (file_exists($path))
-			$result['description'] = file_get_contents($path);
+	// 	if (file_exists($path))
+	// 		$result['description'] = file_get_contents($path);
 
-		return $result;
-    }
+	// 	return $result;
+    // }
     
-    public function delete_problem($id){
-		$cmd = 'rm -rf '.$this->get_directory_path($id);
-		//var_dump($cmd);die();
-		DB::beginTransaction();
-		// Phase 1: Delete this assignment and its submissions from database
-		Problem::destroy($id);
-		$this->db->delete('problem_language', array('problem_id'=>$id));
-		$this->db->delete('problem_assignment', array('problem_id'=>$id));
-		DB::table('submissions')->where('problem_id',$id);
+    // public function delete_problem($id){
+	// 	$cmd = 'rm -rf '.$this->get_directory_path($id);
+	// 	//var_dump($cmd);die();
+	// 	DB::beginTransaction();
+	// 	// Phase 1: Delete this assignment and its submissions from database
+	// 	Problem::destroy($id);
+	// 	$this->db->delete('problem_language', array('problem_id'=>$id));
+	// 	$this->db->delete('problem_assignment', array('problem_id'=>$id));
+	// 	DB::table('submissions')->where('problem_id',$id);
 
-		$this->db->trans_complete();
+	// 	$this->db->trans_complete();
 
-		if ($this->db->trans_status())
-		{
-			// Phase 2: Delete assignment's folder (all test cases and submitted codes)
-			$cmd = 'rm -rf '.$this->get_directory_path($id);
+	// 	if ($this->db->trans_status())
+	// 	{
+	// 		// Phase 2: Delete assignment's folder (all test cases and submitted codes)
+	// 		$cmd = 'rm -rf '.$this->get_directory_path($id);
 
-			shell_exec($cmd);
-		}
-	}
+	// 		shell_exec($cmd);
+	// 	}
+    // }
+
+    public function test()
+    {
+        //
+        $problem = Problem::findOrFail(1);
+        return view('problems.test', ['test' => $problem->get_id]);
+    }
 
 }

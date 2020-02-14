@@ -64,5 +64,16 @@ class dummy_data extends Seeder
                 'updated_at'=>new DateTime
             ]);
         }
+        for ($i=1; $i < 8; $i++) { 
+            DB::table('language_problem')->insert([
+               'language_id' => $i,
+               'problem_id' =>$i,
+               'time_limit' =>100,
+               'memory_limit'=>100,
+               'created_at'=>new DateTime,
+               'updated_at'=>new DateTime
+            ]);
+        }
+        
     }
 }
