@@ -11,13 +11,30 @@
                     <form method="POST" action="{{ route('register') }}">
                         @csrf
 
+                        @if ($settings['registration_code'] > 0)
+                            <div class="form-group row">
+                                <label for="registration_code" class="col-md-4 col-form-label text-md-right">{{ __('Registration code') }}</label>
+
+                                <div class="col-md-6">
+                                    <input id="registration_code" type="number"" class="form-control @error('registration_code') is-invalid @enderror" name="registration_code" value="{{ old('registration_code') }}" required autocomplete="registration_code" autofocus>
+                                    <small class="text-muted">This site require a secret registration code. You must obtain the code from administrators before registering</small>
+                                    @error('registration_code')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>Your registration code is incorrect</strong>
+                                            {{-- <strong>{{ $message }}</strong> --}}
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            
+                        @endif
                         <div class="form-group row">
-                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>
+                            <label for="username" class="col-md-4 col-form-label text-md-right">{{ __('User Name') }}</label>
 
                             <div class="col-md-6">
-                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
+                                <input id="username" type="text" class="form-control @error('username') is-invalid @enderror" name="username" value="{{ old('username') }}" required autocomplete="username" autofocus>
 
-                                @error('name')
+                                @error('username')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>

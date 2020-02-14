@@ -26,7 +26,15 @@ class Setting extends Model
         return false;
     }
 
-    public function find_by_key($key){
+    static public function load_all(){
+
+        $all = Setting::all()->reduce(function($carry, $i){
+            $carry[$i->key] = $i->value;
+            return $carry;
+        }, []);
+        return $all;
+    }
+    static public function find_by_key($key){
         return Setting::where('key', $key)->first();
     }
 

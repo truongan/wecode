@@ -18,7 +18,7 @@
 	@method('DELETE')
 	@csrf
 	<button type="submit" class="btn btn-danger">Delete</button>
-</form><br/>
+</form>
   	<form action="{{route('lops.update', $lop->id)}}" method="POST">
 	@method('PUT')
 	@csrf
