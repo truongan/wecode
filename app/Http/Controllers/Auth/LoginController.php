@@ -43,6 +43,7 @@ class LoginController extends Controller
     public function Login(Request $request)
     {
         $credentials = $request->only('username', 'password');
+        
         if ( Auth::viaRemember() || 
             Auth::attempt($credentials, $request->input('remember') !== NULL)
         ) {
@@ -53,7 +54,10 @@ class LoginController extends Controller
             Auth::user()->save();
             return redirect()->intended('home');
         } else {
-            return back()->withInput();
+            return back()->withInput()->withErrors([
+                'username' => 'Either your username or password are incorrect, and we are too lazy to check which one is wrong. Please check both of them.',
+                'password' => 'Either your username or password are incorrect, and we are too lazy to check which one is wrong. Please check both of them.',
+            ]);;
         }
     }
     
