@@ -25,6 +25,12 @@ class setting_service_provider extends ServiceProvider
     public function boot()
     {
         //
-        view()->share('settings', Setting::load_all());
+        try{
+            view()->share('settings', Setting::load_all());
+        } catch(  \Illuminate\Database\QueryException $e){
+            var_dump('fail to load settings: ' . $e->getMessage());
+            // Log::critical('fail to load settings: ' . $e->getMessage());
+        }
+        
     }
 }

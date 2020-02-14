@@ -1,7 +1,7 @@
 <nav id="mainNav" class="mainNav navbar navbar-expand-lg navbar-dark fixed-top color-{{ $selected }} bg-dark">
         <a  class="navbar-brand" href="{{ url('/home') }}">
             <img src="{{ asset('images/logo.png') }}" height="30px" />
-            {{ env('APP_NAME') }}
+            {{ $settings['site_name'] }}
         </a>
     
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">

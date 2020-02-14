@@ -38,45 +38,47 @@ class setting_controller extends Controller
     public function update(Request $request){
         $t = Setting::all();
         
-        $request->validate(['timezone' => 'required',
+        if ($request->validate(['timezone' => 'required',
             ''
-        ]);
-
-        // var_dump($request->all());die();
-        $keys=[
-            ['key' => 'site_name'],
-            ['key' => 'timezone'],
-            ['key' => 'tester_path'],
-            ['key' => 'assignments_root'],
-            ['key' => 'file_size_limit'],
-            ['key' => 'output_size_limit'],
-            // ['key' => 'queue_is_working'],
-            ['key' => 'default_late_rule'],
-            ['key' => 'enable_c_shield'],
-            // ['key' => 'enable_cpp_shield'],
-            // ['key' => 'enable_py2_shield'],
-            // ['key' => 'enable_py3_shield'],
-            // ['key' => 'enable_java_policy'],
-            // ['key' => 'enable_log'],
-            ['key' => 'submit_penalty'],
-            ['key' => 'enable_registration'],
-            ['key' => 'registration_code'],
-            ['key' => 'mail_from'],
-            ['key' => 'mail_from_name'],
-            ['key' => 'reset_password_mail'],
-            ['key' => 'add_user_mail'],
-            ['key' => 'moss_userid'],
-            ['key' => 'results_per_page_all'],
-            ['key' => 'results_per_page_final'],
-            ['key' => 'week_start'],
-            ['key' => 'theme'],
-            ['key'=> 'concurent_queue_process'],
-        ];
-
-        //verify all the key is there
-        foreach($keys as $k){
-            var_dump ($k);var_dump($request->input($k));
+        ])){
+            $submitted = $request->input();
+            // var_dump($request->all());die();
+            $keys=[
+                 'site_name',
+                 'timezone',
+                 'tester_path',
+                 'assignments_root',
+                 'file_size_limit',
+                 'output_size_limit',
+                //  'queue_is_working',
+                 'default_late_rule',
+                //  'enable_c_shield',
+                //  'enable_cpp_shield',
+                //  'enable_py2_shield',
+                //  'enable_py3_shield',
+                //  'enable_java_policy',
+                //  'enable_log',
+                 'submit_penalty',
+                 'enable_registration',
+                 'registration_code',
+                 'mail_from',
+                 'mail_from_name',
+                 'reset_password_mail',
+                 'add_user_mail',
+                //  'moss_userid',
+                 'results_per_page_all',
+                 'results_per_page_final',
+                 'week_start',
+                 'theme',
+             'concurent_queue_process',
+            ];
+            // var_dump($submitted);die();
+            if (!isset($submitted['enable_registration']))  $submitted['enable_registration'] = 0;
+            foreach($keys as $k){
+                // var_dump ($k);var_dump($submitted[$k]);
+                Setting::updateOrCreate(['key' => $k], ['value' => $submitted[$k]]);
+            }
+            return back();
         }
-        die();
     }
 }

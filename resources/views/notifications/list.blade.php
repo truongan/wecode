@@ -85,7 +85,7 @@ $(document).ready(function () {
 
 @section('content')
 @if ($notifications->all()==[])
-<p style="text-align: center;">Nothing yet...</p>
+<p>Nothing yet...</p>
 @endif
 	@foreach ($notifications as $notification)
 	<div class="">
