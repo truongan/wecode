@@ -66,6 +66,17 @@
       </div>
     </div>
   </div>
+
+  <div class="m-3">
+    <div class="card" style="width: 18rem;">
+      <i class="text-center card-img-top fas fa-edit fa-8x p-4"></i>
+      <div class="card-body bg-light">
+        <h5 class="card-title">Edit by HTML</h5>
+        <p  class="card-text">Soạn văn bản trên web</p>
+        <a href="{{ url('htmleditor') }}" class="stretched-link"></a>
+      </div>
+    </div>
+  </div>
 </div>
 
 
