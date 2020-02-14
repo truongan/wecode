@@ -59,7 +59,7 @@ class problem_controller extends Controller
         {
             $data = DB::table('problems')->find($id);
             if ($data)
-                return view('problems.show',["result" => $data]);
+                return view('problems.show',["problem" => $data]);
         }
            
         return view('problems.list',['problems'=>Problem::all()]); 
