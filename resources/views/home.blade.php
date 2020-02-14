@@ -57,7 +57,7 @@ $(document).ready(function () {
                             {{ $notification->created_at }}
                             </span>
                         </div>
-                        <div class="notif_text latest">{!! $notification->text !!}</div>
+                        <div class="notif_text latest">{!! $notification->description !!}</div>
                     </div>
                 @endforeach
             </div>
