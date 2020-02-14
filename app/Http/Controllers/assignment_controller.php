@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Assignment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class assignment_controller extends Controller
 {
@@ -14,7 +17,7 @@ class assignment_controller extends Controller
     public function index()
     {
         //
-        $this->middleware('auth');
+        return view('assignments.list',['assignments'=>Assignment::all(), 'selected' => 'settings']); 
     }
 
     /**
@@ -25,6 +28,9 @@ class assignment_controller extends Controller
     public function create()
     {
         //
+        if ( !in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
+            abort(404);
+        return view('assignments.create',['selected' => 'settings']);
     }
 
     /**
@@ -36,6 +42,13 @@ class assignment_controller extends Controller
     public function store(Request $request)
     {
         //
+        $assignment=new Assignment;
+        $assignment->name = $request->name;
+        $assignment->description = $request->description;
+        $assignment->open = $request->open;
+        $assignment->score_board = $request->score_board;
+        $assignment->extra_time = $request->extra_time;
+        
     }
 
     /**
