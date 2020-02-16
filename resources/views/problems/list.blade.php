@@ -40,7 +40,11 @@
         <td>{{ $item->id}}</td>
         <td><a href="{{ url("problems/show/$item->id") }}">{{ $item->name }}</a></td>
         <td>{{$item->admin_note}}</td>
-        <td>{item->languages}}</td>
+        <td>
+        @foreach ($item->get_id as $language_name)
+            {{$language_name->name}}
+        @endforeach
+        </td>
         <td>
             {{-- {% for ass_id in item.assignments %}
                 <a href="{{ site_url("assignments/edit/#{ass_id}") }}" class="badge badge-primary">asgmt {{ ass_id}}</a>

@@ -30,7 +30,6 @@ Route::delete('users/{id}', 'UserController@destroy')->name('users.destroy');
 
 
 Route::get('/problems/show/{id}', 'problem_controller@show');
-Route::get('/problems/test', 'problem_controller@test');
 
 // Route::get('/problems/add', 'problem_controller@create')->name('problems.create');
 
