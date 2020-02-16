@@ -29,6 +29,22 @@ $(document).ready(function () {
 	});
 });
 </script> --}}
+
+{{-- Dưới đây là thẻ script tạm thời --}}
+<script>
+    $(document).ready(function () {
+        $('#calendar').fullCalendar({
+            timeFormat: 'HH:mm { - HH:mm}',
+            editable: false,
+            height: "auto",
+            firstDay: 1,
+            events: [
+                                    ]
+        });
+        
+        //$('.notif_text').ellipsis();
+    });
+</script>
 @endsection
 
 @section('content')

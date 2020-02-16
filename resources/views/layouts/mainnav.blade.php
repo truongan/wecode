@@ -86,42 +86,6 @@
                 </div>
             </div>
 
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link"  href="{{ url('assignments') }}">All assignments</a>
-                </li>
-                {{-- {%  if user.level >= 2 %} --}}
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Tools
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="{{ url('rejudge') }}">Rejudge</a>
-                        <a class="dropdown-item" href="{{ url('queue') }}">Submission Queue</a>
-                        {{-- <a class="dropdown-item" href="{{ url('moss/'~user.selected_assignment['id']) }}">Cheat Detection</a> --}}
-                        <a class="dropdown-item" href="{{ url('htmleditor') }}">HTML editor</a>
-                    </div>
-                </li>
-                {{-- {% endif %} --}}
-                {{-- {# <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="{{ url('assignments') }}" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="assignment_name">{{ user.selected_assignment.name|length > 30 ? user.selected_assignment.name|slice(0, 30) ~ '...' : user.selected_assignment.name }}</span>
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        {% for assignment_item in all_assignments|reverse[:5] %}
-                            <a class="dropdown-item select_assignment">
-                                <i class="fa fa-fw fa-lg {{ assignment_item.id == user.selected_assignment.id ? 'fa-check-square-o color6' : 'fa-square-o' }}" data-id="{{ assignment_item.id }}"></i>
-                                {{ assignment_item.name }}
-                            </a>
-                        {% endfor %}
-
-                        <a  class="dropdown-item" href="{{ url('assignments') }}">All Assignments</a>
-
-                    </div>
-                </li> #} --}}
-            </ul>
-
-
             <div class="navbar-nav">
                 <div class="top_object countdown d-flex flex-column justify-content-center" id="countdown">
                     <div class="time_block">
@@ -138,20 +102,16 @@
 
             <ul class="nav navbar-nav navbar-right">
                 <li class="nav-item dropdown">
-                    <a class="dropdown-toggle nav-link" data-toggle="dropdown" href="{{ url('profile') }}" id="profile_link"><i class="fa fa-fw fa-user"></i></a>
+                <a class="dropdown-toggle nav-link" data-toggle="dropdown" href="#" id="profile_link"><i class="fa fa-fw fa-user"></i>{{Auth::user()->username}}</a>
                     <div class="dropdown-menu dropdown-menu-right logout-menu">
                         <div class="d-flex pr-3 pl-3">
-                            <div class="mr-3">
-                                {{-- <div class="gravatar"><img src="https://www.gravatar.com/avatar/{{ md5(user.email) }}?s=70&d=identicon" /></div> --}}
-                            </div>
                             <div class="">
-                                <div class="name h4"><i class="fa fa-fw fa-user"></i>  {{Auth::user()->username}} </div>
                                 <div class="d-inline-flex">
                                     <form action="{{route('logout')}}" method="POST">
                                     @csrf
-                                    <button type="submit" class="btn btn-danger mr-2">Sign out</button>
+                                    <button type="submit" class="btn btn-danger mr-2 text-nowrap"><i class="fas fa-fw fa-sign-out-alt"></i>Sign out</button>
                                     </form>
-                                    <a href="{{ url('profile') }}" class="btn btn-info"><i class="fa fa-fw fa-wrench"></i> Profile</a>
+                                    <a href="{{ route("users.edit", Auth::user()->id) }}" class="btn btn-info text-nowrap"><i class="fas fa-fw fa-wrench"></i>Profile</a>
                                 </div>
                             </div>
                         </div>

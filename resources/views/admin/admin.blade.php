@@ -77,6 +77,39 @@
       </div>
     </div>
   </div>
+
+  <div class="m-3">
+    <div class="card" style="width: 18rem;">
+      <i class="text-center card-img-top fas fa-redo fa-8x p-4"></i>
+      <div class="card-body bg-light">
+        <h5 class="card-title">Rejudge</h5>
+        <p  class="card-text">Zậy đó</p>
+        <a href="{{ url('htmleditor') }}" class="stretched-link"></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="m-3">
+    <div class="card" style="width: 18rem;">
+      <i class="text-center card-img-top fas fa-play fa-8x p-4"></i>
+      <div class="card-body bg-light">
+        <h5 class="card-title">Submission Queue</h5>
+        <p  class="card-text">Zậy đó</p>
+        <a href="{{ url('htmleditor') }}" class="stretched-link"></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="m-3">
+    <div class="card" style="width: 18rem;">
+      <i class="text-center card-img-top fas fa-user-secret fa-8x p-4"></i>
+      <div class="card-body bg-light">
+        <h5 class="card-title">Detect Similar Codes</h5>
+        <p  class="card-text">Zậy đó</p>
+        <a href="{{ url('htmleditor') }}" class="stretched-link"></a>
+      </div>
+    </div>
+  </div>
 </div>
 
 
