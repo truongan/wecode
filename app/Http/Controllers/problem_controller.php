@@ -53,19 +53,22 @@ class problem_controller extends Controller
      * @param  \App\Problem  $problem
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
+    public function show($id){
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
             abort(404);
-        if ($id)
-        {
-            $data = DB::table('problems')->find($id);
-            if ($data)
-                return view('problems.show',["problem" => $data]);
-        }
-           
-        return view('problems.list',['problems'=>Problem::all()]); 
-    }
+
+		$data=[
+			'can_submit' => TRUE,
+            'assignment' => NULL,
+            'error'=>'none'
+        ];
+        $re = $this->get_description($id);
+
+		return view('problems.show', ['data' => $data,
+                                      'description'=>$this->get_description($id),
+                                      'problem' => Problem::problem_info($id),
+                                ]);
+	}
 
     /**
      * Show the form for editing the specified resource.
@@ -163,24 +166,25 @@ class problem_controller extends Controller
 		if ($id === NULL) return NULL;
 		$assignments_root = rtrim(DB::table('settings')->where("key","assignments_root")->first()->value,'/');
 		$problem_dir = $assignments_root . "/problems/".$id;
-		return $problem_dir;
+        return $problem_dir;
     }
 
     public function get_description($id = NULL){
-		$problem_dir = $this->get_directory_path($id);
+        $problem_dir = $this->get_directory_path($id);
+        
 		$result =  array(
 			'description' => '<p>Description not found</p>',
-			'has_pdf' => glob("$problem_dir/*.pdf") != FALSE
-			,'has_template' => glob("$problem_dir/template.cpp") != FALSE
-		);
+			'has_pdf' => glob("$problem_dir/*.pdf") != FALSE,
+			'has_template' => glob("$problem_dir/template.cpp") != FALSE
+        );
 		
 		$path = "$problem_dir/desc.html";
 
 		if (file_exists($path))
-			$result['description'] = file_get_contents($path);
-
+            $result['description'] = file_get_contents($path);   
+           
 		return $result;
-    }
+	}
     
     public function delete_problem($id){
 		$cmd = 'rm -rf '.$this->get_directory_path($id);
@@ -201,14 +205,13 @@ class problem_controller extends Controller
         
     }
     /** Dowload file pdf  */
-    public function pdf()
+    public function pdf($problem_id)
 	{
         // Find pdf file
-        $problem_id=1;
 		if ($problem_id === NULL)
             abort(404);
         else
-            $pattern = $this->get_directory_path(1)."/*.pdf";
+            $pattern = $this->get_directory_path($problem_id)."/*.pdf";
 			
         $pdf_files = glob($pattern);
         $pdf_files = implode("|",$pdf_files);
