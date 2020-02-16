@@ -110,7 +110,7 @@ class UserController extends Controller
     public function edit(User $user)
     {
         //
-        return view('users.edit', compact('user'));
+        return view('users.edit', ['user'=>$user]);
     }
 
     /**
@@ -126,9 +126,12 @@ class UserController extends Controller
         $user->display_name=$request->display_name;
         if ($request->password!="")
             $user->password=Hash::make($request->password);
-        $user->role_id = $request->role_id;
+        if ($request->role_id!=NULL)
+            $user->role_id = $request->role_id;
         $user->save();
-        return redirect('users');
+        if (Auth::user()->role->name=="admin")
+            return redirect('users');
+        return redirect('/home');
     }
 
     /**
