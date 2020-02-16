@@ -68,14 +68,15 @@ class CreateAllTable extends Migration
             $table->bigIncrements('id');
             $table->char('name', 150);
             $table->unsignedInteger('total_submits');
-            $table->tinyInteger('open');
-            $table->tinyInteger('score_board');
+            $table->boolean('open');
+            $table->boolean('score_board');
             $table->tinyInteger('javaexceptions');
             $table->dateTime('start_time');
             $table->dateTime('finish_time');
             $table->integer('extra_time');
             $table->text('late_rule');
             $table->text('participants');
+            $table->text('description');
             $table->char('moss_update', 30);
             $table->timestamps();
         });
