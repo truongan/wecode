@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Problem extends Model
 {
@@ -28,13 +29,25 @@ class Problem extends Model
         return $this->belongsToMany('App\Language');
     }
 
-    public function tags()
-    {
-        return $this->belongsToMany('App\Tag');
-    }
-    
-    public function assignments()
+    public static function problem_info_detailed($id = NULL){
+        $query = Problem::find($id);
+        $result['no_of_ass'] = $query->map_with_assigment->count();
+        $result['no_of_sub'] = $query->map_with_submission->count();
+
+        if($result != NULL) $result['languages'] = Problem::all_languages($id);
+
+        var_dump($result);die();
+        return $result;
+	}
+
+    public function map_with_assigment()
     {
         return $this->belongsToMany('App\Assignment');
     }
+
+    public function map_with_submission()
+    {
+        return $this->hasMany('App\Submission');
+    }
+
 }
