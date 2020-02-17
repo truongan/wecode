@@ -59,6 +59,7 @@ class tag_controller extends Controller
     public function show(Tag $tag)
     {
         //
+        return view('admin.tags.edit', ['tag'=>$tag]);
     }
 
     /**
@@ -70,6 +71,7 @@ class tag_controller extends Controller
     public function edit(Tag $tag)
     {
         //
+        return view('admin.tags.edit', ['tag'=>$tag]);
     }
 
     /**
@@ -82,6 +84,11 @@ class tag_controller extends Controller
     public function update(Request $request, Tag $tag)
     {
         //
+        $tag->update($request->input());
+        $remove = $request->input('remove');
+        if($remove != NULL){
+            $tag->problems()->detach($remove);
+        }
     }
 
     /**
