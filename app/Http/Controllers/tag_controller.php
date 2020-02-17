@@ -47,7 +47,7 @@ class tag_controller extends Controller
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
             abort(404);
         Tag::create($request->input());
-        return view('tags.show',['tag'=>Tag::all()]); 
+        return redirect('tags'); 
     }
 
     /**
@@ -94,8 +94,14 @@ class tag_controller extends Controller
     {
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
             abort(404);
-        if ($id!=NULL)
+        elseif ($id === NULL)
+			$json_result = array('done' => 0, 'message' => 'Input Error');
+        else
+        {
             Tag::destroy($id);
-        return view('tags.show',['tag'=>Tag::all()]); 
+            $json_result = array('done' => 1);
+        }
+        header('Content-Type: application/json; charset=utf-8');  
+        return ($json_result);
     }
 }
