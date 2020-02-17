@@ -11,7 +11,7 @@
 
 @section('content')
 
-<form method="POST"  action="{!! route('assignments.store') !!}">
+<form method="POST"  action="{!! route('assignments.store') !!}" enctype="multipart/form-data">
 <input type="hidden"  name ="_token" value="{!! csrf_token() !!}"/>
 <table>
 	<tr>
@@ -36,11 +36,11 @@
 	</tr>
 	<tr>
 			<td>Participants:</td>
-			<td><input type="number" name="participants"></td>
+			<td><input type="text" name="participants"></td>
 	</tr>
 	<tr>
 			<td>PDF File:</td>
-			<td><input type="file" name="participants"></td>
+			<td><input type="file" name="pdf_file"></td>
 	</tr>
 	<tr>
 			<td>Open:</td>
