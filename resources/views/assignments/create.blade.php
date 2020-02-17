@@ -5,54 +5,62 @@
 @section('title', 'Assignments')
 
 @section('title_menu')
-    {{-- Nếu là admin thì hiển thị --}}
-    <span class="title_menu_item"><a href="{!! route('assignments.create') !!}"><i class="fa fa-plus color8"></i>Add</a></span>
 @endsection
 
 @section('content')
-
-<form method="POST"  action="{!! route('assignments.store') !!}" enctype="multipart/form-data">
+<form method="POST"  
+	@if (Route::currentRouteName() == 'assignments.edit')
+		action="{!! route('assignments.update') !!}"
+	@else  action="{!! route('assignments.store') !!}"
+	@endif
+enctype="multipart/form-data">
 <input type="hidden"  name ="_token" value="{!! csrf_token() !!}"/>
 <table>
 	<tr>
 			<td>Assignment Name:</td>
-			<td><input type="text" name="name"></td>
+			<td><input type="text" name="name" value="{{$assignment->name ?? ''}}"></td>
 	</tr>
 	<tr>
 			<td>Description:</td>
-			<td><input type="text" name="description"></td>
+			<td><input type="text" name="description" value="{{$assignment->description ?? ''}}"></td>
 	</tr>
 	<tr>
 			<td>Start time:</td>
-			<td><input type="date" name="start_time_date"> <input type="time" name="start_time_time"></td>
+			<td>
+				<input type="date" name="start_time_date" value="{{empty($assignment) ? '' : date('Y-m-d', strtotime($assignment->start_time))}}"> 
+				<input type="time" name="start_time_time" value="{{empty($assignment) ? '' : date('H:i', strtotime($assignment->start_time))}}">
+			</td>
 	</tr>
 	<tr>
 			<td>Finish time:</td>
-			<td><input type="date" name="finish_time_date"> <input type="time" name="finish_time_time"></td>
+			<td>
+				<input type="date" name="finish_time_date" value="{{empty($assignment) ? '' : date('Y-m-d', strtotime($assignment->finish_time))}}"> 
+				<input type="time" name="finish_time_time" value="{{empty($assignment) ? '' : date('H:i', strtotime($assignment->start_time))}}">
+			</td>
 	</tr>
 	<tr>
 			<td>Extra time:</td>
-			<td><input type="number" name="extra_time"></td>
+			<td><input type="number" name="extra_time" value="{{$assignment->extra_time ?? ''}}"></td>
 	</tr>
 	<tr>
 			<td>Participants:</td>
-			<td><input type="text" name="participants"></td>
+			<td><input type="text" name="participants" value="{{$assignment->participants ?? ''}}"></td>
 	</tr>
 	<tr>
 			<td>PDF File:</td>
-			<td><input type="file" name="pdf_file"></td>
+			<td><input type="file" name="pdf_file" value="Choose.pdf"></td>
 	</tr>
 	<tr>
 			<td>Open:</td>
-		 	<td><input type="checkbox" name="open"></td>
+		 	<td><input type="checkbox" name="open" checked="{{$assignment->open ?? ''}}"></td>
 	</tr>
 	<tr>
 		 	<td>Scoreboard:</td>
-		 	<td><input type="checkbox" name="score_board"></td>
+		 	<td><input type="checkbox" name="score_board" checked="{{$assignment->score_board ?? ''}}"></td>
 	</tr>
 	<tr>
 			<td>Coefficient rule:</td>
-			<td><input type="text" name="late_rule"></td>
+			<td><input type="text" name="late_rule" value="{{$assignment->late_rule ?? ''}}"></td>
 	</tr>
 
 </table>

@@ -10,5 +10,34 @@
 @endsection
 
 @section('content')
-Nội dung ghi ở đây nè :3
+<table>
+	<tr>
+		<th>ID</th>
+		<th>Name</th>
+		<th>Submissions</th>
+		<th>Coefficient</th>
+		<th>Start Time</th>
+		<th>Finish Time</th>
+		<th>Scoreboard</th>
+		<th>PDF</th>
+		<th>Status</th>
+		<th>Action</th>
+	</tr>
+	@foreach ($assignments as $assignment)
+	<tr>
+		<th>{{$assignment->id}}</th>
+		<th>{{$assignment->name}}</th>
+		<th>{{$assignment->total_submits}}</th>
+		<th>{{$assignment->late_rule}}</th>
+		<th>{{$assignment->start_time}}</th>
+		<th>{{$assignment->finish_time}}</th>
+		<th>{{$assignment->score_board}}</th>
+		<th>File PDF</th>
+		<th>{{$assignment->open}}</th>
+		<th>
+			<a href="{{ route('assignments.edit', $assignment) }}">Edit</a>
+		</th>
+	</tr>
+	@endforeach
+</table>
 @endsection

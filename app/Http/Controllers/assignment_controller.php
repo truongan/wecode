@@ -46,28 +46,30 @@ class assignment_controller extends Controller
         $assignment=new Assignment;
         $assignment->name = $request->name;
         $assignment->description = $request->description;
-        $assignment->open = $request->open;
-        $assignment->score_board = $request->score_board;
+        if ($request->open == 'on')
+            $assignment->open = True;
+        else $assignment->open = False;
+        if ($request->score_board == 'on')
+            $assignment->score_board = True;
+        else $assignment->score_board = False;
         $assignment->extra_time = $request->extra_time;
         $start_time = strval($request->start_time_date) . " " . strval($request->start_time_time);
         $assignment->start_time = date('Y-m-d H:i:s', strtotime($start_time));
         $finish_time = strval($request->finish_time_date) . " " . strval($request->finish_time_time);
         $assignment->finish_time = date('Y-m-d H:i:s', strtotime($finish_time));
         $assignment->total_submits = 0;
-        $assignment->open = 0;
-        $assignment->score_board=0;
         $assignment->javaexceptions=0;
         $assignment->late_rule="";
         $assignment->participants=$request->participants;
         $assignment->moss_update='';
         $assignment->save();
-        if ($request->pdf_file->isValid()) {
+        if ($request->hasFile('pdf_file')) {
             $path_pdf = Setting::get("assignments_root");
             $path_pdf = $path_pdf . "/assignment_" .  strval($assignment->id);
             mkdir($path_pdf);
             $path = $request->pdf_file->storeAs($path_pdf,$request->pdf_file->getClientOriginalName(),'my_local');
-            var_dump($path);
         }
+        var_dump($request->open);
     }
 
     /**
@@ -87,9 +89,9 @@ class assignment_controller extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Assignment $assignment)
     {
-        
+        return view('assignments.create',['assignment' => $assignment, 'selected' => 'assignments']);
     }
 
     /**
