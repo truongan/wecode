@@ -28,6 +28,13 @@ class Problem extends Model
         return $this->belongsToMany('App\Language');
     }
 
+    public function tags()
+    {
+        return $this->belongsToMany('App\Tag');
+    }
     
-    
+    public function assignments()
+    {
+        return $this->belongsToMany('App\Assignment');
+    }
 }
