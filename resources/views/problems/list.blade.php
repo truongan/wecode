@@ -53,16 +53,13 @@
         <td>{{ $item->diff_cmd }}</td>
         <td>{{ $item->diff_arg }}</td>
         
-        <td> 
-            <form method="POST"  action="{!! route('problems.pdf',$item->id) !!}">
-                <input type="hidden"  name ="_token" value="{!! csrf_token() !!}"/>
-                <button title="Download Tests and Descriptions" class="fa fa-cloud-download-alt fa-lg color11">
-            </form>
-            {{-- {# <a href="#"><i title="Download Final Submissions (by user)" class="fa fa-download fa-lg color12"></i></a> #}
-            {# <a href="#"><i title="Download Final Submissions (by problem)" class="fa fa-download fa-lg color2"></i></a> #} --}}
-            {{-- <a href="#"><i title="Edit" class="far fa-edit fa-lg color3"></i></a>
+        <td>
+            <a href="{{ route('problems.pdf',$item->id) }}">
+                <i title="Download Tests and Descriptions" class="fa fa-cloud-download-alt fa-lg color11"></i>
+            </a>
+            <a href="#"><i title="Edit" class="far fa-edit fa-lg color3"></i></a>
             
-            <a href="#"><i title="Delete" class="far fa-trash-alt fa-lg color1"></i></a> --}}
+            <a href="#"><i title="Delete" class="far fa-trash-alt fa-lg color1"></i></a>
             
         </td>
     
