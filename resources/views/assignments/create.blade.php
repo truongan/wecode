@@ -15,6 +15,9 @@
 		action="{!! route('assignments.store') !!}"
 	@endif
 enctype="multipart/form-data">
+@if (Route::currentRouteName() == 'assignments.edit')
+	@method("PUT")
+@endif
 <input type="hidden"  name ="_token" value="{!! csrf_token() !!}"/>
 <table>
 	<tr>
@@ -53,11 +56,23 @@ enctype="multipart/form-data">
 	</tr>
 	<tr>
 			<td>Open:</td>
-		 	<td><input type="checkbox" name="open" checked="{{$assignment->open ?? ''}}"></td>
+		 	<td><input type="checkbox" name="open" 
+		 		@if (!empty($assignment))
+			 		@if ($assignment->open)
+			 			checked
+			 		@endif
+			 	@endif
+		 	></td>
 	</tr>
 	<tr>
 		 	<td>Scoreboard:</td>
-		 	<td><input type="checkbox" name="score_board" checked="{{$assignment->score_board ?? ''}}"></td>
+		 	<td><input type="checkbox" name="score_board" 
+		 		@if (!empty($assignment))
+			 		@if ($assignment->score_board)
+			 			checked
+			 		@endif
+			 	@endif
+		 	></td>
 	</tr>
 	<tr>
 			<td>Coefficient rule:</td>
