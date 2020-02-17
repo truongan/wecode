@@ -18,7 +18,7 @@ class assignment_controller extends Controller
     public function index()
     {
         //
-        return view('assignments.list',['assignments'=>Assignment::all(), 'selected' => 'settings']); 
+        return view('assignments.list',['assignments'=>Assignment::all(), 'selected' => 'assignments']); 
     }
 
     /**
@@ -31,7 +31,7 @@ class assignment_controller extends Controller
         //
         if ( !in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
             abort(404);
-        return view('assignments.create',['selected' => 'settings']);
+        return view('assignments.create',['selected' => 'assignments']);
     }
 
     /**

@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@php($selected="settings")
+@php($selected="problems")
 @section('icon', 'fas fa-puzzle-piece')
 
 @section('title',$problem->name)
@@ -31,7 +31,7 @@
 @endsection
 
 @section('body_end')
-{{-- <script type="text/x-mathjax-config">
+<script type="text/x-mathjax-config">
     MathJax.Hub.Config({
       tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
     });
@@ -39,22 +39,22 @@
     <script type="text/javascript" async
       src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
     </script>
-    <script src="{{ base_url('assets/ckeditor/ckeditor.js') }}" charset="utf-8"></script>
+    <script src="{{ asset('assets/ckeditor/ckeditor.js') }}" charset="utf-8"></script>
     <script type="text/javascript">
     $(document).ready(function(){
     
         shj.setup_save('.save-button'
-        , '{{ site_url("problems/edit_description/#{problem.id}") }}'
+        , '{{ url("problems/edit_description/$problem->id") }}'
         , CKEDITOR.instances.problem_description);
     
     });
-</script> --}}
+</script>
 @endsection
 
 @section('content')
-{{-- {% if error != 'none' %}
-<div class="alert alert-danger"> {{error}} </div>
-{% else %} --}}
+@if ($error != 'none' )
+<div class="alert alert-danger"> {{$error}} </div>
+@else
 
 	<div class="col-md-7 col-lg-8 col-sm-12">
 
@@ -66,10 +66,10 @@
 	</div>
 
 	<div class="col-md-5 col-lg-4 ">
-		{{-- {% if all_problems is defined %}
-		{% set i = 0 %} --}}
+		@if ($all_problems != NULL)
+		@php($i = 0)
 		<div class="problems_widget row">
-			<p><i class="fa fa-file-text fa-lg color9"></i> {{ $assignment->name }}</p>
+			<p><i class="fa fa-file-text fa-lg color9"></i> { $assignment->name }}</p>
 			{{-- <p class="text-muted"><span class="badge badge-secondary count_problems">{{ all_problems|length }}</span> problems with a total score of <span class="badge badge-secondary sum_score">{{ sum_score}}</span></p> --}}
 			<table class="wecode_table table  table-bordered">
 				<thead>
@@ -84,26 +84,27 @@
 					<tr class=" {{ $problem->id == $one_problem->id ? "table-active":"" }} ">
 						<td>{{ $i }}</td>
 						<td>
-							<a href="{{ url("view_problem/$assignment->id/$one_problem->id") }}">{{ $one_problem->problem_name }}</a>
+							@php($t = $assignment != NULL ?$assignment->id:"")
+							<a href="{{ url("view_problem/$t/$one_problem->id") }}">{{ $one_problem->problem_name }}</a>
 						</td>
 						<td  class="{{ $problem_status[$one_problem->id] }}"><span>{{ $one_problem->score }}</span></td>
 					</tr>
 				@endforeach
 			</table>
 		</div>
-		{{-- {% endif %} --}}
+		@endif
 
 
-		@if (can_submit)
+		@if ($can_submit)
 		<div class="problems_widget ">
 
 			<span><i class="fa fa-upload fa-lg color11"></i> Submit</span>
 			
 			{{-- {{ form_open_multipart("submit/") }} --}}
 
-			{{-- {% if all_problems is defined %} --}}
-				<input type="hidden" name="assignment" value="{{ $assignment->id }}"/>
-			{{-- {% endif %} --}}
+			@if ($all_problems != NULL)
+				<input type="hidden" name="assignment" value="{ $assignment->id }}"/>
+			@endif
 			<input type="hidden" name="problem" value="{{ $problem->id }}"/>
 			<fieldset class="form-group form-row">
 				<label>
@@ -132,10 +133,11 @@
 
 		</div>
 		<div class="problems_widget row">
-			<span class=""><a href="{{ site_url("submit/editor/$problem->id/$assignment->id") }}" target="_blank"><i class="fa fa-pencil-square-o"></i> Code editor</a></span>
+			@php($t = $assignment != NULL ?$assignment->id:"")
+			<span class=""><a href="{{ url("submit/editor/$problem->id/$t") }}" target="_blank"><i class="fa fa-pencil-square-o"></i> Code editor</a></span>
 		</div>
 		@endif
 
 	</div>
-{{-- {% endif %} --}}
+@endif
 @endsection
