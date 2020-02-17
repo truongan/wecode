@@ -89,6 +89,7 @@ class tag_controller extends Controller
         if($remove != NULL){
             $tag->problems()->detach($remove);
         }
+        return redirect()->route('tags.index');
     }
 
     /**

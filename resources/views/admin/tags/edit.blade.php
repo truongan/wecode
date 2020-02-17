@@ -17,14 +17,14 @@
 	@method('PUT')
 	@csrf
 	<fieldset 
-  		@if (Route::currentRouteName() == 'lops.show')
+  		@if (Route::currentRouteName() == 'tags.show')
 	  		disabled
 		@endif
 	>
 		<div class="form-group">
 		<label for="name">Tag name</label>
 		<input type="text"
-			class="form-control" name="name" id="name" aria-describedby="_name_desc" placeholder="name" value={{$tag->name}}>
+			class="form-control" name="text" id="name" aria-describedby="_name_desc" placeholder="text" value={{$tag->text}}>
 		<small id="_name_desc" class="form-text text-muted">The name of this new class</small>
 		</div>
 		
