@@ -1,7 +1,9 @@
 <?php
 
 use Illuminate\Database\Seeder;
-
+use App\Tag;
+use App\Problem;
+use App\Lop;
 class dummy_data extends Seeder
 {
     /**
@@ -12,8 +14,8 @@ class dummy_data extends Seeder
     public function run()
     {
         // Insert a bunch of dummy user, assignemnts, and classes for testing
-        $this->call(UsersTableSeeder::class);
-        $this->call(installation_seeding::class);
+        // $this->call(UsersTableSeeder::class);
+        // $this->call(installation_seeding::class);
 
         for ($i=1; $i < 10; $i++) { 
             DB::table('users')->insert([
@@ -25,6 +27,11 @@ class dummy_data extends Seeder
             ]);
         }
         for ($i=1; $i < 10; $i++) { 
+            DB::table('tags')->insert([
+                'text' => 'tag' . $i
+            ]);
+        }
+        for ($i=1; $i < 10; $i++) { 
             DB::table('problems')->insert([
                 'name' => 'problem' . $i,
                 'is_upload_only' => true,
@@ -33,6 +40,13 @@ class dummy_data extends Seeder
                 'admin_note' => 'fake_data'
             ]);
         }
+
+        $a = [1,2,3,4,5,6,7,8];
+        for($i = 1; $i < 5; $i++){
+            shuffle($a);
+            Tag::find($i)->problems()->attach(array_slice($a,0,rand()%5));
+        }
+
         for ($i=1; $i < 10; $i++) { 
             DB::table('submissions')->insert([
                 'username' => 'username' . $i,
@@ -52,6 +66,7 @@ class dummy_data extends Seeder
                 'name' => 'username' . $i,
                 'total_submits' => $i,
                 'open'=>$i,
+                'description' => "",
                 'score_board' => $i,
                 'javaexceptions' => $i,
                 'start_time' => new DateTime,
@@ -72,6 +87,12 @@ class dummy_data extends Seeder
                'memory_limit'=>100,
                'created_at'=>new DateTime,
                'updated_at'=>new DateTime
+            ]);
+        }
+        for ($i=1; $i < 8; $i++) { 
+            App\Lop::create([
+                'name' => 'lop ' . $i,
+                'open' => rand()%2,
             ]);
         }
         
