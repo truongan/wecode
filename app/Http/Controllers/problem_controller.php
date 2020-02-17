@@ -64,9 +64,12 @@ class problem_controller extends Controller
         ];
         $re = $this->get_description($id);
 
-		return view('problems.show', ['data' => $data,
+        return view('problems.show', ['can_submit' => TRUE,
+                                      'assignment' => NULL,
+                                      'error'=>'none',
                                       'description'=>$this->get_description($id),
                                       'problem' => Problem::problem_info($id),
+                                      'all_problems' =>NULL,
                                 ]);
 	}
 

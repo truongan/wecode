@@ -1,7 +1,9 @@
 <?php
 
 use Illuminate\Database\Seeder;
-
+use App\Tag;
+use App\Problem;
+use App\Lop;
 class dummy_data extends Seeder
 {
     /**
@@ -91,17 +93,20 @@ class dummy_data extends Seeder
                 "updated_at"=>new DateTime,
             ]);
         }
-        // for ($i=1; $i < 8; $i++) { 
-        //         DB::table('assignment_problem')->insert([
-        //             "assignment_id"=>$i,
-        //             "problem_id"=>$i,
-        //             "score"=>100,
-        //             "ordering"=>$i,
-        //             "problem_name"=>$i,
-        //             "created_at"=>new DateTime,
-        //             "updated_at"=>new DateTime, 
-        //         ]);        
-        // }
-        
+        for ($i=1; $i < 8; $i++) { 
+            Lop::create([
+                'name' => 'lop ' . $i,
+                'open' => rand()%2,
+            ]);
+        }
+
+        for($i = 1; $i < 5; $i++){
+            shuffle($a);
+            Lop::find($i)->assignments()->attach(array_slice($a,0,rand()%5));
+        }
+        for($i = 1; $i < 5; $i++){
+            shuffle($a);
+            Lop::find($i)->users()->attach(array_slice($a,0,rand()%7));
+        }
     }
 }

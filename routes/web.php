@@ -30,8 +30,10 @@ Route::delete('users/{id}', 'UserController@destroy')->name('users.destroy');
 
 
 Route::get('/problems/show/{id}', 'problem_controller@show');
-Route::post('/problems/dowload/{id}', 'problem_controller@pdf')->name('problems.pdf');
+Route::get('/problems/download/{id}', 'problem_controller@pdf')->name('problems.pdf');
+
 Route::get('/problems/test', 'problem_controller@test');
+// Route::get('/problems/get_description', 'problem_controller@show');
 
 // Route::get('/problems/add', 'problem_controller@create')->name('problems.create');
 
@@ -41,6 +43,5 @@ Route::resource('notifications','notification_controller');
 Route::resource('lops','lop_controller');
 Route::resource('languages','language_controller');
 Route::resource('tags','tag_controller');
-Route::resource('problemtags','problem_tag_controller');
 Route::resource('problems','problem_controller');
 Route::resource('assignments','assignment_controller');
