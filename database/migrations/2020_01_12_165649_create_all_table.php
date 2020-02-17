@@ -80,7 +80,7 @@ class CreateAllTable extends Migration
             $table->char('moss_update', 30);
             $table->timestamps();
         });
-        Schema::create('problem_assignment', function (Blueprint $table) {
+        Schema::create('assignment_problem', function (Blueprint $table) {
             $table->unsignedBigInteger('assignment_id');
             $table->unsignedBigInteger('problem_id');
             $table->integer('score');
@@ -140,7 +140,7 @@ class CreateAllTable extends Migration
         Schema::dropIfExists('settings');
         Schema::dropIfExists('queue');
         Schema::dropIfExists('assignments');
-        Schema::dropIfExists('problem_assignment');
+        Schema::dropIfExists('assignment_problem');
         Schema::dropIfExists('submissions');
         Schema::dropIfExists('language_problem');
         Schema::dropIfExists('notifications');

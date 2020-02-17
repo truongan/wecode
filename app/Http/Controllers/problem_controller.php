@@ -105,15 +105,52 @@ class problem_controller extends Controller
      * @param  \App\Problem  $problem
      * @return \Illuminate\Http\Response
      */
-    // public function destroy(Problem $id)
-    // {
-    //     if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
-    //         abort(404);
-    //     if ($id!=NULL)
-    //         Problem::destroy($id);
-    //     return view('problems.list',['problems'=>Problem::all()]);  
-    // }
+    public function destroy($id)
+    {
+        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
+            abort(404);
+            
+
+		$problem = Problem::problem_info_detailed($id);
+
+		if ($problem == NULL)
+			abort(404);
+		
+		if ($problem['no_of_ass'] != 0 & $problem['no_of_sub'] != 0){
+		    abort(403,"Problem already appear in assignments and got some submission should not be delete");
+		}
+
+		if ($this->input->post('delete') === 'delete')
+		{
+			Problem_model::find($id);
+			redirect('problems');
+		}
+    }
+    public function save_problem_description($problem_id, $text, $type = 'html')
+	{
+		$problem_dir = $this->get_directory_path($problem_id);
+		if (file_put_contents("$problem_dir/desc.html", $text) ) 
+			return true;
+		else return false;
+    }
     
+    public function edit_description($problem_id){
+		// if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
+        //     abort(404);
+		
+		// $this->load->library('form_validation');
+		// $this->form_validation->set_rules('content', 'text' ,'required'); /* todo: xss clean */
+		// if ($this->form_validation->run())
+		// {
+		// 	if ($this->problem_files_model->save_problem_description($problem_id, $this->input->post('content'))){
+		// 		echo "success";
+		// 		return ;
+		// 	}
+		// 	else show_error("Error saving", 501);
+		// } else {
+		// 	show_error(validation_errors(), 501);
+		// }
+	}
     // private function unload_zip_test_file($assignments_root, $problem_dir, $u_data){
 	// 	// Create a temp directory
 	// 	$tmp_dir_name = "shj_tmp_directory";
@@ -222,5 +259,10 @@ class problem_controller extends Controller
 		// Download the file to browser
         return response()->download($pdf_files);
     
-	}
+    }
+    public function test()
+    {
+        $data = Problem::problem_info_detailed(1);
+        return view('problems.test',['data'=>$data]);
+    }
 }
