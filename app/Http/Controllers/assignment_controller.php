@@ -101,9 +101,10 @@ class assignment_controller extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Assignment $assignment)
     {
         //
+        echo("Vo upload roi ne");
     }
 
     /**

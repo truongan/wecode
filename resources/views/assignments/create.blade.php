@@ -10,8 +10,9 @@
 @section('content')
 <form method="POST"  
 	@if (Route::currentRouteName() == 'assignments.edit')
-		action="{!! route('assignments.update') !!}"
-	@else  action="{!! route('assignments.store') !!}"
+		action="{!! route('assignments.update', $assignment) !!}"
+	@else  
+		action="{!! route('assignments.store') !!}"
 	@endif
 enctype="multipart/form-data">
 <input type="hidden"  name ="_token" value="{!! csrf_token() !!}"/>
