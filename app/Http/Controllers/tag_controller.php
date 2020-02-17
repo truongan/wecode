@@ -21,7 +21,7 @@ class tag_controller extends Controller
     {
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
             abort(404);
-        return view('admin.tags.show',['tags'=>Tag::all()]); 
+        return view('admin.tags.index',['tags'=>Tag::all()]); 
     }
 
     /**

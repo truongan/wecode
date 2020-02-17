@@ -90,11 +90,19 @@ class dummy_data extends Seeder
             ]);
         }
         for ($i=1; $i < 8; $i++) { 
-            App\Lop::create([
+            Lop::create([
                 'name' => 'lop ' . $i,
                 'open' => rand()%2,
             ]);
         }
-        
+
+        for($i = 1; $i < 5; $i++){
+            shuffle($a);
+            Lop::find($i)->assignments()->attach(array_slice($a,0,rand()%5));
+        }
+        for($i = 1; $i < 5; $i++){
+            shuffle($a);
+            Lop::find($i)->users()->attach(array_slice($a,0,rand()%7));
+        }
     }
 }
