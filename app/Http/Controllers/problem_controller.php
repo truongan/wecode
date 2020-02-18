@@ -123,11 +123,8 @@ class problem_controller extends Controller
 		    abort(403,"Problem already appear in assignments and got some submission should not be delete");
 		}
 
-		if ($this->input->post('delete') === 'delete')
-		{
-			Problem_model::find($id);
-			redirect('problems');
-		}
+		$this->delete_problem($id);
+		redirect('problems');
     }
     public function save_problem_description($problem_id, $text, $type = 'html')
 	{
@@ -138,9 +135,9 @@ class problem_controller extends Controller
     }
     
     public function edit_description($problem_id){
-		// if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
-        //     abort(404);
-		
+		if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
+            abort(404);
+		var_dump("ok");die();
 		// $this->load->library('form_validation');
 		// $this->form_validation->set_rules('content', 'text' ,'required'); /* todo: xss clean */
 		// if ($this->form_validation->run())
@@ -152,7 +149,8 @@ class problem_controller extends Controller
 		// 	else show_error("Error saving", 501);
 		// } else {
 		// 	show_error(validation_errors(), 501);
-		// }
+        // }
+        return view('problems.edit');
 	}
     // private function unload_zip_test_file($assignments_root, $problem_dir, $u_data){
 	// 	// Create a temp directory
