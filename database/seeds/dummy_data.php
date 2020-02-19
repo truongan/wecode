@@ -6,6 +6,8 @@ use App\Problem;
 use App\Lop;
 use App\Assignment;
 use App\User;
+use App\Queue_item;
+use App\Submission;
 class dummy_data extends Seeder
 {
     /**
@@ -50,8 +52,8 @@ class dummy_data extends Seeder
         }
 
         for ($i=1; $i < 10; $i++) { 
-            DB::table('submissions')->insert([
-                'username' => 'username' . $i,
+            Submission::create([
+                'user_id' => rand(1,6),
                 'assignment_id' => rand(1,2),
                 'problem_id'=>$i,
                 'is_final' => rand(0,1),
@@ -61,6 +63,12 @@ class dummy_data extends Seeder
                 'coefficient'=>$i,
                 'file_name'=>$i,
                 'language_id'=>1
+            ]);
+        }
+        for ($i=1; $i < 10; $i++) { 
+            Queue_item::create([
+                'submission_id' => rand(1,6),
+                'type' => array('judge', 'rejudge')[rand(0,1)],
             ]);
         }
         for ($i=1; $i < 10; $i++) { 

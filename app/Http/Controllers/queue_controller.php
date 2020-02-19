@@ -22,7 +22,7 @@ class queue_controller extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Queue  $queue
+     * @param  \App\Queue_item  $queue
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Queue $queue)
