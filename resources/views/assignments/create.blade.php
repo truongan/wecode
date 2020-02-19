@@ -338,32 +338,32 @@ enctype="multipart/form-data">
 	<ul id="problem_list" class="list-group">
 		@php($i = 0)
 		@foreach($problems as $problem)
-		<li   class="list-group-item {{$problem['id'] == -1 ? 'd-none' : ''}} "><div class="row align-items-center">
+		<li   class="list-group-item {{$problem->id == -1 ? 'd-none' : ''}} "><div class="row align-items-center">
 			<div class="col-auto list_handle pointer">
 				<span><i class="fa fa-grip-vertical fa-lg fa-fw"></i></span>
 			</div>
 			<div class="col">
 				<div class="row  align-items-center" >			
 					<div class="form-inline">
-						<input type="hidden" name="problem_id[]" value="{{$problem['id']}}"/>
+						<input type="hidden" name="problem_id[]" value="{{$problem->id}}"/>
 						<span class="lead mr-2">
-							<span class="badge badge-light">{{ $problem['id'] }}</span>
-							{{ $problem['name'] }}
+							<span class="badge badge-light">{{ $problem->id }}</span>
+							{{ $problem->name }}
 						</span>
 						<div class="input-group input-group-sm mr-2">
 							<div class="input-group-prepend">
 								<label class="input-group-text">Alias</label>
 							</div>
-							<input type="text" name="problem_name[]" class="form-control form-control-sm " value="{{ $problem['problem_name'] }}"/>
+							<input type="text" name="problem_name[]" class="form-control form-control-sm " value="{{ $problem->problem_name }}"/>
 						</div>
 						
 						<div class="input-group input-group-sm mr-2">
 							<div class="input-group-prepend">
 							<label class="input-group-text">Score</label>
 							</div>
-							<input type="number" name="problem_score[]" class="form-control form-control-sm problem-score" value="{{ $problem['score'] }}"/>
+							<input type="number" name="problem_score[]" class="form-control form-control-sm problem-score" value="{{ $problem->score }}"/>
 						</div>
-						<span class="text-muted admin_note">{{ $problem['admin_note'] }}</span>
+						<span class="text-muted admin_note">{{ $problem->admin_note }}</span>
 					</div>
 				</div>
 			</div>
