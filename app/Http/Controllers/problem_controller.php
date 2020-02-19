@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Http\UploadedFile;
 
 class problem_controller extends Controller
 {
@@ -94,6 +95,11 @@ class problem_controller extends Controller
      */
     public function update(Request $request, Problem $problem)
     {
+        $validatedData = $request->validate([
+            'name' => ['required','max:255'],
+            'diff_cmd' => ['required','max:200'],
+            'admin_note'=>['required','max:255']
+        ]);
         DB::beginTransaction(); 
         $id = $problem->id ? $problem->id : $this->new_problem_id();
         $problem->update($request->input()); 
@@ -113,11 +119,66 @@ class problem_controller extends Controller
                 ]);
 			}
         }
+        $problem_dir = $this->get_directory_path($id);
+        $path = $request->myfile->storeAs($problem_dir,$request->myfile->getClientOriginalName(),'my_local');
+        var_dump($path);die;
+        $this->_take_test_file_upload($id);
         DB::commit();
-		// $this->db->trans_complete();
-        // return $id;
         return redirect()->route('problems.index');
     }
+
+    public function _take_test_file_upload($the_id){
+
+		$assignments_root = rtrim(DB::table('settings')->where("key","assignments_root")->first()->value,'/');
+        $problem_dir = $this->get_directory_path($the_id);
+        
+
+		// Create assignment directory
+		// if ( ! file_exists($problem_dir) )
+		// 	mkdir($problem_dir, 0700, TRUE);
+
+		// $this->load->library('upload');
+		// $up_dir = $_FILES['tests_dir'];
+		// $up_zip = $_FILES['tests_zip'];
+
+		// if ( $up_dir['error'][0] === UPLOAD_ERR_NO_FILE 
+		// 	&& $up_zip['error'] === UPLOAD_ERR_NO_FILE 
+		// ){
+		// 	$messages[] = array(
+		// 		'type' => 'notice',
+		// 		'text' => "Notice: You did not upload test case and description. If needed, upload by editing assignment."
+		// 	);
+		// 	return;
+		// }
+
+		// if ($up_dir['error'][0] === UPLOAD_ERR_NO_FILE ) {
+		// 	// Upload Tests (zip file)
+		// 	shell_exec('rm -f '.$assignments_root.'/*.zip');
+		// 	$config = array(
+		// 		'upload_path' => $assignments_root,
+		// 		'allowed_types' => 'zip',
+		// 	);
+		// 	$this->upload->initialize($config);
+		// 	$zip_uploaded = $this->upload->do_upload('tests_zip');
+		// 	$u_data = $this->upload->data();
+			
+		// 	if ( ! $zip_uploaded )
+		// 		$messages[] = array(
+		// 			'type' => 'error',
+		// 			'text' => "Error: Error uploading tests zip file: ".$this->upload->display_errors('', '')
+		// 		);
+		// 	else
+		// 		$messages[] = array(
+		// 			'type' => 'success',
+		// 			'text' => "Tests (zip file) uploaded successfully."
+		// 		);
+
+		// 	if ($zip_uploaded) $this->unload_zip_test_file($assignments_root, $problem_dir, $u_data, $messages);
+
+		// } else {
+		// 	return $this->handle_test_dir_upload($up_dir, $problem_dir, $messages);
+		// }
+	}
 
     /**
      * Remove the specified resource from storage.
@@ -178,54 +239,83 @@ class problem_controller extends Controller
         // }
         return view('problems.edit');
 	}
-    // private function unload_zip_test_file($assignments_root, $problem_dir, $u_data){
-	// 	// Create a temp directory
-	// 	$tmp_dir_name = "shj_tmp_directory";
-	// 	$tmp_dir = "$assignments_root/$tmp_dir_name";
-	// 	shell_exec("rm -rf $tmp_dir; mkdir $tmp_dir;");
+    private function unload_zip_test_file($assignments_root, $problem_dir, $u_data, &$messages){
+        
+        // // Create a temp directory
+		// $tmp_dir_name = "shj_tmp_directory";
+		// $tmp_dir = "$assignments_root/$tmp_dir_name";
+		// shell_exec("rm -rf $tmp_dir; mkdir $tmp_dir;");
 
-	// 	// Extract new test cases and descriptions in temp directory
-	// 	$this->load->library('unzip');
-	// 	$this->unzip->allow(array('txt', 'cpp', 'html', 'md', 'pdf'));
-	// 	$extract_result = $this->unzip->extract($u_data['full_path'], $tmp_dir);
+		// $rename_inputoutput = $request->rename_zip;
 
-	// 	// Remove the zip file
-	// 	unlink($u_data['full_path']);
+		// // Extract new test cases and descriptions in temp directory
+		// $this->load->library('unzip');
+		// // $this->unzip->allow(array('txt', 'cpp', 'html', 'md', 'pdf'));
+		// $extract_result = $this->unzip->extract($u_data['full_path'], $tmp_dir);
 
-	// 	if ( $extract_result )
-	// 	{
-	// 		$this->clean_up_old_problem_dir($problem_dir);
+		// // Remove the zip file
+		// unlink($u_data['full_path']);
 
-	// 		if (glob("$tmp_dir/*.pdf"))
-	// 			shell_exec("cd $problem_dir; rm -f *.pdf");
-	// 		// Copy new test cases from temp dir
-	// 		// echo $tmp_dir . "<br/>";
-	// 		// echo $problem_dir . "<br/>";
-	// 		// echo shell_exec("ls $tmp_dir/*");
-	// 		// echo "cp -R $tmp_dir/* $problem_dir;";
-	// 		//die();
-	// 		shell_exec("cp -R $tmp_dir/* $problem_dir;");
-	// 		$this->messages[] = array(
-	// 			'type' => 'success',
-	// 			'text' => 'Tests (zip file) extracted successfully.'
-	// 		);
-	// 	}
-	// 	else
-	// 	{
-	// 		$this->messages[] = array(
-	// 			'type' => 'error',
-	// 			'text' => 'Error: Error extracting zip archive.'
-	// 		);
-	// 		foreach($this->unzip->errors_array() as $msg)
-	// 			$this->messages[] = array(
-	// 				'type' => 'error',
-	// 				'text' => " Zip Extraction Error: ".$msg
-	// 			);
-	// 	}
+		// if ( $extract_result )
+		// {
+		// 	$this->clean_up_old_problem_dir($problem_dir);
 
-	// 	// Remove temp directory
-	// 	shell_exec("rm -rf $tmp_dir");
-    // }
+		// 	if (glob("$tmp_dir/*.pdf"))
+		// 		shell_exec("cd $problem_dir; rm -f *.pdf");
+
+		// 	shell_exec("cp -R $tmp_dir/* $problem_dir;");
+		// 	$messages[] = array(
+		// 		'type' => 'success',
+		// 		'text' => 'Tests (zip file) extracted successfully.'
+		// 	);
+		// 	$in = glob("$problem_dir/in/*");
+		// 	$out = glob("$problem_dir/out/*");
+
+		// 	if ($in){
+		// 		//rename input and output file base on file name order
+		// 		if ($rename_inputoutput){
+		// 			if (count($in) != count($out)){
+		// 				$messages[] = array(
+		// 					'type' => 'error',
+		// 					'text' => 'The zip contain mismatch number of input and output files: ' . count($in) . ' input files vs ' . count($out) . ' output files'
+		// 				);
+		// 			}
+		// 			else {
+		// 				for($i = 1; $i <= count($in); $i++){
+		// 					rename($in[$i-1], "$problem_dir/in/input$i.txt");
+		// 					rename($out[$i-1], "$problem_dir/out/output$i.txt");
+		// 				}
+		// 			}
+		// 		} else {
+		// 			//Check input and output file but won't rename
+		// 			for($i = 1; $i < count($in); $i++){
+		// 				if (!isset($in["input$i.txt"])){
+		// 					$messages[] = array('type' => 'error', 'text' => "A file name input$i.txt seem to be missing in your folder");
+		// 				} else {
+		// 					if (!isset($out["output$i.txt"])){
+		// 						$messages[] = array('type' => 'error', 'text' => "A file name output$i.txt seem to be missing in your folder");
+		// 					}
+		// 				}
+		// 			}
+		// 		}
+		// 	}
+		// }
+		// else
+		// {
+		// 	$messages[] = array(
+		// 		'type' => 'error',
+		// 		'text' => 'Error: Error extracting zip archive.'
+		// 	);
+		// 	foreach($this->unzip->errors_array() as $msg)
+		// 		$messages[] = array(
+		// 			'type' => 'error',
+		// 			'text' => " Zip Extraction Error: ".$msg
+		// 		);
+		// }
+
+		// // Remove temp directory
+		// shell_exec("rm -rf $tmp_dir");
+	}
     public function get_directory_path($id = NULL){
         if ($id === NULL) return NULL;
         
@@ -274,6 +364,8 @@ class problem_controller extends Controller
         
         shell_exec($cmd);
     }
+
+  
     /** Dowload file pdf  */
     public function pdf($problem_id)
 	{
@@ -306,8 +398,20 @@ class problem_controller extends Controller
 		return $max;
     }
 
+    public function get_template_path($problem_id = NULL){
+		$pattern1 = rtrim($this->get_directory_path($problem_id)
+		."/template.public.cpp");
 
-    
+		$template_file = glob($pattern1);
+		if ( ! $template_file ){
+			$pattern = rtrim($this->get_directory_path($problem_id)
+						."/template.cpp");
+
+			$template_file = glob($pattern);
+		}
+		return $template_file;
+	}
+
     public function test()
     {
         $data = Problem::problem_info_detailed(1);

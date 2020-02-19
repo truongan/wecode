@@ -44,6 +44,15 @@
 			name="memory_limit[]" id="name" value={{$item->default_memory_limit}}
 		>
 	@endforeach
-
+	<input type="file" id="myfile" name="myfile"><br><br>
 	<button type="submit" class="btn btn-primary">Edit</button>
+	@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 @endsection
