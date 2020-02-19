@@ -54,14 +54,11 @@ class CreateAllTable extends Migration
             $table->text('value');
             $table->timestamps();
         });
-        Schema::create('queue', function (Blueprint $table) {
+        Schema::create('queue_item', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedInteger('submit_id');
-            $table->char('username', 20);
-            $table->unsignedSmallInteger('assigment');  
-            $table->unsignedSmallInteger('problem'); 
+            $table->unsignedInteger('submission_id');
             $table->char('type', 8);
-            $table->unsignedInteger('process_id');
+            $table->unsignedInteger('processid');
             $table->timestamps();
         });
         Schema::create('assignments', function (Blueprint $table) {
@@ -90,9 +87,9 @@ class CreateAllTable extends Migration
         });
         Schema::create('submissions', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->char('username',20);
             $table->unsignedBigInteger('assignment_id');
             $table->unsignedBigInteger('problem_id');
+            $table->unsignedBigInteger('user_id');
             $table->tinyInteger('is_final');
             $table->dateTime('time');
             $table->char('status',100);

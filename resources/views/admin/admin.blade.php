@@ -105,7 +105,7 @@
       <div class="card-body bg-light">
         <h5 class="card-title">Submission Queue</h5>
         <p  class="card-text">Zậy đó</p>
-        <a href="{{ url('htmleditor') }}" class="stretched-link"></a>
+        <a href="{{ route('queue.index') }}" class="stretched-link"></a>
       </div>
     </div>
   </div>

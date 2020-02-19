@@ -45,3 +45,4 @@ Route::resource('languages','language_controller');
 Route::resource('tags','tag_controller');
 Route::resource('problems','problem_controller');
 Route::resource('assignments','assignment_controller');
+Route::resource('queue','queue_controller');

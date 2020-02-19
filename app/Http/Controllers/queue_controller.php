@@ -15,49 +15,7 @@ class queue_controller extends Controller
     public function index()
     {
         //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Queue  $queue
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Queue $queue)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Queue  $queue
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Queue $queue)
-    {
-        //
+        return view('admin.queue', Queue::all());
     }
 
     /**
