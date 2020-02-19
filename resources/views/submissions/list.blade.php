@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('other_assets')
+  <link rel='stylesheet' type='text/css' href='https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css'/>
+@endsection
+
 @section('content')
 
 <div class="row">
@@ -23,18 +27,21 @@
 						<th>Rejudge</th>
 					</tr>
 				</thead>
-				
-				@foreach ($submissions as $submission)
+				@if ($final == 0)
+					@foreach ($submissions as $submission)
+				@else 
+					@foreach ($submissions->where('is_final',1)->get() as $submission)
+				@endif
 				<tr data-id="{{$submission->id}}">
-					<td>{{$submission->iteration}} </td>
+					<td>{{$loop->iteration}} </td>
 					<td>{{$submission->id}}</td>
 					<td>{{$submission->user->username}}</td>
 					<td>{{$submission->user->display_name}}</td>
 					<td>{{$submission->problem->name}}</td>
+					<td>{{$submission->time}}</td>
 					<td>{{$submission->score}}</td>
 					<td>Delay</td>
 					<td>{{$submission->language->name}}</td>
-					<td>File PDF</td>
 					<td>Status</td>
 					<td>Code</td>
 					<td>Log</td>
