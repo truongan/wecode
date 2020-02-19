@@ -11,20 +11,20 @@ class Submission extends Model
 
     public function problem()
     {
-        return $this->belongsToMany('App\Problem');
+        return $this->belongsTo('App\Problem');
     }
     public function language()
     {
-        return $this->belongsToMany('App\Language');
+        return $this->belongsTo('App\Language');
     }
     public function assignment()
     {
-        return $this->belongsToMany('App\Assignment');
+        return $this->belongsTo('App\Assignment');
     }
 
     public function user()
     {
-    	return $this->belongsToMany('App\User');
+    	return $this->belongsTo('App\User');
     }
     
 }
