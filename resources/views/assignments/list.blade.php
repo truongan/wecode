@@ -9,8 +9,13 @@
 @endsection
 
 @section('title_menu')
-    {{-- Nếu là admin thì hiển thị --}}
-    <span class="title_menu_item"><a href="{!! route('assignments.create') !!}"><i class="fa fa-plus color8"></i>Add</a></span>
+	{{-- Nếu là admin thì hiển thị --}}
+<small><nav class="nav nav-pills">
+	<a class="nav-link" href="{{ route('assignments.create') }}"><i class="fa fa-plus color8"></i> Add</a>
+	<a class="nav-link active" href="{{ url('assignments/') }}"><i class="far fa-star color1"></i>Assingments setting</a>
+	<a class="nav-link" href="{{ url('assignments/scores/accepted') }}"><i class="far fa-star color1"></i>Assignments score accepted</a>
+	<a class="nav-link" href="{{ url('assignments/scores/sum') }}"><i class="far fa-star color1"></i>Assignments score olp</a>
+</nav></small>
 @endsection
 
 @section('content')

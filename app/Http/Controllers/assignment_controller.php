@@ -32,7 +32,10 @@ class assignment_controller extends Controller
         //
         if ( !in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
             abort(404);
-        return view('assignments.create',['problems' => Problem::all(), 'messages' => [], 'selected' => 'assignments']);
+        $problem = new Problem();
+        $problem->id = -1; $problem->name = 'dummy'; $problem->score=0;
+        $problems[-1] = array($problem);
+        return view('assignments.create',['all_problems' => Problem::all(), 'messages' => [], 'problems' => $problems, 'selected' => 'assignments']);
     }
 
     /**
@@ -94,7 +97,7 @@ class assignment_controller extends Controller
      */
     public function edit(Assignment $assignment)
     {
-        return view('assignments.create',['assignment' => $assignment, 'problems' => Problem::all(), 'messages' => [], 'selected' => 'assignments']);
+        return view('assignments.create',['assignment' => $assignment, 'all_problems' => Problem::all(), 'messages' => [], 'problems' => $assignment->problems, 'selected' => 'assignments']);
     }
 
     /**

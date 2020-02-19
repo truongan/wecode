@@ -7,4 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Assignment extends Model
 {
     //
+    public function problems()
+    {
+        return $this->belongsToMany('App\Problem')->withPivot('score','ordering','problem_name')->withTimestamps();
+    }
 }

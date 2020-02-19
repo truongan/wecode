@@ -54,11 +54,11 @@ class CreateAllTable extends Migration
             $table->text('value');
             $table->timestamps();
         });
-        Schema::create('queue_item', function (Blueprint $table) {
+        Schema::create('queue_items', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedInteger('submission_id');
             $table->char('type', 8);
-            $table->unsignedInteger('processid');
+            $table->unsignedInteger('processid')->nullable();
             $table->timestamps();
         });
         Schema::create('assignments', function (Blueprint $table) {
@@ -136,6 +136,7 @@ class CreateAllTable extends Migration
         Schema::dropIfExists('problems');
         Schema::dropIfExists('settings');
         Schema::dropIfExists('queue');
+        Schema::dropIfExists('queue_items');
         Schema::dropIfExists('assignments');
         Schema::dropIfExists('assignment_problem');
         Schema::dropIfExists('submissions');
