@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Problem;
 use App\Setting;
+use App\Language;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -79,15 +80,9 @@ class problem_controller extends Controller
      * @param  \App\Problem  $problem
      * @return \Illuminate\Http\Response
      */
-    public function edit(Problem $id)
+    public function edit(Problem $problem)
     {
-        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
-            abort(404);
-        if (!$request->has($request['file']))
-        {
-            return view('problems.list',['problems'=>Problem::all()]); 
-        }
-        return rediect('problems');
+        return view('problems.edit', ['problem'=>$problem,'languages'=>Language::all()]);
     }
 
     /**
@@ -99,7 +94,29 @@ class problem_controller extends Controller
      */
     public function update(Request $request, Problem $problem)
     {
-        //
+        DB::beginTransaction(); 
+        $id = $problem->id ? $problem->id : $this->new_problem_id();
+        $problem->update($request->input()); 
+        DB::table('language_problem')->where('problem_id','=',$id)->delete();
+        
+        $time_limit = $request->time_limit;
+		$memory_limit = $request->memory_limit;
+        $enable = $request->enable;
+        //Now add new problems:
+        for($i=0;$i<count($enable);$i++){
+            if($enable[$i]){
+				DB::table('language_problem')->insert([
+					'language_id' => $request->language_update[$i],
+					'problem_id' => $problem->id,
+					'time_limit' => $time_limit[$i],
+					'memory_limit' => $memory_limit[$i],
+                ]);
+			}
+        }
+        DB::commit();
+		// $this->db->trans_complete();
+        // return $id;
+        return redirect()->route('problems.index');
     }
 
     /**
@@ -108,23 +125,30 @@ class problem_controller extends Controller
      * @param  \App\Problem  $problem
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id = NULL)
     {
+        
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
             abort(404);
-        
-        $problem = Problem::problem_info_detailed($id);
-		if ($problem == NULL)
+            
+        elseif ($id === NULL)
+        {
             $json_result = array('done' => 0, 'message' => 'Input Error');
-		elseif ($problem['no_of_ass'] != 0 & $problem['no_of_sub'] != 0){
-		    $json_result = array('done' => 0, 'message' => 'Problem already appear in assignments and got some submission should not be delete');
         }
-        else{
+        else
+        {
+            $problem = Problem::problem_info_detailed($id);
+         
+            if ($problem == NULL)
+                $json_result = array('message' => 'Not found detailed');
+            elseif ($problem['no_of_ass'] != 0 & $problem['no_of_sub'] != 0)
+            {
+                $json_result = array("message" => "Problem already appear in assignments and got some submission should not be delete");
+            }
             $this->delete_problem($id);
-            $json_result = array('done' => 1);
         }
-        header('Content-Type: application/json; charset=utf-8');  
-    
+        
+		header('Content-Type: application/json; charset=utf-8');  
         return ($json_result);
     }
 
@@ -137,9 +161,9 @@ class problem_controller extends Controller
     }
     
     public function edit_description($problem_id){
-		// if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
-        //     abort(404);
-		
+		if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
+            abort(404);
+		var_dump("ok");die();
 		// $this->load->library('form_validation');
 		// $this->form_validation->set_rules('content', 'text' ,'required'); /* todo: xss clean */
 		// if ($this->form_validation->run())
@@ -151,7 +175,8 @@ class problem_controller extends Controller
 		// 	else show_error("Error saving", 501);
 		// } else {
 		// 	show_error(validation_errors(), 501);
-		// }
+        // }
+        return view('problems.edit');
 	}
     // private function unload_zip_test_file($assignments_root, $problem_dir, $u_data){
 	// 	// Create a temp directory
@@ -202,9 +227,12 @@ class problem_controller extends Controller
 	// 	shell_exec("rm -rf $tmp_dir");
     // }
     public function get_directory_path($id = NULL){
-		if ($id === NULL) return NULL;
+        if ($id === NULL) return NULL;
+        
 		$assignments_root = rtrim(DB::table('settings')->where("key","assignments_root")->first()->value,'/');
+       
         $problem_dir = $assignments_root . "/problems/".$id;
+       
         return $problem_dir;
     }
 
@@ -226,23 +254,25 @@ class problem_controller extends Controller
 	}
     
     public function delete_problem($id){
-		$cmd = 'rm -rf '.$this->get_directory_path($id);
-         // If you want to set transaction time, you can append the new argument in the transaction function
-         die();
-		DB::transaction(function(){
-            Problem::destroy($id);
-            Problem_language::delete(['problem_id'=>$id]);
-            Problem_assignment::delete(['problem_id'=>$id]);
-            Submissions::delete(['problem_id',$id]);
-        });
-        die();
+        
+        $cmd = 'rm -rf '.$this->get_directory_path($id);
+      
+		 // If you want to set transaction time, you can append the new argument in the transaction function
+        
+        DB::beginTransaction();  
+        Problem::destroy($id);  
+        DB::table('language_problem')->where('problem_id','=',$id)->delete();
+        DB::table('assignment_problem')->where('problem_id','=',$id)->delete();
+        DB::table('submissions')->where('problem_id','=',$id)->delete();
+            
+        DB::commit();
+        
         // Make the path to prepare to delete problem
         $cmd = 'rm -rf '.$this->get_directory_path($id);
         
         // Delete assignment's folder (all test cases and submitted codes)
         
         shell_exec($cmd);
-        
     }
     /** Dowload file pdf  */
     public function pdf($problem_id)
@@ -263,9 +293,26 @@ class problem_controller extends Controller
         return response()->download($pdf_files);
     
     }
+
+    public function new_problem_id(){
+		$max = $max = DB::table('problems')->count()+1 ;
+
+		$assignments_root = rtrim(DB::table('settings')->where("key","assignments_root")->first()->value,'/');
+       
+		while (file_exists($assignments_root.'/problems/'.$max)){
+			$max++;
+		}
+
+		return $max;
+    }
+
+
+    
     public function test()
     {
         $data = Problem::problem_info_detailed(1);
         return view('problems.test',['data'=>$data]);
     }
+
+
 }
