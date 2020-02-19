@@ -50,12 +50,12 @@ class dummy_data extends Seeder
         for ($i=1; $i < 10; $i++) { 
             DB::table('submissions')->insert([
                 'username' => 'username' . $i,
-                'assignment_id' => $i,
+                'assignment_id' => rand(1,2),
                 'problem_id'=>$i,
-                'is_final' => 1,
+                'is_final' => rand(0,1),
                 'time' => new DateTime,
-                'status' => $i,
-                'pre_score' => '100',
+                'status' => rand(0,100),
+                'pre_score' => rand(50,100)/10,
                 'coefficient'=>$i,
                 'file_name'=>$i,
                 'language_id'=>1
