@@ -139,7 +139,7 @@ enctype="multipart/form-data">
 			@method("PUT")
 		@endif
 	
-		<input type="hidden" name="number_of_problems" id="nop" value="{{ $edit ? $assignment->problems->count() : $problems->count() }}"/>
+		{{-- <input type="hidden" name="number_of_problems" id="nop" value="{{ $edit ? $assignment->problems->count() : $problems->count() }}"/> --}}
 		<div class="row">
 			<div class="col-sm-6">
 				<fieldset class="form-group">
@@ -288,8 +288,10 @@ enctype="multipart/form-data">
 				</label>
 				<select class="all_problems form-control" multiple="multiple">
 					@foreach( $all_problems as $p)
-					<option value="{{ $p->id }}" data-name="{{$p->name}}" data-id="{{$p->id}}" data-note="{{ $p->admin_note }}" data-no_of_assignment="{{ $p->no_of_assignment }}"
-					selected="{{ $problems[$p->id] ? "selected" : ""  }}">{{$p->id}} - {{$p->name}} ({{ $p->admin_note }}) </option>
+					<option value="{{ $p->id }}" data-name="{{$p->name}}" data-id="{{$p->id}}" data-note="{{ $p->admin_note }}" data-no_of_assignment="{{ $p->no_of_assignment }}" 
+						{{-- {{ $problems[$p->id] ?  'selected="selected"' : ''  }} --}}
+						>
+					 {{$p->id}} - {{$p->name}} ({{ $p->admin_note }}) </option>
 					@endforeach
 				</select>
 			</fieldset>
@@ -314,7 +316,7 @@ enctype="multipart/form-data">
 		</div>
 	</div>
 	
-	{{-- <fieldset class="form-group">
+	<fieldset class="form-group">
 	<label> Set alias, score and order for problems in this assignment  <small class="form-text text-muted">Problem's alias will be displayed when student view this assignment instead of the problem's original name<br/>
 	You can drag the handle to re-order the problems.<br/>
 	Remove one problem from assignment won't remove the submissions of that problem but will reset its alias and score to default if you re-add it later.
@@ -323,32 +325,32 @@ enctype="multipart/form-data">
 	<ul id="problem_list" class="list-group">
 		@php($i = 0)
 		@foreach($problems as $problem)
-		<li   class="list-group-item {{$problem->id == -1 ? 'd-none' : ''}} "><div class="row align-items-center">
+		<li   class="list-group-item {{$problem['id'] == -1 ? 'd-none' : ''}} "><div class="row align-items-center">
 			<div class="col-auto list_handle pointer">
 				<span><i class="fa fa-grip-vertical fa-lg fa-fw"></i></span>
 			</div>
 			<div class="col">
 				<div class="row  align-items-center" >			
 					<div class="form-inline">
-						<input type="hidden" name="problem_id[]" value="{{$problem->id}}"/>
+						<input type="hidden" name="problem_id[]" value="{{$problem['id']}}"/>
 						<span class="lead mr-2">
-							<span class="badge badge-light">{{ $problem->id }}</span>
-							{{ $problem->name }}
+							<span class="badge badge-light">{{ $problem['id'] }}</span>
+							{{ $problem['name'] }}
 						</span>
 						<div class="input-group input-group-sm mr-2">
 							<div class="input-group-prepend">
 								<label class="input-group-text">Alias</label>
 							</div>
-							<input type="text" name="problem_name[]" class="form-control form-control-sm " value="{{ $problem->problem_name }}"/>
+							<input type="text" name="problem_name[]" class="form-control form-control-sm " value="{{ $problem['problem_name'] }}"/>
 						</div>
 						
 						<div class="input-group input-group-sm mr-2">
 							<div class="input-group-prepend">
 							<label class="input-group-text">Score</label>
 							</div>
-							<input type="number" name="problem_score[]" class="form-control form-control-sm problem-score" value="{{ $problem->score }}"/>
+							<input type="number" name="problem_score[]" class="form-control form-control-sm problem-score" value="{{ $problem['score'] }}"/>
 						</div>
-						<span class="text-muted admin_note">{{ $problem->admin_note }}</span>
+						<span class="text-muted admin_note">{{ $problem['admin_note'] }}</span>
 					</div>
 				</div>
 			</div>
@@ -363,7 +365,7 @@ enctype="multipart/form-data">
 	
 	<fieldset class="form-group mt-2">
 		<input type="submit" value="{{ $edit ? "Edit" : "Add" }} Assignment" class="sharif_input btn btn-primary"/>
-	</fieldset> --}}
+	</fieldset>
 	</form>
 </div>
 @endsection
