@@ -14,25 +14,23 @@ class submission_controller extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(int $final = 0)
+    public function index($choose = 'all')
     {
         if ( in_array( Auth::user()->role->name, ['student']) )
         {
-            $submissions = Submission::where('user_id',Auth::user()->id)->get();
-            if ($final == 1)
-                $submissions = $submissions->where('is_final',1)->get();
-            return view('submissions.list',['submissions' => $submissions, 'final' => $final, 'selected' => 'submissions']);
+            if ($choose == 'final')
+                $submissions = Submission::where('user_id',Auth::user()->id)->where('is_final',1)->get();
+            else
+                $submissions = Submission::where('user_id',Auth::user()->id)->get();
+            return view('submissions.list',['submissions' => $submissions, 'choose' => $choose, 'selected' => 'submissions']);
         }
         else 
         {
-            if ($final == 1)
+            if ($choose == 'final')
                 $submissions = Submission::where('is_final',1)->get();
-            return view('submissions.list',['submissions' => Submission::all(), 'final' => $final, 'selected' => 'submissions']); 
+            else  $submissions = Submission::all();
+            return view('submissions.list',['submissions' => $submissions, 'choose' => $choose, 'selected' => 'submissions']); 
         }
     }
 
-    public function indexx(int $final = 0)
-    {
-        echo("Hello");
-    }
 }
