@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Assignment;
 use App\Setting;
+use App\Problem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -18,7 +19,7 @@ class assignment_controller extends Controller
     public function index()
     {
         //
-        return view('assignments.list',['assignments'=>Assignment::all(), 'selected' => 'assignments']); 
+        return view('assignments.list',['assignments'=> Assignment::all(), 'selected' => 'assignments']); 
     }
 
     /**
@@ -31,7 +32,7 @@ class assignment_controller extends Controller
         //
         if ( !in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
             abort(404);
-        return view('assignments.create',['selected' => 'assignments']);
+        return view('assignments.create',['problems' => Problem::all(), 'messages' => [], 'selected' => 'assignments']);
     }
 
     /**
@@ -93,7 +94,7 @@ class assignment_controller extends Controller
      */
     public function edit(Assignment $assignment)
     {
-        return view('assignments.create',['assignment' => $assignment, 'selected' => 'assignments']);
+        return view('assignments.create',['assignment' => $assignment, 'problems' => Problem::all(), 'messages' => [], 'selected' => 'assignments']);
     }
 
     /**
@@ -106,7 +107,6 @@ class assignment_controller extends Controller
     public function update(Request $request, Assignment $assignment)
     {
         //
-        echo("Vo upload roi ne");
         $assignment->name = $request->name;
          $assignment->description = $request->description;
         if ($request->open == 'on')

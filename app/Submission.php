@@ -9,5 +9,14 @@ class Submission extends Model
     protected $fillable = ['id', 'username','assignment_id','problem_id','is_final','time','status','pre_score'
                             ,'coefficient','file_name','language_id'];
 
+    public function problems()
+    {
+        return $this->belongsToMany('App\Problem');
+    }
+
+    public function users()
+    {
+    	return $this->belongsToMany('App\User');
+    }
     
 }
