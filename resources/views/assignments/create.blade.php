@@ -22,6 +22,19 @@
 </span>
 @endsection
 
+@section('body_end')
+<script type="text/javascript" src="{{ asset('assets/js/Sortable.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/select2/select2.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/js/add_assignments.js') }}"></script>
+<script type='text/javascript' src="{{ asset('assets/js/taboverride.min.js') }}"></script>
+<script>
+	$(document).ready(function(){
+		tabOverride.set(document.getElementsByTagName('textarea'));
+	});
+</script>
+{{-- <script type="text/javascript">shj.num_of_problems={{ $problems.count() }};</script> --}}
+@endsection
+
 @section('content')
 {{-- <form method="POST"  
 	@if (Route::currentRouteName() == 'assignments.edit')
@@ -139,7 +152,7 @@ enctype="multipart/form-data">
 			@method("PUT")
 		@endif
 	
-		<input type="hidden" name="number_of_problems" id="nop" value="{{ $edit ? $assignment->problems->count() : $problems->count() }}"/>
+		{{-- <input type="hidden" name="number_of_problems" id="nop" value="{{ $edit ? $assignment->problems->count() : $problems->count() }}"/> --}}
 		<div class="row">
 			<div class="col-sm-6">
 				<fieldset class="form-group">
@@ -288,8 +301,10 @@ enctype="multipart/form-data">
 				</label>
 				<select class="all_problems form-control" multiple="multiple">
 					@foreach( $all_problems as $p)
-					<option value="{{ $p->id }}" data-name="{{$p->name}}" data-id="{{$p->id}}" data-note="{{ $p->admin_note }}" data-no_of_assignment="{{ $p->no_of_assignment }}"
-					selected="{{ $problems[$p->id] ? "selected" : ""  }}">{{$p->id}} - {{$p->name}} ({{ $p->admin_note }}) </option>
+					<option value="{{ $p->id }}" data-name="{{$p->name}}" data-id="{{$p->id}}" data-note="{{ $p->admin_note }}" data-no_of_assignment="{{ $p->no_of_assignment }}" 
+						{{-- {{ $problems[$p->id] ?  'selected="selected"' : ''  }} --}}
+						>
+					 {{$p->id}} - {{$p->name}} ({{ $p->admin_note }}) </option>
 					@endforeach
 				</select>
 			</fieldset>
@@ -314,7 +329,7 @@ enctype="multipart/form-data">
 		</div>
 	</div>
 	
-	{{-- <fieldset class="form-group">
+	<fieldset class="form-group">
 	<label> Set alias, score and order for problems in this assignment  <small class="form-text text-muted">Problem's alias will be displayed when student view this assignment instead of the problem's original name<br/>
 	You can drag the handle to re-order the problems.<br/>
 	Remove one problem from assignment won't remove the submissions of that problem but will reset its alias and score to default if you re-add it later.
@@ -363,7 +378,7 @@ enctype="multipart/form-data">
 	
 	<fieldset class="form-group mt-2">
 		<input type="submit" value="{{ $edit ? "Edit" : "Add" }} Assignment" class="sharif_input btn btn-primary"/>
-	</fieldset> --}}
+	</fieldset>
 	</form>
 </div>
 @endsection
