@@ -143,15 +143,16 @@ enctype="multipart/form-data">
 	@php($edit = Route::currentRouteName() == 'assignments.edit')
 	<form method="POST"
 		@if (Route::currentRouteName() == 'assignments.edit')
-			action="{!! route('assignments.update', $assignment) !!}"
+			action="{{ route('assignments.update', $assignment) }}"
 		@else  
-			action="{!! route('assignments.store') !!}"
+			action="{{ route('assignments.store') }}"
 		@endif
-		enctype="multipart/form-data">
+	enctype="multipart/form-data"
+	>
 		@if (Route::currentRouteName() == 'assignments.edit')
 			@method("PUT")
 		@endif
-	
+		@csrf
 		{{-- <input type="hidden" name="number_of_problems" id="nop" value="{{ $edit ? $assignment->problems->count() : $problems->count() }}"/> --}}
 		<div class="row">
 			<div class="col-sm-6">

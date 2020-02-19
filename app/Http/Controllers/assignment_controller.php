@@ -51,27 +51,25 @@ class assignment_controller extends Controller
     public function store(Request $request)
     {
         //
-        $assignment=new Assignment;
-        $assignment->name = $request->name;
-        $assignment->description = $request->description;
+        dd($request->input());
+
+        $assignment = Assignment::create($request->input());
+        
         if ($request->open == 'on')
             $assignment->open = True;
         else $assignment->open = False;
         if ($request->score_board == 'on')
             $assignment->score_board = True;
         else $assignment->score_board = False;
-        $assignment->extra_time = $request->extra_time;
+        
         $start_time = strval($request->start_time_date) . " " . strval($request->start_time_time);
         $assignment->start_time = date('Y-m-d H:i:s', strtotime($start_time));
         $finish_time = strval($request->finish_time_date) . " " . strval($request->finish_time_time);
         $assignment->finish_time = date('Y-m-d H:i:s', strtotime($finish_time));
-        $assignment->total_submits = 0;
-        $assignment->javaexceptions=0;
-        if ($request->late_rule!=NULL)
-            $assignment->late_rule=$request->late_rule;
-        else $assignment->late_rule="";
-        $assignment->participants=$request->participants;
+        
+        
         $assignment->moss_update='';
+        
         $assignment->save();
         if ($request->hasFile('pdf_file')) {
             $path_pdf = Setting::get("assignments_root");

@@ -5,9 +5,8 @@
 @endsection
 
 @section('content')
-<a herf="https://www.google.com/">google</a>
-<a herf="{{route('submissions.index', 0)}}">All</a>
-<a herf="{{route('submissions.index', 1)}}">Final</a>
+<a href="{{route('submissions.index', 'all')}}">All</a>
+<a href="{{route('submissions.index', 'final')}}">Final</a>
 <div class="row">
     <div class="col">
         <div class="table-responsive">
