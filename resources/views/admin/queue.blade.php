@@ -16,7 +16,7 @@
 
 <div class="col-12">
   <p>
-    Total submissions in queue: {{ $queue->count() }}
+    {{-- Total submissions in queue: {{ $queue->count() }} --}}
   </p>
   <p>
     {# <a href="#" class="shj_act" id="pause"><i class="fa fa-pause"></i> Pause</a> | #}
@@ -39,15 +39,17 @@
       @foreach ($queue as $item)
       <tr>
         <td>{{ $item->id }}</td>
-        <td>{{ $item->submit_id }}</td>
-        <td>{{ $item->username }}</td>
-        <td>{{ $item->assignment }} (<span>{{ all_assignments[item.assignment].name }}</span>)</td>
-        <td>{{ $item->problem }}</td>
+        <td>{{ $item->submission_id }}</td>
+        <td>{{ $item->submission->username }}</td>
+        <td>{{ $item->submission->assignment->id }} (<span>{{ $item->submission->assignment->name }}</span>)</td>
+        <td>{{ $item->submission->problem->id }}</td>
         <td>{{ $item->type }}</td>
         <td>{{ $item->process_id }}</td>
-        <td>{% if item.process_id %}
-            <a href="#" class="shj_act btn btn-danger" id="unlock/{{ item.id }}"  data-toggle="tooltip" data-placement="right" title="Unlock this queue item, allow it to be processed. Should only be used if its processor process has terminated somehow. MUST DOUBLE CHECK BEFORE USE"><i class="fas fa-lock-open"></i></a>
-          {% endif %}</td>
+        <td>
+          @if ($item->process_id)
+            <a href="#" class="shj_act btn btn-danger" id="unlock/{{ $item->id }}"  data-toggle="tooltip" data-placement="right" title="Unlock this queue item, allow it to be processed. Should only be used if its processor process has terminated somehow. MUST DOUBLE CHECK BEFORE USE"><i class="fas fa-lock-open"></i></a>
+          @endif
+        </td>
       </tr>
       @endforeach
   </table>
