@@ -112,23 +112,22 @@ class problem_controller extends Controller
     {
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
             abort(404);
-            
-
-		$problem = Problem::problem_info_detailed($id);
-
+        
+        $problem = Problem::problem_info_detailed($id);
 		if ($problem == NULL)
-			abort(404);
-		
-		if ($problem['no_of_ass'] != 0 & $problem['no_of_sub'] != 0){
-		    abort(403,"Problem already appear in assignments and got some submission should not be delete");
-		}
-
-		if ($this->input->post('delete') === 'delete')
-		{
-			Problem_model::find($id);
-			redirect('problems');
-		}
+            $json_result = array('done' => 0, 'message' => 'Input Error');
+		elseif ($problem['no_of_ass'] != 0 & $problem['no_of_sub'] != 0){
+		    $json_result = array('done' => 0, 'message' => 'Problem already appear in assignments and got some submission should not be delete');
+        }
+        else{
+            $this->delete_problem($id);
+            $json_result = array('done' => 1);
+        }
+        header('Content-Type: application/json; charset=utf-8');  
+    
+        return ($json_result);
     }
+
     public function save_problem_description($problem_id, $text, $type = 'html')
 	{
 		$problem_dir = $this->get_directory_path($problem_id);
@@ -205,7 +204,7 @@ class problem_controller extends Controller
     public function get_directory_path($id = NULL){
 		if ($id === NULL) return NULL;
 		$assignments_root = rtrim(DB::table('settings')->where("key","assignments_root")->first()->value,'/');
-		$problem_dir = $assignments_root . "/problems/".$id;
+        $problem_dir = $assignments_root . "/problems/".$id;
         return $problem_dir;
     }
 
@@ -228,14 +227,15 @@ class problem_controller extends Controller
     
     public function delete_problem($id){
 		$cmd = 'rm -rf '.$this->get_directory_path($id);
-		 // If you want to set transaction time, you can append the new argument in the transaction function
+         // If you want to set transaction time, you can append the new argument in the transaction function
+         die();
 		DB::transaction(function(){
             Problem::destroy($id);
             Problem_language::delete(['problem_id'=>$id]);
             Problem_assignment::delete(['problem_id'=>$id]);
             Submissions::delete(['problem_id',$id]);
         });
-        
+        die();
         // Make the path to prepare to delete problem
         $cmd = 'rm -rf '.$this->get_directory_path($id);
         

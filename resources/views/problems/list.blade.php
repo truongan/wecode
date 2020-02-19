@@ -35,7 +35,7 @@
     </tr>
     </thead>
     @foreach ($problems as $item)
-    <tr>
+    <tr data-id="{{$item->id}}"">
         
         <td>{{ $item->id}}</td>
         <td><a href="{{ url("problems/show/$item->id") }}">{{ $item->name }}</a></td>
@@ -49,17 +49,16 @@
             {{-- {% for ass_id in item.assignments %}
                 <a href="{{ site_url("assignments/edit/#{ass_id}") }}" class="badge badge-primary">asgmt {{ ass_id}}</a>
             {% endfor %} --}}
+            x
         </td>
         <td>{{ $item->diff_cmd }}</td>
         <td>{{ $item->diff_arg }}</td>
-        
         <td>
             <a href="{{ route('problems.pdf',$item->id) }}">
                 <i title="Download Tests and Descriptions" class="fa fa-cloud-download-alt fa-lg color11"></i>
             </a>
             <a href="#"><i title="Edit" class="far fa-edit fa-lg color3"></i></a>
-            
-            <a href="#"><i title="Delete" class="far fa-trash-alt fa-lg color1"></i></a>
+            <span title="Delete problem" class="del_n delete_problem pointer"><i title="Delete problem" class="far fa-trash-alt fa-lg color1"></i></span>
             
         </td>
     
@@ -67,4 +66,57 @@
     @endforeach
     </table>
 </div>
+
+<div class="modal fade" id="problem_delete" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Are you sure you want to delete this problem?</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-danger confirm-problem-delete">YES</button>
+      <button type="button" class="btn btn-primary" data-dismiss="modal">NO</button>
+        </div>
+      </div>
+    </div>
+</div>
+@endsection
+
+@section('body_end')
+<script>
+/**
+* Notifications
+*/
+$(document).ready(function () {
+    $('.del_n').click(function () {
+        var row = $(this).parents('tr');
+        var id = row.data('id');
+        $(".confirm-problem-delete").off();
+        $(".confirm-problem-delete").click(function(){
+            $("#problem_delete").modal("hide");
+            $.ajax({
+            type: 'DELETE',
+            url: 'problems/'+id,
+            data: {
+                        '_token': "{{ csrf_token() }}",
+            },
+            error: shj.loading_error,
+            success: function (response) {
+                if (response.done) {
+                row.animate({backgroundColor: '#FF7676'},100, function(){row.remove();});
+                $.notify('problem deleted'	, {position: 'bottom right', className: 'success', autoHideDelay: 5000});
+                $("#problem_delete").modal("hide");
+                }
+                else
+                shj.loading_failed(response.message);
+            }
+            });
+        });
+    $("#problem_delete").modal("show");
+    });
+});
+</script>
 @endsection
