@@ -26,7 +26,7 @@ class Problem extends Model
 
     public function map_with_language()
     {
-        return $this->belongsToMany('App\Language');
+        return $this->belongsToMany('App\Language')->withTimestamps();
     }
 
     public static function problem_info_detailed($id = 1){
