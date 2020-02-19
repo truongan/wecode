@@ -18,9 +18,10 @@ class submission_controller extends Controller
     {
         if ( in_array( Auth::user()->role->name, ['student']) )
         {
-
+            $submissions = Submission::where($user_id,Submission::user()->user_id)->get();
+            return view('submissions.list',['submissions' => $submissions, 'selected' => 'submissions']);
         }
-        return view('submissions.list',['submissions'=>Submission::all(), 'selected' => 'submissions']); 
+        return view('submissions.list',['submissions' => Submission::all(), 'selected' => 'submissions']); 
     }
 
 }
