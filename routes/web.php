@@ -29,10 +29,11 @@ Route::post('/users/adds', 'UserController@add')->name('users.add');
 Route::delete('users/{id}', 'UserController@destroy')->name('users.destroy');
 
 
-Route::get('/problems/show/{id}', 'problem_controller@show');
+// Route::get('/problems/show/{id}', 'problem_controller@show');
 Route::get('/problems/download/{id}', 'problem_controller@pdf')->name('problems.pdf');
 
-Route::post('/problems/edit_description/{id}', 'problem_controller@edit_description')->name('problem.edit_des');
+// Route::post('/problems/edit_description/{id}', 'problem_controller@edit_description')->name('problem.edit_des');
+// Route::get('problems/test', 'problem_controller@test');
 // Route::get('/problems/get_description', 'problem_controller@show');
 
 // Route::get('/problems/add', 'problem_controller@create')->name('problems.create');

@@ -1,18 +1,49 @@
-<form action="/problems/edit_description/{{ $notification->id }}" method="POST">
-    @method('PUT')
-    <input type="hidden"  name ="_token" value="{!! csrf_token() !!}"/>
-    <input type="hidden" name="id" value="{{ $notification->id }}"/>
+@php($selected = 'settings')
+@extends('layouts.app')
 
-    <p class="input_p">
-        <label for="form_title" class="tiny">Title:</label>
-        <input id="form_title" name="title" type="text" class="sharif_input" value=" {{$notification->title}} "/>
-    </p>
-    <p class="input_p">
-        <label for="notif_text" class="tiny">Text:</label><br><br>
-        <textarea id="notif_text" name="text"> {!!$notification->text!!} </textarea>
-    </p>
-    <p class="input_p">
-        <input type="submit" value="Save" class="sharif_input"/>
-    </p>
-</form>	
+@section('icon', 'fas fa-tags')
+
+@section('title', 'Tags')
+
+@section('title_menu')
+	<span class="title_menu_item"><a href="{{ route('problems.index') }}"><i class="fa fa-list color11"></i>Back to list of problems</a></span>
+@endsection
+@section('content')
+
+
+<div class="row">
+  	<form action="{{route('problems.update', $problem->id)}}" method="POST">
+	@method('PUT')
+	@csrf
+	<p>problem name</p>
+	<input type="text"
+		name="name" id="name" value={{$problem->name}}
+	>
+	<p>admin note</p>
+	<input type="text"
+		name="admin_note" id="name" value={{$problem->admin_note}}
+	>
+	<p>diff arg</p>
+	<input type="text"
+		name="	diff_arg" id="name" value={{$problem->diff_arg}}
+	>
+	<p>diff cmd</p>
+	<input type="text"
+		name="diff_cmd" id="name" value={{$problem->diff_cmd}}
+	>
+	
+	@foreach ($languages as $item)
+		<p> edit language {{$item->name}} </p>
+		<input type="text" name="enable[]">
+		<input type="hidden" name = "language_update[]" value={{$item->id}}>
+		
+		<input type="text"
+			name="time_limit[]" id="name" value={{$item->default_time_limit}}
+		>
+		<input type="text"
+			name="memory_limit[]" id="name" value={{$item->default_memory_limit}}
+		>
+	@endforeach
+
+	<button type="submit" class="btn btn-primary">Edit</button>
 @endsection
