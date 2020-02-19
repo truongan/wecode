@@ -32,7 +32,9 @@
 		tabOverride.set(document.getElementsByTagName('textarea'));
 	});
 </script>
-{{-- <script type="text/javascript">shj.num_of_problems={{ $problems.count() }};</script> --}}
+<script type="text/javascript">
+	shj.num_of_problems={{ count($problems) }};
+</script>
 @endsection
 
 @section('content')
@@ -152,7 +154,7 @@ enctype="multipart/form-data">
 			@method("PUT")
 		@endif
 	
-		{{-- <input type="hidden" name="number_of_problems" id="nop" value="{{ $edit ? $assignment->problems->count() : $problems->count() }}"/> --}}
+		<input type="hidden" name="number_of_problems" id="nop" value="{{ $edit ? count($assignment->problems) : count($problems) }}"/>
 		<div class="row">
 			<div class="col-sm-6">
 				<fieldset class="form-group">
@@ -302,7 +304,7 @@ enctype="multipart/form-data">
 				<select class="all_problems form-control" multiple="multiple">
 					@foreach( $all_problems as $p)
 					<option value="{{ $p->id }}" data-name="{{$p->name}}" data-id="{{$p->id}}" data-note="{{ $p->admin_note }}" data-no_of_assignment="{{ $p->no_of_assignment }}" 
-						{{-- {{ $problems[$p->id] ?  'selected="selected"' : ''  }} --}}
+						{{ $problems[$p->id] ? 'selected="selected"' : ''  }}
 						>
 					 {{$p->id}} - {{$p->name}} ({{ $p->admin_note }}) </option>
 					@endforeach
