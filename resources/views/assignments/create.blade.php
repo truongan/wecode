@@ -22,6 +22,19 @@
 </span>
 @endsection
 
+@section('body_end')
+<script type="text/javascript" src="{{ asset('assets/js/Sortable.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/select2/select2.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/js/add_assignments.js') }}"></script>
+<script type='text/javascript' src="{{ asset('assets/js/taboverride.min.js') }}"></script>
+<script>
+	$(document).ready(function(){
+		tabOverride.set(document.getElementsByTagName('textarea'));
+	});
+</script>
+{{-- <script type="text/javascript">shj.num_of_problems={{ $problems.count() }};</script> --}}
+@endsection
+
 @section('content')
 {{-- <form method="POST"  
 	@if (Route::currentRouteName() == 'assignments.edit')
