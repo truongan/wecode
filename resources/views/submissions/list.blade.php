@@ -5,7 +5,9 @@
 @endsection
 
 @section('content')
-
+<a herf="https://www.google.com/">google</a>
+<a herf="{{route('submissions.index', 0)}}">All</a>
+<a herf="{{route('submissions.index', 1)}}">Final</a>
 <div class="row">
     <div class="col">
         <div class="table-responsive">
@@ -27,11 +29,7 @@
 						<th>Rejudge</th>
 					</tr>
 				</thead>
-				@if ($final == 0)
-					@foreach ($submissions as $submission)
-				@else 
-					@foreach ($submissions->where('is_final',1)->get() as $submission)
-				@endif
+				@foreach ($submissions as $submission)
 				<tr data-id="{{$submission->id}}">
 					<td>{{$loop->iteration}} </td>
 					<td>{{$submission->id}}</td>
