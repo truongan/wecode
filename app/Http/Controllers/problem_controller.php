@@ -120,23 +120,26 @@ class problem_controller extends Controller
 			}
         }
         $problem_dir = $this->get_directory_path($id);
-        $path = $request->myfile->storeAs($problem_dir,$request->myfile->getClientOriginalName(),'my_local');
-        var_dump($path);die;
-        $this->_take_test_file_upload($id);
+        
+        // if ($request->hasFile('pdf_file')) {
+        //     $this->_take_test_file_upload($id);   
+        // }
+
         DB::commit();
+
         return redirect()->route('problems.index');
     }
 
     public function _take_test_file_upload($the_id){
-
-		$assignments_root = rtrim(DB::table('settings')->where("key","assignments_root")->first()->value,'/');
-        $problem_dir = $this->get_directory_path($the_id);
-        
-
-		// Create assignment directory
+        // Tôi Rất mệt ~~ 
+		// $assignments_root = Setting::get("assignments_root");
+        // $problem_dir = $this->get_directory_path($the_id);
+    
+		// // Create assignment directory
 		// if ( ! file_exists($problem_dir) )
 		// 	mkdir($problem_dir, 0700, TRUE);
-
+        // var_dump(1);
+        // die();
 		// $this->load->library('upload');
 		// $up_dir = $_FILES['tests_dir'];
 		// $up_zip = $_FILES['tests_zip'];
@@ -152,26 +155,26 @@ class problem_controller extends Controller
 		// }
 
 		// if ($up_dir['error'][0] === UPLOAD_ERR_NO_FILE ) {
-		// 	// Upload Tests (zip file)
-		// 	shell_exec('rm -f '.$assignments_root.'/*.zip');
-		// 	$config = array(
-		// 		'upload_path' => $assignments_root,
-		// 		'allowed_types' => 'zip',
-		// 	);
-		// 	$this->upload->initialize($config);
-		// 	$zip_uploaded = $this->upload->do_upload('tests_zip');
-		// 	$u_data = $this->upload->data();
+			// Upload Tests (zip file)
+			// shell_exec('rm -f '.$assignments_root.'/*.zip');
+			// $config = array(
+			// 	'upload_path' => $assignments_root,
+			// 	'allowed_types' => 'zip',
+			// );
+			// $this->upload->initialize($config);
+			// $zip_uploaded = $this->upload->do_upload('tests_zip');
+			// $u_data = $this->upload->data();
 			
-		// 	if ( ! $zip_uploaded )
-		// 		$messages[] = array(
-		// 			'type' => 'error',
-		// 			'text' => "Error: Error uploading tests zip file: ".$this->upload->display_errors('', '')
-		// 		);
-		// 	else
-		// 		$messages[] = array(
-		// 			'type' => 'success',
-		// 			'text' => "Tests (zip file) uploaded successfully."
-		// 		);
+			// if ( ! $zip_uploaded )
+			// 	$messages[] = array(
+			// 		'type' => 'error',
+			// 		'text' => "Error: Error uploading tests zip file: ".$this->upload->display_errors('', '')
+			// 	);
+			// else
+			// 	$messages[] = array(
+			// 		'type' => 'success',
+			// 		'text' => "Tests (zip file) uploaded successfully."
+			// 	);
 
 		// 	if ($zip_uploaded) $this->unload_zip_test_file($assignments_root, $problem_dir, $u_data, $messages);
 
@@ -319,7 +322,7 @@ class problem_controller extends Controller
     public function get_directory_path($id = NULL){
         if ($id === NULL) return NULL;
         
-		$assignments_root = rtrim(DB::table('settings')->where("key","assignments_root")->first()->value,'/');
+		$assignments_root = Setting::get("assignments_root");
        
         $problem_dir = $assignments_root . "/problems/".$id;
        
@@ -389,7 +392,7 @@ class problem_controller extends Controller
     public function new_problem_id(){
 		$max = $max = DB::table('problems')->count()+1 ;
 
-		$assignments_root = rtrim(DB::table('settings')->where("key","assignments_root")->first()->value,'/');
+		$assignments_root = Setting::get("assignments_root");
        
 		while (file_exists($assignments_root.'/problems/'.$max)){
 			$max++;

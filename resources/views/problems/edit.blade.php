@@ -44,7 +44,8 @@
 			name="memory_limit[]" id="name" value={{$item->default_memory_limit}}
 		>
 	@endforeach
-	<input type="file" id="myfile" name="myfile"><br><br>
+	<td>PDF File:</td>
+			<input type="file" name="pdf_file" value="Choose.pdf">
 	<button type="submit" class="btn btn-primary">Edit</button>
 	@if ($errors->any())
     <div class="alert alert-danger">
