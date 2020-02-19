@@ -48,12 +48,12 @@
 			<input type="file" name="pdf_file" value="Choose.pdf">
 	<button type="submit" class="btn btn-primary">Edit</button>
 	@if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
+		<div class="alert alert-danger">
+			<ul>
+				@foreach ($errors->all() as $error)
+					<li>{{ $error }}</li>
+				@endforeach
+			</ul>
+		</div>
+	@endif
 @endsection

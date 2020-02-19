@@ -24,7 +24,7 @@ Route::post('/htmleditor/autosave', 'html_editor_controller@autosave');
 Route::get('/settings', 'setting_controller@index')->name('settings.index');
 Route::post('/settings', 'setting_controller@update')->name('settings.update');
 
-Route::get('/users/add', 'UserController@add')->name('users.add');
+Route::get('/users/add_multiple', 'UserController@add_multiple');
 Route::post('/users/adds', 'UserController@add')->name('users.add');
 Route::delete('users/{id}', 'UserController@destroy')->name('users.destroy');
 
