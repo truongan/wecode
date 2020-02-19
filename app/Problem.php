@@ -33,6 +33,7 @@ class Problem extends Model
         
         if ($id === NULL) return NULL;
         $query = Problem::find($id);
+        
         $result['no_of_ass'] = $query->map_with_assigment->count();
         $result['no_of_sub'] = $query->map_with_submission->count();
         

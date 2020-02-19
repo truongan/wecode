@@ -4,6 +4,8 @@ use Illuminate\Database\Seeder;
 use App\Tag;
 use App\Problem;
 use App\Lop;
+use App\Assignment;
+use App\User;
 class dummy_data extends Seeder
 {
     /**
@@ -50,20 +52,20 @@ class dummy_data extends Seeder
         for ($i=1; $i < 10; $i++) { 
             DB::table('submissions')->insert([
                 'username' => 'username' . $i,
-                'assignment_id' => $i,
+                'assignment_id' => rand(1,2),
                 'problem_id'=>$i,
-                'is_final' => 1,
+                'is_final' => rand(0,1),
                 'time' => new DateTime,
-                'status' => $i,
-                'pre_score' => '100',
+                'status' => rand(0,100),
+                'pre_score' => rand(50,100)/10,
                 'coefficient'=>$i,
                 'file_name'=>$i,
                 'language_id'=>1
             ]);
         }
         for ($i=1; $i < 10; $i++) { 
-            DB::table('assignments')->insert([
-                'name' => 'username' . $i,
+            Assignment::create([
+                'name' => 'assignment' . $i,
                 'total_submits' => $i,
                 'open'=>$i,
                 'description' => "",
@@ -75,8 +77,6 @@ class dummy_data extends Seeder
                 'late_rule'=>$i,
                 'participants'=>$i,
                 'moss_update'=>$i,
-                'created_at'=>new DateTime,
-                'updated_at'=>new DateTime
             ]);
         }
         for ($i=1; $i < 8; $i++) { 

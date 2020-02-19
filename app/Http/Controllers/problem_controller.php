@@ -151,6 +151,7 @@ class problem_controller extends Controller
 		header('Content-Type: application/json; charset=utf-8');  
         return ($json_result);
     }
+
     public function save_problem_description($problem_id, $text, $type = 'html')
 	{
 		$problem_dir = $this->get_directory_path($problem_id);
