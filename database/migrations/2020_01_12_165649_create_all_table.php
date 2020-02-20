@@ -64,10 +64,9 @@ class CreateAllTable extends Migration
         Schema::create('assignments', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->char('name', 150);
-            $table->unsignedInteger('total_submits');
+            $table->unsignedInteger('total_submits')->default(0);
             $table->boolean('open');
             $table->boolean('score_board');
-            $table->tinyInteger('javaexceptions');
             $table->dateTime('start_time');
             $table->dateTime('finish_time');
             $table->integer('extra_time');

@@ -13,4 +13,8 @@ class Assignment extends Model
     {
         return $this->belongsToMany('App\Problem')->withPivot('score','ordering','problem_name')->withTimestamps();
     }
+    public function submissions()
+    {
+        return $this->hasMany('App\Submission');
+    }
 }
