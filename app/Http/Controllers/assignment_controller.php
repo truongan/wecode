@@ -124,7 +124,12 @@ class assignment_controller extends Controller
         $problem->id = -1; 
         $problem->name = 'dummy'; 
         $problem->score=0;
-        $problems = $assignment->problems->push($problem);
+
+        $problems = [];
+        $a = $assignment->problems->push($problem);
+        foreach($a as $i){
+            $problems[$i->id] = $i;
+        }
         return view('assignments.create',['assignment' => $assignment, 'all_problems' => Problem::all(), 'messages' => [], 'problems' => $problems, 'selected' => 'assignments']);
     }
 
