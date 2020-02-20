@@ -305,7 +305,6 @@ enctype="multipart/form-data">
 					</small>
 				</label>
 				<select class="all_problems form-control" multiple="multiple">
-					{!!$problems!!}
 					@foreach( $all_problems as $p)
 					<option value="{{ $p->id }}" data-name="{{$p->name}}" data-id="{{$p->id}}" data-note="{{ $p->admin_note }}" data-no_of_assignment="{{ $p->no_of_assignment }}" 
 						{{-- {{ isset($problems[$p->id]) ? 'selected="selected"' : ''  }} --}}
