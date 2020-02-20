@@ -33,13 +33,23 @@ $(document).ready(function () {
 {{-- Dưới đây là thẻ script tạm thời --}}
 <script>
     $(document).ready(function () {
+        var all_assignments = @json($all_assignments);
         $('#calendar').fullCalendar({
             timeFormat: 'HH:mm { - HH:mm}',
             editable: false,
             height: "auto",
             firstDay: 1,
             events: [
-                                    ]
+                @php($colors = ['#812C8C','#FF750D','#2C578C','#013440','#A6222C','#42758C','#02A300','#BA6900'])
+                @foreach ($all_assignments as $assignment )
+                        {id:{{ $assignment->id }},
+                        title:'{{ $assignment->name }}', 
+                        start:'{{ $assignment->start_time }}', 
+                        end:'{{ $assignment->finish_time }}',
+                        allDay:false,
+                        color:'{{ $colors[($loop->index)%count($colors)] }}'},
+                @endforeach
+            ]
         });
         
         //$('.notif_text').ellipsis();
