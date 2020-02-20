@@ -70,10 +70,6 @@ class assignment_controller extends Controller
         
         $assignment->start_time = date('Y-m-d H:i:s', strtotime($request->start_time));
         $assignment->finish_time = date('Y-m-d H:i:s', strtotime($request->finish_time));
-        $assignment->total_submits = 0;
-        $assignment->javaexceptions = 1; // ($this->input->post('javaexceptions')===NULL?0:1), to be removed later
-        $assignment->moss_update = 1 ; // gõ nhàu
-        
 
         $assignment->save();
         if ($request->hasFile('pdf_file')) {
