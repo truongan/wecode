@@ -52,7 +52,7 @@
                     </a>
                 </li>
                 <li class="nav-item color-all_submissions {{ ($selected=="all_submissions") ? "selected" : ""}}">
-                    <a class="nav-link" href="{{ url('submissions/') }}">
+                    <a class="nav-link" href="{{ url('submissions/all') }}">
                         <i class="fa fa-fw fa-bars fa-lg"></i>
                         <span class="nav-link-text">Submissions</span>
                     </a>
