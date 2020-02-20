@@ -4,9 +4,19 @@
   <link rel='stylesheet' type='text/css' href='https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css'/>
 @endsection
 
+@section('title_menu')
+<th>Submissions</th>
+@if ($user_id != 'all' and !in_array( Auth::user()->role->name, ['student'])) 
+	<a href="{{route('submissions.index', [$assignment_id, 'all', $problem_id, 'all'])}}">Remove filter user</a>
+@endif
+@if ($problem_id != 'all')
+	<a href="{{route('submissions.index', [$assignment_id, $user_id, 'all', 'all'])}}">Remove filter problem</a>
+@endif
+@endsection
+
 @section('content')
-<a href="{{route('submissions.index', 'all')}}">All</a>
-<a href="{{route('submissions.index', 'final')}}">Final</a>
+<a href="{{route('submissions.index', [$assignment_id, $user_id, $problem_id, 'all'])}}">All</a>
+<a href="{{route('submissions.index', [$assignment_id, $user_id, $problem_id, 'final'])}}">Final</a>
 <div class="row">
     <div class="col">
         <div class="table-responsive">
@@ -32,9 +42,14 @@
 				<tr data-id="{{$submission->id}}">
 					<td>{{$loop->iteration}} </td>
 					<td>{{$submission->id}}</td>
-					<td>{{$submission->user->username}}</td>
+					<td><a href="{{route('submissions.index', [$assignment_id, strval($submission->user_id), $problem_id, 'all'])}}">
+						{{$submission->user->username}}
+					</a></td>
 					<td>{{$submission->user->display_name}}</td>
-					<td>{{$submission->problem->name}}</td>
+					<td>
+						<a href="{{route('problems.show', $submission->problem_id)}}">{{$submission->problem->name}}</a>
+						<a href="{{route('submissions.index', [$assignment_id, $user_id, strval($submission->problem_id), 'all'])}}">Filter</a>
+					</td>
 					<td>{{$submission->time}}</td>
 					<td>{{$submission->score}}</td>
 					<td>Delay</td>

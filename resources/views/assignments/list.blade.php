@@ -9,7 +9,6 @@
 @endsection
 
 @section('title_menu')
-	{{-- Nếu là admin thì hiển thị --}}
 <small><nav class="nav nav-pills">
 	<a class="nav-link" href="{{ route('assignments.create') }}"><i class="fa fa-plus color8"></i> Add</a>
 	<a class="nav-link active" href="{{ url('assignments/') }}"><i class="far fa-star color1"></i>Assingments setting</a>
@@ -43,7 +42,13 @@
 				<tr data-id="{{$assignment->id}}">
 					<td>{{$loop->iteration}} </td>
 					<td>{{$assignment->id}}</td>
-					<td>{{$assignment->name}}</td>
+					<td>
+						@if ( in_array( Auth::user()->role->name, ['student']) )
+							<a href="{{ route('submissions.index', [$assignment->id, Auth::user()->id, 'all', 'all'])}}">{{$assignment->name}}</a>
+						@else
+							<a href="{{ route('submissions.index', [$assignment->id, 'all', 'all', 'all'])}}">{{$assignment->name}}</a>
+						@endif
+					</td>
 					<td>{{$assignment->total_submits}}</td>
 					<td>{{$assignment->late_rule}}</td>
 					<td>{{$assignment->start_time}}</td>
