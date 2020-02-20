@@ -51,9 +51,15 @@ class assignment_controller extends Controller
     public function store(Request $request)
     {
         //
-        dd($request->input());
+        // dd($request->input());
 
-        $assignment = Assignment::create($request->input());
+        $validated = $request->validate([
+            'name' => ['required','max:150'],
+            'participants'=>['required'],
+        ]);
+        
+        $assignment = new Assignment;
+        $assignment->fill($request->input());
         
         if ($request->open == 'on')
             $assignment->open = True;
@@ -66,9 +72,6 @@ class assignment_controller extends Controller
         $assignment->start_time = date('Y-m-d H:i:s', strtotime($start_time));
         $finish_time = strval($request->finish_time_date) . " " . strval($request->finish_time_time);
         $assignment->finish_time = date('Y-m-d H:i:s', strtotime($finish_time));
-        
-        
-        $assignment->moss_update='';
         
         $assignment->save();
         if ($request->hasFile('pdf_file')) {

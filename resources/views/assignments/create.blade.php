@@ -164,8 +164,10 @@ enctype="multipart/form-data">
 							<label for="form_a_name">Assignment Name</label>
 						</div>
 						<div class="col-sm-8">
-							<input id="form_a_name" type="text" name="assignment_name" class="form-control col-xs-7" value="{{ $edit ? $assignment->name : old('assignment_name') }}"/>
-							{{-- {{ form_error('assignment_name', '<div class="alert alert-danger">', '</div>') }} --}}
+							<input id="form_a_name" type="text" name="name" class="form-control col-xs-7" value="{{ $edit ? $assignment->name : old('name') }}"/>
+							@error('name')
+								<div class="alert alert-danger">{{ $message }} </div>
+							@enderror
 						</div>
 					</div>
 				</fieldset>
@@ -259,9 +261,9 @@ enctype="multipart/form-data">
 			<div class="col-sm-6">
 				<fieldset class="form-group">
 					<div class="form-row">
-							<label for="form_late_rule">Description
-							<small class="form-text text-muted medium clear" style="display: block;"></small>
-							</label>
+						<label for="form_late_rule">Description
+						<small class="form-text text-muted medium clear" style="display: block;"></small>
+						</label>
 					</div>
 					<textarea id="form_late_rule" name="description" rows="3" class="form-control add_text">{{ $edit ? $assignment->description : old('description', '') }}</textarea>
 					{{-- {{ form_error('late_rule', '<div class="alert alert-danger">', '</div>') }} --}}

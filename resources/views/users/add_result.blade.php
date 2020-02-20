@@ -25,6 +25,10 @@
 					<span class="text-muted">Email: {{$item[1]}}</span>   
 					<span class="text-muted">Password: </span><code> {{$item[2]}} </code> 
 					<span class="text-muted">Role:</span>  {{$item[3]}} ( {{$item[4]}} )
+					<span class="text-muted">Role:</span>  {{$item[3]}} ( {{$item[4]}} )
+					@foreach ($item[5] as $message)
+						{{$message}}
+					@endforeach
 				</li>	
 				@empty
 					<p> no user sucess</p>

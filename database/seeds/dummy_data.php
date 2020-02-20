@@ -75,10 +75,9 @@ class dummy_data extends Seeder
             Assignment::create([
                 'name' => 'assignment' . $i,
                 'total_submits' => $i,
-                'open'=>$i,
+                'open'=>rand(0,1),
                 'description' => "",
-                'score_board' => $i,
-                'javaexceptions' => $i,
+                'score_board' => rand(0,1),
                 'start_time' => new DateTime,
                 'finish_time' => new DateTime,
                 'extra_time'=> $i,
