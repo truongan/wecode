@@ -50,7 +50,7 @@
 						@endif
 					</td>
 					<td>{{$assignment->total_submits}}</td>
-					<td>{{$assignment->late_rule}}</td>
+					<td>{{$assignment->coefficient}}</td>
 					<td>{{$assignment->start_time}}</td>
 					<td>{{$assignment->finish_time}}</td>
 					<td>{{$assignment->score_board}}</td>

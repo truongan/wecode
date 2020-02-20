@@ -19,7 +19,29 @@ class assignment_controller extends Controller
     public function index()
     {
         //
-        return view('assignments.list',['assignments'=> Assignment::all(), 'selected' => 'assignments']); 
+        $assignments = Assignment::all();
+        foreach ($assignments as $assignment)
+        {
+            $extra_time = $assignment->extra_time;
+            $delay = strtotime(date("Y-m-d H:i:s")) - strtotime($assignment->finish_time);
+            $submit_time = strtotime(date("Y-m-d H:i:s")) - strtotime($assignment->start_time);
+            ob_start();
+            try 
+            {
+                eval($assignment->late_rule);
+            }
+            catch (\Throwable $e) 
+            {
+                $coefficient = "error";
+            }
+            if (!isset($coefficient))
+                $coefficient = "error";
+            ob_end_clean();
+            $assignment->coefficient = $coefficient;
+            $assignment->finished = ($assignment->start_time < $assignment->finish_time &&  $delay > $extra_time);
+            $assignment->no_of_problems = $assignment->problems->count();
+        }
+        return view('assignments.list',['assignments'=> $assignments, 'selected' => 'assignments']); 
     }
 
     /**
@@ -51,8 +73,6 @@ class assignment_controller extends Controller
     public function store(Request $request)
     {
         //
-        // dd($request->input());
-
         $validated = $request->validate([
             'name' => ['required','max:150'],
             'participants'=>['required']
