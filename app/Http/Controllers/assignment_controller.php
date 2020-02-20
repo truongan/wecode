@@ -100,7 +100,12 @@ class assignment_controller extends Controller
      */
     public function edit(Assignment $assignment)
     {
-        return view('assignments.create',['assignment' => $assignment, 'all_problems' => Problem::all(), 'messages' => [], 'problems' => $assignment->problems, 'selected' => 'assignments']);
+        $problem = new Problem();
+        $problem->id = -1; 
+        $problem->name = 'dummy'; 
+        $problem->score=0;
+        $problems = $assignment->problems->push($problem);
+        return view('assignments.create',['assignment' => $assignment, 'all_problems' => Problem::all(), 'messages' => [], 'problems' => $problems, 'selected' => 'assignments']);
     }
 
     /**
