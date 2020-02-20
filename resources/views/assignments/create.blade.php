@@ -32,7 +32,9 @@
 		tabOverride.set(document.getElementsByTagName('textarea'));
 	});
 </script>
-{{-- <script type="text/javascript">shj.num_of_problems={{ $problems.count() }};</script> --}}
+<script type="text/javascript">
+	shj.num_of_problems={{ count($problems) }};
+</script>
 @endsection
 
 @section('content')
@@ -178,10 +180,10 @@ enctype="multipart/form-data">
 							<input id="start_time" type="hidden" name="start_time" class="form-control" value="" />
 							<div class="form-row">
 								<div class="col-xl-7">
-									<input id="start_date" type="date" name="start_date" class="form-control" value="{{ $edit ? $assignment->start_time|date('Y-m-d') : old('start_date') }}" />
+									<input id="start_date" type="date" name="start_date" class="form-control" value="{{ $edit ? date('Y-m-d', strtotime($assignment->start_time)) : old('start_date') }}" />
 								</div>
 								<div class="col-xl-5">
-									<input id="start__time" type="time" name="start__time" class="form-control" value="{{ $edit ? $assignment->start_time|date('H:i') : old('start__time',0) }}" />
+									<input id="start__time" type="time" name="start__time" class="form-control" value="{{ $edit ? date('H:i', strtotime($assignment->start_time)) : old('start__time',0) }}" />
 								</div>
 							</div>
 							{{-- {{ form_error('start_time', '<div class="alert alert-danger">', '</div>') }} --}}
@@ -200,10 +202,10 @@ enctype="multipart/form-data">
 							<input id="finish_time" type="hidden" name="finish_time" class="form-control" value="" />
 							<div class="form-row">
 								<div class="col-xl-7">
-									<input id="finish_date" type="date" name="finish_date" class="form-control" value="{{ $edit ? $assignment->finish_time|date('Y-m-d') : old('finish_date') }}" />
+									<input id="finish_date" type="date" name="finish_date" class="form-control" value="{{ $edit ? date('Y-m-d', strtotime($assignment->finish_time)) : old('finish_date') }}" />
 								</div>
 								<div class="col-xl-5">
-									<input id="finish__time" type="time" name="finish__time" class="form-control" value="{{ $edit ? $assignment->finish_time|date('H:i') : old('finish__time') }}" />
+									<input id="finish__time" type="time" name="finish__time" class="form-control" value="{{ $edit ? date('H:i', strtotime($assignment->finish_time)) : old('finish__time') }}" />
 								</div>
 							</div>
 							{{-- {{ form_error('finish_time', '<div class="alert alert-danger">', '</div>') }} --}}
@@ -305,7 +307,7 @@ enctype="multipart/form-data">
 				<select class="all_problems form-control" multiple="multiple">
 					@foreach( $all_problems as $p)
 					<option value="{{ $p->id }}" data-name="{{$p->name}}" data-id="{{$p->id}}" data-note="{{ $p->admin_note }}" data-no_of_assignment="{{ $p->no_of_assignment }}" 
-						{{-- {{ $problems[$p->id] ?  'selected="selected"' : ''  }} --}}
+						{{-- {{ $problems[$p->id] ? 'selected="selected"' : ''  }} --}}
 						>
 					 {{$p->id}} - {{$p->name}} ({{ $p->admin_note }}) </option>
 					@endforeach

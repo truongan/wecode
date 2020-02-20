@@ -68,11 +68,9 @@ class assignment_controller extends Controller
             $assignment->score_board = True;
         else $assignment->score_board = False;
         
-        $start_time = strval($request->start_time_date) . " " . strval($request->start_time_time);
-        $assignment->start_time = date('Y-m-d H:i:s', strtotime($start_time));
-        $finish_time = strval($request->finish_time_date) . " " . strval($request->finish_time_time);
-        $assignment->finish_time = date('Y-m-d H:i:s', strtotime($finish_time));
-        
+        $assignment->start_time = date('Y-m-d H:i:s', strtotime($request->start_time));
+        $assignment->finish_time = date('Y-m-d H:i:s', strtotime($request->finish_time));
+
         $assignment->save();
         if ($request->hasFile('pdf_file')) {
             $path_pdf = Setting::get("assignments_root");
