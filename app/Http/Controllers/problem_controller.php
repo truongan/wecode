@@ -32,7 +32,13 @@ class problem_controller extends Controller
      */
     public function create()
     {
-        return view('problems.create');
+        return view('problems.create', ['problem'=>NULL,
+                                      'all_languages'=>Language::all(),
+                                      'tree_dump'=>"no input",
+                                      'messages'=>[],
+                                      'languages'=>[],
+                                      'max_file_uploads'=>1000,    
+                                  ]);
     }
 
     /**
@@ -80,9 +86,19 @@ class problem_controller extends Controller
      */
     public function edit(Problem $problem)
     {
-        return view('problems.edit', ['problem'=>$problem,
-                                      'languages'=>Language::all(),
-                                      'messages'=>[],    
+        $lang_of_problems = Problem::all_languages($problem->id);
+        $languages = [];
+        foreach($lang_of_problems as $lang)
+        {
+            $languages[$lang->id] = $lang;
+        }
+        return view('problems.create', ['problem'=>$problem,
+                                      'all_languages'=>Language::all(),
+                                      'tree_dump'=>"no input",
+                                      'messages'=>[],  
+                                      'languages'=>$languages,
+                                      'tree_dump'=>10000,  
+                                      'max_file_uploads'=>1000,
                                   ]);
     }
 
@@ -95,6 +111,7 @@ class problem_controller extends Controller
      */
     public function update(Request $request, Problem $problem)
     {
+        
         $validatedData = $request->validate([
             'name' => ['required','max:255'],
             'diff_cmd' => ['required','max:200'],
@@ -142,7 +159,7 @@ class problem_controller extends Controller
     }
 
     public function _take_test_file_upload(Request $request, $the_id,  &$messages){
-		$up_dir = $request->tests_dir;
+        $up_dir = $request->tests_dir;
 		$up_zip = $request->tests_zip;
         if (!$up_dir && !$up_zip){
             $messages['type'] = 'Error';
@@ -483,23 +500,16 @@ class problem_controller extends Controller
         $this->clean_up_old_problem_dir($problem_dir);
 
 		foreach($in as $name => $tmp_name ){
-        
-            // var_dump($name);
-            // var_dump("$problem_dir/in/$name");
-            // die();
-            move_uploaded_file($name, "$problem_dir/in/$name");
-            die();
+            rename($name, "$problem_dir/in/$name");
         }
         
 		foreach($out as $name => $tmp_name ){
-			move_uploaded_file($tmp_name, "$problem_dir/out/$name");
+			rename($tmp_name, "$problem_dir/out/$name");
         }
         
 		foreach($files as $name => $tmp_name ){
-			move_uploaded_file($tmp_name, "$problem_dir/$name");
+			rename($tmp_name, "$problem_dir/$name");
         }
-        
-        die();
     } 
 
 }

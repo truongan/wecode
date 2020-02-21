@@ -192,7 +192,7 @@ $(document).ready(function(){
 			<div class="collapse" id="collapseExample">
 				<div class="card card-body">
 					<pre>
-					{ $tree_dump }}
+						{ $tree_dump }
 					</pre>
 				</div>
 			</div>
