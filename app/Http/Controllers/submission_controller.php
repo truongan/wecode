@@ -17,8 +17,8 @@ class submission_controller extends Controller
      */
     public function index($assignment_id = NULL, $user_id = 'all', $problem_id = 'all', $choose = 'all')
     {
-        if ($assignment_id == NULL)
-            show(403,'You have not selected assignment');
+        if ($assignment_id == 0)
+            abort(403,'You have not selected assignment');
         Auth::user()->selected_assignment_id = $assignment_id;
         Auth::user()->save(); 
         if ( in_array( Auth::user()->role->name, ['student']) )
