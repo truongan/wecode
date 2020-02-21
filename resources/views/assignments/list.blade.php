@@ -42,14 +42,14 @@
 				<tr data-id="{{$assignment->id}}">
 					<td>{{$loop->iteration}} </td>
 					<td>{{$assignment->id}}</td>
+					<td>{{$assignment->name}}</td>
 					<td>
 						@if ( in_array( Auth::user()->role->name, ['student']) )
-							<a href="{{ route('submissions.index', [$assignment->id, Auth::user()->id, 'all', 'all'])}}">{{$assignment->name}}</a>
+							<a href="{{ route('submissions.index', [$assignment->id, Auth::user()->id, 'all', 'all'])}}">{{$assignment->total_submits}}</a>
 						@else
-							<a href="{{ route('submissions.index', [$assignment->id, 'all', 'all', 'all'])}}">{{$assignment->name}}</a>
+							<a href="{{ route('submissions.index', [$assignment->id, 'all', 'all', 'all'])}}">{{$assignment->total_submits}}</a>
 						@endif
 					</td>
-					<td>{{$assignment->total_submits}}</td>
 					<td>{{$assignment->coefficient}}</td>
 					<td>{{$assignment->start_time}}</td>
 					<td>{{$assignment->finish_time}}</td>
