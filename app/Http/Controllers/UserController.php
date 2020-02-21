@@ -304,10 +304,8 @@ class UserController extends Controller
         }
 		DB::beginTransaction();
         try {
-            $username = User::user_id_to_username($user_id);
-            if ($username === FALSE)
-                return FALSE;
-            DB::table('users')->delete($user_id);
+            User::delete($user_id)
+            
             // DB::delete('submissions', array('username' => $username));
             // each time we delete a user, we should update all scoreboards
             // $this->load->model('scoreboard_model');

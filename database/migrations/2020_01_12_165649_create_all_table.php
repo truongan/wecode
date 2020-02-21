@@ -20,10 +20,10 @@ class CreateAllTable extends Migration
             $table->char('display_name', 240)->nullable();
             $table->char('email', 240)->unique();
             $table->unsignedInteger('role_id');
+            $table->unsignedInteger('selected_assignment_id')->nullable();
             $table->rememberToken();
             $table->dateTime('first_login_time')->nullable();
             $table->dateTime('last_login_time')->nullable();
-            $table->unsignedSmallInteger('selected_assigment')->nullable();  
             $table->timestamps();
         });
         Schema::create('roles', function (Blueprint $table) {

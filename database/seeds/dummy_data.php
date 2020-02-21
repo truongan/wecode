@@ -25,6 +25,7 @@ class dummy_data extends Seeder
             DB::table('users')->insert([
                 'username' => 'test' . $i,
                 'email' => 'test@def.com' . $i,
+                'selected_assignment_id' => rand(1,5),
                 // 'email' => Str::random(10).'@gmail.com',
                 'password' => Hash::make('1234567890'),
                 'role_id' => $i % 4 + 1 //student
