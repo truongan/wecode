@@ -32,6 +32,7 @@ class problem_controller extends Controller
      */
     public function create()
     {
+        
         return view('problems.create', ['problem'=>NULL,
                                       'all_languages'=>Language::all(),
                                       'tree_dump'=>"no input",
@@ -39,6 +40,7 @@ class problem_controller extends Controller
                                       'languages'=>[],
                                       'max_file_uploads'=>1000,    
                                   ]);
+                                
     }
 
     /**
@@ -76,6 +78,7 @@ class problem_controller extends Controller
                                       'problem' => Problem::problem_info($id),
                                       'all_problems' =>NULL,
                                 ]);
+                                
 	}
 
     /**
@@ -87,11 +90,13 @@ class problem_controller extends Controller
     public function edit(Problem $problem)
     {
         $lang_of_problems = Problem::all_languages($problem->id);
+       
         $languages = [];
-        foreach($lang_of_problems as $lang)
-        {
-            $languages[$lang->id] = $lang;
-        }
+        if ($lang_of_problems != [])
+            foreach($lang_of_problems as $lang)
+            {
+                $languages[$lang->id] = $lang;
+            }
         return view('problems.create', ['problem'=>$problem,
                                       'all_languages'=>Language::all(),
                                       'tree_dump'=>"no input",
@@ -155,7 +160,7 @@ class problem_controller extends Controller
                                  'languages'=>Language::all()
                                 ]);
         
-        return redirect()->route('problems.index');
+        return redirect('problems');
     }
 
     public function _take_test_file_upload(Request $request, $the_id,  &$messages){
