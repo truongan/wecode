@@ -44,11 +44,7 @@ class assignment_controller extends Controller
         //
         if (Auth::user()->role->name == 'student')
         {
-            $a = collect();
-            foreach ($Auth::user()->lops as $key => $lop) {
-                $a->merge($lop->assignments);
-            }
-            $assignments = $a;
+            $assignments = Auth::user()->available_assignments()->sortByDesc('created_at');
         }
         else $assignments = Assignment::latest()->get();
 
