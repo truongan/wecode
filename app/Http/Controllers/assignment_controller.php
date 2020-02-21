@@ -86,7 +86,7 @@ class assignment_controller extends Controller
     {
         //
         if ( !in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
-            show(403,'You do not have permission to add assignment');
+            abort(403,'You do not have permission to add assignment');
         
 
         $problems[-1] = $this->dummy_problem();
@@ -104,7 +104,7 @@ class assignment_controller extends Controller
     {
         //
         if ( !in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
-            show(403,'You do not have permission to add assignment');
+            abort(403,'You do not have permission to add assignment');
 
         $validated = $request->validate([
             'name' => ['required','max:150'],
@@ -168,7 +168,7 @@ class assignment_controller extends Controller
     {
        //
         if ( !in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
-            show(403,'You do not have permission to edit assignment');
+            abort(403,'You do not have permission to edit assignment');
         $problems = [];
         $a = $assignment->problems()->orderBy('ordering')->get()->push($this->dummy_problem());
         foreach($a as $i){
@@ -193,7 +193,7 @@ class assignment_controller extends Controller
     {
         //
         if ( !in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
-            show(403,'You do not have permission to edit assignment');
+            abort(403,'You do not have permission to edit assignment');
 
         $validated = $request->validate([
             'name' => ['required','max:150'],
