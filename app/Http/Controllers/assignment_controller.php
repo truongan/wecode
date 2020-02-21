@@ -103,6 +103,9 @@ class assignment_controller extends Controller
     public function store(Request $request)
     {
         //
+        if ( !in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
+            abort(404);
+
         $validated = $request->validate([
             'name' => ['required','max:150'],
             'participants'=>['required'],
@@ -163,8 +166,9 @@ class assignment_controller extends Controller
      */
     public function edit(Assignment $assignment)
     {
-       
-
+       //
+        if ( !in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
+            abort(404);
         $problems = [];
         $a = $assignment->problems()->orderBy('ordering')->get()->push($this->dummy_problem());
         foreach($a as $i){
@@ -185,6 +189,9 @@ class assignment_controller extends Controller
     public function update(Request $request, Assignment $assignment)
     {
         //
+        if ( !in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
+            abort(404);
+        
         $validated = $request->validate([
             'name' => ['required','max:150'],
             'participants'=>['required'],
