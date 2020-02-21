@@ -7,7 +7,7 @@
 @section('other_assets')
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/select2/select2.min.css') }}">
 <style>
-	.select2-selection__choice{
+	#choice_multi_assignment .select2-selection__choice{
 		display:none !important;
 	}
 	.problem-score{
@@ -30,11 +30,13 @@
 <script>
 	$(document).ready(function(){
 		tabOverride.set(document.getElementsByTagName('textarea'));
+		$('.js-example-basic-multiple').select2();
 	});
 </script>
 <script type="text/javascript">
 	shj.num_of_problems={{ count($problems) }};
 </script>
+
 @endsection
 
 @section('content')
@@ -240,7 +242,24 @@ enctype="multipart/form-data">
 						</div>
 					</div>
 				</fieldset>
-	
+				<fieldset class="form-group">
+					<div class="form-row">
+						<div class="col-sm-4">
+							<label>Select class(es)<br>
+								<small class="form-text text-muted"> Thêm note vào nhé :D </small>
+							</label>
+						</div>
+						<div class="col-sm-8">
+							<select class="js-example-basic-multiple form-control" multiple="multiple" name="lop_id[]">
+								@foreach( $all_lops as $p)
+								<option value="{{ $p->id }}" data-name="{{$p->name}}" data-id="{{$p->id}}" data-no_of_assignment="{{ $p->no_of_assignment }}" 
+									{{ isset($lops[$p->id]) ? 'selected="selected"' : ''  }}
+									> {{$p->name}}</option>
+								@endforeach
+							</select>
+						</div>
+					</div>
+				</fieldset>
 				<fieldset class="form-group">
 					<div class="form-row">
 						<div class="col-sm-4">
@@ -299,7 +318,7 @@ enctype="multipart/form-data">
 	
 	<div class="row">
 		<div class="col-sm-8">
-			<fieldset class="form-group">
+			<fieldset class="form-group" id="choice_multi_assignment">
 				<label> Select problem(s) for this assignment
 					<small class="form-text text-muted">You can type in the box below to search for problems
 					</small>
