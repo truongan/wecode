@@ -11,6 +11,28 @@ use Illuminate\Support\Facades\DB;
 
 class assignment_controller extends Controller
 {
+
+    protected static function dummy_problem(){
+        $problem = new class{}; 
+        $problem->pivot = new class{};
+        $problem->id = -1; 
+        $problem->name = 'dummy'; 
+        $problem->pivot->problem_name = 'dummy'; 
+        $problem->pivot->score=0;
+        $problem->admin_note = 'dummy';
+
+        return $problem;
+    }
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth'); // phải login
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -19,7 +41,17 @@ class assignment_controller extends Controller
     public function index()
     {
         //
-        $assignments = Assignment::all();
+        if (Auth::user()->role->name == 'student')
+        {
+            $a = collect();
+            foreach ($Auth::user()->lops as $key => $lop) {
+                $a->merge($lop->assignments);
+            }
+            $assignments = $a;
+        }
+        else $assignments = Assignment::latest()->get();
+
+
         foreach ($assignments as $assignment)
         {
             $extra_time = $assignment->extra_time;
@@ -54,11 +86,9 @@ class assignment_controller extends Controller
         //
         if ( !in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
             abort(404);
-        $problem = new Problem();
-        $problem->id = -1; 
-        $problem->name = 'dummy'; 
-        $problem->score=0;
-        $problems[-1] = $problem;
+        
+
+        $problems[-1] = $this->dummy_problem();
 
         // $problems[-1] = ['id' => -1, 'name' => 'dummy', 'score'=>0];
         return view('assignments.create',['all_problems' => Problem::all(), 'messages' => [], 'problems' => $problems, 'selected' => 'assignments']);
@@ -120,13 +150,10 @@ class assignment_controller extends Controller
      */
     public function edit(Assignment $assignment)
     {
-        $problem = new Problem();
-        $problem->id = -1; 
-        $problem->name = 'dummy'; 
-        $problem->score=0;
+       
 
         $problems = [];
-        $a = $assignment->problems->push($problem);
+        $a = $assignment->problems()->orderBy('ordering')->get()->push($this->dummy_problem());
         foreach($a as $i){
             $problems[$i->id] = $i;
         }

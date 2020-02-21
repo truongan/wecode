@@ -138,6 +138,7 @@ class CreateAllTable extends Migration
         Schema::dropIfExists('queue_items');
         Schema::dropIfExists('assignments');
         Schema::dropIfExists('assignment_problem');
+        Schema::dropIfExists('problem_assignment');
         Schema::dropIfExists('submissions');
         Schema::dropIfExists('language_problem');
         Schema::dropIfExists('notifications');

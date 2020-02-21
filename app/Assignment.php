@@ -17,4 +17,9 @@ class Assignment extends Model
     {
         return $this->hasMany('App\Submission');
     }
+
+    public function lops()
+    {
+        return $this->belongsToMany('App\lop' );
+    }
 }

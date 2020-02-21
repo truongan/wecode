@@ -304,14 +304,14 @@ class UserController extends Controller
         }
 		DB::beginTransaction();
         try {
-            User::delete($user_id)
+            User::delete($user_id);
             
             // DB::delete('submissions', array('username' => $username));
             // each time we delete a user, we should update all scoreboards
             // $this->load->model('scoreboard_model');
             // $this->scoreboard_model->update_scoreboards();
             // shell_exec("cd {$this->settings_model->get_setting('assignments_root')}; rm -r */*/{$username};");
-            DB::commit();
+            
 			return TRUE; //success
         } catch (Exception $e) {
             DB::rollBack();
