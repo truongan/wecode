@@ -42,7 +42,7 @@
             <td><a href="{{ url("problems/show/$item->id") }}">{{ $item->name }}</a></td>
             <td>{{$item->admin_note}}</td>
             <td>
-              @foreach ($item->map_with_language as $language_name)
+              @foreach ($item->languages as $language_name)
                   {{$language_name->name}}
               @endforeach
             </td>

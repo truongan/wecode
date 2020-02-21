@@ -86,7 +86,8 @@ class problem_controller extends Controller
      */
     public function edit(Problem $problem)
     {
-        $lang_of_problems = Problem::all_languages($problem->id);
+        $lang_of_problems = $problem->languages;
+        // $lang_of_problems = Problem::all_languages($problem->id);
         $languages = [];
         foreach($lang_of_problems as $lang)
         {
@@ -209,7 +210,7 @@ class problem_controller extends Controller
         }
         else
         {
-            $problem = Problem::problem_info_detailed($id);
+            $problem = Problem::find($id)->problem_info_detailed();
          
             if ($problem == NULL)
                 $json_result = array('message' => 'Not found detailed');
@@ -435,11 +436,11 @@ class problem_controller extends Controller
 		return $template_file;
 	}
 
-    public function test()
-    {
-        $data = Problem::problem_info_detailed(1);
-        return view('problems.test',['data'=>$data]);
-    }
+    // public function test()
+    // {
+    //     $data = Problem::problem_info_detailed(1);
+    //     return view('problems.test',['data'=>$data]);
+    // }
 
     private function handle_test_dir_upload(Request $request,$assignments_root,$up_dir, $problem_dir, &$messages)
     {

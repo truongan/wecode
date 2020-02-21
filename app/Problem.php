@@ -19,35 +19,35 @@ class Problem extends Model
     {
         $result = [];
         $query = Problem::find($id);
-        foreach ($query->map_with_language as $language_name)
+        foreach ($query->languages as $language_name)
             array_push($result,$language_name->name);
         return $result;
     }
 
-    public function map_with_language()
+    public function languages()
     {
         return $this->belongsToMany('App\Language')->withTimestamps();
     }
 
-    public static function problem_info_detailed($id = NULL){
+    public  function problem_info_detailed(){
         
         if ($id === NULL) return NULL;
         $query = Problem::find($id);
         
-        $result['no_of_ass'] = $query->map_with_assigment->count();
-        $result['no_of_sub'] = $query->map_with_submission->count();
+        $result['no_of_ass'] = $this->assigments->count();
+        $result['no_of_sub'] = $this->submissions->count();
         
         if($result != NULL) $result['languages'] = Problem::all_languages($id);
        
         return $result;
 	}
 
-    public function map_with_assigment()
+    public function assignments()
     {
         return $this->belongsToMany('App\Assignment');
     }
 
-    public function map_with_submission()
+    public function submissions()
     {
         return $this->hasMany('App\Submission');
     }
