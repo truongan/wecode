@@ -90,6 +90,7 @@ class problem_controller extends Controller
     public function edit(Problem $problem)
     {
         $lang_of_problems = $problem->languages;
+        // var_dump($lang_of_problems);die();
         // $lang_of_problems = Problem::all_languages($problem->id);
         $languages = [];
         if ($lang_of_problems != [])
@@ -117,11 +118,11 @@ class problem_controller extends Controller
     public function update(Request $request, Problem $problem)
     {
         
-        $validatedData = $request->validate([
-            'name' => ['required','max:255'],
-            'diff_cmd' => ['required','max:200'],
-            'admin_note'=>['required','max:255']
-        ]);
+        // $validatedData = $request->validate([
+        //     'name' => ['required','max:255'],
+        //     'diff_cmd' => ['required','max:200'],
+        //     'admin_note'=>['required','max:255']
+        // ]);
 
         DB::beginTransaction(); 
         
@@ -133,15 +134,17 @@ class problem_controller extends Controller
 		$memory_limit = $request->memory_limit;
         $enable = $request->enable;
         //Now add new problems:
+        // var_dump($enable);die();
+        $problem->languages()->detach();
         for($i=0;$i<count($enable);$i++){
-            if($enable[$i]){
-				DB::table('language_problem')->insert([
-					'language_id' => $request->language_update[$i],
-					'problem_id' => $problem->id,
-					'time_limit' => $time_limit[$i],
-					'memory_limit' => $memory_limit[$i],
-                ]);
-			}
+            if($enable[$i]){ 
+                $problem->languages()->attach($request->language_id[$i],
+                        [
+                            'time_limit' => $time_limit[$i],
+                            'memory_limit' => $memory_limit[$i],
+                        ]
+                    );
+			    }
         }
         // Status process request
 
@@ -153,12 +156,14 @@ class problem_controller extends Controller
 
         // Except, Error Transaction
         
+        // if ($messages)
+        //     return view('problems.create',
+        //                         ['messages'=>$messages,
+        //                          'problem'=>$problem,
+        //                          'languages'=>Language::all()
+        //                         ]);
         if ($messages)
-            return view('problems.edit',
-                                ['messages'=>$messages,
-                                 'problem'=>$problem,
-                                 'languages'=>Language::all()
-                                ]);
+            return back()->withInput()->withErrors(["messages"=>$messages]);
         
         return redirect('problems');
     }

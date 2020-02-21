@@ -14,7 +14,7 @@ class Problem extends Model
 
     public function languages()
     {
-        return $this->belongsToMany('App\Language')->withTimestamps();
+        return $this->belongsToMany('App\Language')->withTimestamps()->withPivot('time_limit','memory_limit');
     }
 
     public  function problem_info_detailed(){
