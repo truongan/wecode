@@ -108,7 +108,7 @@ $(document).ready(function(){
 						<label for="problem_name">Problem Name</label>
 					</div>
 					<div class="col-sm-7">
-						<input id="problem_name" type="text" name="problem_name" class="form-control col-xs-7" value="{{ $edit ? $problem->name : old('problem_name') }}"/>
+						<input id="problem_name" type="text" name="problem_name" class="form-control col-xs-7" value="{{ old('problem_name',  $edit ? $problem->name : '') }}"/>
 						{{-- {{ form_error('problem_name', '<div class="alert alert-danger">', '</div>') }} --}}
 					</div>
 				</div>
@@ -119,7 +119,7 @@ $(document).ready(function(){
 						<label for="diff_cmd">Diff command</label>
 					</div>
 					<div class="col-sm-7">
-						<input  type="text" name="diff_cmd" class="form-control col-xs-7" value="{{ $edit ? $problem->diff_cmd : old('diff_cmd', 'diff') }}"/>
+						<input  type="text" name="diff_cmd" class="form-control col-xs-7" value="{{ old('diff_cmd', $edit ? $problem->diff_cmd : 'diff') }}"/>
 						{{-- {{ form_error('diff_cmd', '<div class="alert alert-danger">', '</div>') }} --}}
 					</div>
 				</div>

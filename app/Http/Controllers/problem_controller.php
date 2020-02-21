@@ -118,17 +118,15 @@ class problem_controller extends Controller
     public function update(Request $request, Problem $problem)
     {
         
-        // $validatedData = $request->validate([
-        //     'name' => ['required','max:255'],
-        //     'diff_cmd' => ['required','max:200'],
-        //     'admin_note'=>['required','max:255']
-        // ]);
-
+        $validatedData = $request->validate([
+            'problem_name' => ['required','max:255'],
+            ]);
+            
+            // dd($problem->languages);
         DB::beginTransaction(); 
         
         $id = $problem->id ? $problem->id : $this->new_problem_id();
         $problem->update($request->input()); 
-        DB::table('language_problem')->where('problem_id','=',$id)->delete();
         
         $time_limit = $request->time_limit;
 		$memory_limit = $request->memory_limit;
