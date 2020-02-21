@@ -122,7 +122,6 @@ class problem_controller extends Controller
             'problem_name' => ['required','max:255'],
             ]);
             
-            // dd($problem->languages);
         DB::beginTransaction(); 
         
         $id = $problem->id ? $problem->id : $this->new_problem_id();
@@ -131,9 +130,9 @@ class problem_controller extends Controller
         $time_limit = $request->time_limit;
 		$memory_limit = $request->memory_limit;
         $enable = $request->enable;
-        //Now add new problems:
-        // var_dump($enable);die();
+        
         $problem->languages()->detach();
+        
         for($i=0;$i<count($enable);$i++){
             if($enable[$i]){ 
                 $problem->languages()->attach($request->language_id[$i],
@@ -144,8 +143,7 @@ class problem_controller extends Controller
                     );
 			    }
         }
-        // Status process request
-
+        
         // Processing request 
         $this->_take_test_file_upload($request, $id, $messages);  
         
@@ -508,7 +506,7 @@ class problem_controller extends Controller
         $this->clean_up_old_problem_dir($problem_dir);
 
 		foreach($in as $name => $tmp_name ){
-            rename($name, "$problem_dir/in/$name");
+            rename($tmp_name, "$problem_dir/in/$name");
         }
         
 		foreach($out as $name => $tmp_name ){
