@@ -25,6 +25,7 @@ class dummy_data extends Seeder
             DB::table('users')->insert([
                 'username' => 'test' . $i,
                 'email' => 'test@def.com' . $i,
+                'selected_assignment_id' => rand(1,5),
                 // 'email' => Str::random(10).'@gmail.com',
                 'password' => Hash::make('1234567890'),
                 'role_id' => $i % 4 + 1 //student
@@ -75,10 +76,9 @@ class dummy_data extends Seeder
             Assignment::create([
                 'name' => 'assignment' . $i,
                 'total_submits' => $i,
-                'open'=>$i,
+                'open'=>rand(0,1),
                 'description' => "",
-                'score_board' => $i,
-                'javaexceptions' => $i,
+                'score_board' => rand(0,1),
                 'start_time' => new DateTime,
                 'finish_time' => new DateTime,
                 'extra_time'=> $i,

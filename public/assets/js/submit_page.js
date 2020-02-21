@@ -45,7 +45,6 @@ $(document).ready(function(){
             url: shj.site_url + 'submit/template',
             data: {
                 wcj_csrf_name: shj.csrf_token,
-                assignment: shj.selected_assignment ,
                 problem: problem_id
             },
             success : function(data){
@@ -123,6 +122,7 @@ $(document).ready(function(){
             , "C":"c_pp"
             , "Python 2":"python"
             , "Python 3":"python"
+            , "Free Pascal":"pascal"
         };
 
         mode = "ace/mode/" + lang_to_mode[$(this).val()];

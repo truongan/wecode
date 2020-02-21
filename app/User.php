@@ -42,23 +42,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    /**
-	 * User ID to Username
-	 *
-	 * Converts user id to username (returns FALSE if user does not exist)
-	 *
-	 * @param $user_id
-	 * @return bool
-	 */
-	public static function user_id_to_username($user_id)
-	{
-		if( ! is_numeric($user_id))
-			return FALSE;
-		$query = DB::table('users')->select('username')->where('id','=',$user_id)->get();;
-		if ($query->all() == NULL)
-			return FALSE;
-        return $query->all()[0]->username;
-	}
+
 
     public function role(){
         return $this->belongsTo('App\Role');
@@ -71,7 +55,11 @@ class User extends Authenticatable
 
 	function lops(){
 		return $this->belongsToMany('App\Lop');
-	}
+    }
+    
+    function selected_assignment(){
+        return $this->belongsTo('App\Assignment', 'selected_assignment_id');
+    }
 }
 
 //---------------------------------------------------------------------------------------------------------

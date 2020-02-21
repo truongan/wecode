@@ -52,7 +52,11 @@
                     </a>
                 </li>
                 <li class="nav-item color-all_submissions {{ ($selected=="all_submissions") ? "selected" : ""}}">
-                    <a class="nav-link" href="{{ url('submissions/all') }}">
+                    @if ( in_array( Auth::user()->role->name, ['student']) ) 
+                        <a class="nav-link" href="{{ route('submissions.index', [1, Auth::user()->id, 'all', 'all'])}}">
+                    @else
+                        <a class="nav-link" href="{{ route('submissions.index', [1, 'all', 'all', 'all'])}}">
+                    @endif
                         <i class="fa fa-fw fa-bars fa-lg"></i>
                         <span class="nav-link-text">Submissions</span>
                     </a>
