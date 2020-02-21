@@ -29,7 +29,7 @@ class Problem extends Model
         return $this->belongsToMany('App\Language')->withTimestamps();
     }
 
-    public static function problem_info_detailed($id = 1){
+    public static function problem_info_detailed($id = NULL){
         
         if ($id === NULL) return NULL;
         $query = Problem::find($id);
