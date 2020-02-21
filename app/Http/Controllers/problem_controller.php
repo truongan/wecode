@@ -18,6 +18,11 @@ class problem_controller extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware('auth'); // phải login
+    }
+    
     public function index()
     {
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
@@ -32,6 +37,8 @@ class problem_controller extends Controller
      */
     public function create()
     {
+        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
+            abort(404);  
         
         return view('problems.create', ['problem'=>NULL,
                                       'all_languages'=>Language::all(),
@@ -89,6 +96,8 @@ class problem_controller extends Controller
      */
     public function edit(Problem $problem)
     {
+        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
+            abort(404);
         $lang_of_problems = $problem->languages;
         // var_dump($lang_of_problems);die();
         // $lang_of_problems = Problem::all_languages($problem->id);
@@ -117,7 +126,8 @@ class problem_controller extends Controller
      */
     public function update(Request $request, Problem $problem)
     {
-        
+        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
+            abort(404);
         $validatedData = $request->validate([
             'problem_name' => ['required','max:255'],
             ]);
