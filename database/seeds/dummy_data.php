@@ -37,9 +37,9 @@ class dummy_data extends Seeder
             ]);
         }
         for ($i=1; $i < 10; $i++) { 
-            DB::table('problems')->insert([
+            Problem::create([
                 'name' => 'problem' . $i,
-                'is_upload_only' => true,
+                'allow_practice' => (rand(1,10) > 3),
                 'diff_cmd' => $i,
                 'diff_arg' => $i,
                 'admin_note' => 'fake_data'

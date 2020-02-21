@@ -42,7 +42,7 @@ class CreateAllTable extends Migration
         Schema::create('problems', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->char('name', 150);
-            $table->tinyInteger('is_upload_only');
+            $table->tinyInteger('allow_practice');
             $table->char('diff_cmd', 20);
             $table->char('diff_arg', 20);
             $table->text('admin_note');
