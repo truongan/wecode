@@ -90,7 +90,6 @@ class problem_controller extends Controller
     public function edit(Problem $problem)
     {
         $lang_of_problems = Problem::all_languages($problem->id);
-       
         $languages = [];
         if ($lang_of_problems != [])
             foreach($lang_of_problems as $lang)

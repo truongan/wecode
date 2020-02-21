@@ -20,7 +20,7 @@ class Problem extends Model
         $result = [];
         $query = Problem::find($id);
         foreach ($query->map_with_language as $language_name)
-            array_push($result,$language_name->name);
+            array_push($result,$language_name);
         return $result;
     }
 
