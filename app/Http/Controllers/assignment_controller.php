@@ -91,7 +91,7 @@ class assignment_controller extends Controller
 
         $problems[-1] = $this->dummy_problem();
 
-        return view('assignments.create',['all_problems' => Problem::all(), 'all_lop' => Lop::all(), 'messages' => [], 'problems' => $problems, 'selected' => 'assignments']);
+        return view('assignments.create',['all_problems' => Problem::all(), 'all_lops' => Lop::all(), 'lops' => [], 'messages' => [], 'problems' => $problems, 'selected' => 'assignments']);
     }
 
     /**
@@ -136,6 +136,11 @@ class assignment_controller extends Controller
             ]);
         }
 
+        foreach ($request->lop_id as $i => $id)
+        {
+            $assignment->lops()->attach($id);
+        }
+
         return redirect('assignments');
     }
 
@@ -165,7 +170,9 @@ class assignment_controller extends Controller
         foreach($a as $i){
             $problems[$i->id] = $i;
         }
-        return view('assignments.create',['assignment' => $assignment, 'all_problems' => Problem::all(), 'messages' => [], 'problems' => $problems, 'selected' => 'assignments']);
+
+        $lops = $assignment->lops;
+        return view('assignments.create',['assignment' => $assignment, 'all_problems' => Problem::all(), 'messages' => [], 'problems' => $problems, 'lops' => $lops, 'selected' => 'assignments']);
     }
 
     /**
@@ -213,13 +220,18 @@ class assignment_controller extends Controller
         }
 
         $assignment->problems()->detach();
-
         foreach ($request->problem_id as $i => $id)
         {
             if ($id == -1) continue;
             $assignment->problems()->attach([
                 $id => ['problem_name' => $request->problem_name[$i], 'score' => $request->problem_score[$i], 'ordering' => $i],
             ]);
+        }
+
+        $assignment->lops()->detach();
+        foreach ($request->lop_id as $i => $id)
+        {
+            $assignment->lops()->attach($id);
         }
 
         return redirect('assignments');
