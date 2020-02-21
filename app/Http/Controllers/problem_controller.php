@@ -86,11 +86,17 @@ class problem_controller extends Controller
      */
     public function edit(Problem $problem)
     {
+        $lang_of_problems = Problem::all_languages($problem->id);
+        $languages = [];
+        foreach($lang_of_problems as $lang)
+        {
+            $languages[$lang->id] = $lang;
+        }
         return view('problems.create', ['problem'=>$problem,
                                       'all_languages'=>Language::all(),
                                       'tree_dump'=>"no input",
                                       'messages'=>[],  
-                                      'languages'=>Problem::all_languages($problem->id),
+                                      'languages'=>$languages,
                                       'tree_dump'=>10000,  
                                       'max_file_uploads'=>1000,
                                   ]);
