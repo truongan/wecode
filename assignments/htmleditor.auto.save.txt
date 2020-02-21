@@ -1,1 +1,0 @@
-<p>Just click on the text to start editidfsgdgfddfng. You can insert formula <span class="math-tex">\(x = {-b \pm \sqrt{b^2-4ac} \over 2a}\)</span>or image as well.</p>

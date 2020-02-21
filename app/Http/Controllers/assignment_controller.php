@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Assignment;
 use App\Setting;
 use App\Problem;
+use App\Lop;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -81,13 +82,12 @@ class assignment_controller extends Controller
     {
         //
         if ( !in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
-            abort(404);
+            abort(403,'You do not have permission to add assignment');
         
 
         $problems[-1] = $this->dummy_problem();
 
-        // $problems[-1] = ['id' => -1, 'name' => 'dummy', 'score'=>0];
-        return view('assignments.create',['all_problems' => Problem::all(), 'messages' => [], 'problems' => $problems, 'selected' => 'assignments']);
+        return view('assignments.create',['all_problems' => Problem::all(), 'all_lops' => Lop::all(), 'lops' => [], 'messages' => [], 'problems' => $problems, 'selected' => 'assignments']);
     }
 
     /**
@@ -99,9 +99,12 @@ class assignment_controller extends Controller
     public function store(Request $request)
     {
         //
+        if ( !in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
+            abort(403,'You do not have permission to add assignment');
+
         $validated = $request->validate([
             'name' => ['required','max:150'],
-            'participants'=>['required']
+            'participants'=>['required'],
         ]);
         
         $assignment = new Assignment;
@@ -124,6 +127,19 @@ class assignment_controller extends Controller
             mkdir($path_pdf);
             $path = $request->pdf_file->storeAs($path_pdf,$request->pdf_file->getClientOriginalName(),'my_local');
         }
+        foreach ($request->problem_id as $i => $id)
+        {
+            if ($id == -1) continue;
+            $assignment->problems()->attach([
+                $id => ['problem_name' => $request->problem_name[$i], 'score' => $request->problem_score[$i], 'ordering' => $i],
+            ]);
+        }
+
+        foreach ($request->lop_id as $i => $id)
+        {
+            $assignment->lops()->attach($id);
+        }
+
         return redirect('assignments');
     }
 
@@ -146,14 +162,20 @@ class assignment_controller extends Controller
      */
     public function edit(Assignment $assignment)
     {
-       
-
+       //
+        if ( !in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
+            abort(403,'You do not have permission to edit assignment');
         $problems = [];
         $a = $assignment->problems()->orderBy('ordering')->get()->push($this->dummy_problem());
         foreach($a as $i){
             $problems[$i->id] = $i;
         }
-        return view('assignments.create',['assignment' => $assignment, 'all_problems' => Problem::all(), 'messages' => [], 'problems' => $problems, 'selected' => 'assignments']);
+
+        $b = $assignment->lops;
+        foreach ($b as $i){
+            $lops[$i->id] = $i;
+        }
+        return view('assignments.create',['assignment' => $assignment, 'all_problems' => Problem::all(), 'messages' => [], 'problems' => $problems, 'all_lops' => Lop::all(), 'lops' => $lops, 'selected' => 'assignments']);
     }
 
     /**
@@ -166,9 +188,12 @@ class assignment_controller extends Controller
     public function update(Request $request, Assignment $assignment)
     {
         //
+        if ( !in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
+            abort(403,'You do not have permission to edit assignment');
+
         $validated = $request->validate([
             'name' => ['required','max:150'],
-            'participants'=>['required']
+            'participants'=>['required'],
         ]);
 
         $assignment->fill($request->input());
@@ -199,6 +224,22 @@ class assignment_controller extends Controller
             }
             $path = $request->pdf_file->storeAs($path_pdf,$request->pdf_file->getClientOriginalName(),'my_local');
         }
+
+        $assignment->problems()->detach();
+        foreach ($request->problem_id as $i => $id)
+        {
+            if ($id == -1) continue;
+            $assignment->problems()->attach([
+                $id => ['problem_name' => $request->problem_name[$i], 'score' => $request->problem_score[$i], 'ordering' => $i],
+            ]);
+        }
+
+        $assignment->lops()->detach();
+        foreach ($request->lop_id as $i => $id)
+        {
+            $assignment->lops()->attach($id);
+        }
+
         return redirect('assignments');
     }
 
