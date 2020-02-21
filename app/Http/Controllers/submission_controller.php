@@ -15,8 +15,12 @@ class submission_controller extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($assignment_id = 1, $user_id = 'all', $problem_id = 'all', $choose = 'all')
+    public function index($assignment_id = NULL, $user_id = 'all', $problem_id = 'all', $choose = 'all')
     {
+        if ($assignment_id == NULL)
+            show(403,'You have not selected assignment');
+        Auth::user()->selected_assignment_id = $assignment_id;
+        Auth::user()->save(); 
         if ( in_array( Auth::user()->role->name, ['student']) )
         {
             if ($choose == 'final')
