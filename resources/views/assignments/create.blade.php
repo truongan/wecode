@@ -359,14 +359,14 @@ enctype="multipart/form-data">
 							<div class="input-group-prepend">
 								<label class="input-group-text">Alias</label>
 							</div>
-							<input type="text" name="problem_name[]" class="form-control form-control-sm " value="{{ $problem->problem_name }}"/>
+							<input type="text" name="problem_name[]" class="form-control form-control-sm " value="{{ $problem->pivot->problem_name }}"/>
 						</div>
 						
 						<div class="input-group input-group-sm mr-2">
 							<div class="input-group-prepend">
 							<label class="input-group-text">Score</label>
 							</div>
-							<input type="number" name="problem_score[]" class="form-control form-control-sm problem-score" value="{{ $problem->score }}"/>
+							<input type="number" name="problem_score[]" class="form-control form-control-sm problem-score" value="{{ $problem->pivot->score }}"/>
 						</div>
 						<span class="text-muted admin_note">{{ $problem->admin_note }}</span>
 					</div>

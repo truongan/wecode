@@ -5,12 +5,35 @@ namespace App\Http\Controllers;
 use App\Assignment;
 use App\Setting;
 use App\Problem;
+use App\Lop;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class assignment_controller extends Controller
 {
+
+    protected static function dummy_problem(){
+        $problem = new class{}; 
+        $problem->pivot = new class{};
+        $problem->id = -1; 
+        $problem->name = 'dummy'; 
+        $problem->pivot->problem_name = 'dummy'; 
+        $problem->pivot->score=0;
+        $problem->admin_note = 'dummy';
+
+        return $problem;
+    }
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth'); // phải login
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -19,7 +42,17 @@ class assignment_controller extends Controller
     public function index()
     {
         //
-        $assignments = Assignment::all();
+        if (Auth::user()->role->name == 'student')
+        {
+            $a = collect();
+            foreach ($Auth::user()->lops as $key => $lop) {
+                $a->merge($lop->assignments);
+            }
+            $assignments = $a;
+        }
+        else $assignments = Assignment::latest()->get();
+
+
         foreach ($assignments as $assignment)
         {
             $extra_time = $assignment->extra_time;
@@ -54,14 +87,11 @@ class assignment_controller extends Controller
         //
         if ( !in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
             abort(404);
-        $problem = new Problem();
-        $problem->id = -1; 
-        $problem->name = 'dummy'; 
-        $problem->score=0;
-        $problems[-1] = $problem;
+        
 
-        // $problems[-1] = ['id' => -1, 'name' => 'dummy', 'score'=>0];
-        return view('assignments.create',['all_problems' => Problem::all(), 'messages' => [], 'problems' => $problems, 'selected' => 'assignments']);
+        $problems[-1] = $this->dummy_problem();
+
+        return view('assignments.create',['all_problems' => Problem::all(), 'all_lop' => Lop::all(), 'messages' => [], 'problems' => $problems, 'selected' => 'assignments']);
     }
 
     /**
@@ -75,7 +105,7 @@ class assignment_controller extends Controller
         //
         $validated = $request->validate([
             'name' => ['required','max:150'],
-            'participants'=>['required']
+            'participants'=>['required'],
         ]);
         
         $assignment = new Assignment;
@@ -98,6 +128,14 @@ class assignment_controller extends Controller
             mkdir($path_pdf);
             $path = $request->pdf_file->storeAs($path_pdf,$request->pdf_file->getClientOriginalName(),'my_local');
         }
+        foreach ($request->problem_id as $i => $id)
+        {
+            if ($id == -1) continue;
+            $assignment->problems()->attach([
+                $id => ['problem_name' => $request->problem_name[$i], 'score' => $request->problem_score[$i], 'ordering' => $i],
+            ]);
+        }
+
         return redirect('assignments');
     }
 
@@ -120,13 +158,10 @@ class assignment_controller extends Controller
      */
     public function edit(Assignment $assignment)
     {
-        $problem = new Problem();
-        $problem->id = -1; 
-        $problem->name = 'dummy'; 
-        $problem->score=0;
+       
 
         $problems = [];
-        $a = $assignment->problems->push($problem);
+        $a = $assignment->problems()->orderBy('ordering')->get()->push($this->dummy_problem());
         foreach($a as $i){
             $problems[$i->id] = $i;
         }
@@ -145,7 +180,7 @@ class assignment_controller extends Controller
         //
         $validated = $request->validate([
             'name' => ['required','max:150'],
-            'participants'=>['required']
+            'participants'=>['required'],
         ]);
 
         $assignment->fill($request->input());
