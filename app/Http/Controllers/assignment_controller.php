@@ -211,6 +211,17 @@ class assignment_controller extends Controller
             }
             $path = $request->pdf_file->storeAs($path_pdf,$request->pdf_file->getClientOriginalName(),'my_local');
         }
+
+        $assignment->problems()->detach();
+
+        foreach ($request->problem_id as $i => $id)
+        {
+            if ($id == -1) continue;
+            $assignment->problems()->attach([
+                $id => ['problem_name' => $request->problem_name[$i], 'score' => $request->problem_score[$i], 'ordering' => $i],
+            ]);
+        }
+
         return redirect('assignments');
     }
 
