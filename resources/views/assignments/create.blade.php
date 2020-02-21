@@ -307,7 +307,7 @@ enctype="multipart/form-data">
 				<select class="all_problems form-control" multiple="multiple">
 					@foreach( $all_problems as $p)
 					<option value="{{ $p->id }}" data-name="{{$p->name}}" data-id="{{$p->id}}" data-note="{{ $p->admin_note }}" data-no_of_assignment="{{ $p->no_of_assignment }}" 
-						{{-- {{ isset($problems[$p->id]) ? 'selected="selected"' : ''  }} --}}
+						{{ isset($problems[$p->id]) ? 'selected="selected"' : ''  }}
 						>
 					 {{$p->id}} - {{$p->name}} ({{ $p->admin_note }}) </option>
 					@endforeach
