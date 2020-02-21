@@ -172,7 +172,7 @@ class assignment_controller extends Controller
         }
 
         $lops = $assignment->lops;
-        return view('assignments.create',['assignment' => $assignment, 'all_problems' => Problem::all(), 'messages' => [], 'problems' => $problems, 'lops' => $lops, 'selected' => 'assignments']);
+        return view('assignments.create',['assignment' => $assignment, 'all_problems' => Problem::all(), 'messages' => [], 'problems' => $problems, 'all_lops' => Lop::all(), 'lops' => $lops, 'selected' => 'assignments']);
     }
 
     /**
