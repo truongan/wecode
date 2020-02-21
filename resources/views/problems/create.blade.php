@@ -140,9 +140,9 @@ $(document).ready(function(){
 					<div class="col-sm-6">
 						<label for="form_tests_dir"><i class="far fa-lg fa-folder-open"></i>Tests and Descriptions (folder)
 							<br/>
-							{{-- <small class="text-secondary">You can upload an entire folder of <strong> {{ $max_file_uploads }} </strong> file(s).
+							<small class="text-secondary">You can upload an entire folder of <strong> {{ $max_file_uploads }} </strong> file(s).
 								If your test folder have more files you will have to upload a zip file of that folder instead. Also, this features is not web standard, some browser may not support it 
-							</small> --}}
+							</small>
 						</label>
 					</div>
 					<div class="col-sm-6">
@@ -192,7 +192,7 @@ $(document).ready(function(){
 			<div class="collapse" id="collapseExample">
 				<div class="card card-body">
 					<pre>
-						{ $tree_dump }
+						{{ $tree_dump }}
 					</pre>
 				</div>
 			</div>
@@ -203,7 +203,10 @@ $(document).ready(function(){
 	<label>Click on the button to add more language for this problems</label></br>
 	<div class ="form-row">
 		@foreach($all_languages as $lang)
-			<a data-lang="{{ $lang->id }}" class="btn btn-success mr-2 add_language add_language_{{ $lang->id }} {{ $languages[$lang->id] ? "d-none" : "" }}" href="#" role="button">{{ $lang->name }}</a>
+			<a data-lang="{{ $lang->id }}" class="btn btn-success mr-2 add_language add_language_{{ $lang->id }} 
+				{{ isset($languages[$lang->id]) ? "d-none" : "" }}" href="#" role="button">
+				{{ $lang->name }}
+			</a>
 		@endforeach
 	</div>
 	
@@ -221,12 +224,12 @@ $(document).ready(function(){
 				</thead class="form-inline">
 				<tbody>
 					@foreach( $all_languages as $lang )
-					<tr class = "lang_row_{{ $lang->id }} {{ $languages[$lang->id] ? "" : "d-none" }}">
-						<input class="lang_checkbox" type="hidden" name="enable[]" value="{{ $languages[$lang->id] ? "1" : "0" }}"/>
+					<tr class = "lang_row_{{ $lang->id }} {{ isset($languages[$lang->id]) ? "" : "d-none" }}">
+						<input class="lang_checkbox" type="hidden" name="enable[]" value="{{ isset($languages[$lang->id]) ? "1" : "0" }}"/>
 						<td>{{ $lang->id }} <input type="hidden" name="language_id[]" value="{{ $lang->id }}"></td>
 						<td>{{ $lang->name }}</td>
-						<td><input type="number" name="time_limit[]" class="form-control" value="{{ $languages[$lang->id] ? $languages[$lang->id]->time_limit : $lang->default_time_limit}}"/></td>
-						<td><input type="number" name="memory_limit[]" class="form-control" value="{{ $languages[$lang->id] ? $languages[$lang->id]->memory_limit :  $lang->default_memory_limit }}"/></td>
+						<td><input type="number" name="time_limit[]" class="form-control" value="{{ isset($languages[$lang->id]) ? $languages[$lang->id]->time_limit : $lang->default_time_limit}}"/></td>
+						<td><input type="number" name="memory_limit[]" class="form-control" value="{{ isset($languages[$lang->id]) ? $languages[$lang->id]->memory_limit :  $lang->default_memory_limit }}"/></td>
 						<td><a  data-lang="{{ $lang->id }}"  class="btn btn-danger remove_language remove_language_{{ $lang->id }}" href="#" role="button"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
 					</tr>
 					@endforeach
