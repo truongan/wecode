@@ -30,6 +30,9 @@ class UserController extends Controller
      */
     public function index()
     {
+        if(!in_array(Auth::user()->role->name, ['admin', 'head_instructor'])){
+            abort(403);
+        }
         return view('users.list',['users'=>User::all(), 'selected' => 'settings']); 
     }
 
@@ -51,6 +54,9 @@ class UserController extends Controller
      */
     public function create()
     {
+        if(Auth::user()->role->name != 'admin'){
+            abort(403);
+        }
         return view('users.create');
     }
     
@@ -63,6 +69,9 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
+        if(Auth::user()->role->name != 'admin'){
+            abort(403);
+        }
         $user=new User;
         $user->username=$request->username;
         $user->password=Hash::make($request->password);
@@ -96,21 +105,28 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        if (Auth::user()->role != 'admin' && Auth::user()->id != $user->id){
+            //Non admin only can update their own user profile
+            abort(403);
+        }
         //
         $validated = $request->validate([
-            'display_name' => ['required','max:50'],
-            'email'=>['required'],
+            'username' => ['required', 'string', 'max:50', 'unique:users'],
+            'display_name' => ['nullable', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
 
-        $user->display_name=$request->display_name;
+        $user->fill($request->input());
+
         if ($request->password!="")
             $user->password=Hash::make($request->password);
-        if ($request->role_id!=NULL)
+        if ($request->role_id!=NULL &&  Auth::user()->role->name == 'admin') {
             $user->role_id = $request->role_id;
+        }
         $user->save();
-        if (Auth::user()->role->name=="admin")
-            return redirect('users');
-        return redirect('/home');
+
+        return back()->withInput();
     }
 
     /**
@@ -124,7 +140,7 @@ class UserController extends Controller
         $user_id = $request['user_id'];
 		if ( ! is_numeric($user_id) )
 			$json_result = array('done' => 0, 'message' => 'Input Error');
-		elseif (User::delete_user($user_id))
+		elseif (User::destroy($user_id))
 			$json_result = array('done' => 1);
 		else
 			$json_result = array('done' => 0, 'message' => 'Deleting User Failed');
@@ -154,24 +170,8 @@ class UserController extends Controller
         else
             return view('users.add');
     }
-    // check same user 
-    public function have_user($user_name){
-        $query = User::where('username','=',$user_name)->first();
-        if ($query == FALSE) 
-            return FALSE;
-        if ($query->count() == 0)
-			return FALSE;
-        return TRUE;
-    }
+    
 
-    // check duplication display name
-
-    public function duplication_display_name($display_name){
-		$query = User::where('display_name','=',$display_name)->first();
-		if ($query)
-			return TRUE;
-		return FALSE;
-    }
     //check email 
 
     public static function have_email($email, $username = FALSE)
@@ -191,52 +191,32 @@ class UserController extends Controller
     public  function add_user($username, $email, $password, $role, $display_name="")
     {
         $json = [];
-		$name = ['username'=>$username];
-		$validator = Validator::make($name, [
-            'username' => ['alpha_dash'],
-		]);
-		if ($validator->fails()) {
-			array_push($json,'Username may only contain alpha-numeric characters.');
-        }
-		
-		if (strlen($username) < 3 OR strlen($username) > 20 OR strlen($password) < 6 OR strlen($password) > 200)
-            array_push($json,'Username or password length error.');
-		
-		if ($this->have_user($username))
-		    array_push($json,'User with this username exists.');
-        
-        $mail = ['email'=>$email];
-        $validator_mail = Validator::make($mail, [
-                'email' => ['email'],
-        ]);
-
-        if ($validator_mail->fails())
-            array_push($json,'error address email');
-
-        if ($this->have_email($email))
-            array_push($json,'User with this email exists.');
-            
-        if (strtolower($username) !== $username)
-            array_push($json,'Username must be lowercase.');
-
-        if ( ! in_array($role, ['1', '2', '3', '4']))
-            array_push($json,'Users role is not valid.');
-			
-        if ($this->duplication_display_name($display_name))
-            array_push($json,'User with this display_name exists.');
-        
-        if (count($json)>0)
-            return $json;
-        
-		$user = [
+        // $name = ['username'=>$username];
+        $user = [
 			'username' => $username,
 			'email' => $email,
-			'password' => Hash::make($password),
+			'password' => $password,
 			'role_id' => $role,
 			'display_name' => $display_name
 		];
+		$validator = Validator::make($user, [
+            'username' => ['required', 'string', 'max:50', 'unique:users'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'display_name' => ['nullable', 'string', 'max:255'],
+            'password' => ['required', 'string', 'min:8'],
+		]);
+		if ($validator->fails()) {
+            foreach ($validator->errors()->all() as $message){
+                array_push($json, $message);
+            }
+        }
         
-		DB::table('users')->insert($user);
+        if (count($json)>0)
+            return $json;
+        $user['password'] = Hash::make($password);
+
+        
+		User::create($user);
 	
 		return TRUE; //success
     }
@@ -248,7 +228,6 @@ class UserController extends Controller
         $lines = preg_split('/\r?\n|\n?\r/', $text);
         
         $users_ok = [];
-		
 		$users_error = [];
         
 		// loop over lines of $text :
@@ -290,34 +269,5 @@ class UserController extends Controller
 		return ['users_ok'=>$users_ok,'users_error'=>$users_error];
     }
     
-    public function delete_user($user_id)
-	{
-        $user_count = DB::table('users')->count();
-		if ($user_id == 1){
-			///Cannot delete the fist user (usually the one who installed the Judge)
-			///First user will only be deleted from database
-			return false;
-        } 
-        else if ($user_count < 2){
-			///Cannot delete the only user there is.
-			return false;
-        }
-		DB::beginTransaction();
-        try {
-            User::delete($user_id);
-            
-            // DB::delete('submissions', array('username' => $username));
-            // each time we delete a user, we should update all scoreboards
-            // $this->load->model('scoreboard_model');
-            // $this->scoreboard_model->update_scoreboards();
-            // shell_exec("cd {$this->settings_model->get_setting('assignments_root')}; rm -r */*/{$username};");
-            
-			return TRUE; //success
-        } catch (Exception $e) {
-            DB::rollBack();
-            
-            throw new Exception($e->getMessage());
-            return FALSE; //success
-        }
-	}
+    
 }

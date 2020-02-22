@@ -426,7 +426,7 @@ class problem_controller extends Controller
     }
 
     public function new_problem_id(){
-		$max = $max = DB::table('problems')->count()+1 ;
+		$max = $max = Problem::count()+1 ;
 
 		$assignments_root = Setting::get("assignments_root");
        
