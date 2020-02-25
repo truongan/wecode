@@ -68,24 +68,17 @@ class problem_controller extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id){
-        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
-            abort(404);
-
-		$data=[
-			'can_submit' => TRUE,
-            'assignment' => NULL,
-            'error'=>'none'
-        ];
-        $re = $this->get_description($id);
-
-        return view('problems.show', ['can_submit' => TRUE,
-                                      'assignment' => NULL,
-                                      'error'=>'none',
-                                      'description'=>$this->get_description($id),
-                                      'problem' => Problem::find($id),
-                                      'all_problems' =>NULL,
-                                ]);
-                                
+        $result = $this->get_description($id);
+        
+        $problem = Problem::find($id);
+        $problem['has_pdf'] = $result['has_pdf'];
+        $problem['description'] = $result['description'];
+        $problem['error'] = 'none';
+        return view('problems.show', ['problem'=>$problem,
+                                      'all_problems'=>NULL,
+                                      'can_submit'=>TRUE,
+                                      'assignment'=>NULL,
+                                      ]);    
 	}
 
     /**
@@ -248,23 +241,27 @@ class problem_controller extends Controller
 		else return false;
     }
     
-    public function edit_description($problem_id){
+    public function edit_description(Request $problem){
 		if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
             abort(404);
-		var_dump("ok");die();
-		// $this->load->library('form_validation');
-		// $this->form_validation->set_rules('content', 'text' ,'required'); /* todo: xss clean */
-		// if ($this->form_validation->run())
-		// {
-		// 	if ($this->problem_files_model->save_problem_description($problem_id, $this->input->post('content'))){
-		// 		echo "success";
-		// 		return ;
-		// 	}
-		// 	else show_error("Error saving", 501);
-		// } else {
-		// 	show_error(validation_errors(), 501);
-        // }
-        return view('problems.edit');
+
+        $request->validate([
+            'content'=>['required','text']
+        ]);
+        
+		
+		if ($this->problem_files_model->save_problem_description($problem->id, $request->content)){
+            $messages[] = array(
+				'type' => 'Success',
+				);
+            return ;
+		}
+        else $messages[] = array(
+				'type' => 'Error',
+				'text' => 'Save error'
+			);
+		
+        return view('problems.edit',['messages'=>$messages]);
     }
     
     private function unload_zip_test_file(Request $request, $assignments_root, $problem_dir, &$messages, $name_zip){
@@ -376,9 +373,9 @@ class problem_controller extends Controller
 		
 		$path = "$problem_dir/desc.html";
 
-		if (file_exists($path))
+		// if (file_exists($path))
             $result['description'] = file_get_contents($path);   
-           
+        // dd($path);
 		return $result;
 	}
     
@@ -424,7 +421,7 @@ class problem_controller extends Controller
         return response()->download($pdf_files);
     
     }
-
+    
     public function new_problem_id(){
 		$max = $max = Problem::count()+1 ;
 
