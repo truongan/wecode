@@ -69,7 +69,8 @@ class installation_seeding extends Seeder
             'open' => true, 
             'score_board' => 0,
             'start_time' => now(),
-            'end_time' => now(),
+            'finish_time' => now(),
+            'extra_time' => 0,
         ]);
     }
 }

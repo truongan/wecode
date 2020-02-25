@@ -40,97 +40,6 @@
 @endsection
 
 @section('content')
-{{-- <form method="POST"  
-	@if (Route::currentRouteName() == 'assignments.edit')
-		action="{!! route('assignments.update', $assignment) !!}"
-	@else  
-		action="{!! route('assignments.store') !!}"
-	@endif
-enctype="multipart/form-data">
-@if (Route::currentRouteName() == 'assignments.edit')
-	@method("PUT")
-@endif
-<input type="hidden"  name ="_token" value="{!! csrf_token() !!}"/>
-<table>
-	<tr>
-			<td>Assignment Name:</td>
-			<td><input type="text" name="name" value="{{$assignment->name ?? ''}}"></td>
-	</tr>
-	<tr>
-			<td>Description:</td>
-			<td><input type="text" name="description" value="{{$assignment->description ?? ''}}"></td>
-	</tr>
-	<tr>
-			<td>Start time:</td>
-			<td>
-				<input type="date" name="start_time_date" value="{{empty($assignment) ? '' : date('Y-m-d', strtotime($assignment->start_time))}}"> 
-				<input type="time" name="start_time_time" value="{{empty($assignment) ? '' : date('H:i', strtotime($assignment->start_time))}}">
-			</td>
-	</tr>
-	<tr>
-			<td>Finish time:</td>
-			<td>
-				<input type="date" name="finish_time_date" value="{{empty($assignment) ? '' : date('Y-m-d', strtotime($assignment->finish_time))}}"> 
-				<input type="time" name="finish_time_time" value="{{empty($assignment) ? '' : date('H:i', strtotime($assignment->start_time))}}">
-			</td>
-	</tr>
-	<tr>
-			<td>Extra time:</td>
-			<td><input type="number" name="extra_time" value="{{$assignment->extra_time ?? ''}}"></td>
-	</tr>
-	<tr>
-			<td>Participants:</td>
-			<td><input type="text" name="participants" value="{{$assignment->participants ?? ''}}"></td>
-	</tr>
-	<tr>
-			<td>PDF File:</td>
-			<td><input type="file" name="pdf_file" value="Choose.pdf"></td>
-	</tr>
-	<tr>
-			<td>Open:</td>
-		 	<td><input type="checkbox" name="open" 
-		 		@if (!empty($assignment))
-			 		@if ($assignment->open)
-			 			checked
-			 		@endif
-			 	@endif
-		 	></td>
-	</tr>
-	<tr>
-		 	<td>Scoreboard:</td>
-		 	<td><input type="checkbox" name="score_board" 
-		 		@if (!empty($assignment))
-			 		@if ($assignment->score_board)
-			 			checked
-			 		@endif
-			 	@endif
-		 	></td>
-	</tr>
-	<tr>
-			<td>Coefficient rule:</td>
-			<td><input type="text" name="late_rule" value="{{$assignment->late_rule ?? ''}}"></td>
-	</tr>
-
-</table>
-<button class="btn btn-primary"   type="submit" > OK </button>
-</form> --}}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 <div class="col">
@@ -229,24 +138,12 @@ enctype="multipart/form-data">
 						</div>
 					</div>
 				</fieldset>
-				<fieldset class="form-group">
-					<div class="form-row">
-						<div class="col-sm-4">
-							<label for="form_participants">Participants<br>
-								<small class="form-text text-muted">Only the users in this list (comma separated) are able to submit.
-									You can use keyword <code>ALL</code>.</small>
-							</label>
-						</div>
-						<div class="col-sm-8">
-					<textarea id="form_participants" name="participants" rows="2" class="form-control">{{ $edit ? $assignment->participants : old('participants', 'ALL') }}</textarea>
-						</div>
-					</div>
-				</fieldset>
+
 				<fieldset class="form-group">
 					<div class="form-row">
 						<div class="col-sm-4">
 							<label>Select class(es)<br>
-								<small class="form-text text-muted"> Thêm note vào nhé :D </small>
+								<small class="form-text text-muted">Select the classes that are required to take this assignment. If your class have to take assignment with different start and/or finish time, please craete different assignments.</small>
 							</label>
 						</div>
 						<div class="col-sm-8">

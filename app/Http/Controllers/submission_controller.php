@@ -45,8 +45,9 @@ class submission_controller extends Controller
         }
     }
 
-    public function create(){
-        
+    public function create(Assignment $assignment, $problem_id){
+
+        return view('')
     }
 
     public function store($request)
