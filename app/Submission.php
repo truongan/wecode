@@ -13,14 +13,17 @@ class Submission extends Model
     {
         return $this->belongsTo('App\Problem');
     }
+
     public function language()
     {
         return $this->belongsTo('App\Language');
     }
+
     public function assignment()
     {
         return $this->belongsTo('App\Assignment');
     }
+    
     public function user()
     {
     	return $this->belongsTo('App\User');

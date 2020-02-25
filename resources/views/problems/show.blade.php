@@ -42,9 +42,27 @@
 <script src="{{ asset('assets/ckeditor/ckeditor.js') }}" charset="utf-8"></script>
 <script type="text/javascript">
     $(document).ready(function(){
-        shj.setup_save('.save-button'
-        , '{{ route('problems.edit_description', $problem->id) }}'
-        , CKEDITOR.instances.problem_description);
+		$('.save-button').click(function(){
+            $.ajax({
+                type: 'POST',
+                url: '{{ route('problems.edit_description', $problem->id) }}',
+                data: {
+                    '_token': "{{ csrf_token() }}",
+                    content : CKEDITOR.instances.problem_description.getData()
+                },
+                success: function (response) {
+                    if (response == "success"){
+                        $.notify('Change sucessfully saved'
+                            , {position: 'bottom right', className: 'success', autoHideDelay: 3500});
+                        $('.save-button').removeClass('btn-info').addClass('btn-secondary');
+                    }
+                },
+                error: function(response){
+                    $.notify('Error while saving'
+                        , {position: 'bottom right', className: 'error', autoHideDelay: 3500});
+                }
+            });
+        }); 
     });
 </script>
 @endsection
@@ -59,7 +77,7 @@
 
         <div class="problem_description" id="problem_description" 
         {{ in_array( Auth::user()->role->name, ['admin', 'head_instructor']) ? 'contenteditable=true' : ''}}
-        >
+		>
 			{!! $problem->description !!}
 		</div>
 	</div>
@@ -102,7 +120,7 @@
 			{{-- {{ form_open_multipart("submit/") }} --}}
 
 			@if ($all_problems != NULL)
-				<input type="hidden" name="assignment" value="{ $assignment->id }}"/>
+				<input type="hidden" name="assignment" value="{{ $assignment->id }}"/>
 			@endif
 			<input type="hidden" name="problem" value="{{ $problem->id }}"/>
 			<fieldset class="form-group form-row">

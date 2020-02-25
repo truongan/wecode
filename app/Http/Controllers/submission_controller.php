@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Submission;
 use App\Assignment;
+use App\Problem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -45,8 +46,47 @@ class submission_controller extends Controller
         }
     }
 
-    public function store($request)
+
+
+    public function create(Assignment $assignment, $problem_id){
+
+        return view('submissions.create', ['assignment' => $assignment, 'problem_id' => $problem_id]);
+    }
+
+    public function store($request){
+
+    }
+    
+    private function eval_coefficient($assignment)
     {
-        
+        ob_start();
+        try 
+        {
+            eval($assignment->late_rule);
+        }
+        catch (\Throwable $e) 
+        {
+            $coefficient = "error";
+        }
+        if (!isset($coefficient))
+            $coefficient = "error";
+        ob_end_clean();
+        return $coefficient;
+    }
+
+    public function upload($request)
+    {
+        $problem = Problem::where('id',$request->problem)->get();
+        $assignment = Assignment::where('id',$request->assignment)->get();
+        $coefficient = 100;
+        if ($assignment->id == 0)
+            if (!in_array( Auth::user()->role->name, ['admin']) && $problem->allow_practice!=1)
+                abort(403,'Only admin can submit without assignment');
+        else
+        {
+            $coefficient = eval_coefficient($assignment);
+
+
+        }
     }
 }

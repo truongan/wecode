@@ -63,5 +63,14 @@ class installation_seeding extends Seeder
                 ['name' =>  'student', 'id' => 4 ],
             ]
         );
+        DB::table('assignments')->insert([
+            'id' => 0 , 
+            'name' => 'practice',
+            'open' => true, 
+            'score_board' => 0,
+            'start_time' => now(),
+            'finish_time' => now(),
+            'extra_time' => 0,
+        ]);
     }
 }
