@@ -35,6 +35,7 @@ Route::get('/problems/test', 'problem_controller@test');
 Route::post('/problems/edit_description/{problem_id}', 'problem_controller@edit_description')->name('problems.edit_description');
 
 Route::get('/submissions/assignment/{assignment_id}/user/{user_id}/problem/{problem_id}/view/{choose}', 'submission_controller@index')->name('submissions.index');
+Route::get('/submissions/create/{assignment_id}/{problem_id}/', 'submission_controller@index')->name('submissions.index');
 Route::get('/practice', 'practice_controller@index');
 
 
