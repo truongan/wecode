@@ -18,6 +18,11 @@ class problem_controller extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware('auth'); // phải login
+    }
+    
     public function index()
     {
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
@@ -32,6 +37,8 @@ class problem_controller extends Controller
      */
     public function create()
     {
+        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
+            abort(404);  
         
         return view('problems.create', ['problem'=>NULL,
                                       'all_languages'=>Language::all(),
@@ -89,7 +96,10 @@ class problem_controller extends Controller
      */
     public function edit(Problem $problem)
     {
+        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
+            abort(404);
         $lang_of_problems = $problem->languages;
+        // var_dump($lang_of_problems);die();
         // $lang_of_problems = Problem::all_languages($problem->id);
         $languages = [];
         if ($lang_of_problems != [])
@@ -116,35 +126,34 @@ class problem_controller extends Controller
      */
     public function update(Request $request, Problem $problem)
     {
-        
+        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
+            abort(404);
         $validatedData = $request->validate([
-            'name' => ['required','max:255'],
-            'diff_cmd' => ['required','max:200'],
-            'admin_note'=>['required','max:255']
-        ]);
-
+            'problem_name' => ['required','max:255'],
+            ]);
+            
         DB::beginTransaction(); 
         
         $id = $problem->id ? $problem->id : $this->new_problem_id();
         $problem->update($request->input()); 
-        DB::table('language_problem')->where('problem_id','=',$id)->delete();
         
         $time_limit = $request->time_limit;
 		$memory_limit = $request->memory_limit;
         $enable = $request->enable;
-        //Now add new problems:
+        
+        $problem->languages()->detach();
+        
         for($i=0;$i<count($enable);$i++){
-            if($enable[$i]){
-				DB::table('language_problem')->insert([
-					'language_id' => $request->language_update[$i],
-					'problem_id' => $problem->id,
-					'time_limit' => $time_limit[$i],
-					'memory_limit' => $memory_limit[$i],
-                ]);
-			}
+            if($enable[$i]){ 
+                $problem->languages()->attach($request->language_id[$i],
+                        [
+                            'time_limit' => $time_limit[$i],
+                            'memory_limit' => $memory_limit[$i],
+                        ]
+                    );
+			    }
         }
-        // Status process request
-
+        
         // Processing request 
         $this->_take_test_file_upload($request, $id, $messages);  
         
@@ -153,12 +162,14 @@ class problem_controller extends Controller
 
         // Except, Error Transaction
         
+        // if ($messages)
+        //     return view('problems.create',
+        //                         ['messages'=>$messages,
+        //                          'problem'=>$problem,
+        //                          'languages'=>Language::all()
+        //                         ]);
         if ($messages)
-            return view('problems.edit',
-                                ['messages'=>$messages,
-                                 'problem'=>$problem,
-                                 'languages'=>Language::all()
-                                ]);
+            return back()->withInput()->withErrors(["messages"=>$messages]);
         
         return redirect('problems');
     }
@@ -415,7 +426,7 @@ class problem_controller extends Controller
     }
 
     public function new_problem_id(){
-		$max = $max = DB::table('problems')->count()+1 ;
+		$max = $max = Problem::count()+1 ;
 
 		$assignments_root = Setting::get("assignments_root");
        
@@ -505,7 +516,7 @@ class problem_controller extends Controller
         $this->clean_up_old_problem_dir($problem_dir);
 
 		foreach($in as $name => $tmp_name ){
-            rename($name, "$problem_dir/in/$name");
+            rename($tmp_name, "$problem_dir/in/$name");
         }
         
 		foreach($out as $name => $tmp_name ){
