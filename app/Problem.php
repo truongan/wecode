@@ -10,8 +10,6 @@ class Problem extends Model
     protected $fillable = ['id','name','is_upload_only','diff_cmd','diff_arg'];
 
 
-
-
     public function languages()
     {
         return $this->belongsToMany('App\Language')->withTimestamps();
@@ -39,4 +37,8 @@ class Problem extends Model
         return $this->hasMany('App\Submission');
     }
 
+    public function tags()
+    {
+        return $this->belongsToMany('App\Tag');
+    }
 }
