@@ -105,11 +105,11 @@ $(document).ready(function(){
 			<fieldset class="form-group">
 				<div class="form-row">
 					<div class="col-sm-5">
-						<label for="problem_name">Problem Name</label>
+						<label for="name">Problem Name</label>
 					</div>
 					<div class="col-sm-7">
-						<input id="problem_name" type="text" name="problem_name" class="form-control col-xs-7" value="{{ old('problem_name',  $edit ? $problem->name : '') }}"/>
-						{{-- {{ form_error('problem_name', '<div class="alert alert-danger">', '</div>') }} --}}
+						<input id="name" type="text" name="name" class="form-control col-xs-7" value="{{ old('name',  $edit ? $problem->name : '') }}"/>
+						{{-- {{ form_error('name', '<div class="alert alert-danger">', '</div>') }} --}}
 					</div>
 				</div>
 			</fieldset>
@@ -237,7 +237,9 @@ $(document).ready(function(){
 			</table>
 		</div>
 	</div>
+	<input type="number" name = "allow_practice">
 	<input type="submit" value="{{ $edit ? 'Edit' : 'Add' }} Problem" class="sharif_input btn btn-primary mt-2"/>
 </form>
 </div>
+
 @endsection
