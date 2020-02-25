@@ -49,4 +49,8 @@ class submission_controller extends Controller
         
     }
 
+    public function store($request)
+    {
+        
+    }
 }

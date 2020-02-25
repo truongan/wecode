@@ -39,7 +39,7 @@
       @foreach ($problems as $item)
         <tr data-id="{{$item->id}}">
             <td>{{ $item->id}}</td>
-            <td><a href="{{ url("problems/show/$item->id") }}">{{ $item->name }}</a></td>
+            <td><a href="{{ url("problems/$item->id") }}">{{ $item->name }}</a></td>
             <td>{{$item->admin_note}}</td>
             <td>
               @foreach ($item->languages as $language_name)
