@@ -47,7 +47,7 @@ class submission_controller extends Controller
 
     public function create(Assignment $assignment, $problem_id){
 
-        return view('')
+        return view('submissions.create', ['assignment' => $assignment, 'problem_id' => $problem_id]);
     }
 
     public function store($request)
