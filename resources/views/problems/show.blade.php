@@ -120,7 +120,7 @@
 			{{-- {{ form_open_multipart("submit/") }} --}}
 
 			@if ($all_problems != NULL)
-				<input type="hidden" name="assignment" value="{ $assignment->id }}"/>
+				<input type="hidden" name="assignment" value="{{ $assignment->id }}"/>
 			@endif
 			<input type="hidden" name="problem" value="{{ $problem->id }}"/>
 			<fieldset class="form-group form-row">

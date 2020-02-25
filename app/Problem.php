@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 class Problem extends Model
 {
-    protected $fillable = ['id','name','is_upload_only','diff_cmd','diff_arg'];
+    protected $fillable = ['id','name','diff_cmd','diff_arg','allow_practice','admin_note'];
 
 
     public function languages()

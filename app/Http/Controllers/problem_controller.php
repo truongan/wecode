@@ -42,7 +42,7 @@ class problem_controller extends Controller
         
         return view('problems.create', ['problem'=>NULL,
                                       'all_languages'=>Language::all(),
-                                      'tree_dump'=>"no input",
+                                      'tree_dump'=>"not found",
                                       'messages'=>[],
                                       'languages'=>[],
                                       'max_file_uploads'=>1000,    
@@ -58,7 +58,28 @@ class problem_controller extends Controller
      */
     public function store(Request $request)
     {
-        return redirect('/');
+       
+        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
+            abort(404);
+        
+        $validatedData = $request->validate([
+            'name' => ['required','max:255'],
+        ]);
+
+        $default_language = Language::find(1);
+        
+        $the_id = $this->new_problem_id();
+        
+        Problem::create($request->input());
+        // Processing file 
+        $this->_take_test_file_upload($request, $the_id, $messages);  
+        
+        // handler error
+        if ($messages)
+            return back()->withInput()->withErrors(["messages"=>$messages]);
+        
+        
+        return redirect('problems');
     }
 
     /**
@@ -92,8 +113,6 @@ class problem_controller extends Controller
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
             abort(404);
         $lang_of_problems = $problem->languages;
-        // var_dump($lang_of_problems);die();
-        // $lang_of_problems = Problem::all_languages($problem->id);
         $languages = [];
         if ($lang_of_problems != [])
             foreach($lang_of_problems as $lang)
@@ -102,10 +121,9 @@ class problem_controller extends Controller
             }
         return view('problems.create', ['problem'=>$problem,
                                       'all_languages'=>Language::all(),
-                                      'tree_dump'=>"no input",
                                       'messages'=>[],  
                                       'languages'=>$languages,
-                                      'tree_dump'=>10000,  
+                                      'tree_dump'=>shell_exec("tree -h " . $this->get_directory_path($problem->id)),  
                                       'max_file_uploads'=>1000,
                                   ]);
     }
@@ -121,46 +139,15 @@ class problem_controller extends Controller
     {
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
             abort(404);
-        $validatedData = $request->validate([
-            'problem_name' => ['required','max:255'],
-            ]);
-            
-        DB::beginTransaction(); 
-        
-        $id = $problem->id ? $problem->id : $this->new_problem_id();
-        $problem->update($request->input()); 
-        
-        $time_limit = $request->time_limit;
-		$memory_limit = $request->memory_limit;
-        $enable = $request->enable;
-        
-        $problem->languages()->detach();
-        
-        for($i=0;$i<count($enable);$i++){
-            if($enable[$i]){ 
-                $problem->languages()->attach($request->language_id[$i],
-                        [
-                            'time_limit' => $time_limit[$i],
-                            'memory_limit' => $memory_limit[$i],
-                        ]
-                    );
-			    }
-        }
-        
-        // Processing request 
-        $this->_take_test_file_upload($request, $id, $messages);  
-        
-        // Accept all processing
-        DB::commit();
 
-        // Except, Error Transaction
+        $validatedData = $request->validate([
+            'name' => ['required','max:255'],
+            ]);
+
+        $problem->update($request->input()); 
+        $this->replace_problem($request,$problem->id,$problem);
+        $this->_take_test_file_upload($request, $problem->id, $messages);  
         
-        // if ($messages)
-        //     return view('problems.create',
-        //                         ['messages'=>$messages,
-        //                          'problem'=>$problem,
-        //                          'languages'=>Language::all()
-        //                         ]);
         if ($messages)
             return back()->withInput()->withErrors(["messages"=>$messages]);
         
@@ -335,7 +322,7 @@ class problem_controller extends Controller
         if ($id === NULL) return NULL;
         
 		$assignments_root = Setting::get("assignments_root");
-       
+        
         $problem_dir = $assignments_root . "/problems/".$id;
        
         return $problem_dir;
@@ -365,10 +352,10 @@ class problem_controller extends Controller
         );
 		
 		$path = "$problem_dir/desc.html";
-
-		// if (file_exists($path))
+        
+		if (file_exists($path))
             $result['description'] = file_get_contents($path);   
-        // dd($path);
+       
 		return $result;
 	}
     
@@ -416,14 +403,13 @@ class problem_controller extends Controller
     }
     
     public function new_problem_id(){
-		$max = $max = Problem::count()+1 ;
-
+		$max = Problem::count()+1 ;
+        var_dump($max);
 		$assignments_root = Setting::get("assignments_root");
-       
 		while (file_exists($assignments_root.'/problems/'.$max)){
 			$max++;
-		}
-
+        }
+        var_dump($max);
 		return $max;
     }
 
@@ -517,5 +503,29 @@ class problem_controller extends Controller
 			rename($tmp_name, "$problem_dir/$name");
         }
     } 
+    
+    public function replace_problem(Request $request, $id , Problem $problem)
+    {
+        DB::beginTransaction(); 
+
+        $time_limit = $request->time_limit;
+		$memory_limit = $request->memory_limit;
+        $enable = $request->enable;
+        
+        $problem->languages()->detach();
+        
+        for($i=0;$i<count($enable);$i++){
+            if($enable[$i]){ 
+                $problem->languages()->attach($request->language_id[$i],
+                        [
+                            'time_limit' => $time_limit[$i],
+                            'memory_limit' => $memory_limit[$i],
+                        ]
+                    );
+			    }
+        }
+
+        DB::commit();
+    }
 
 }
