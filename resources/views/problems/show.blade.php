@@ -41,14 +41,14 @@
 </script>
 <script src="{{ asset('assets/ckeditor/ckeditor.js') }}" charset="utf-8"></script>
 <script type="text/javascript">
-$(document).ready(function(){
+    $(document).ready(function(){
 		$('.save-button').click(function(){
             $.ajax({
                 type: 'POST',
                 url: '{{ route('problems.edit_description', $problem->id) }}',
                 data: {
                     '_token': "{{ csrf_token() }}",
-                    'content' : CKEDITOR.instances.problem_description.getData()
+                    content : CKEDITOR.instances.problem_description.getData()
                 },
                 success: function (response) {
                     if (response == "success"){
@@ -63,8 +63,7 @@ $(document).ready(function(){
                 }
             });
         }); 
-
-});
+    });
 </script>
 @endsection
 
@@ -78,7 +77,7 @@ $(document).ready(function(){
 
         <div class="problem_description" id="problem_description" 
         {{ in_array( Auth::user()->role->name, ['admin', 'head_instructor']) ? 'contenteditable=true' : ''}}
-        >
+		>
 			{!! $problem->description !!}
 		</div>
 	</div>
