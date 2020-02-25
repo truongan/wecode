@@ -77,7 +77,7 @@ class problem_controller extends Controller
             'error'=>'none'
         ];
         $re = $this->get_description($id);
-
+        dd($data);
         return view('problems.show', ['can_submit' => TRUE,
                                       'assignment' => NULL,
                                       'error'=>'none',
