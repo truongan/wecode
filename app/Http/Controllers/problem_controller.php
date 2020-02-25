@@ -42,7 +42,7 @@ class problem_controller extends Controller
         
         return view('problems.create', ['problem'=>NULL,
                                       'all_languages'=>Language::all(),
-                                      'tree_dump'=>"no input",
+                                      'tree_dump'=>"not found",
                                       'messages'=>[],
                                       'languages'=>[],
                                       'max_file_uploads'=>1000,    
@@ -58,7 +58,34 @@ class problem_controller extends Controller
      */
     public function store(Request $request)
     {
-        return redirect('/');
+       
+        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
+            abort(404);
+        
+        $validatedData = $request->validate([
+            'name' => ['required','max:255'],
+        ]);
+        
+        $default_language = 2;
+
+        $id = $this->new_problem_id();
+        $default_language = $this->language_model->default_language($this->settings_model->get_setting('default_language_number',1));
+
+        Problem::create($request->input());
+        
+        $time_limit = $request->time_limit;
+		$memory_limit = $request->memory_limit;
+        $enable = $request->enable;
+
+        // Processing file 
+        $this->_take_test_file_upload($request, $id, $messages);  
+        
+        // handler error
+        if ($messages)
+            return back()->withInput()->withErrors(["messages"=>$messages]);
+        
+        
+        return redirect('problems');
     }
 
     /**
@@ -92,8 +119,6 @@ class problem_controller extends Controller
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
             abort(404);
         $lang_of_problems = $problem->languages;
-        // var_dump($lang_of_problems);die();
-        // $lang_of_problems = Problem::all_languages($problem->id);
         $languages = [];
         if ($lang_of_problems != [])
             foreach($lang_of_problems as $lang)
@@ -102,10 +127,9 @@ class problem_controller extends Controller
             }
         return view('problems.create', ['problem'=>$problem,
                                       'all_languages'=>Language::all(),
-                                      'tree_dump'=>"no input",
                                       'messages'=>[],  
                                       'languages'=>$languages,
-                                      'tree_dump'=>10000,  
+                                      'tree_dump'=>shell_exec("tree -h " . $this->get_directory_path($problem->id)),  
                                       'max_file_uploads'=>1000,
                                   ]);
     }
@@ -122,12 +146,13 @@ class problem_controller extends Controller
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
             abort(404);
         $validatedData = $request->validate([
-            'problem_name' => ['required','max:255'],
+            'name' => ['required','max:255'],
             ]);
             
         DB::beginTransaction(); 
         
         $id = $problem->id ? $problem->id : $this->new_problem_id();
+        
         $problem->update($request->input()); 
         
         $time_limit = $request->time_limit;
@@ -164,7 +189,7 @@ class problem_controller extends Controller
         if ($messages)
             return back()->withInput()->withErrors(["messages"=>$messages]);
         
-        return redirect('problems');
+        return redirect('problems.list');
     }
 
     public function _take_test_file_upload(Request $request, $the_id,  &$messages){
