@@ -119,7 +119,11 @@
 				<input id="form_concurent_queue_process" type="number" name="concurent_queue_process" class="form-control" value="{{ $concurent_queue_process ?? 2 }}" />
 				<small class="form-text text-muted">The number of queue process to run at the same time. This settings is sensitive to the server hardware capabilities. Set this to 0 will disable queue and stop judging all submissions</small>
 			</fieldset>
-
+			<fieldset class="form-group col-md-2">
+				<label for="form_default_language_number">Number of default languages</label>
+				<input id="form_default_language_number" type="number" name="default_language_number" class="form-control" value="{{ $default_language_number ?? 2 }}" />
+				<small class="form-text text-muted">The number languages to be enabled by default while adding problem</small>
+			</fieldset>
 		</div>
 
 		<br><h5>Judge settings</h5><hr>

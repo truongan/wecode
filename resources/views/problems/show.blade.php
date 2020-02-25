@@ -13,21 +13,21 @@
 @endsection
 
 @section('title_menu')
-{{-- {% if problem.has_pdf %}
+@if ($problem->has_pdf)
 	<span class="title_menu_item"><a href="
-	{% if all_problems is defined %}
-		{{ site_url("view_problem/pdf/#{problem.id}/#{assignment.id}") }}
-	{% else %}
-		{{ site_url("problems/pdf/#{problem.id}") }}
-	{% endif %}
+	@if (isset($all_problems))
+		{{ url("view_problem/pdf/$problem->id/$assignment->id") }}
+	@else
+		{{ url("problems/pdf/$problem->id") }}
+	@endif
 	"><i class="fas fa-file-pdf color1"></i> PDF</a></span>
-{% endif %}
-{% if problem.has_template %}
-	<span class="title_menu_item"><a href="{{ site_url("view_problem/template/#{problem.id}/#{assignment.id}") }}"><i class="fa fa-download color1"></i> Download the code template</a></span>
-{% endif %}
-{% if user.level >= 2 %}
+@endif
+@if ($problem->has_template)
+	<span class="title_menu_item"><a href="{{ url("view_problem/template/$problem->id/$assignment->id") }}"><i class="fa fa-download color1"></i> Download the code template</a></span>
+@endif
+@if (in_array( Auth::user()->role->name, ['admin', 'head_instructor']))
 	<span class="title_menu_item ml-auto"><a href="#" class="btn btn-secondary save-button"><i class="fa fa-floppy-o "></i> Save</a></span>
-{% endif %} --}}
+@endif
 @endsection
 
 @section('body_end')
@@ -36,32 +36,49 @@
       tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
     });
     </script>
-    <script type="text/javascript" async
-      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
-    </script>
-    <script src="{{ asset('assets/ckeditor/ckeditor.js') }}" charset="utf-8"></script>
-    <script type="text/javascript">
+<script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+<script src="{{ asset('assets/ckeditor/ckeditor.js') }}" charset="utf-8"></script>
+<script type="text/javascript">
     $(document).ready(function(){
-    
-        shj.setup_save('.save-button'
-        , '{{ url("problems/edit_description/$problem->id") }}'
-        , CKEDITOR.instances.problem_description);
-    
+		$('.save-button').click(function(){
+            $.ajax({
+                type: 'POST',
+                url: '{{ route('problems.edit_description', $problem->id) }}',
+                data: {
+                    '_token': "{{ csrf_token() }}",
+                    content : CKEDITOR.instances.problem_description.getData()
+                },
+                success: function (response) {
+                    if (response == "success"){
+                        $.notify('Change sucessfully saved'
+                            , {position: 'bottom right', className: 'success', autoHideDelay: 3500});
+                        $('.save-button').removeClass('btn-info').addClass('btn-secondary');
+                    }
+                },
+                error: function(response){
+                    $.notify('Error while saving'
+                        , {position: 'bottom right', className: 'error', autoHideDelay: 3500});
+                }
+            });
+        }); 
     });
 </script>
 @endsection
 
 @section('content')
 @if ($problem->error != 'none' )
+
 <div class="alert alert-danger"> {{$error}} </div>
 @else
-
+<div class="row">
 	<div class="col-md-7 col-lg-8 col-sm-12">
 
         <div class="problem_description" id="problem_description" 
-        {{-- {% if user.level >= 2 %} contenteditable="true" {% endif %}  --}}
-        >
-			{{ $problem->description }}
+        {{ in_array( Auth::user()->role->name, ['admin', 'head_instructor']) ? 'contenteditable=true' : ''}}
+		>
+			{!! $problem->description !!}
 		</div>
 	</div>
 
@@ -69,8 +86,8 @@
 		@if ($all_problems != NULL)
 		@php($i = 0)
 		<div class="problems_widget row">
-			<p><i class="fa fa-file-text fa-lg color9"></i> { $assignment->name }}</p>
-			{{-- <p class="text-muted"><span class="badge badge-secondary count_problems">{{ all_problems|length }}</span> problems with a total score of <span class="badge badge-secondary sum_score">{{ sum_score}}</span></p> --}}
+			<p><i class="fa fa-file-text fa-lg color9"></i> {{ $assignment->name }}</p>
+			<p class="text-muted"><span class="badge badge-secondary count_problems">{{ count($all_problems) }}</span> problems with a total score of <span class="badge badge-secondary sum_score">{{ $sum_score }}</span></p>
 			<table class="wecode_table table  table-bordered">
 				<thead>
 				<tr>
@@ -139,5 +156,8 @@
 		@endif
 
 	</div>
+</div>
 @endif
+
+
 @endsection

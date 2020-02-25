@@ -104,7 +104,6 @@ class assignment_controller extends Controller
 
         $validated = $request->validate([
             'name' => ['required','max:150'],
-            'participants'=>['required'],
         ]);
         
         $assignment = new Assignment;
@@ -193,7 +192,6 @@ class assignment_controller extends Controller
 
         $validated = $request->validate([
             'name' => ['required','max:150'],
-            'participants'=>['required'],
         ]);
 
         $assignment->fill($request->input());

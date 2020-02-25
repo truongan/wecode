@@ -71,7 +71,6 @@ class CreateAllTable extends Migration
             $table->dateTime('finish_time');
             $table->integer('extra_time');
             $table->text('late_rule')->nullable();
-            $table->text('participants');
             $table->text('description')->nullable();
             $table->char('moss_update', 30)->nullable();
             $table->timestamps();

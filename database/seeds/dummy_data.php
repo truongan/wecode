@@ -83,7 +83,6 @@ class dummy_data extends Seeder
                 'finish_time' => new DateTime,
                 'extra_time'=> $i,
                 'late_rule'=>$i,
-                'participants'=>$i,
                 'moss_update'=>$i,
             ]);
         }

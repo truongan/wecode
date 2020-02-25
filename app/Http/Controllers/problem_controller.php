@@ -241,27 +241,20 @@ class problem_controller extends Controller
 		else return false;
     }
     
-    public function edit_description(Request $problem){
+    public function edit_description(Request $request, $id){
 		if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
             abort(404);
 
-        $request->validate([
-            'content'=>['required','text']
-        ]);
-        
-		
-		if ($this->problem_files_model->save_problem_description($problem->id, $request->content)){
-            $messages[] = array(
-				'type' => 'Success',
-				);
-            return ;
+        // $request->validate([
+        //     'content'=>['required','text']
+        // ]); 
+
+		if ($this->save_problem_description($id, $request->content)){
+            echo "success";
+                return;
 		}
-        else $messages[] = array(
-				'type' => 'Error',
-				'text' => 'Save error'
-			);
-		
-        return view('problems.edit',['messages'=>$messages]);
+        else 
+            echo "error";
     }
     
     private function unload_zip_test_file(Request $request, $assignments_root, $problem_dir, &$messages, $name_zip){
