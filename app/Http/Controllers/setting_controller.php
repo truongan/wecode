@@ -71,6 +71,7 @@ class setting_controller extends Controller
                  'week_start',
                  'theme',
              'concurent_queue_process',
+             'default_language_number',
             ];
             // var_dump($submitted);die();
             if (!isset($submitted['enable_registration']))  $submitted['enable_registration'] = 0;
