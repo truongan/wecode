@@ -32,8 +32,11 @@ Route::delete('users/{id}', 'UserController@destroy')->name('users.destroy');
 // Route::get('/problems/show/{id}', 'problem_controller@show');
 Route::get('/problems/download/{id}', 'problem_controller@pdf')->name('problems.pdf');
 Route::get('/problems/test', 'problem_controller@test');
+Route::post('/problems/edit_description/{problem_id}', 'problem_controller@edit_description')->name('problems.edit_description');
+
 Route::get('/submissions/assignment/{assignment_id}/user/{user_id}/problem/{problem_id}/view/{choose}', 'submission_controller@index')->name('submissions.index');
 Route::get('/practice', 'practice_controller@index');
+
 
 //Resource route phải được  ghi cuối cùng, nếu không các route sau dính tới /usres sẽ ăn shit 
 Route::resource('users','UserController');

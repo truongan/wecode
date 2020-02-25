@@ -241,7 +241,7 @@ class problem_controller extends Controller
 		else return false;
     }
     
-    public function edit_description(Request $problem){
+    public function edit_description($id){
 		if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
             abort(404);
 
@@ -250,7 +250,7 @@ class problem_controller extends Controller
         ]);
         
 		
-		if ($this->problem_files_model->save_problem_description($problem->id, $request->content)){
+		if ($this->problem_files_model->save_problem_description($id, $request->content)){
             $messages[] = array(
 				'type' => 'Success',
 				);

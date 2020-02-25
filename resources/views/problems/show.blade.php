@@ -22,12 +22,12 @@
 	@endif
 	"><i class="fas fa-file-pdf color1"></i> PDF</a></span>
 @endif
-{{-- {% if problem.has_template %}
-	<span class="title_menu_item"><a href="{{ site_url("view_problem/template/#{problem.id}/#{assignment.id}") }}"><i class="fa fa-download color1"></i> Download the code template</a></span>
-{% endif %}
-{% if user.level >= 2 %}
+@if ($problem->has_template)
+	<span class="title_menu_item"><a href="{{ url("view_problem/template/$problem->id/$assignment->id") }}"><i class="fa fa-download color1"></i> Download the code template</a></span>
+@endif
+@if (in_array( Auth::user()->role->name, ['admin', 'head_instructor']))
 	<span class="title_menu_item ml-auto"><a href="#" class="btn btn-secondary save-button"><i class="fa fa-floppy-o "></i> Save</a></span>
-{% endif %} --}}
+@endif
 @endsection
 
 @section('body_end')
@@ -43,7 +43,7 @@
 <script type="text/javascript">
     $(document).ready(function(){
         shj.setup_save('.save-button'
-        , '{{ url("problems/edit_description/$problem->id") }}'
+        , '{{ route('problems.edit_description', $problem->id) }}'
         , CKEDITOR.instances.problem_description);
     });
 </script>
