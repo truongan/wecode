@@ -26,7 +26,7 @@
 	<span class="title_menu_item"><a href="{{ url("view_problem/template/$problem->id/$assignment->id") }}"><i class="fa fa-download color1"></i> Download the code template</a></span>
 @endif
 @if (in_array( Auth::user()->role->name, ['admin', 'head_instructor']))
-	<span class="title_menu_item ml-auto"><a href="#" class="btn btn-secondary save-button"><i class="fa fa-floppy-o "></i> Save</a></span>
+	<span class="title_menu_item ml-auto"><a href="#" class="btn btn-info save-button"><i class="fa fa-floppy-o "></i> Save</a></span>
 @endif
 @endsection
 
