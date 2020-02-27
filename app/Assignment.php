@@ -61,6 +61,6 @@ class Assignment extends Model
 
     public function started($assignment){
         return strtotime(date("Y-m-d H:i:s")) >= strtotime($assignment->start_time) //now should be larger than start time
-                || !in_array( Auth::user()->role->name, ['student']; ///instructor can view assignment before start time
+                || !in_array( Auth::user()->role->name, ['student']); ///instructor can view assignment before start time
     }
 }
