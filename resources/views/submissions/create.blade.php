@@ -5,7 +5,6 @@
 @endsection
 
 @section('title_menu')
-
 @endsection
 
 
