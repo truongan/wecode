@@ -86,7 +86,7 @@ class dummy_data extends Seeder
                 'moss_update'=>$i,
             ]);
         }
-        for($i = 1; $i < 5; $i++){
+        for($i = 2; $i < 5; $i++){
             shuffle($a);
             Assignment::find($i)->problems()->attach([
                 rand(1,5) => ['score' => rand(100,200), 'ordering'=>rand(1,10), 'problem_name' => 'dummy 1 for ass ' . $i],

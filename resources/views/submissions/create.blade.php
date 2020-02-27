@@ -11,36 +11,43 @@
 
 @section('content')
 
-{% if error != 'none' %}
-<p class="text-warning"> {{ error }}</p>
-{% else %}
-	{{ form_open_multipart('submit') }}
-		{% if assignment is defined %} 
+@if (isset($error) && $error != 'none')
+<p class="text-warning"> {{ $error }}</p>
+@else
+
+	<form action="{{ route('submissions.store',['assignment_id'=> $assignment->id, 'problem_id' => $problem->id]) }}" method="POST">
+	@csrf
+	@if ($assignment->id != 0)
+		
 			<input type ="hidden" value="{{assignment.id}}" name="assignment"/>
-		{% endif %}
-	<input type="hidden" value="{{ problem.id }}" name="problem"/>
+	@endif
+
+	<input type="hidden" value="{{ $problem->id }}" name="problem"/>
 	<div class="form-inline">
-		{# <div class="inp_grp"> #}
 			<div class="form-group mr-3">
 				<label for="problems" class="">Problem:</label>
 				<select id="problems" name ="problem" class="form-control custom-select">
-					{% for problem in problems %}
-						<option value="{{ problem.id }}">#{{problem.id}}--{{ problem.problem_name }}
+					@foreach ($assignment->problems as $problem)
+						<option value="{{ $problem->id }}">#{{$problem->id}}--{{ $problem->problem_name }}
 						</option>
-					{% endfor %}
+					@endforeach
 				</select>
 
 				<small class="form-text text-info"><a id="problem_link" href="#" target="_blank">Problem statement</a>
 				</small>
-
-				{{ form_error('problem','<div class="text-danger">','</div>') }}
+				@error('problem')
+					<div class="alert alert-danger"> {{ $message }}</div>
+				@enderror
 			</div>
 			<div class="form-group mr-3">
 				<label for="languages" class="">Language:</label>
 				<select id="languages" name="language" class="form-control custom-select">
 
 				</select>
-				{{ form_error('language','<div class="text-danger">','</div>') }}
+				@error('language')
+					<div class="alert alert-danger"> {{ $message }}</div>
+				@enderror
+				
 			</div>
 
 			<div class="form-group">
@@ -108,7 +115,7 @@
 	</textarea>
 	</form>
 
-{% endif %}
+@endif
 @endsection
 
 @section('body_end')
