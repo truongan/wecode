@@ -51,43 +51,24 @@ $(document).ready(function(){
 @endsection
 
 @section('content')
-{{-- <form method="POST"  action="{!! route('problems.store') !!}">
-	<input type="hidden"  name ="_token" value="{!! csrf_token() !!}"/>
-	<input type="file" id="myfile" name="myfile"><br><br>
-	<p class="input_p">
-		<input type="submit" value="Add" class="btn btn-primary"/>
-	</p>
-</form> --}}
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 <div class="col">
-	{{-- @php( $msgclasses = {'text-success': 'text-success', 'text-info': 'text-warning', 'text-danger': 'text-danger'} ) --}}
+	@php( $msgclasses = array('text-success'=> 'text-success', 'text-info'=> 'text-warning', 'text-danger'=> 'text-danger') )
 	
-	{{-- @foreach ($messages as $message)
+	@foreach ($messages as $message)
 		<p class="{{ $msgclasses[$message->type] }}">
 			{{ $message->text }}
 		</p>
-	@endforeach --}}
+	@endforeach
 	
-	{{-- @if ($edit)
+	@php($edit = Route::currentRouteName() == 'problems.edit')
+	@if ($edit)
 	<p>
 		<i class="fa fa-info-circle fa-lg color8"></i> If you don't want to change tests or pdf file, just do not upload its file.
 	</p>
-	@endif --}}
+	@endif
 	
-	@php($edit = Route::currentRouteName() == 'problems.edit')
+	
 <form method="POST"
 	@if ($edit)
 		action="{{ route('problems.update', $problem) }}"
@@ -169,6 +150,14 @@ $(document).ready(function(){
 					</label>
 				</div>
 			</fieldset>
+			<fieldset class="form-group" data-toggle="tooltip" data-html="true" title="Rename all files in <strong>in</strong> and <strong>out</strong> folder after unziping. This is assuming that all files in these two folder are perfectly corresponding to each when sorted by file name. This could useful when importing dataset from another format but should be use with care ">
+				<div class="custom-control custom-switch">
+					<input type="checkbox" class="custom-control-input" id="customSwitch2" name = "allow_practice">
+					<label class="custom-control-label" for="customSwitch2">
+						Nội dung
+					</label>
+				</div>
+			</fieldset>
 			<fieldset class="form-group">
 				<div class="form-row">
 					<div class="col-sm-6">
@@ -237,7 +226,6 @@ $(document).ready(function(){
 			</table>
 		</div>
 	</div>
-	<input type="number" name = "allow_practice">
 	<input type="submit" value="{{ $edit ? 'Edit' : 'Add' }} Problem" class="sharif_input btn btn-primary mt-2"/>
 </form>
 </div>
