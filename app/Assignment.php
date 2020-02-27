@@ -54,9 +54,9 @@ class Assignment extends Model
         return $result;
     }
 
-    public function is_participant($assignment, $user_id)
+    public function is_participant($user_id)
     {
-        return in_array($assignment->with('lops.users')->lops->pluck('users')->collapse()->pluck('id')->unique(), [$user_id]);
+        return in_array($this->lops->pluck('users')->collapse()->pluck('id')->unique(), [$user_id]);
     }
 
     public function started($assignment){
