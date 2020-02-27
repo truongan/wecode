@@ -135,10 +135,14 @@ class assignment_controller extends Controller
             ]);
         }
 
-        foreach ($request->lop_id as $i => $id)
+        if (!$request->lop_id)
         {
-            $assignment->lops()->attach($id);
+            foreach ($request->lop_id as $i => $id)
+            {
+                $assignment->lops()->attach($id);
+            }
         }
+        
 
         return redirect('assignments');
     }
