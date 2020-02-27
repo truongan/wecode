@@ -135,7 +135,7 @@ class assignment_controller extends Controller
             ]);
         }
 
-        if (!$request->lop_id)
+        if ($request->lop_id != NULL)
         {
             foreach ($request->lop_id as $i => $id)
             {
@@ -177,8 +177,11 @@ class assignment_controller extends Controller
 
         $lops = array();
         $b = $assignment->lops;
-        foreach ($b as $i){
-            $lops[$i->id] = $i;
+        if ($b != NULL)
+        {
+            foreach ($b as $i){
+                $lops[$i->id] = $i;
+            }
         }
         return view('assignments.create',['assignment' => $assignment, 'all_problems' => Problem::all(), 'messages' => [], 'problems' => $problems, 'all_lops' => Lop::all(), 'lops' => $lops, 'selected' => 'assignments']);
     }
