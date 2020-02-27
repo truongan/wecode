@@ -26,7 +26,7 @@
 	<span class="title_menu_item"><a href="{{ url("view_problem/template/$problem->id/$assignment->id") }}"><i class="fa fa-download color1"></i> Download the code template</a></span>
 @endif
 @if (in_array( Auth::user()->role->name, ['admin', 'head_instructor']))
-	<span class="title_menu_item ml-auto"><a href="#" class="btn btn-secondary save-button"><i class="fa fa-floppy-o "></i> Save</a></span>
+	<span class="title_menu_item ml-auto"><a href="#" class="btn btn-info save-button"><i class="fa fa-floppy-o "></i> Save</a></span>
 @endif
 @endsection
 
@@ -150,8 +150,8 @@
 
 		</div>
 		<div class="problems_widget row">
-			@php($t = $assignment != NULL ?$assignment->id:"")
-			<span class=""><a href="{{ url("submit/editor/$problem->id/$t") }}" target="_blank"><i class="fa fa-pencil-square-o"></i> Code editor</a></span>
+			@php($t = $assignment->id ?? 0)
+			<span class=""><a href="{{ route("submissions.create", ['assignment_id' => $t, 'problem_id' => $problem->id]) }}" target="_blank"><i class="fa fa-pencil-square-o"></i> Code editor</a></span>
 		</div>
 		@endif
 

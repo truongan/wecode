@@ -48,12 +48,9 @@ class submission_controller extends Controller
         }
     }
 
-
-
-    public function create(Assignment $assignment, $problem_id)
-    {
-
-        return view('submissions.create', ['assignment' => $assignment, 'problem_id' => $problem_id]);
+    public function create(Assignment $assignment, Problem $problem){
+        dd($assignment->name);
+        return view('submissions.create', ['assignment' => $assignment, 'problem' => $problem]);
     }
 
     public function store($request)

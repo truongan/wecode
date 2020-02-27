@@ -33,9 +33,10 @@ Route::delete('users/{id}', 'UserController@destroy')->name('users.destroy');
 Route::get('/problems/download/{id}', 'problem_controller@pdf')->name('problems.pdf');
 Route::get('/problems/test', 'problem_controller@test');
 Route::post('/problems/edit_description/{problem_id}', 'problem_controller@edit_description')->name('problems.edit_description');
+Route::get('/view_problem/{problem_id}', 'view_problem_controller@index');
 
 Route::get('/submissions/assignment/{assignment_id}/user/{user_id}/problem/{problem_id}/view/{choose}', 'submission_controller@index')->name('submissions.index');
-Route::get('/submissions/create/{assignment_id}/{problem_id}/', 'submission_controller@index')->name('submissions.create');
+Route::get('/submissions/create/{assignment}/{problem}/', 'submission_controller@create')->name('submissions.create');
 Route::get('/practice', 'practice_controller@index');
 
 

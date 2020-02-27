@@ -171,6 +171,7 @@ class assignment_controller extends Controller
             $problems[$i->id] = $i;
         }
 
+        $lops = array();
         $b = $assignment->lops;
         foreach ($b as $i){
             $lops[$i->id] = $i;
