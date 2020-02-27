@@ -39,12 +39,12 @@
                         <span class="nav-link-text">Assignments</span>
                     </a>
                 </li>
-                <li class="nav-item color-problems {{ ($selected=="problems") ? "selected" : ""}}">
+                {{-- <li class="nav-item color-problems {{ ($selected=="problems") ? "selected" : ""}}">
                     <a class="nav-link" href="{{ url('view_problem') }}">
                         <i class="fa fa-fw fa-puzzle-piece fa-lg"></i>
                         <span class="nav-link-text">Problems</span>
                     </a>
-                </li>
+                </li> --}}
                 <li class="nav-item color-submit {{ ($selected=="submit") ? "selected" : ""}}">
                     <a class="nav-link" href="{{ url('submit') }}">
                         <i class="fas fa-fw fa-code fa-lg"></i>

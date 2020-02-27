@@ -44,19 +44,19 @@ class Assignment extends Model
             // but if start time is before finish time, the deadline is NEVER
             $result->error_message =  'Selected assignment has finished.';
         }
-        elseif ( !is_participant($assignment, Auth::user()->username) )
+        elseif ( !is_participant($assignment, Auth::user()->id) )
             $result->error_message = 'You are not registered for submitting.';
-        else{
+        else
+        {
             $result->error_message = 'none';
             $result->can_submit = TRUE;
         }
         return $result;
     }
 
-    public function is_participant($assignment, $username)
+    public function is_participant($assignment, $user_id)
     {
-        $lops = $assignment->lops;
-
+        return in_array($assignment->with('lops.users')->lops->pluck('users')->collapse()->pluck('id')->unique(), [$user_id]);
     }
 
     public function started($assignment){

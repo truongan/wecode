@@ -104,6 +104,7 @@ class assignment_controller extends Controller
 
         $validated = $request->validate([
             'name' => ['required','max:150'],
+            #'pdf_file' => 'mimes:pdf',
         ]);
         
         $assignment = new Assignment;
@@ -134,10 +135,14 @@ class assignment_controller extends Controller
             ]);
         }
 
-        foreach ($request->lop_id as $i => $id)
+        if ($request->lop_id != NULL)
         {
-            $assignment->lops()->attach($id);
+            foreach ($request->lop_id as $i => $id)
+            {
+                $assignment->lops()->attach($id);
+            }
         }
+        
 
         return redirect('assignments');
     }
@@ -172,8 +177,11 @@ class assignment_controller extends Controller
 
         $lops = array();
         $b = $assignment->lops;
-        foreach ($b as $i){
-            $lops[$i->id] = $i;
+        if ($b != NULL)
+        {
+            foreach ($b as $i){
+                $lops[$i->id] = $i;
+            }
         }
         return view('assignments.create',['assignment' => $assignment, 'all_problems' => Problem::all(), 'messages' => [], 'problems' => $problems, 'all_lops' => Lop::all(), 'lops' => $lops, 'selected' => 'assignments']);
     }
@@ -193,6 +201,7 @@ class assignment_controller extends Controller
 
         $validated = $request->validate([
             'name' => ['required','max:150'],
+            #'pdf_file' => 'mimes:pdf',
         ]);
 
         $assignment->fill($request->input());
@@ -234,9 +243,12 @@ class assignment_controller extends Controller
         }
 
         $assignment->lops()->detach();
-        foreach ($request->lop_id as $i => $id)
+        if ($request->lop_id != NULL)
         {
-            $assignment->lops()->attach($id);
+            foreach ($request->lop_id as $i => $id)
+            {
+                $assignment->lops()->attach($id);
+            }
         }
 
         return redirect('assignments');

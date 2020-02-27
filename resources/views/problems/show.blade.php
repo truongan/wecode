@@ -150,8 +150,8 @@
 
 		</div>
 		<div class="problems_widget row">
-			@php($t = $assignment != NULL ?$assignment->id:"")
-			<span class=""><a href="{{ url("submit/editor/$problem->id/$t") }}" target="_blank"><i class="fa fa-pencil-square-o"></i> Code editor</a></span>
+			@php($t = $assignment->id ?? 0)
+			<span class=""><a href="{{ route("submissions.create", ['assignment_id' => $t, 'problem_id' => $problem->id]) }}" target="_blank"><i class="fa fa-pencil-square-o"></i> Code editor</a></span>
 		</div>
 		@endif
 
