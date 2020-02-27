@@ -237,7 +237,9 @@ $(document).ready(function(){
 			</table>
 		</div>
 	</div>
+	<input type="number" name = "allow_practice">
 	<input type="submit" value="{{ $edit ? 'Edit' : 'Add' }} Problem" class="sharif_input btn btn-primary mt-2"/>
 </form>
 </div>
+
 @endsection

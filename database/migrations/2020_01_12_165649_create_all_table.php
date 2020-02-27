@@ -62,7 +62,7 @@ class CreateAllTable extends Migration
             $table->timestamps();
         });
         Schema::create('assignments', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->bigInteger('id')->autoIncrement();
             $table->char('name', 150);
             $table->unsignedInteger('total_submits')->default(0);
             $table->boolean('open');
