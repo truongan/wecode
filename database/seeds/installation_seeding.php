@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-
+use App\Assignment;
 class installation_seeding extends Seeder
 {
     /**
@@ -64,7 +64,6 @@ class installation_seeding extends Seeder
             ]
         );
         DB::table('assignments')->insert([
-            'id' => '0' , 
             'name' => 'practice',
             'open' => true, 
             'score_board' => 0,
@@ -72,5 +71,6 @@ class installation_seeding extends Seeder
             'finish_time' => now(),
             'extra_time' => 0,
         ]);
+        DB::table('assignments')->update(['id' => 0]);
     }
 }
