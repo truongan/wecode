@@ -104,6 +104,7 @@ class assignment_controller extends Controller
 
         $validated = $request->validate([
             'name' => ['required','max:150'],
+            #'pdf_file' => 'mimes:pdf',
         ]);
         
         $assignment = new Assignment;
@@ -192,6 +193,7 @@ class assignment_controller extends Controller
 
         $validated = $request->validate([
             'name' => ['required','max:150'],
+            #'pdf_file' => 'mimes:pdf',
         ]);
 
         $assignment->fill($request->input());
