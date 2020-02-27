@@ -5,7 +5,7 @@
 @endsection
 
 @section('title_menu')
-<th>Submissions</th>
+<th>Submit page</th>
 @if ($user_id != 'all' and !in_array( Auth::user()->role->name, ['student'])) 
 	<a href="{{route('submissions.index', [$assignment_id, 'all', $problem_id, 'all'])}}">Remove filter user</a>
 @endif
