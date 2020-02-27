@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('head_title','Users')
 @section('icon', 'fas fa-users')
 
 @section('title', 'Users')

@@ -1,8 +1,9 @@
 @extends('layouts.app')
 @php($selected="settings")
+@section('head_title','Problems')
 @section('icon', 'fas fa-clipboard-list')
 
-@section('title','Problems List')
+@section('title','Problems')
 
 @section('title_menu')
 {{-- {% if user.level >= 2 %} --}}

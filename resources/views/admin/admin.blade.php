@@ -1,6 +1,6 @@
 @php($selected = 'settings')
 @extends('layouts.app')
-
+@section('head_title','Admin panel')
 @section('icon', 'fas fa-sliders-h')
 
 @section('title', 'Admin panel')

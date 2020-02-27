@@ -1,9 +1,9 @@
 @php($selected = 'settings')
 @extends('layouts.app')
-
+@section('head_title','New Problem')
 @section('icon', 'fas fa-plus-square')
 
-@section('title', 'Add Problem')
+@section('title', 'New Problem')
 
 @section('other_assets')
 <style type="text/css">

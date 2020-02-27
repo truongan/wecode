@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('head_title','Edit by HTML')
 @section('icon', 'fas fa-edit')
 
 @section('title', 'Edit by HTML')

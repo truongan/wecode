@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('head_title','Practice')
 @section('icon', 'fas fa-folder-open')
 
 @section('title', 'Practice')

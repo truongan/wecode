@@ -1,5 +1,6 @@
 @extends('layouts.app')
-@php($selected="problems")
+@php($selected="assignments")
+@section('head_title','View Problem')
 @section('icon', 'fas fa-puzzle-piece')
 
 @section('title',$problem->name)
