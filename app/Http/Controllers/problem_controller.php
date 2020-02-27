@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Problem;
 use App\Setting;
 use App\Language;
+use App\Submission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -205,14 +206,19 @@ class problem_controller extends Controller
         }
         else
         {
-            $problem = Problem::find($id)->problem_info_detailed();
-         
+           
+            $problem = Problem::find($id);
+            $result['no_of_ass'] = $problem->assignments->count();
+            $result['no_of_sub'] = $problem->submissions->count();
+            $result['languages'] = $problem->languages;
+
             if ($problem == NULL)
                 $json_result = array('message' => 'Not found detailed');
             elseif ($problem['no_of_ass'] != 0 & $problem['no_of_sub'] != 0)
             {
                 $json_result = array("message" => "Problem already appear in assignments and got some submission should not be delete");
             }
+            // dd($id);
             $this->delete_problem($id);
         }
         
@@ -364,12 +370,20 @@ class problem_controller extends Controller
         $cmd = 'rm -rf '.$this->get_directory_path($id);
       
 		 // If you want to set transaction time, you can append the new argument in the transaction function
-        
+        // dd($id);
         DB::beginTransaction();  
+
+        $problem = Problem::find($id);
         Problem::destroy($id);  
-        DB::table('language_problem')->where('problem_id','=',$id)->delete();
-        DB::table('assignment_problem')->where('problem_id','=',$id)->delete();
-        DB::table('submissions')->where('problem_id','=',$id)->delete();
+        
+        $problem->languages()->detach();
+        $problem->assignments()->detach();
+        
+        $problem->submissions->each(function($item,$key){
+            Submission::destroy($item);
+        });
+
+        $problem->tags()->detach();
             
         DB::commit();
         
