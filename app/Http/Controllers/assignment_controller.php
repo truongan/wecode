@@ -104,7 +104,7 @@ class assignment_controller extends Controller
 
         $validated = $request->validate([
             'name' => ['required','max:150'],
-            #'pdf_file' => 'mimes:pdf',
+            'pdf_file' => 'mimes:pdf',
         ]);
         
         $assignment = new Assignment;
@@ -121,11 +121,11 @@ class assignment_controller extends Controller
         $assignment->finish_time = date('Y-m-d H:i:s', strtotime($request->finish_time));
 
         $assignment->save();
-        if ($request->hasFile('pdf_file')) {
+        if ($request->hasFile('pdf')) {
             $path_pdf = Setting::get("assignments_root");
             $path_pdf = $path_pdf . "/assignment_" .  strval($assignment->id);
             mkdir($path_pdf);
-            $path = $request->pdf_file->storeAs($path_pdf,$request->pdf_file->getClientOriginalName(),'my_local');
+            $path = $request->pdf->storeAs($path_pdf,$request->pdf->getClientOriginalName(),'my_local');
         }
         foreach ($request->problem_id as $i => $id)
         {
@@ -153,10 +153,77 @@ class assignment_controller extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($assignment_id = NULL, $problem_id = NULL)
     {
-        //
+        if ($assignment_id === NULL){
+            redirect(view('problems.show'));
+        }
+        
+        $data=array(
+			'can_submit' => TRUE,
+        );
+        
+        while(1){
+            $assignment = $this->assignment_info($assignment_id);
+
+            if($assignment['id'] == 0){
+				if ( Auth::user()->role > "1" && $problem_id != 0) redirect('problems.show/'.$problem_id);
+				$data['error'] = "There is nothing to submit to. Please select assignment and problem.";
+				break;
+            }
+
+            if (! $this->started($assignment)){
+				$data['error'] = "selected assignment hasn't started yet";
+				break;
+			}
+            
+            if ($assignment['open'] == 0  && Auth::user()->role < "2"){
+				$data['error'] =("assignment " . $assignment['id'] . " has ben closed");
+				break;
+            }
+            
+            if (! $this->is_participant($assignment,$this->user->username)){
+				$data['error'] = "You are not registered to participate in this assignment";
+				break;
+			}
+        }
+
     }
+
+    public function is_participant($assignment_info, $username)
+	{
+		$participants = explode(',', $assignment_info['participants']);
+		foreach ($participants as &$participant){
+			$participant = trim($participant);
+		}
+		if(in_array('ALL', $participants))
+			return TRUE;
+		if(in_array($username, $participants))
+			return TRUE;
+		return FALSE;
+    }
+    
+    public function started($assignment_info){
+		return new DateTime >= strtotime($assignment_info['start_time']) //now should be larger than start time
+				|| $this->user->level > "0"; ///instructor can view assignment before start time
+	}
+
+    public function assignment_info($assignment_id)
+	{
+		$query = Assignment::get($assignment_id);
+		if ($query->count() != 1)
+			return array(
+				'id' => 0,
+				'name' => "instructors'submit",
+				'finish_time' => 0,
+				'extra_time' => 0,
+				'problems' => 0,
+				'open' => 0,
+				'total_submits' => $query->submissions()->count(),
+			);
+
+		return $query->first();
+	}
 
     /**
      * Show the form for editing the specified resource.
@@ -201,7 +268,7 @@ class assignment_controller extends Controller
 
         $validated = $request->validate([
             'name' => ['required','max:150'],
-            #'pdf_file' => 'mimes:pdf',
+            'pdf' => 'mimes:pdf',
         ]);
 
         $assignment->fill($request->input());
@@ -220,7 +287,7 @@ class assignment_controller extends Controller
         $assignment->total_submits = 0;
 
         $assignment->save();
-        if ($request->hasFile('pdf_file')) {
+        if ($request->hasFile('pdf')) {
             $path_pdf = Setting::get("assignments_root");
             $path_pdf = $path_pdf . "/assignment_" .  strval($assignment->id);
             if (!file_exists($path_pdf)) {
@@ -230,7 +297,7 @@ class assignment_controller extends Controller
             {
                 unlink($file);
             }
-            $path = $request->pdf_file->storeAs($path_pdf,$request->pdf_file->getClientOriginalName(),'my_local');
+            $path = $request->pdf->storeAs($path_pdf,$request->pdf->getClientOriginalName(),'my_local');
         }
 
         $assignment->problems()->detach();

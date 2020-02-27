@@ -427,12 +427,10 @@ class problem_controller extends Controller
     
     public function new_problem_id(){
 		$max = Problem::count()+1 ;
-        var_dump($max);
 		$assignments_root = Setting::get("assignments_root");
 		while (file_exists($assignments_root.'/problems/'.$max)){
 			$max++;
         }
-        var_dump($max);
 		return $max;
     }
 
