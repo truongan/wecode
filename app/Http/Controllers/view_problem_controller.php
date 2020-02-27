@@ -14,7 +14,7 @@ class view_problem_controller extends Controller
      */
     public function index()
     {
-        //
+        //return view('view_problem', ['selected' => 'problems']);
     }
 
     /**
