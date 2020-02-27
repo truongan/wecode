@@ -243,9 +243,12 @@ class assignment_controller extends Controller
         }
 
         $assignment->lops()->detach();
-        foreach ($request->lop_id as $i => $id)
+        if ($request->lop_id != NULL)
         {
-            $assignment->lops()->attach($id);
+            foreach ($request->lop_id as $i => $id)
+            {
+                $assignment->lops()->attach($id);
+            }
         }
 
         return redirect('assignments');
