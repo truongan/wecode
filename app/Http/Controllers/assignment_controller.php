@@ -104,7 +104,7 @@ class assignment_controller extends Controller
 
         $validated = $request->validate([
             'name' => ['required','max:150'],
-            #'pdf_file' => 'mimes:pdf',
+            'pdf_file' => 'mimes:pdf',
         ]);
         
         $assignment = new Assignment;
@@ -121,11 +121,11 @@ class assignment_controller extends Controller
         $assignment->finish_time = date('Y-m-d H:i:s', strtotime($request->finish_time));
 
         $assignment->save();
-        if ($request->hasFile('pdf_file')) {
+        if ($request->hasFile('pdf')) {
             $path_pdf = Setting::get("assignments_root");
             $path_pdf = $path_pdf . "/assignment_" .  strval($assignment->id);
             mkdir($path_pdf);
-            $path = $request->pdf_file->storeAs($path_pdf,$request->pdf_file->getClientOriginalName(),'my_local');
+            $path = $request->pdf->storeAs($path_pdf,$request->pdf->getClientOriginalName(),'my_local');
         }
         foreach ($request->problem_id as $i => $id)
         {
@@ -201,7 +201,7 @@ class assignment_controller extends Controller
 
         $validated = $request->validate([
             'name' => ['required','max:150'],
-            #'pdf_file' => 'mimes:pdf',
+            'pdf' => 'mimes:pdf',
         ]);
 
         $assignment->fill($request->input());
@@ -220,7 +220,7 @@ class assignment_controller extends Controller
         $assignment->total_submits = 0;
 
         $assignment->save();
-        if ($request->hasFile('pdf_file')) {
+        if ($request->hasFile('pdf')) {
             $path_pdf = Setting::get("assignments_root");
             $path_pdf = $path_pdf . "/assignment_" .  strval($assignment->id);
             if (!file_exists($path_pdf)) {
@@ -230,7 +230,7 @@ class assignment_controller extends Controller
             {
                 unlink($file);
             }
-            $path = $request->pdf_file->storeAs($path_pdf,$request->pdf_file->getClientOriginalName(),'my_local');
+            $path = $request->pdf->storeAs($path_pdf,$request->pdf->getClientOriginalName(),'my_local');
         }
 
         $assignment->problems()->detach();
