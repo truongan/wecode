@@ -49,7 +49,7 @@ class submission_controller extends Controller
     }
 
     public function create(Assignment $assignment, Problem $problem){
-        dd($assignment->name);
+        // dd($assignment->name);
         return view('submissions.create', ['assignment' => $assignment, 'problem' => $problem]);
     }
 

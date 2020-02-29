@@ -1,3 +1,5 @@
+@php($selected = 'submit')
+
 @extends('layouts.app')
 
 @section('other_assets')
@@ -119,23 +121,20 @@
 @endsection
 
 @section('body_end')
-<script src="{{ base_url('assets/ace/ace.js') }}" type="text/javascript" charset="utf-8"></script>
-<script  type="text/javascript" src="{{ base_url('assets/js/submit_page.js')   }}" charset="utf-8"></script>
+<script src="{{ asset('assets/ace/ace.js') }}" type="text/javascript" charset="utf-8"></script>
+<script  type="text/javascript" src="{{ asset('assets/js/submit_pa1e.js')   }}" charset="utf-8"></script>
 <script>
 	shj.p={};
 	
-	@if (isset($assignment))
-		shj.selected_assignment = {{assignment.id}};
-	@else
-		shj.selected_assignment = 0;
-	@endif
 	
-	{{ problems_js|raw }}
+	shj.selected_assignment = {{$assignment->id}};
+	
+	{{-- {{ problems_js|raw }} --}}
 
 	$(document).ready(function(){
 		///Select the problem from referring page
 
-		$("select#problems").val({{ from }});
+		{{-- $("select#problems").val({{ from }}); --}}
 
 		$("select#problems").change();
 	});
