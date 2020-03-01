@@ -13,6 +13,11 @@ use Illuminate\Support\Facades\DB;
 
 class submission_controller extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth'); // phải login
+    }
+
     /**
      * Display a listing of the resource.
      *
