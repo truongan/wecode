@@ -64,11 +64,11 @@ class submission_controller extends Controller
             'assignment' => ['integer', 'greater_than[-1]'],
             'problem' => ['integer', 'greater_than[0]'],
         ]);
-
+        
         if (upload($request))
             return index($request->assignment);
         else
-            abort(403,'Error Uploading File: '.$this->upload->display_errors());
+            abort(403,'Error Uploading File');
     }
     
     private function eval_coefficient($assignment)
@@ -88,7 +88,26 @@ class submission_controller extends Controller
         return $coefficient;
     }
  
-    public function upload($request)
+    public function upload_file_code($assignment, $problem, $user_dir, $submit_info)
+    {
+
+    }
+
+    public function upload_post_code($assignment, $problem, $a, $user_dir, $submit_info)
+    {
+
+    }
+
+    private function add_to_queue($submit_info, $assignment, $file_name)
+    {
+        $submit_info->submit_id = $assignment->increment('total_submits');
+        $submit_info->file_name = $file_name;
+
+        Queue_item::add_to_queue($submit_info);
+        process_the_queue();
+    }
+
+    private function upload($request)
     {
         $problem = Problem::where('id',$request->problem)->get();
         $assignment = Assignment::where('id',$request->assignment)->get();
