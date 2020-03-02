@@ -1,8 +1,9 @@
 @extends('layouts.app')
 @php($selected="settings")
+@section('head_title','New Users')
 @section('icon', 'fas fa-user-plus')
 
-@section('title', ' Add Users')
+@section('title', ' New Users')
 
 @section('title_menu')
     {{-- Nếu là admin thì hiển thị --}}

@@ -1,9 +1,9 @@
 @php($selected = 'settings')
 @extends('layouts.app')
-
+@section('head_title','Edit Class')
 @section('icon', 'fas fa-school')
 
-@section('title', 'lops')
+@section('title', 'Edit Class')
 
 @section('title_menu')
 	<span class="title_menu_item"><a href="{{ route('lops.index') }}"><i class="fa fa-list color11"></i>Back to list of class</a></span>

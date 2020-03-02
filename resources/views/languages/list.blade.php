@@ -1,5 +1,6 @@
 @extends('layouts.app')
 @php($selected="settings")
+@section('head_title','Languages')
 @section('icon', 'fas fa-laptop-code')
 
 @section('title','Languages')

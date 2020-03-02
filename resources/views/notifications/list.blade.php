@@ -1,6 +1,6 @@
 @php($selected = 'notifications')
 @extends('layouts.app')
-
+@section('head_title','Notifications')
 @section('icon', 'fas fa-bell')
 
 @section('title', 'Notifications')

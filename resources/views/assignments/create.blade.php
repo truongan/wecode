@@ -1,8 +1,8 @@
 @extends('layouts.app')
-
+@section('head_title','New assignments'')
 @section('icon', 'fas fa-plus-square')
 
-@section('title', 'Add assignments')
+@section('title', 'New assignments')
 
 @section('other_assets')
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/select2/select2.min.css') }}">

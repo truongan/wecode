@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('head_title','Assignments')
 @section('icon', 'fas fa-folder-open')
 
 @section('title', 'Assignments')
@@ -25,7 +25,7 @@
 				<thead class="thead-dark">
 					<tr>
 						<th>#</th>
-						<th>ID</th>
+						<th>Select</th>
 						<th>Name</th>
 						<th>Submissions</th>
 						<th>Coefficient</th>
@@ -41,8 +41,14 @@
 				@foreach ($assignments as $assignment)
 				<tr data-id="{{$assignment->id}}">
 					<td>{{$loop->iteration}} </td>
-					<td>{{$assignment->id}}</td>
-					<td>{{$assignment->name}}</td>
+					<td>
+						<span data-toggle="tooltip" title="View an assignment's problem or submission will set it as your default assignment">
+							<i  class=" far {{ $assignment->id == isset(Auth::user()->selected_assignment->id) ? 'fa-check-square color6' : 'fa-square' }} fa-2x" data-id="{{ $assignment->id }}"></i>
+						</span>
+					</td>
+					<td>
+						<a href="{{ route('assignments.show',$assignment->id, NULL) }}" data-toggle="tooltip" title="Click to view problem(s)"><strong>{{ $assignment->name }}</strong><br/>({{ $assignment->no_of_problems }} problems)</a>
+					</td>
 					<td>
 						@if ( in_array( Auth::user()->role->name, ['student']) )
 							<a href="{{ route('submissions.index', [$assignment->id, Auth::user()->id, 'all', 'all'])}}">{{$assignment->total_submits}}</a>

@@ -70,8 +70,9 @@ class problem_controller extends Controller
         $default_language = Language::find(1);
         
         $the_id = $this->new_problem_id();
-        
-        Problem::create($request->input());
+        $problem = $request->input();
+        $problem["allow_practice"] = isset($request["allow_practice"]) ? 1 : 0;
+        Problem::create($problem);
         // Processing file 
         $this->_take_test_file_upload($request, $the_id, $messages);  
         
@@ -144,8 +145,11 @@ class problem_controller extends Controller
         $validatedData = $request->validate([
             'name' => ['required','max:255'],
             ]);
+        
+        $req = $request->input();
+        $req["allow_practice"] = isset($request["allow_practice"]) ? 1 : 0;
 
-        $problem->update($request->input()); 
+        $problem->update($req); 
         $this->replace_problem($request,$problem->id,$problem);
         $this->_take_test_file_upload($request, $problem->id, $messages);  
         
@@ -213,13 +217,18 @@ class problem_controller extends Controller
             $result['languages'] = $problem->languages;
 
             if ($problem == NULL)
-                $json_result = array('message' => 'Not found detailed');
+                $json_result = array('done' => 0, 'message' => 'Not found detailed');
             elseif ($problem['no_of_ass'] != 0 & $problem['no_of_sub'] != 0)
             {
-                $json_result = array("message" => "Problem already appear in assignments and got some submission should not be delete");
+                $json_result = array('done' => 0, 'message' => "Problem already appear in assignments and got some submission should not be delete");
+            }
+            else
+            {
+                $this->delete_problem($id);
+                $json_result = array('done' => 1);
             }
             // dd($id);
-            $this->delete_problem($id);
+
         }
         
 		header('Content-Type: application/json; charset=utf-8');  

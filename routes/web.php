@@ -36,7 +36,10 @@ Route::post('/problems/edit_description/{problem_id}', 'problem_controller@edit_
 Route::get('/view_problem/{problem_id}', 'view_problem_controller@index');
 
 Route::get('/submissions/assignment/{assignment_id}/user/{user_id}/problem/{problem_id}/view/{choose}', 'submission_controller@index')->name('submissions.index');
-Route::get('/submissions/create/{assignment}/{problem}/', 'submission_controller@create')->name('submissions.create');
+Route::get('/submissions/create/assignment/{assignment}/problem/{problem}/', 'submission_controller@create')->name('submissions.create');
+Route::post('/submissions/store/')->name('submissions.store');
+
+
 Route::get('/practice', 'practice_controller@index');
 
 

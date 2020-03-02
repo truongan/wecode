@@ -1,5 +1,6 @@
 @extends('layouts.app')
-@php($selected="problems")
+@php($selected="assignments")
+@section('head_title','View Problem')
 @section('icon', 'fas fa-puzzle-piece')
 
 @section('title',$problem->name)
@@ -151,7 +152,7 @@
 		</div>
 		<div class="problems_widget row">
 			@php($t = $assignment->id ?? 0)
-			<span class=""><a href="{{ route("submissions.create", ['assignment_id' => $t, 'problem_id' => $problem->id]) }}" target="_blank"><i class="fa fa-pencil-square-o"></i> Code editor</a></span>
+			<span class=""><a href="{{ route("submissions.create", ['assignment' => $t, 'problem' => $problem->id]) }}" target="_blank"><i class="fa fa-pencil-square-o"></i> Code editor</a></span>
 		</div>
 		@endif
 

@@ -1,5 +1,6 @@
 @extends('layouts.app')
 @php($selected="settings")
+@section('head_title','Tags')
 @section('icon', 'fas fa-tags')
 
 @section('title','Tags')

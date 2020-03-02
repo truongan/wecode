@@ -93,8 +93,8 @@ $(document).ready(function(){
         //$('<option value="0" selected="selected">-- Select Language --</option>').appendTo('select#languages');
         if (v==0)
             return;
-        for (var i=0;i<shj.p[v].length;i++)
-            $('<option value="'+shj.p[v][i].langid+'">'+shj.p[v][i].langname+'</option>').appendTo('select#languages');
+        for (var i=0;i<problem_languages[v].length;i++)
+            $('<option value="'+problem_languages[v][i].id+'">'+problem_languages[v][i].name+'</option>').appendTo('select#languages');
         $("#problem_link").attr('href', shj.site_url + "view_problem/"+shj.selected_assignment+"/" + $(this).val());
 
         get_template($(this).val());

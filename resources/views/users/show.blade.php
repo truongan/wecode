@@ -1,5 +1,6 @@
 @extends('layouts.app')
 @php($selected="settings")
+@section('head_title','View User')
 @section('icon', 'fas fa-users')
 
 @section('title')

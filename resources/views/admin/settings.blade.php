@@ -1,6 +1,6 @@
 @php($selected = 'settings')
 @extends('layouts.app')
-
+@section('head_title','Settings')
 @section('icon', 'fas fa-cogs')
 
 @section('title', 'Settings')
