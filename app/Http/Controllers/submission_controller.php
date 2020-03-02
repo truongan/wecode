@@ -81,7 +81,6 @@ class submission_controller extends Controller
         ob_end_clean();
         return $coefficient;
     }
-<<<<<<< HEAD
  
     public function upload_file_code($assignment, $problem, $user_dir, $submit_info)
     {
@@ -102,8 +101,6 @@ class submission_controller extends Controller
         process_the_queue();
     }
 
-    private function upload($request)
-=======
     public function get_template($request){
         $validated = $request->validate([
             'assignment_id' => ['integer'],
@@ -117,8 +114,8 @@ class submission_controller extends Controller
 
         
     }
+
     public function upload($request)
->>>>>>> 9a165c19b8df2c78adfeb99691684399f82af4a5
     {
         $problem = Problem::where('id',$request->problem)->get();
         $assignment = Assignment::where('id',$request->assignment)->get();
