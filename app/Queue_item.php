@@ -27,6 +27,6 @@ class Queue_item extends Model
 
     public function add_to_queue($submit_info)
     {
-        j
+        
     }
 }

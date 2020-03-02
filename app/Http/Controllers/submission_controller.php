@@ -145,14 +145,14 @@ class submission_controller extends Controller
         if (!file_exists($user_dir))
             mkdir($user_dir, 0700, TRUE);
 
-        $submit_info = (object)[
-            'username' => Auth::user()->username,
+        $submission = new Submission;
+        $submission = (object)[
             'assignment_id' => $assignment->id,
             'problem_id' => $problem->id,
+            'user_id' => Auth::user()->id,
             'language_id' => $language->id,
             'coefficient' => $coefficient,
             'pre_score' => 0,
-            'time' => strtotime(date("Y-m-d H:i:s")),
         ];
 
         $a = $request->code;
