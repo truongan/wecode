@@ -4,6 +4,7 @@
 
 @section('other_assets')
   <link rel='stylesheet' type='text/css' href='https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css'/>
+  <meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
 
 @section('title_menu')
@@ -19,7 +20,7 @@
 
 	<form action="{{ route('submissions.store',['assignment_id'=> $assignment->id, 'problem_id' => $problem->id]) }}" method="POST">
 	@csrf
-		<input type ="hidden" value="{{$assignment->id}}" name="assignment"/>
+		<input type ="hidden" id="assignment_id_input" value="{{$assignment->id}}" name="assignment"/>
 
 	<input type="hidden" value="{{ $problem->id }}" name="problem"/>
 	<div class="form-inline">
@@ -120,8 +121,8 @@
 @endsection
 
 @section('body_end')
-<script src="{{ asset('assets/ace/ace.js') }}" type="text/javascript" charset="utf-8"></script>
-<script  type="text/javascript" src="{{ asset('assets/js/submit_page.js')   }}" charset="utf-8"></script>
+<script type="text/javascript" src="{{ asset('assets/ace/ace.js') }}" charset="utf-8"></script>
+<script type="text/javascript" src="{{ asset('assets/js/submit_page.js')   }}" charset="utf-8"></script>
 <script>
 	problem_languages ={};
 	

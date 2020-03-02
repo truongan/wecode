@@ -38,14 +38,15 @@ $(document).ready(function(){
     var all_ace_s = [before, editor, after];
 
 
-    function get_template(problem_id){
+    function get_template(problem_id, assignment_id){
         $.ajax({
             cache: true,
             type: 'POST',
             url: shj.site_url + 'submit/template',
             data: {
-                wcj_csrf_name: shj.csrf_token,
-                problem: problem_id
+                '_token': $('meta[name="csrf-token"]').attr('content'),
+                'problem_id': problem_id,
+                'assignment_id': assignment_id
             },
             success : function(data){
                 if (data.banned != ""){
@@ -96,8 +97,10 @@ $(document).ready(function(){
         for (var i=0;i<problem_languages[v].length;i++)
             $('<option value="'+problem_languages[v][i].id+'">'+problem_languages[v][i].name+'</option>').appendTo('select#languages');
         $("#problem_link").attr('href', shj.site_url + "view_problem/"+shj.selected_assignment+"/" + $(this).val());
+        
+        // asfas
 
-        get_template($(this).val());
+        get_template($(this).val(), $('#assignment_id_input').val());
     });
 
 

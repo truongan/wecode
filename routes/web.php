@@ -37,7 +37,8 @@ Route::get('/view_problem/{problem_id}', 'view_problem_controller@index');
 
 Route::get('/submissions/assignment/{assignment_id}/user/{user_id}/problem/{problem_id}/view/{choose}', 'submission_controller@index')->name('submissions.index');
 Route::get('/submissions/create/assignment/{assignment}/problem/{problem}/', 'submission_controller@create')->name('submissions.create');
-Route::post('/submissions/store/')->name('submissions.store');
+Route::post('/submissions/store/', 'submission_controller@store')->name('submissions.store');
+Route::post('/submissions/get_template/', 'submission_controller@get_template')->name('submissions.get_template');
 
 
 Route::get('/practice', 'practice_controller@index');
