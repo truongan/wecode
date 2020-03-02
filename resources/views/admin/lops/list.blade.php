@@ -38,7 +38,7 @@
           <td>{{$lop->users()->count() }}</td>
           <td>{{$lop->assignments()->count() }}</td>
           <td>
-            <a title="Profile" href="{{ route('lops.show', $lop->id) }}" class = "fas fa-address-book fa-lg color0"></a>
+            <a title="Profile" href="{{ route('lops.show', $lop->id) }}" class = "fas fa-clipboard-list fa-lg color8"></a>
             <a title="Edit" href="{{ route('lops.edit', $lop->id) }}"><i class="fas fa-edit fa-lg color9"></i></a>
             <span title="Delete lop" class="delete-btn del_n delete_lop pointer" href="{{ route('lops.destroy', $lop->id) }}"><i class="fa fa-times-circle fa-lg color1"></i></span>
           </td>

@@ -49,7 +49,7 @@
     <div class="card" style="width: 18rem;">
       <i class="text-center card-img-top fas fa-laptop-code fa-8x p-4"></i>
       <div class="card-body bg-light">
-        <h5 class="card-title">Language</h5>
+        <h5 class="card-title">LANGUAGES</h5>
         <p  class="card-text">Thiết lập ngôn ngữ lập trình</p>
         <a href="{{ route('languages.index') }}" class="stretched-link"></a>
       </div>
@@ -60,8 +60,8 @@
     <div class="card" style="width: 18rem;">
       <i class="text-center card-img-top fas fa-clipboard-list fa-8x p-4"></i>
       <div class="card-body bg-light">
-        <h5 class="card-title">PROBLEM LIST</h5>
-        <p  class="card-text">Chỉnh sửa và ...</p>
+        <h5 class="card-title">PROBLEMS</h5>
+        <p  class="card-text">Danh sách bài tập</p>
         <a href="{{ route('problems.index') }}" class="stretched-link"></a>
       </div>
     </div>
@@ -70,8 +70,8 @@
     <div class="card" style="width: 18rem;">
       <i class="text-center card-img-top fas fa-tags fa-8x p-4"></i>
       <div class="card-body bg-light">
-        <h5 class="card-title">Tag</h5>
-        <p  class="card-text">Chỉnh sửa và ...</p>
+        <h5 class="card-title">TAGS</h5>
+        <p  class="card-text">Đánh đầu các dạng thuật toán</p>
         <a href="{{ route('tags.index') }}" class="stretched-link"></a>
       </div>
     </div>
@@ -81,7 +81,7 @@
     <div class="card" style="width: 18rem;">
       <i class="text-center card-img-top fas fa-edit fa-8x p-4"></i>
       <div class="card-body bg-light">
-        <h5 class="card-title">Edit by HTML</h5>
+        <h5 class="card-title">EDIT BY HTML</h5>
         <p  class="card-text">Soạn văn bản trên web</p>
         <a href="{{ url('htmleditor') }}" class="stretched-link"></a>
       </div>

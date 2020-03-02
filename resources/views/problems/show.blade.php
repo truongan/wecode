@@ -3,7 +3,7 @@
 @section('head_title','View Problem')
 @section('icon', 'fas fa-puzzle-piece')
 
-@section('title',$problem->name)
+@section('title',isset($problem->name) ? $problem->name : 'Problem ...')
 
 @section('other_assets')
 <style media="screen">

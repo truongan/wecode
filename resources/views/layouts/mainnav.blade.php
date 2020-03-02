@@ -93,7 +93,7 @@
             <div class="navbar-nav">
                 <div class="top_object countdown d-flex flex-column justify-content-center" id="countdown">
                     <div class="time_block">
-                        <span id="time_days" class="countdown_num">0 0 0 </span>
+                        <span id="time_days" class="countdown_num"></span>
                     </div>
                 </div>
                 <div class="top_object countdown" id="extra_time">
