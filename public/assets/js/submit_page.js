@@ -42,7 +42,7 @@ $(document).ready(function(){
         $.ajax({
             cache: true,
             type: 'POST',
-            url: shj.site_url + 'submit/template',
+            url: get_template_route,
             data: {
                 '_token': $('meta[name="csrf-token"]').attr('content'),
                 'problem_id': problem_id,
@@ -96,9 +96,12 @@ $(document).ready(function(){
             return;
         for (var i=0;i<problem_languages[v].length;i++)
             $('<option value="'+problem_languages[v][i].id+'">'+problem_languages[v][i].name+'</option>').appendTo('select#languages');
-        $("#problem_link").attr($(this).data('statement'));
+        console.log($(this).children('option:selected').first().data('statement'));
+        $("#problem_link").attr('href', $(this).children('option:selected').first().data('statement'));
         
         // asfas
+        console.log($(this).val());
+        console.log($('#assignment_id_input').val());
 
         get_template($(this).val(), $('#assignment_id_input').val());
     });

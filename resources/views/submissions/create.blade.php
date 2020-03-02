@@ -134,11 +134,9 @@
 		problem_languages[{{$problem->id}}] = {!!$problem->languages !!};
 
 	@endforeach
-	shj.selected_assignment =  {{ $assignment->id }};
 	
+	get_template_route = '{{ route('submissions.get_template') }}';
 	
-	{{-- {{ problems_js|raw }} --}}
-
 	$(document).ready(function(){
 		///Select the problem from referring page
 

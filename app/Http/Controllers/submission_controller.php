@@ -101,17 +101,20 @@ class submission_controller extends Controller
         process_the_queue();
     }
 
-    public function get_template($request){
+    public function get_template(Request $request){
         $validated = $request->validate([
             'assignment_id' => ['integer'],
             'problem_id' => 'integer',
         ]);
-        
-        $assignment = Assignment::find($assignment_id);
+        // dd($request->input());
+        $assignment = Assignment::with('problems')->find($request->input('assignment_id'));
         if ($assignment == NULL || $assignment->can_submit(Auth::user()->id)){
             abort(403, 'Either assigment ID is invalid or you cannot submit to this assigment');
         }
 
+        if (!in_array($request->input('problem_id'), $assignment->problems()->pluck('id')->all())){
+            abort(403, 'Invalid problem ID');
+        }
         
     }
 
