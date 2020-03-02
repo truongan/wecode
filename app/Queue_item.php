@@ -11,13 +11,17 @@ class Queue_item extends Model
 
     public function submission()
     {
-        return $this->belongsTo('App\Submission');
+        return $this->hasOne('App\Submission');
     }
 
     public function in_queue ($user_id, $assignment_id, $problem_id)
 	{
-		
-		$query = $this->db->get_where('queue', array('username'=>$username, 'assignment'=>$assignment, 'problem'=>$problem));
+		$queries = Queue_item::all();
+        foreach $queries as $query
+        {
+            $query->submission->where(array('user_id' => $user_id, 'assignment_id' => $assignment_id, 'problem_id' => $problem_id))->get();
+            
+        }
 		return ($query->num_rows() > 0);
 	}
 }
