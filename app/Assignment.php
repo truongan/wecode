@@ -24,7 +24,7 @@ class Assignment extends Model
         return $this->belongsToMany('App\Lop');
     }
 
-    public function can_submit($assignment)
+    public function can_submit($user_id)
     {
         $result->error_message = 'Uknown error';
         $result->can_submit = FALSE;
@@ -33,7 +33,7 @@ class Assignment extends Model
             // if assignment is closed, non-student users (admin, instructors) still can submit
             $result->error_message = 'Selected assignment is closed.';
         }
-        elseif (!started($assignment)){
+        elseif (!$this->started()){
             // non-student users can submit to not started assignments
             $result->error_message = 'Selected assignment has not started.';
         }
@@ -44,7 +44,7 @@ class Assignment extends Model
             // but if start time is before finish time, the deadline is NEVER
             $result->error_message =  'Selected assignment has finished.';
         }
-        elseif ( !is_participant($assignment, Auth::user()->id) )
+        elseif ( !$this->is_participant($user_id) )
             $result->error_message = 'You are not registered for submitting.';
         else
         {
@@ -59,8 +59,8 @@ class Assignment extends Model
         return in_array($this->lops->pluck('users')->collapse()->pluck('id')->unique(), [$user_id]);
     }
 
-    public function started($assignment){
-        return strtotime(date("Y-m-d H:i:s")) >= strtotime($assignment->start_time) //now should be larger than start time
+    public function started(){
+        return strtotime(date("Y-m-d H:i:s")) >= strtotime($this->start_time) //now should be larger than start time
                 || !in_array( Auth::user()->role->name, ['student']); ///instructor can view assignment before start time
     }
 }

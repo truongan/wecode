@@ -279,9 +279,11 @@ class assignment_controller extends Controller
         if ($request->score_board == 'on')
             $assignment->score_board = True;
         else $assignment->score_board = False;
-        
-        $assignment->start_time = date('Y-m-d H:i:s', strtotime($request->start_time));
-        $assignment->finish_time = date('Y-m-d H:i:s', strtotime($request->finish_time));
+       
+        $start_time = strval($request->start_time_date) . " " . strval($request->start_time_time);
+        $assignment->start_time = date('Y-m-d H:i:s', strtotime($start_time));
+        $finish_time = strval($request->finish_time_date) . " " . strval($request->finish_time_time);
+        $assignment->finish_time = date('Y-m-d H:i:s', strtotime($finish_time));
         $assignment->total_submits = 0;
 
         $assignment->save();

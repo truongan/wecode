@@ -13,11 +13,6 @@ use Illuminate\Support\Facades\DB;
 
 class submission_controller extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth'); // phải login
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -54,7 +49,6 @@ class submission_controller extends Controller
     }
 
     public function create(Assignment $assignment, Problem $problem){
-        // dd($assignment->name);
         return view('submissions.create', ['assignment' => $assignment, 'problem' => $problem]);
     }
 
@@ -87,6 +81,7 @@ class submission_controller extends Controller
         ob_end_clean();
         return $coefficient;
     }
+<<<<<<< HEAD
  
     public function upload_file_code($assignment, $problem, $user_dir, $submit_info)
     {
@@ -108,6 +103,22 @@ class submission_controller extends Controller
     }
 
     private function upload($request)
+=======
+    public function get_template($request){
+        $validated = $request->validate([
+            'assignment_id' => ['integer'],
+            'problem_id' => 'integer',
+        ]);
+        
+        $assignment = Assignment::find($assignment_id);
+        if ($assignment == NULL || $assignment->can_submit(Auth::user()->id)){
+            abort(403, 'Either assigment ID is invalid or you cannot submit to this assigment');
+        }
+
+        
+    }
+    public function upload($request)
+>>>>>>> 9a165c19b8df2c78adfeb99691684399f82af4a5
     {
         $problem = Problem::where('id',$request->problem)->get();
         $assignment = Assignment::where('id',$request->assignment)->get();

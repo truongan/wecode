@@ -89,7 +89,6 @@ class CreateAllTable extends Migration
             $table->unsignedBigInteger('problem_id');
             $table->unsignedBigInteger('user_id');
             $table->tinyInteger('is_final');
-            $table->dateTime('time');
             $table->char('status',100);
             $table->integer('pre_score');
             $table->char('coefficient',6);

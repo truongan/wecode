@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('head_title','New assignments'')
+@section('head_title','New assignments')
 @section('icon', 'fas fa-plus-square')
 
 @section('title', 'New assignments')
