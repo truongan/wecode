@@ -96,7 +96,7 @@ $(document).ready(function(){
             return;
         for (var i=0;i<problem_languages[v].length;i++)
             $('<option value="'+problem_languages[v][i].id+'">'+problem_languages[v][i].name+'</option>').appendTo('select#languages');
-        $("#problem_link").attr('href', shj.site_url + "view_problem/"+shj.selected_assignment+"/" + $(this).val());
+        $("#problem_link").attr($(this).data('statement'));
         
         // asfas
 

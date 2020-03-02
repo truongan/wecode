@@ -136,6 +136,7 @@
 	@endforeach
 	shj.selected_assignment =  {{ $assignment->id }};
 	
+	
 	{{-- {{ problems_js|raw }} --}}
 
 	$(document).ready(function(){

@@ -77,8 +77,9 @@
         shj.offset = moment(shj_now_str).diff(moment());
         shj.time = moment();
         {{-- Thông số finish_time và extra_time cần được chỉnh sửa sau khi có assignment --}}
-        shj.finish_time = moment("{!! Auth::user()->selected_assignment->finish_time !!}"); 
-        shj.extra_time = moment.duration({!! Auth::user()->selected_assignment->extra_time !!}, 'seconds');
+        
+        shj.finish_time = moment("{!! (Auth::user()->selected_assignment->finish_time)?? now() !!}"); 
+        shj.extra_time = moment.duration({!! (Auth::user()->selected_assignment->extra_time) ?? 0 !!}, 'seconds');
         shj.color_scheme = 'github';
     </script>
 
