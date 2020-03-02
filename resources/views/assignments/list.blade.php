@@ -47,7 +47,7 @@
 						</span>
 					</td>
 					<td>
-						<a href="{{ url("view_problem/$assignment->id") }}" data-toggle="tooltip" title="Click to view problem(s)"><strong>{{ $assignment->name }}</strong><br/>({{ $assignment->no_of_problems }} problems)</a>
+						<a href="{{ route('assignments.show',$assignment->id, NULL) }}" data-toggle="tooltip" title="Click to view problem(s)"><strong>{{ $assignment->name }}</strong><br/>({{ $assignment->no_of_problems }} problems)</a>
 					</td>
 					<td>
 						@if ( in_array( Auth::user()->role->name, ['student']) )
