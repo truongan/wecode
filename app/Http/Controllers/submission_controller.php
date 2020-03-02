@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\DB;
 
 class submission_controller extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth'); // phải login
+    }
     /**
      * Display a listing of the resource.
      *
@@ -108,14 +112,49 @@ class submission_controller extends Controller
         ]);
         // dd($request->input());
         $assignment = Assignment::with('problems')->find($request->input('assignment_id'));
-        if ($assignment == NULL || $assignment->can_submit(Auth::user()->id)){
+        // dd($assignment->can_submit(Auth::user()));
+        if ($assignment == NULL || $assignment->can_submit(Auth::user())->can_submit == false){
             abort(403, 'Either assigment ID is invalid or you cannot submit to this assigment');
         }
-
-        if (!in_array($request->input('problem_id'), $assignment->problems()->pluck('id')->all())){
+        
+        $problem = Problem::find($request->problem_id);
+        if (
+            $problem == NULL  ||
+            ( $assignment->id != 0 &&
+            !in_array($request->input('problem_id'), $assignment->problems()->pluck('id')->all())
+            )
+        )
+        {
             abort(403, 'Invalid problem ID');
         }
+
+        $template = $problem->template_content('cpp');
         
+		if ($template == NULL)
+			$result = array('banned' => '', 'before'  => '', 'after' => '');
+
+		preg_match("/(\/\*###Begin banned.*\n)((.*\n)*)(###End banned keyword\*\/)/"
+			, $template, $matches
+		);
+	
+		$set_or_empty = function($arr, $key){
+			if(isset($arr[$key])) return $arr[$key];
+			return "";
+		};
+
+		$banned = $set_or_empty($matches, 2);
+
+		preg_match("/(###End banned keyword\*\/\n)((.*\n)*)\/\/###INSERT CODE HERE -\n?((.*\n?)*)/"
+			, $template, $matches
+		);
+
+		$before = $set_or_empty($matches, 2);
+		$after = $set_or_empty($matches, 4);
+
+		$result = array('banned' => $banned, 'before'  => $before, 'after' => $after);
+
+        return response()->json($result);
+
     }
 
     public function upload($request)
