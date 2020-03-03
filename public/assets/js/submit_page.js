@@ -38,15 +38,14 @@ $(document).ready(function(){
     var all_ace_s = [before, editor, after];
 
 
-    function get_template(problem_id, assignment_id){
+    function get_template(problem_id){
         $.ajax({
             cache: true,
             type: 'POST',
-            url: get_template_route,
+            url: shj.site_url + 'submit/template',
             data: {
-                '_token': $('meta[name="csrf-token"]').attr('content'),
-                'problem_id': problem_id,
-                'assignment_id': assignment_id
+                wcj_csrf_name: shj.csrf_token,
+                problem: problem_id
             },
             success : function(data){
                 if (data.banned != ""){
@@ -94,22 +93,18 @@ $(document).ready(function(){
         //$('<option value="0" selected="selected">-- Select Language --</option>').appendTo('select#languages');
         if (v==0)
             return;
-        for (var i=0;i<problem_languages[v].length;i++)
-            $('<option value="'+problem_languages[v][i].id+'">'+problem_languages[v][i].name+'</option>').appendTo('select#languages');
-        console.log($(this).children('option:selected').first().data('statement'));
-        $("#problem_link").attr('href', $(this).children('option:selected').first().data('statement'));
-        
-        // asfas
+        for (var i=0;i<shj.p[v].length;i++)
+            $('<option value="'+shj.p[v][i].langid+'">'+shj.p[v][i].langname+'</option>').appendTo('select#languages');
+        $("#problem_link").attr('href', shj.site_url + "view_problem/"+shj.selected_assignment+"/" + $(this).val());
 
-        get_template($(this).val(), $('#assignment_id_input').val());
+        get_template($(this).val());
     });
 
 
     before.setReadOnly(true);
     after.setReadOnly(true);
 
-    console.log(all_ace_s);
-     
+    //editor.setTheme("ace/theme/" + theme);
     all_ace_s.map(function(editor){
         editor.setTheme("ace/theme/" + theme);
     });
