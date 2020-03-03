@@ -86,22 +86,39 @@ class submission_controller extends Controller
         return $coefficient;
     }
  
-    public function upload_file_code($assignment, $problem, $user_dir, $submit_info)
+    public function upload_file_code($assignment, $problem, $user_dir, $submission)
     {
 
     }
 
-    public function upload_post_code($assignment, $problem, $a, $user_dir, $submit_info)
+    public function upload_post_code($assignment, $problem, $a, $user_dir, $submission)
     {
 
     }
 
-    private function add_to_queue($submit_info, $assignment, $file_name)
+    private function in_queue ($user_id, $assignment_id, $problem_id)
     {
-        $submit_info->submit_id = $assignment->increment('total_submits');
-        $submit_info->file_name = $file_name;
+        $queries = Queue_item::all();
+        foreach ($queries as $query)
+        {
+            $query->submission->where(array('user_id' => $user_id, 'assignment_id' => $assignment_id, 'problem_id' => $problem_id))->get();
+            if ($query->num_rows() > 0) return TRUE;
+        }
+        return FALSE;
+    }
 
-        Queue_item::add_to_queue($submit_info);
+    private function add_to_queue($submission, $assignment, $file_name)
+    {
+        $assignment->increment('total_submits');
+        $submission->file_name = $file_name;
+        $submission->save();
+
+        $queue_item = new Queue_item;
+        $queue_item = (object) [
+            'submission_id' => $submission->id;
+            'type' => 'judge',
+            'processid' => null,
+        ];
         process_the_queue();
     }
 
@@ -174,7 +191,7 @@ class submission_controller extends Controller
             $a = Assignment::can_submit($assignment);
             if(!$a->can_submit) abort(403, $a->error_message);
 
-            if (Queue_item::in_queue(Auth::user()->id, $assignment->id, $problem->id))
+            if (in_queue(Auth::user()->id, $assignment->id, $problem->id))
                 abort(403,'You have already submitted for this problem. Your last submission is still in queue.');
 
             
@@ -192,15 +209,25 @@ class submission_controller extends Controller
             'assignment_id' => $assignment->id,
             'problem_id' => $problem->id,
             'user_id' => Auth::user()->id,
-            'language_id' => $language->id,
-            'coefficient' => $coefficient,
+            'is_final' => 0,
+            'status' => 'pending',
             'pre_score' => 0,
+            'coefficient' => $coefficient,
+            'file_name' => null,
+            'language_id' => $language->id,
         ];
 
         $a = $request->code;
         if ($a != NULL)
-            return upload_post_code($assignment, $problem, $a, $user_dir, $submit_info);
+            return upload_post_code($assignment, $problem, $a, $user_dir, $submission);
         else 
-            return upload_file_code($assignment, $problem, $user_dir, $submit_info);
+        {
+            if ($request->hasFile('userfile')) 
+            {
+                $file_name = $request->userfile->getClientOriginalName();
+                return upload_file_code($assignment, $problem, $user_dir, $submission);
+            }
+            else abort(403,'No file chosen');
+        }
     }
 }
