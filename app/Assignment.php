@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Assignment extends Model
@@ -24,12 +25,13 @@ class Assignment extends Model
         return $this->belongsToMany('App\Lop');
     }
 
-    public function can_submit($user_id)
-    {
+    public function can_submit(User $user)
+    {   
+        $result = new class{};
         $result->error_message = 'Uknown error';
         $result->can_submit = FALSE;
 
-        if (in_array( Auth::user()->role->name, ['student']) && $assignment->open == 0){
+        if (in_array( $user->role->name, ['student']) && $assignment->open == 0){
             // if assignment is closed, non-student users (admin, instructors) still can submit
             $result->error_message = 'Selected assignment is closed.';
         }
@@ -37,14 +39,14 @@ class Assignment extends Model
             // non-student users can submit to not started assignments
             $result->error_message = 'Selected assignment has not started.';
         }
-        elseif (strtotime($assignment->start_time) < strtotime($assignment->finish_time)
-                && strtotime(date("Y-m-d H:i:s")) > strtotime($assignment->finish_time) + $assignment->extra_time)
+        elseif (strtotime($this->start_time) < strtotime($this->finish_time)
+                && strtotime(date("Y-m-d H:i:s")) > strtotime($this->finish_time) + $this->extra_time)
         {
             // deadline = finish_time + extra_time
             // but if start time is before finish time, the deadline is NEVER
             $result->error_message =  'Selected assignment has finished.';
         }
-        elseif ( !$this->is_participant($user_id) )
+        elseif ( !$this->is_participant($user->id) )
             $result->error_message = 'You are not registered for submitting.';
         else
         {
@@ -56,7 +58,10 @@ class Assignment extends Model
 
     public function is_participant($user_id)
     {
-        return in_array($this->lops->pluck('users')->collapse()->pluck('id')->unique(), [$user_id]);
+        if ($this->id == 0) return true; //Everyone can submit to practice problem, no lops check
+
+        //An: 2020-03-02: cho nay fix roi ma sao khong push len vay SEN!!
+        return in_array($user_id, $this->lops->pluck('users')->collapse()->pluck('id')->unique()->all());
     }
 
     public function started(){
