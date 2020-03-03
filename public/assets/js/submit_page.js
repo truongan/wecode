@@ -100,8 +100,6 @@ $(document).ready(function(){
         $("#problem_link").attr('href', $(this).children('option:selected').first().data('statement'));
         
         // asfas
-        console.log($(this).val());
-        console.log($('#assignment_id_input').val());
 
         get_template($(this).val(), $('#assignment_id_input').val());
     });
@@ -110,7 +108,8 @@ $(document).ready(function(){
     before.setReadOnly(true);
     after.setReadOnly(true);
 
-    //editor.setTheme("ace/theme/" + theme);
+    console.log(all_ace_s);
+     
     all_ace_s.map(function(editor){
         editor.setTheme("ace/theme/" + theme);
     });

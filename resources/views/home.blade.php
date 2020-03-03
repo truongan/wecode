@@ -5,7 +5,7 @@
 @section('title', 'Dashboard')
 
 @section('other_assets')
-<link rel="stylesheet" type='text/css' href="{{ asset('css/fullcalendar/fullcalendar.min.css') }}">
+<link rel="stylesheet" type='text/css' href="{{ asset('assets/fullcalendar/fullcalendar.min.css') }}">
 @endsection
 
 @section('body_end')

@@ -3,7 +3,7 @@
 @extends('layouts.app')
 
 @section('other_assets')
-  <link rel='stylesheet' type='text/css' href='https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css'/>
+<link rel="stylesheet" type='text/css' href="{{ asset('assets/styles/submit_page.css') }}"/>
   <meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
 
