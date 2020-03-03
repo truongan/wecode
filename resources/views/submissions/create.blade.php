@@ -139,9 +139,6 @@
 	
 	$(document).ready(function(){
 		///Select the problem from referring page
-
-		{{-- $("select#problems").val({{ from }}); --}}
-
 		$("select#problems").change();
 	});
 </script>

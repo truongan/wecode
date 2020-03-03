@@ -81,7 +81,7 @@ $(document).ready(function(){
                 }
     
                 all_ace_s.map(function(editor){
-                    //console.log(editor)
+                    console.log(editor)
                     editor.resize();
                 });
             }
@@ -109,7 +109,7 @@ $(document).ready(function(){
     after.setReadOnly(true);
 
     console.log(all_ace_s);
-     
+
     all_ace_s.map(function(editor){
         editor.setTheme("ace/theme/" + theme);
     });
