@@ -59,8 +59,8 @@ class submission_controller extends Controller
     public function store($request)
     {
         $validated = $request->validate([
-            'assignment' => ['integer', 'greater_than[-1]'],
-            'problem' => ['integer', 'greater_than[0]'],
+            'assignment' => ['integer', 'gt:-1'],
+            'problem' => ['integer', 'gt:0'],
         ]);
         
         if (upload($request))
@@ -115,7 +115,7 @@ class submission_controller extends Controller
 
         $queue_item = new Queue_item;
         $queue_item = (object) [
-            'submission_id' => $submission->id;
+            'submission_id' => $submission->id,
             'type' => 'judge',
             'processid' => null,
         ];
