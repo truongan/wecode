@@ -90,13 +90,14 @@ class submission_controller extends Controller
  
     public function upload_file_code($request, $user_dir, $submission)
     {
-        $ext = $request->userfile->extension;
+        $ext = $request->userfile->extension();
         $file_name = basename($request->userfile->getClientOriginalName(), ".{$ext}"); // uploaded file name without extension    
         $file_name = preg_replace('/[^a-zA-Z0-9_\-()]+/', '', $file_name);
         $ext = $submission->language->extension;
-        $file_name = $$file_name."-".($submission->assignment->total_submits+1).".".$ext;
-        
-        if ($request->pdf->storeAs($path_pdf, $file_name, 'my_local'))
+        $file_name = $file_name."-".($submission->assignment->total_submits+1).".".$ext;
+
+        $path = $request->userfile->storeAs($user_dir, $file_name, 'my_local');
+        if ($path)
         {      
             $this->add_to_queue($submission, $submission->assignment, $file_name);   
             return TRUE;
@@ -130,7 +131,8 @@ class submission_controller extends Controller
         foreach ($queries as $query)
         {
             $tmp = $query->submission->where(array('user_id' => $user_id, 'assignment_id' => $assignment_id, 'problem_id' => $problem_id))->get();
-            if ($tmp->count() > 0) return TRUE;
+            if ($tmp->count() > 0) 
+                    return TRUE;
         }
         return FALSE;
     }
@@ -261,5 +263,20 @@ class submission_controller extends Controller
             }
             else abort(403,'No file chosen');
         }
+    }
+
+    public function view_code(Request $request)
+    {
+
+    }
+
+    public function view_log(Request $request)
+    {
+
+    }
+
+    public function select_final(Request $request)
+    {
+        
     }
 }
