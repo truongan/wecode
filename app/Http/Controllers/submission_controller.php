@@ -87,16 +87,16 @@ class submission_controller extends Controller
         return $coefficient;
     }
  
-    public function upload_file_code($assignment, $problem, $user_dir, $submission)
+    public function upload_file_code($assignment, $problem, $language, $user_dir, $submission)
     {
-        $ext = substr(strrchr($_FILES['userfile']['name'],'.'),1);
-        $file_name = basename($_FILES['userfile']['name'], ".{$ext}"); // uploaded file name without extension    
+        $ext = substr(strrchr($submission->file_name,'.'),1);
+        $file_name = basename($submission->file_name, ".{$ext}"); // uploaded file name without extension    
         $file_name = preg_replace('/[^a-zA-Z0-9_\-()]+/', '', $file_name);
-        $ext = $problem['languages'][$submit_info['language_id']]->extension;
+        $ext = $language->extension;
 
         $config['upload_path'] = $user_dir;
         $config['allowed_types'] = '*';
-        $config['max_size'] = $this->settings_model->get_setting('file_size_limit');
+        $config['max_size'] = $this->Setting::get("file_size_limit");
         $config['file_name'] = $file_name."-".($assignment['total_submits']+1).".".$ext;
         $config['max_file_name'] = 200;
         $config['remove_spaces'] = TRUE;
@@ -113,21 +113,21 @@ class submission_controller extends Controller
         return FALSE;
     }
 
-    public function upload_post_code($assignment, $problem, $a, $user_dir, $submission)
+    public function upload_post_code($assignment, $problem, $language, $code, $user_dir, $submission)
     {
         if (strlen($code) > Setting::get("file_size_limit") * 1024 )
             //string length larger tan file size limit
             abort(403, "Your submission is larger than system limited size");
 
-        $ext = $problem['languages'][$submit_info['language_id']]->extension;
+        $ext = $language->extension;
         $file_name = "solution";
-        file_put_contents("$user_dir/$file_name-"
-                            .($assignment['total_submits']+1)
+        file_put_contents("{$user_dir}/{$file_name}-"
+                            .($assignment->total_submits+1)
                             . "." . $ext, $code);
 
         
-        $this->_add_to_queue($submit_info, $assignment
-                                , "$file_name-".($assignment['total_submits']+1) 
+        $this->add_to_queue($submission, $assignment
+                                , "{$file_name}-".($assignment->total_submits+1) 
                             );
         return TRUE;
     }
@@ -259,16 +259,16 @@ class submission_controller extends Controller
         if (!file_exists($user_dir))
             mkdir($user_dir, 0700, TRUE);
 
-        $a = $request->code;
-        if ($a != NULL)
-            return $this->upload_post_code($assignment, $problem, $a, $user_dir, $submission);
+        $code = $request->code;
+        if ($code != NULL)
+            return $this->upload_post_code($assignment, $problem, $language, $code, $user_dir, $submission);
         else 
         {
             if ($request->hasFile('userfile')) 
             {
                 $file_name = $request->userfile->getClientOriginalName();
                 $submission->file_name = $file_name;
-                return $this->upload_file_code($assignment, $problem, $user_dir, $submission);
+                return $this->upload_file_code($assignment, $problem, $language, $user_dir, $submission);
             }
             else abort(403,'No file chosen');
         }
