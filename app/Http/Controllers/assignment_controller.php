@@ -218,10 +218,10 @@ class assignment_controller extends Controller
 				break;
             }
            
-            // if (! $assignment->is_participant(Auth::user()->id)){
-			// 	$data['error'] = "You are not registered to participate in this assignment";
-			// 	break;
-            // }
+            if (! $assignment->is_participant(Auth::user()->id)){
+				$data['error'] = "You are not registered to participate in this assignment";
+				break;
+            }
             // dd($assignment);
             $a = $assignment->can_submit(Auth::user());
             $data['can_submit'] = $a->can_submit;
@@ -266,7 +266,7 @@ class assignment_controller extends Controller
     }
     
     public function get_description($id = NULL){
-        dd($id);
+       
         $problem_dir = $this->get_directory_path($id);
         
 		$result =  array(

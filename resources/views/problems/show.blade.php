@@ -103,9 +103,9 @@
 						<td>{{ $i }}</td>
 						<td>
 							@php($t = $assignment != NULL ?$assignment->id:"")
-							<a href="{{ url("view_problem/$t/$one_problem->id") }}">{{ $one_problem->problem_name }}</a>
+							<a href="{{ url("view_problem/$t/$one_problem->id") }}">{{ $one_problem->pivot->problem_name }}</a>
 						</td>
-						<td  class="{{ $problem_status[$one_problem->id] }}"><span>{{ $one_problem->score }}</span></td>
+						<td  class="{{ $problem_status[$one_problem->id] }}"><span>{{ $one_problem->pivot->score }}</span></td>
 					</tr>
 				@endforeach
 			</table>
@@ -148,7 +148,7 @@
 				</div>
 			</fieldset>
 
-			<fieldset class="form-group form-row" action="{!! route('submissions.store') !!}">
+			<fieldset class="form-group form-row">
 				<input type="submit" value="Submit" class="form-control"/>
 			</fieldset>
 			</form>
