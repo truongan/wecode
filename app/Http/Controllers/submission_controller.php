@@ -56,7 +56,7 @@ class submission_controller extends Controller
         return view('submissions.create', ['assignment' => $assignment, 'problem' => $problem]);
     }
 
-    public function store($request)
+    public function store(Request $request)
     {
         $validated = $request->validate([
             'assignment' => ['integer', 'gt:-1'],
