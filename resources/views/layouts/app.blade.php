@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ $settings['site_name'] }}</title>
+    <title>@yield('head_title') - {{ $settings['site_name'] }}</title>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -15,9 +15,9 @@
 	<link rel="icon" href="{{ asset('assets/images/favicon.ico') }}">
 
     <!-- Styles -->
-	<link rel="stylesheet" type='text/css' href="{{ asset('css/bootstrap/' . $settings['theme']  . '.min.css') }}">
+	<link rel="stylesheet" type='text/css' href="{{ asset('assets/styles/bootstrap/' . $settings['theme']  . '.min.css') }}">
     <link rel="stylesheet" type='text/css' href="{{ asset('assets/sbadmin/css/sb-admin.css') }}">
-    <link href="{{ asset('css/main.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/styles/main.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/fontawesome-free-5.3.1-web/css/all.css') }}" rel="stylesheet">
     @yield('other_assets')
 </head>
@@ -32,8 +32,7 @@
                 @yield('title_menu')
             </div>
         </div>
-    
-        <div id="main_content">
+        <div id="main_content" > 
             @yield('content')
         </div>
     
@@ -77,8 +76,9 @@
         shj.offset = moment(shj_now_str).diff(moment());
         shj.time = moment();
         {{-- Thông số finish_time và extra_time cần được chỉnh sửa sau khi có assignment --}}
-        shj.finish_time = moment("0"); 
-        shj.extra_time = moment.duration(0, 'seconds');
+        
+        shj.finish_time = moment("{!! (Auth::user()->selected_assignment->finish_time)?? now() !!}"); 
+        shj.extra_time = moment.duration({!! (Auth::user()->selected_assignment->extra_time) ?? 0 !!}, 'seconds');
         shj.color_scheme = 'github';
     </script>
 

@@ -1,11 +1,11 @@
 @extends('layouts.app')
-
+@section('head_title','Dashboard')
 @section('icon', 'fa fa-tachometer-alt')
 
 @section('title', 'Dashboard')
 
 @section('other_assets')
-<link rel="stylesheet" type='text/css' href="{{ asset('css/fullcalendar/fullcalendar.min.css') }}">
+<link rel="stylesheet" type='text/css' href="{{ asset('assets/fullcalendar/fullcalendar.min.css') }}">
 @endsection
 
 @section('body_end')
@@ -72,9 +72,9 @@ $(document).ready(function () {
                   Latest Notifications
               </div>
             <div class="widget_contents_container">
-                {{-- {% if notifications|length == 0 %}
+                @if (count($notifications) == 0)
                     <p style="text-align: center;">Nothing yet...</p>
-                {% endif %} --}}
+                @endif
                 @foreach ($notifications as $notification)
                     <div class="notif" id="number{{ $notification->id }}" data-id="{{ $notification->id }}">
                         <div class="notif_title">

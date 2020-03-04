@@ -1,8 +1,8 @@
 @extends('layouts.app')
-
+@section('head_title','New assignments')
 @section('icon', 'fas fa-plus-square')
 
-@section('title', 'Add assignments')
+@section('title', 'New assignments')
 
 @section('other_assets')
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/select2/select2.min.css') }}">
@@ -195,7 +195,7 @@
 	
 				<fieldset class="form-group">
 					<label class="custom-control custom-switch">
-						<input id="form_a_scoreboard" class="custom-control-input" type="checkbox" name="scoreboard" value="1" {!! $edit ? ($assignment->scoreboard ? 'checked' : '') : '' !!} />
+						<input id="form_a_scoreboard" class="custom-control-input" type="checkbox" name="scoreboard" value="1" {!! $edit ? ($assignment->score_board ? 'checked' : '') : '' !!} />
 						<span {#for="form_a_scoreboard"#} class="custom-control-label">Scoreboard</span>
 					</label>
 					<small class="form-text text-muted ">Check this to publish scoreboard to student, lecturer can always see scoreboard</small>

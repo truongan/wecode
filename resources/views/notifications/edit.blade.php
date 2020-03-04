@@ -1,9 +1,9 @@
 @php($selected = 'notifications')
 @extends('layouts.app')
-
+@section('head_title','Edit Notification')
 @section('icon', 'fas fa-plus')
 
-@section('title', 'New Notification')
+@section('title', 'Edit Notification')
 
 @section('body_end')
 <script src="{{ asset('assets/ckeditor/ckeditor.js') }}" charset="utf-8"></script>

@@ -105,16 +105,16 @@ class assignment_controller extends Controller
 
         $validated = $request->validate([
             'name' => ['required','max:150'],
-            #'pdf_file' => 'mimes:pdf',
+            'pdf_file' => 'mimes:pdf',
         ]);
         
         $assignment = new Assignment;
         $assignment->fill($request->input());
         
-        if ($request->open == 'on')
+        if ($request->open == 1)
             $assignment->open = True;
         else $assignment->open = False;
-        if ($request->score_board == 'on')
+        if ($request->scoreboard == 1)
             $assignment->score_board = True;
         else $assignment->score_board = False;
         
@@ -122,11 +122,11 @@ class assignment_controller extends Controller
         $assignment->finish_time = date('Y-m-d H:i:s', strtotime($request->finish_time));
 
         $assignment->save();
-        if ($request->hasFile('pdf_file')) {
+        if ($request->hasFile('pdf')) {
             $path_pdf = Setting::get("assignments_root");
             $path_pdf = $path_pdf . "/assignment_" .  strval($assignment->id);
             mkdir($path_pdf);
-            $path = $request->pdf_file->storeAs($path_pdf,$request->pdf_file->getClientOriginalName(),'my_local');
+            $path = $request->pdf->storeAs($path_pdf,$request->pdf->getClientOriginalName(),'my_local');
         }
         foreach ($request->problem_id as $i => $id)
         {
@@ -165,66 +165,66 @@ class assignment_controller extends Controller
         
         $data=array(
             'can_submit' => TRUE,
+            'problem_status' => NULL,
+            'sum_score' => 0
         );
-         
-	
+        
+        $assignment = Assignment::find($assignment_id);
+       
+        if ($problem_id == NULL)
+        {
+          
+            if (!$assignment->problems->count()==0) $problem_id = $assignment->problems->first()->id;
+            else {
+                abort(404);
+            }
+        }
+        
+        $check = False;
+        foreach($assignment->problems as $item)
+        {
+            if ($problem_id == $item->pivot->problem_id)
+            {
+                $check = True;
+                break;
+            }
+        }
+        if (!$check) abort(404);
+        $result = $this->get_description($problem_id);
+        $problem = Problem::find($problem_id);
+        $problem['has_pdf'] = $result['has_pdf'];
+        $problem['description'] = $result['description'];
+        $problem['error'] = 'none';
+        $data['problem'] = $problem;
+        $data['language'] = $problem->languages(); 
+        $data['all_problems'] = $assignment->problems;
+        $data['assignment'] =$assignment;
+        
         while(1){
             
-            $assignment = Assignment::find($assignment_id);
-            
-            if ($problem_id == NULL)
-            {
-              
-				if (!$assignment->problems->count()==0) $problem_id = $assignment->problems->first()->id;
-				else {
-					abort(404);
-				}
-            }
-            else {
-                $check = False;
-                foreach($assignment->problems as $item)
-                {
-                    if ($problem_id == $item->pivot->problem_id)
-                    {
-                        $check = True;
-                        break;
-                    }
-                }
-                if (!$check) abort(404);
-                $result = $this->get_description($problem_id);
-               
-                $problem = Problem::find($problem_id);
-                $problem['has_pdf'] = $result['has_pdf'];
-                $problem['description'] = $result['description'];
-                $problem['error'] = 'none';
-                $data['problem'] = $problem;
-                $data['language'] = $problem->languages(); 
-               
-            }
-            
             if($assignment->id == 0){
-				if ( !in_array( Auth::user()->role->name, ['admin']) && $problem_id != 0) redirect('problems.show/'.$problem_id);
-				$data['error'] = "There is nothing to submit to. Please select assignment and problem.";
-				break;
+                if ( !in_array( Auth::user()->role->name, ['admin']) && $problem_id != 0) redirect('problems.show/'.$problem_id);
+                $data['error'] = "There is nothing to submit to. Please select assignment and problem.";
+                break;
             }
-        
+           
             if (! $assignment->started()){
 				$data['error'] = "selected assignment hasn't started yet";
 				break;
-			}
+            }
             
             if ($assignment->open == 0  && in_array( Auth::user()->role->name, ['admin', 'head_instructor'])){
 				$data['error'] =("assignment " . $assignment['id'] . " has ben closed");
 				break;
             }
-            dd(1);
-            if (! $assignment->is_participant(Auth::user()->username)){
-				$data['error'] = "You are not registered to participate in this assignment";
-				break;
-            }
-
-            $a = $assignment->can_submit();
-            $data['can_submit'] = $a['can_submit'];
+        
+            // if (! $assignment->is_participant(Auth::user()->id)){
+			// 	$data['error'] = "You are not registered to participate in this assignment";
+			// 	break;
+            // }
+            // dd($assignment);
+            $a = $assignment->can_submit(Auth::user());
+            $data['can_submit'] = $a->can_submit;
             $data['sum_score'] = 0;
             $all_score = $assignment->submissions->where('user_id',Auth::user()->id);
             
@@ -237,8 +237,9 @@ class assignment_controller extends Controller
             $data['error'] = 'none';
            
             $probs = [];
-            $subs = $assignment->submissions->where('is_final','1')->where('problem_id',$problem_id)->where('user_id',Auth::user()->user_id);
-            
+           
+            $subs = $assignment->submissions->where('is_final',1);//->where('user_id',Auth::user()->id);
+            dd($subs);
             foreach($subs as $sub){
 				$class = "";
 				if($sub->status != 'PENDING'){
@@ -247,9 +248,16 @@ class assignment_controller extends Controller
 				} else $class = "text-light bg-secondary";
 				$probs[$sub['problem_id']] = $class;
             }
+            
             $data['problem_status'] = $probs;
             break;
         }
+        foreach($data['problem_status'] as $a)
+        {
+            var_dump($a);
+        }
+        die();
+        dd($data['all_problems']);
         return view('problems.show',$data);
     }
 
@@ -341,15 +349,14 @@ class assignment_controller extends Controller
 
         $validated = $request->validate([
             'name' => ['required','max:150'],
-            #'pdf_file' => 'mimes:pdf',
+            'pdf' => 'mimes:pdf',
         ]);
 
         $assignment->fill($request->input());
-
-        if ($request->open == 'on')
+        if ($request->open == 1)
             $assignment->open = True;
         else $assignment->open = False;
-        if ($request->score_board == 'on')
+        if ($request->scoreboard == 1)
             $assignment->score_board = True;
         else $assignment->score_board = False;
        
@@ -360,7 +367,7 @@ class assignment_controller extends Controller
         $assignment->total_submits = 0;
 
         $assignment->save();
-        if ($request->hasFile('pdf_file')) {
+        if ($request->hasFile('pdf')) {
             $path_pdf = Setting::get("assignments_root");
             $path_pdf = $path_pdf . "/assignment_" .  strval($assignment->id);
             if (!file_exists($path_pdf)) {
@@ -370,7 +377,7 @@ class assignment_controller extends Controller
             {
                 unlink($file);
             }
-            $path = $request->pdf_file->storeAs($path_pdf,$request->pdf_file->getClientOriginalName(),'my_local');
+            $path = $request->pdf->storeAs($path_pdf,$request->pdf->getClientOriginalName(),'my_local');
         }
 
         $assignment->problems()->detach();

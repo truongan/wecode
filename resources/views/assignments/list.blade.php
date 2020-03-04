@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('head_title','Assignments')
 @section('icon', 'fas fa-folder-open')
 
 @section('title', 'Assignments')
@@ -21,11 +21,11 @@
 <div class="row">
     <div class="col">
         <div class="table-responsive">
-			<table class="table table-striped table-bordered">
+			<table class="wecode_table table table-striped table-bordered">
 				<thead class="thead-dark">
 					<tr>
 						<th>#</th>
-						<th>ID</th>
+						<th>Select</th>
 						<th>Name</th>
 						<th>Submissions</th>
 						<th>Coefficient</th>
@@ -41,27 +41,59 @@
 				@foreach ($assignments as $assignment)
 				<tr data-id="{{$assignment->id}}">
 					<td>{{$loop->iteration}} </td>
-					<td>{{$assignment->id}}</td>
-					
 					<td>
-						<a href="{{ route('assignments.show',$assignment->id) }}"> 
-							{{$assignment->name}}
+						<span data-toggle="tooltip" title="View an assignment's problem or submission will set it as your default assignment">
+							<i  class=" far {{ (isset(Auth::user()->selected_assignment->id) && $assignment->id == Auth::user()->selected_assignment->id) ? 'fa-check-square color6' : 'fa-square' }} fa-2x" data-id="{{ $assignment->id }}"></i>
+						</span>
+					</td>
+					<td>
+						<a href="{{ route('assignments.show',$assignment->id, NULL) }}" data-toggle="tooltip" title="Click to view problem(s)">
+							<strong>{{ $assignment->name }}</strong>
+							<br/>
+							({{ $assignment->no_of_problems }} problems)
 						</a>
-						
 					</td>
 					<td>
 						@if ( in_array( Auth::user()->role->name, ['student']) )
-							<a href="{{ route('submissions.index', [$assignment->id, Auth::user()->id, 'all', 'all'])}}">{{$assignment->total_submits}}</a>
+							<a href="{{ route('submissions.index', [$assignment->id, Auth::user()->id, 'all', 'all'])}}">
+								<small>{{$assignment->total_submits}} submission{{ $assignment->total_submits > 1 ? 's' : ''}}</small>
+							</a>
 						@else
-							<a href="{{ route('submissions.index', [$assignment->id, 'all', 'all', 'all'])}}">{{$assignment->total_submits}}</a>
+							<a href="{{ route('submissions.index', [$assignment->id, 'all', 'all', 'all'])}}">
+								<small>{{$assignment->total_submits}} submission{{ $assignment->total_submits > 1 ? 's' : ''}}</small>
+							</a>
 						@endif
 					</td>
-					<td>{{$assignment->coefficient}}</td>
+					<td>
+						@if ($assignment->finished)
+							<span style="color: red;">Finished</span>
+						@else
+							@if($assignment->coefficient != "error")
+								{{$assignment->coefficient}}%
+							@else
+								<span style="color: red;">! Error</span>
+							@endif
+						@endif
+					</td>
 					<td>{{$assignment->start_time}}</td>
 					<td>{{$assignment->finish_time}}</td>
-					<td>{{$assignment->score_board}}</td>
-					<td>File PDF</td>
-					<td>{{$assignment->open}}</td>
+					<td>
+						@if ($assignment->score_board)
+							<a href="{{ url("scoreboard/full/$assignment->id")}}" data-toggle="tooltip" title="Click to viewa assignment's scoreboard">View<i class="fas fa-external-link-alt"></i></a>
+						@else
+							<a href="{{ url("scoreboard/full/$assignment->id")}}"  data-toggle="tooltip" title="Scoreboard closed, admin view only" ><span class="text-secondary">View<i class="fas fa-external-link-alt "></i></span></a>
+						@endif
+					</td>
+					<td>
+						<a href="{{ url("assignments/pdf/$assignment->id") }}"><i class="far fa-lg fa-file-pdf"></i></a>
+					</td>
+					<td>
+						@if ($assignment->open)
+							<span class="text-success">Open</span>
+						@else
+							<span class="text-danger">Close</span>
+						@endif
+					</td>
 					<td>
 						<a title="Edit" href="{{ route('assignments.edit', $assignment) }}"><i class="fas fa-edit fa-lg color9"></i></a>
 					</td>
@@ -77,11 +109,11 @@
 <script type='text/javascript' src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 <script type='text/javascript' src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
 <script>
-{{-- $(document).ready(function () {
+$(document).ready(function () {
     $("table").DataTable({
 		"pageLength": 10,
 		"lengthMenu": [ [10, 20, 30, 50, -1], [10, 20, 30, 50, "All"] ]
 	});
-}); --}}
+}); 
 </script>
 @endsection

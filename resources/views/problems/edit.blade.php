@@ -1,9 +1,9 @@
 @php($selected = 'settings')
 @extends('layouts.app')
-
+@section('head_title','Edit Problem')
 @section('icon', 'fas fa-tags')
 
-@section('title', 'Tags')
+@section('title', 'Edit Problem')
 
 @section('title_menu')
 	<span class="title_menu_item"><a href="{{ route('problems.index') }}"><i class="fa fa-list color11"></i>Back to list of problems</a></span>
