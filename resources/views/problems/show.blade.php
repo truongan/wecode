@@ -118,7 +118,8 @@
 
 			<span><i class="fa fa-upload fa-lg color11"></i> Submit</span>
 			
-			{{-- {{ form_open_multipart("submit/") }} --}}
+			<form action="{{ route('submissions.store') }}" method="POST">
+			@csrf
 
 			@if ($all_problems != NULL)
 				<input type="hidden" name="assignment" value="{{ $assignment->id }}"/>
