@@ -29,12 +29,13 @@ class submission_controller extends Controller
             abort(403,'You have not selected assignment');
         Auth::user()->selected_assignment_id = $assignment_id;
         Auth::user()->save(); 
+        $assignment = Assignment::with('submissions.user', 'submissions.problem')->find($assignment_id);
         if ( in_array( Auth::user()->role->name, ['student']) )
         {
             if ($choose == 'final')
-                $submissions = Submission::where('assignment_id',$assignment_id)->where('user_id',Auth::user()->id)->where('is_final',1)->get();
+                $submissions =$assignment->submissions()->where('user_id',Auth::user()->id)->where('is_final',1)->get();
             else
-                $submissions = Submission::where('assignment_id',$assignment_id)->where('user_id',Auth::user()->id)->get();
+                $submissions =$assignment->submissions()->where('user_id',Auth::user()->id)->get();
             if ($problem_id != 'all')
                 $submissions = collect($submissions->where('problem_id',intval($problem_id))->all());
             return view('submissions.list',['submissions' => $submissions, 'assignment_id' => $assignment_id, 'user_id' => $user_id, 'problem_id' => $problem_id, 'choose' => $choose]);
@@ -42,14 +43,14 @@ class submission_controller extends Controller
         else 
         {
             if ($choose == 'final')
-                $submissions = Submission::where('assignment_id',$assignment_id)->where('is_final',1)->get();
+                $submissions =$assignment->submissions()->where('is_final',1)->get();
             else  
-                $submissions = Submission::where('assignment_id',$assignment_id)->get();
+                $submissions =$assignment->submissions()->get();
             if ($user_id != 'all')
                 $submissions = collect($submissions->where('user_id',intval($user_id))->all());
             if ($problem_id != 'all')
                 $submissions = collect($submissions->where('problem_id',intval($problem_id))->all());
-            return view('submissions.list',['submissions' => $submissions, 'assignment_id' => $assignment_id, 'user_id' => $user_id, 'problem_id' => $problem_id, 'choose' => $choose]); 
+            return view('submissions.list',['submissions' => $submissions, 'assignment' => $assignment, 'user_id' => $user_id, 'problem_id' => $problem_id, 'choose' => $choose]); 
         }
     }
 
