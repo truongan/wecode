@@ -212,12 +212,12 @@ class assignment_controller extends Controller
 				$data['error'] = "selected assignment hasn't started yet";
 				break;
             }
-            
+      
             if ($assignment->open == 0  && in_array( Auth::user()->role->name, ['admin', 'head_instructor'])){
 				$data['error'] =("assignment " . $assignment['id'] . " has ben closed");
 				break;
             }
-        
+           
             // if (! $assignment->is_participant(Auth::user()->id)){
 			// 	$data['error'] = "You are not registered to participate in this assignment";
 			// 	break;
@@ -239,7 +239,7 @@ class assignment_controller extends Controller
             $probs = [];
            
             $subs = $assignment->submissions->where('is_final',1);//->where('user_id',Auth::user()->id);
-            dd($subs);
+            
             foreach($subs as $sub){
 				$class = "";
 				if($sub->status != 'PENDING'){
@@ -252,12 +252,8 @@ class assignment_controller extends Controller
             $data['problem_status'] = $probs;
             break;
         }
-        foreach($data['problem_status'] as $a)
-        {
-            var_dump($a);
-        }
-        die();
-        dd($data['all_problems']);
+        
+        
         return view('problems.show',$data);
     }
 
