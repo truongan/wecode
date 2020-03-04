@@ -4,7 +4,6 @@ namespace App;
 
 use App\User;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
 
 class Assignment extends Model
 {

@@ -60,24 +60,16 @@ $(document).ready(function(){
                                     + ban_span
                                     + '</h6>');
                     $("#banned").show();
-                } else {
-                    $("#banned").hide();
-                }
+                } 
     
                 if (data.before != ""){
                     ace.edit("before").setValue(data.before);
                     $("#before-grp").show();
                 }
-                else {
-                    $("#before-grp").hide();
-                }
-    
+                $("#editor_grp").show();
                 if (data.after != ""){
                     ace.edit("after").setValue(data.after);
                     $("#after-grp").show();
-                }
-                else {
-                    $("#after-grp").hide();
                 }
     
                 all_ace_s.map(function(editor){
