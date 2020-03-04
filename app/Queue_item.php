@@ -11,6 +11,6 @@ class Queue_item extends Model
 
     public function submission()
     {
-        return $this->hasOne('App\Submission');
+        return $this->belongsTo('App\Submission');
     }
 }
