@@ -238,8 +238,13 @@ class assignment_controller extends Controller
            
             $probs = [];
            
-            $subs = $assignment->submissions->where('is_final',1);//->where('user_id',Auth::user()->id);
+            $subs = $assignment->submissions->where('is_final',1)->where('user_id',Auth::user()->id);
             
+            foreach($assignment->problems as $p)
+            {
+                $probs[$p->pivot->id] = 'text-light bg-secondary';
+            }
+
             foreach($subs as $sub){
 				$class = "";
 				if($sub->status != 'PENDING'){
