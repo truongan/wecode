@@ -252,8 +252,6 @@ class assignment_controller extends Controller
             $data['problem_status'] = $probs;
             break;
         }
-        
-        
         return view('problems.show',$data);
     }
 
@@ -268,6 +266,7 @@ class assignment_controller extends Controller
     }
     
     public function get_description($id = NULL){
+        dd($id);
         $problem_dir = $this->get_directory_path($id);
         
 		$result =  array(
