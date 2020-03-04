@@ -20,10 +20,10 @@
 @endsection
 @section('title_menu')
 @if ($user_id != 'all' and !in_array( Auth::user()->role->name, ['student'])) 
-	<a href="{{route('submissions.index', [$assignment_id, 'all', $problem_id, 'all'])}}">Remove filter user</a>
+	<a href="{{route('submissions.index', [$assignment->id, 'all', $problem_id, 'all'])}}">Remove filter user</a>
 @endif
 @if ($problem_id != 'all')
-	<a href="{{route('submissions.index', [$assignment_id, $user_id, 'all', 'all'])}}">Remove filter problem</a>
+	<a href="{{route('submissions.index', [$assignment->id, $user_id, 'all', 'all'])}}">Remove filter problem</a>
 @endif
 @endsection
 @section('body_end')
@@ -57,11 +57,11 @@
 @endsection
 @section('content')
 @if($choose == 'all')
-<a href="{{route('submissions.index', [$assignment_id, $user_id, $problem_id, 'all'])}}" class="btn btn-primary active" role="button">All <i class="fas fa-chevron-down"></i></a>
-<a style="opacity: 0.3;" href="{{route('submissions.index', [$assignment_id, $user_id, $problem_id, 'final'])}}" class="btn btn-light active" role="button">Final <i class="fas fa-chevron-right"></i></a>
+<a href="{{route('submissions.index', [$assignment->id, $user_id, $problem_id, 'all'])}}" class="btn btn-primary active" role="button">All <i class="fas fa-chevron-down"></i></a>
+<a style="opacity: 0.3;" href="{{route('submissions.index', [$assignment->id, $user_id, $problem_id, 'final'])}}" class="btn btn-light active" role="button">Final <i class="fas fa-chevron-right"></i></a>
 @else
-<a style="opacity: 0.3;" href="{{route('submissions.index', [$assignment_id, $user_id, $problem_id, 'all'])}}" class="btn btn-light active" role="button">All <i class="fas fa-chevron-right"></i></a>
-<a href="{{route('submissions.index', [$assignment_id, $user_id, $problem_id, 'final'])}}" class="btn btn-primary active" role="button">Final <i class="fas fa-chevron-down"></i></a>
+<a style="opacity: 0.3;" href="{{route('submissions.index', [$assignment->id, $user_id, $problem_id, 'all'])}}" class="btn btn-light active" role="button">All <i class="fas fa-chevron-right"></i></a>
+<a href="{{route('submissions.index', [$assignment->id, $user_id, $problem_id, 'final'])}}" class="btn btn-primary active" role="button">Final <i class="fas fa-chevron-down"></i></a>
 @endif
 <hr>
 @if ($choose == 'all')
@@ -117,15 +117,22 @@
 					<td>{{$submission->id}}</td>
 					@if (!in_array( Auth::user()->role->name, ['student']))
 					<td>
-						<a href="{{route('submissions.index', [$assignment_id, strval($submission->user_id), $problem_id, 'all'])}}">
+						<a href="{{route('submissions.index', [$assignment->id, strval($submission->user_id), $problem_id, 'all'])}}">
 							{{$submission->user->username}}<br><i class="fas fa-filter"></i>
 						</a>
 					</td>
 					<td>{{$submission->user->display_name}}</td>
 					@endif
 					<td>
-						<a href="{{route('problems.show', $submission->problem_id)}}">{{$submission->problem->name}}</a><br>
-						<a href="{{route('submissions.index', [$assignment_id, $user_id, strval($submission->problem_id), 'all'])}}"><span class="btn btn-info btn-sm"><i class="fas fa-filter"></i></span></a>
+						<a href="{{route('problems.show', $submission->problem_id)}}">
+							@if ($assignment->id == 0)
+								{{$submission->problem->name}}
+							@else
+								{{$submission->problem->name}}
+								{{-- {{$assignment->problems[$submission->problem->id]->pivot->problem_name}} --}}
+							@endif
+						</a><br>
+						<a href="{{route('submissions.index', [$assignment->id, $user_id, strval($submission->problem_id), 'all'])}}"><span class="btn btn-info btn-sm"><i class="fas fa-filter"></i></span></a>
 					</td>
 					<td>{{$submission->time}}</small></td>
 					<td>{{$submission->score}}</td>

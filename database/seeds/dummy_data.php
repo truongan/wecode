@@ -53,25 +53,6 @@ class dummy_data extends Seeder
         }
 
         for ($i=1; $i < 10; $i++) { 
-            Submission::create([
-                'user_id' => rand(1,6),
-                'assignment_id' => rand(1,2),
-                'problem_id'=>$i,
-                'is_final' => rand(0,1),
-                'status' => rand(0,100),
-                'pre_score' => rand(50,100)/10,
-                'coefficient'=>$i,
-                'file_name'=>$i,
-                'language_id'=>1
-            ]);
-        }
-        for ($i=1; $i < 10; $i++) { 
-            Queue_item::create([
-                'submission_id' => rand(1,6),
-                'type' => array('judge', 'rejudge')[rand(0,1)],
-            ]);
-        }
-        for ($i=1; $i < 10; $i++) { 
             Assignment::create([
                 'name' => 'assignment' . $i,
                 'total_submits' => $i,
@@ -94,6 +75,43 @@ class dummy_data extends Seeder
 
             ]);
         }
+
+        
+        for ($i=1; $i < 30; $i++) { 
+            
+            $assignment = Assignment::all()->random();
+            while($assignment->id != 0 && $assignment->problems->count() == 0){
+                $assignment = Assignment::all()->random();
+            }
+            if ($assignment->id == 0){
+                $problem_id = Problem::all()->random()->id;
+            } else {
+                $problem_id = $assignment->problems->random()->id;
+            }
+            Submission::create([
+                'user_id' => rand(1,6),
+                'assignment_id' => $assignment->id,
+                'problem_id'=> $problem_id,
+                'is_final' => rand(0,1),
+                'status' => rand(0,100),
+                'pre_score' => rand(50,100)/10,
+                'coefficient'=>$i,
+                'file_name'=>$i,
+                'language_id'=>1
+            ]);
+        }
+
+        foreach(Assignment::all() as &$assignment){
+            $assignment->total_submits = $assignment->submissions->count();
+            $assignment->save();
+        }
+        for ($i=1; $i < 10; $i++) { 
+            Queue_item::create([
+                'submission_id' => rand(1,6),
+                'type' => array('judge', 'rejudge')[rand(0,1)],
+            ]);
+        }
+        
         for ($i=1; $i < 8; $i++) { 
             DB::table('language_problem')->insert([
                'language_id' => $i,

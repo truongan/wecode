@@ -144,7 +144,7 @@
 				</div>
 			</fieldset>
 
-			<fieldset class="form-group form-row">
+			<fieldset class="form-group form-row" action="{!! route('submissions.store') !!}">
 				<input type="submit" value="Submit" class="form-control"/>
 			</fieldset>
 			</form>
