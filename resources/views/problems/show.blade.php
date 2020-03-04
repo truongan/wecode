@@ -69,7 +69,7 @@
 @endsection
 
 @section('content')
-@if ($problem->error != 'none' )
+@if ($error != 'none' )
 
 <div class="alert alert-danger"> {{$error}} </div>
 @else

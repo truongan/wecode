@@ -128,8 +128,12 @@
 							@if ($assignment->id == 0)
 								{{$submission->problem->name}}
 							@else
-								{{$submission->problem->name}}
-								{{-- {{$assignment->problems[$submission->problem->id]->pivot->problem_name}} --}}
+								@foreach($assignment->problems as $p)
+									@if ($p->id == $submission->problem->id)
+										{{$p->pivot->problem_name}}
+										@break
+									@endif
+								@endforeach
 							@endif
 						</a><br>
 						<a href="{{route('submissions.index', [$assignment->id, $user_id, strval($submission->problem_id), 'all'])}}"><span class="btn btn-info btn-sm"><i class="fas fa-filter"></i></span></a>
