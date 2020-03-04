@@ -63,7 +63,7 @@ class submission_controller extends Controller
             'problem' => ['integer', 'gt:0'],
         ]);
         
-        if (upload($request))
+        if ($this->upload($request))
             return index($request->assignment);
         else
             abort(403,'Error Uploading File');
