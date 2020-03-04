@@ -8,7 +8,7 @@
     flex-direction: column;
 }
 #main_content{
-    /* display: flex; */
+    display: flex;
     flex-grow: 1;
 }
 form{

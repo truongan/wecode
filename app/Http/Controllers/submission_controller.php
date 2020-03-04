@@ -56,7 +56,7 @@ class submission_controller extends Controller
         return view('submissions.create', ['assignment' => $assignment, 'problem' => $problem]);
     }
 
-    public function store($request)
+    public function store(Request $request)
     {
         $validated = $request->validate([
             'assignment' => ['integer', 'greater_than[-1]'],
@@ -115,7 +115,7 @@ class submission_controller extends Controller
 
         $queue_item = new Queue_item;
         $queue_item = (object) [
-            'submission_id' => $submission->id;
+            'submission_id' => $submission->id,
             'type' => 'judge',
             'processid' => null,
         ];

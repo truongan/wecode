@@ -17,8 +17,9 @@
 @if (isset($error) && $error != 'none')
 <p class="text-warning"> {{ $error }}</p>
 @else
+{{-- <div class="row"> --}}
 
-	<form action="{{ route('submissions.store',['assignment_id'=> $assignment->id, 'problem_id' => $problem->id]) }}" method="POST">
+	<form action="{{ route('submissions.store') }}" method="POST">
 	@csrf
 		<input type ="hidden" id="assignment_id_input" value="{{$assignment->id}}" name="assignment"/>
 
@@ -116,7 +117,7 @@
 	<textarea style="display:none;" rows="4" cols="80" name="code" class="sharif_input add_text" >
 	</textarea>
 	</form>
-
+{{-- </div> --}}
 @endif
 @endsection
 

@@ -32,8 +32,7 @@
                 @yield('title_menu')
             </div>
         </div>
-        {{-- Ủa sao bỏ class .row của main_content vậy Ry?  --}}
-        <div id="main_content" class="row"> 
+        <div id="main_content" > 
             @yield('content')
         </div>
     
