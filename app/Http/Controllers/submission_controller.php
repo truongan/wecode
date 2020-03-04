@@ -37,7 +37,7 @@ class submission_controller extends Controller
                 $submissions = Submission::where('assignment_id',$assignment_id)->where('user_id',Auth::user()->id)->get();
             if ($problem_id != 'all')
                 $submissions = collect($submissions->where('problem_id',intval($problem_id))->all());
-            return view('submissions.list',['submissions' => $submissions, 'assignment_id' => $assignment_id, 'user_id' => $user_id, 'problem_id' => $problem_id, 'choose' => $choose, 'selected' => 'submissions']);
+            return view('submissions.list',['submissions' => $submissions, 'assignment_id' => $assignment_id, 'user_id' => $user_id, 'problem_id' => $problem_id, 'choose' => $choose]);
         }
         else 
         {
@@ -49,7 +49,7 @@ class submission_controller extends Controller
                 $submissions = collect($submissions->where('user_id',intval($user_id))->all());
             if ($problem_id != 'all')
                 $submissions = collect($submissions->where('problem_id',intval($problem_id))->all());
-            return view('submissions.list',['submissions' => $submissions, 'assignment_id' => $assignment_id, 'user_id' => $user_id, 'problem_id' => $problem_id, 'choose' => $choose, 'selected' => 'submissions']); 
+            return view('submissions.list',['submissions' => $submissions, 'assignment_id' => $assignment_id, 'user_id' => $user_id, 'problem_id' => $problem_id, 'choose' => $choose]); 
         }
     }
 
