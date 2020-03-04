@@ -57,11 +57,9 @@ class Assignment extends Model
     }
 
     public function is_participant($user_id)
-    {
-        if ($this->id == 0) return true; //Everyone can submit to practice problem, no lops check
-
-        //An: 2020-03-02: cho nay fix roi ma sao khong push len vay SEN!!
-        return in_array($user_id, $this->lops->pluck('users')->collapse()->pluck('id')->unique()->all());
+    {   
+        if ($this->id == 0) return True;
+        return in_array($user_id,$this->lops->pluck('users')->collapse()->pluck('id')->unique()->toArray());
     }
 
     public function started(){
