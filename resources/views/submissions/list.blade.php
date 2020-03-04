@@ -128,7 +128,7 @@
 							@if ($assignment->id == 0)
 								{{$submission->problem->name}}
 							@else
-								{{$submission->problem->id}}
+								{{$submission->problem->name}}
 								{{-- {{$assignment->problems[$submission->problem->id]->pivot->problem_name}} --}}
 							@endif
 						</a><br>

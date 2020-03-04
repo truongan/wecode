@@ -49,7 +49,8 @@ class submission_controller extends Controller
                 $submissions = collect($submissions->where('user_id',intval($user_id))->all());
             if ($problem_id != 'all')
                 $submissions = collect($submissions->where('problem_id',intval($problem_id))->all());
-            }
+        }
+        // dd($submissions);
             return view('submissions.list',['submissions' => $submissions, 'assignment' => $assignment, 'user_id' => $user_id, 'problem_id' => $problem_id, 'choose' => $choose]); 
     }
 
