@@ -1,7 +1,6 @@
 @extends('layouts.app')
 @php($selected="problems")
 @section('icon', 'fas fa-puzzle-piece')
-
 @section('title',$problem->name)
 
 @section('other_assets')

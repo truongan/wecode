@@ -6,6 +6,7 @@ use App\Assignment;
 use App\Setting;
 use App\Problem;
 use App\Lop;
+use App\Language;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -155,62 +156,134 @@ class assignment_controller extends Controller
      */
     public function show($assignment_id = NULL, $problem_id = NULL)
     {
+        if ($assignment_id > Assignment::count())
+            abort(404);
+         
         if ($assignment_id === NULL){
             redirect(view('problems.show'));
         }
         
         $data=array(
-			'can_submit' => TRUE,
+            'can_submit' => TRUE,
         );
-        
+         
+	
         while(1){
-            $assignment = $this->assignment_info($assignment_id);
-
-            if($assignment['id'] == 0){
-				if ( Auth::user()->role > "1" && $problem_id != 0) redirect('problems.show/'.$problem_id);
+            
+            $assignment = Assignment::find($assignment_id);
+            
+            if ($problem_id == NULL)
+            {
+              
+				if (!$assignment->problems->count()==0) $problem_id = $assignment->problems->first()->id;
+				else {
+					abort(404);
+				}
+            }
+            else {
+                $check = False;
+                foreach($assignment->problems as $item)
+                {
+                    if ($problem_id == $item->pivot->problem_id)
+                    {
+                        $check = True;
+                        break;
+                    }
+                }
+                if (!$check) abort(404);
+                $result = $this->get_description($problem_id);
+               
+                $problem = Problem::find($problem_id);
+                $problem['has_pdf'] = $result['has_pdf'];
+                $problem['description'] = $result['description'];
+                $problem['error'] = 'none';
+                $data['problem'] = $problem;
+                $data['language'] = $problem->languages(); 
+               
+            }
+            
+            if($assignment->id == 0){
+				if ( !in_array( Auth::user()->role->name, ['admin']) && $problem_id != 0) redirect('problems.show/'.$problem_id);
 				$data['error'] = "There is nothing to submit to. Please select assignment and problem.";
 				break;
             }
-
-            if (! $this->started($assignment)){
+        
+            if (! $assignment->started()){
 				$data['error'] = "selected assignment hasn't started yet";
 				break;
 			}
             
-            if ($assignment['open'] == 0  && Auth::user()->role < "2"){
+            if ($assignment->open == 0  && in_array( Auth::user()->role->name, ['admin', 'head_instructor'])){
 				$data['error'] =("assignment " . $assignment['id'] . " has ben closed");
 				break;
             }
-            
-            if (! $this->is_participant($assignment,$this->user->username)){
+            dd(1);
+            if (! $assignment->is_participant(Auth::user()->username)){
 				$data['error'] = "You are not registered to participate in this assignment";
 				break;
-			}
-        }
+            }
 
+            $a = $assignment->can_submit();
+            $data['can_submit'] = $a['can_submit'];
+            $data['sum_score'] = 0;
+            $all_score = $assignment->submissions->where('user_id',Auth::user()->id);
+            
+            // current score 
+            foreach( $all_score as $p)
+            {
+                $data['sum_score'] = $data['sum_score'] + $p->status;
+            }
+           
+            $data['error'] = 'none';
+           
+            $probs = [];
+            $subs = $assignment->submissions->where('is_final','1')->where('problem_id',$problem_id)->where('user_id',Auth::user()->user_id);
+            
+            foreach($subs as $sub){
+				$class = "";
+				if($sub->status != 'PENDING'){
+					if ($sub->pre_score == 10000) $class = 'text-light bg-success';
+					else $class = "text-light bg-danger";
+				} else $class = "text-light bg-secondary";
+				$probs[$sub['problem_id']] = $class;
+            }
+            $data['problem_status'] = $probs;
+            break;
+        }
+        return view('problems.show',$data);
     }
 
-    public function is_participant($assignment_info, $username)
-	{
-		$participants = explode(',', $assignment_info['participants']);
-		foreach ($participants as &$participant){
-			$participant = trim($participant);
-		}
-		if(in_array('ALL', $participants))
-			return TRUE;
-		if(in_array($username, $participants))
-			return TRUE;
-		return FALSE;
+    public function get_directory_path($id = NULL){
+        if ($id === NULL) return NULL;
+        
+		$assignments_root = Setting::get("assignments_root");
+        
+        $problem_dir = $assignments_root . "/problems/".$id;
+       
+        return $problem_dir;
     }
     
-    public function started($assignment_info){
-		return new DateTime >= strtotime($assignment_info['start_time']) //now should be larger than start time
-				|| $this->user->level > "0"; ///instructor can view assignment before start time
-	}
-
+    public function get_description($id = NULL){
+        $problem_dir = $this->get_directory_path($id);
+        
+		$result =  array(
+			'description' => '<p>Description not found</p>',
+			'has_pdf' => glob("$problem_dir/*.pdf") != FALSE,
+			'has_template' => glob("$problem_dir/template.cpp") != FALSE
+        );
+		
+		$path = "$problem_dir/desc.html";
+        
+		if (file_exists($path))
+            $result['description'] = file_get_contents($path);   
+       
+		return $result;
+    }
+    
     public function assignment_info($assignment_id)
 	{
-		$query = Assignment::get($assignment_id);
+        $query = Assignment::find($assignment_id);
+      
 		if ($query->count() != 1)
 			return array(
 				'id' => 0,
@@ -219,9 +292,9 @@ class assignment_controller extends Controller
 				'extra_time' => 0,
 				'problems' => 0,
 				'open' => 0,
-				'total_submits' => $query->submissions()->count(),
+				'total_submits' => $query->submissions->count(),
 			);
-
+        
 		return $query->first();
 	}
 
