@@ -28,11 +28,5 @@ class Submission extends Model
     {
     	return $this->belongsTo('App\User');
     }
-    
-    public function get_path($username, $assignment_id, $problem_id)
-    {
-        $assignment_root = rtrim(Setting::get("assignments_root"),'/');
-        return $assignment_root . "/assignment_{$assignment_id}/problem_{$problem_id}/{$username}";
-    }
 
 }

@@ -195,7 +195,7 @@
 	
 				<fieldset class="form-group">
 					<label class="custom-control custom-switch">
-						<input id="form_a_scoreboard" class="custom-control-input" type="checkbox" name="scoreboard" value="1" {!! $edit ? ($assignment->scoreboard ? 'checked' : '') : '' !!} />
+						<input id="form_a_scoreboard" class="custom-control-input" type="checkbox" name="scoreboard" value="1" {!! $edit ? ($assignment->score_board ? 'checked' : '') : '' !!} />
 						<span {#for="form_a_scoreboard"#} class="custom-control-label">Scoreboard</span>
 					</label>
 					<small class="form-text text-muted ">Check this to publish scoreboard to student, lecturer can always see scoreboard</small>

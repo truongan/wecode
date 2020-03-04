@@ -58,7 +58,6 @@ class dummy_data extends Seeder
                 'assignment_id' => rand(1,2),
                 'problem_id'=>$i,
                 'is_final' => rand(0,1),
-                'time' => new DateTime,
                 'status' => rand(0,100),
                 'pre_score' => rand(50,100)/10,
                 'coefficient'=>$i,

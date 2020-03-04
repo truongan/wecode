@@ -110,10 +110,10 @@ class assignment_controller extends Controller
         $assignment = new Assignment;
         $assignment->fill($request->input());
         
-        if ($request->open == 'on')
+        if ($request->open == 1)
             $assignment->open = True;
         else $assignment->open = False;
-        if ($request->score_board == 'on')
+        if ($request->scoreboard == 1)
             $assignment->score_board = True;
         else $assignment->score_board = False;
         
@@ -189,24 +189,7 @@ class assignment_controller extends Controller
         }
 
     }
-
-    public function is_participant($assignment_info, $username)
-	{
-		$participants = explode(',', $assignment_info['participants']);
-		foreach ($participants as &$participant){
-			$participant = trim($participant);
-		}
-		if(in_array('ALL', $participants))
-			return TRUE;
-		if(in_array($username, $participants))
-			return TRUE;
-		return FALSE;
-    }
     
-    public function started($assignment_info){
-		return new DateTime >= strtotime($assignment_info['start_time']) //now should be larger than start time
-				|| $this->user->level > "0"; ///instructor can view assignment before start time
-	}
 
     public function assignment_info($assignment_id)
 	{
@@ -272,11 +255,10 @@ class assignment_controller extends Controller
         ]);
 
         $assignment->fill($request->input());
-
-        if ($request->open == 'on')
+        if ($request->open == 1)
             $assignment->open = True;
         else $assignment->open = False;
-        if ($request->score_board == 'on')
+        if ($request->scoreboard == 1)
             $assignment->score_board = True;
         else $assignment->score_board = False;
        

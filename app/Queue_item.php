@@ -11,17 +11,6 @@ class Queue_item extends Model
 
     public function submission()
     {
-        return $this->hasOne('App\Submission');
+        return $this->belongsTo('App\Submission');
     }
-
-    public function in_queue ($user_id, $assignment_id, $problem_id)
-	{
-		$queries = Queue_item::all();
-        foreach $queries as $query
-        {
-            $query->submission->where(array('user_id' => $user_id, 'assignment_id' => $assignment_id, 'problem_id' => $problem_id))->get();
-            
-        }
-		return ($query->num_rows() > 0);
-	}
 }

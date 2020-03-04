@@ -3,7 +3,8 @@
 @extends('layouts.app')
 
 @section('other_assets')
-  <link rel='stylesheet' type='text/css' href='https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css'/>
+<link rel="stylesheet" type='text/css' href="{{ asset('assets/styles/submit_page.css') }}"/>
+  <meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
 
 @section('title_menu')
@@ -16,10 +17,11 @@
 @if (isset($error) && $error != 'none')
 <p class="text-warning"> {{ $error }}</p>
 @else
+{{-- <div class="row"> --}}
 
-	<form action="{{ route('submissions.store',['assignment_id'=> $assignment->id, 'problem_id' => $problem->id]) }}" method="POST">
+	<form action="{{ route('submissions.store') }}" method="POST">
 	@csrf
-		<input type ="hidden" value="{{$assignment->id}}" name="assignment"/>
+		<input type ="hidden" id="assignment_id_input" value="{{$assignment->id}}" name="assignment"/>
 
 	<input type="hidden" value="{{ $problem->id }}" name="problem"/>
 	<div class="form-inline">
@@ -115,13 +117,13 @@
 	<textarea style="display:none;" rows="4" cols="80" name="code" class="sharif_input add_text" >
 	</textarea>
 	</form>
-
+{{-- </div> --}}
 @endif
 @endsection
 
 @section('body_end')
-<script src="{{ asset('assets/ace/ace.js') }}" type="text/javascript" charset="utf-8"></script>
-<script  type="text/javascript" src="{{ asset('assets/js/submit_page.js')   }}" charset="utf-8"></script>
+<script type="text/javascript" src="{{ asset('assets/ace/ace.js') }}" charset="utf-8"></script>
+<script type="text/javascript" src="{{ asset('assets/js/submit_page.js')   }}" charset="utf-8"></script>
 <script>
 	problem_languages ={};
 	
@@ -133,15 +135,11 @@
 		problem_languages[{{$problem->id}}] = {!!$problem->languages !!};
 
 	@endforeach
-	shj.selected_assignment =  {{ $assignment->id }};
 	
-	{{-- {{ problems_js|raw }} --}}
-
+	get_template_route = '{{ route('submissions.get_template') }}';
+	
 	$(document).ready(function(){
 		///Select the problem from referring page
-
-		{{-- $("select#problems").val({{ from }}); --}}
-
 		$("select#problems").change();
 	});
 </script>

@@ -38,14 +38,15 @@ $(document).ready(function(){
     var all_ace_s = [before, editor, after];
 
 
-    function get_template(problem_id){
+    function get_template(problem_id, assignment_id){
         $.ajax({
             cache: true,
             type: 'POST',
-            url: shj.site_url + 'submit/template',
+            url: get_template_route,
             data: {
-                wcj_csrf_name: shj.csrf_token,
-                problem: problem_id
+                '_token': $('meta[name="csrf-token"]').attr('content'),
+                'problem_id': problem_id,
+                'assignment_id': assignment_id
             },
             success : function(data){
                 if (data.banned != ""){
@@ -80,7 +81,7 @@ $(document).ready(function(){
                 }
     
                 all_ace_s.map(function(editor){
-                    //console.log(editor)
+                    console.log(editor)
                     editor.resize();
                 });
             }
@@ -95,16 +96,20 @@ $(document).ready(function(){
             return;
         for (var i=0;i<problem_languages[v].length;i++)
             $('<option value="'+problem_languages[v][i].id+'">'+problem_languages[v][i].name+'</option>').appendTo('select#languages');
-        $("#problem_link").attr('href', shj.site_url + "view_problem/"+shj.selected_assignment+"/" + $(this).val());
+        console.log($(this).children('option:selected').first().data('statement'));
+        $("#problem_link").attr('href', $(this).children('option:selected').first().data('statement'));
+        
+        // asfas
 
-        get_template($(this).val());
+        get_template($(this).val(), $('#assignment_id_input').val());
     });
 
 
     before.setReadOnly(true);
     after.setReadOnly(true);
 
-    //editor.setTheme("ace/theme/" + theme);
+    console.log(all_ace_s);
+
     all_ace_s.map(function(editor){
         editor.setTheme("ace/theme/" + theme);
     });
