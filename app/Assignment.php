@@ -4,7 +4,6 @@ namespace App;
 
 use App\User;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
 
 class Assignment extends Model
 {
@@ -58,8 +57,11 @@ class Assignment extends Model
     }
 
     public function is_participant($user_id)
-    {   
-        return in_array($user_id,$this->lops->pluck('users')->collapse()->pluck('id')->unique()->toArray());
+    {
+        if ($this->id == 0) return true; //Everyone can submit to practice problem, no lops check
+
+        //An: 2020-03-02: cho nay fix roi ma sao khong push len vay SEN!!
+        return in_array($user_id, $this->lops->pluck('users')->collapse()->pluck('id')->unique()->all());
     }
 
     public function started(){
