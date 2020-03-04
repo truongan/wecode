@@ -88,47 +88,38 @@ class submission_controller extends Controller
         return $coefficient;
     }
  
-    public function upload_file_code($assignment, $problem, $language, $user_dir, $submission)
+    public function upload_file_code($request, $user_dir, $submission)
     {
-        $ext = substr(strrchr($submission->file_name,'.'),1);
-        $file_name = basename($submission->file_name, ".{$ext}"); // uploaded file name without extension    
+        $ext = $request->userfile->extension;
+        $file_name = basename($request->userfile->getClientOriginalName(), ".{$ext}"); // uploaded file name without extension    
         $file_name = preg_replace('/[^a-zA-Z0-9_\-()]+/', '', $file_name);
-        $ext = $language->extension;
-
-        $config['upload_path'] = $user_dir;
-        $config['allowed_types'] = '*';
-        $config['max_size'] = $this->Setting::get("file_size_limit");
-        $config['file_name'] = $file_name."-".($assignment['total_submits']+1).".".$ext;
-        $config['max_file_name'] = 200;
-        $config['remove_spaces'] = TRUE;
-        $this->upload->initialize($config);
+        $ext = $submission->language->extension;
+        $file_name = $$file_name."-".($submission->assignment->total_submits+1).".".$ext;
         
-        if ($this->upload->do_upload('userfile'))
-        {
-            $result = $this->upload->data();        
-            $this->_add_to_queue($submit_info, $assignment, $result['raw_name']);
-            
+        if ($request->pdf->storeAs($path_pdf, $file_name, 'my_local'))
+        {      
+            $this->add_to_queue($submission, $submission->assignment, $file_name);   
             return TRUE;
         }
         
         return FALSE;
     }
 
-    public function upload_post_code($assignment, $problem, $language, $code, $user_dir, $submission)
+    public function upload_post_code($code, $user_dir, $submission)
     {
         if (strlen($code) > Setting::get("file_size_limit") * 1024 )
             //string length larger tan file size limit
             abort(403, "Your submission is larger than system limited size");
 
-        $ext = $language->extension;
+        $ext = $submission->language->extension;
         $file_name = "solution";
         file_put_contents("{$user_dir}/{$file_name}-"
-                            .($assignment->total_submits+1)
+                            .($submission->assignment->total_submits+1)
                             . "." . $ext, $code);
 
         
-        $this->add_to_queue($submission, $assignment
-                                , "{$file_name}-".($assignment->total_submits+1) 
+        $this->add_to_queue($submission, $submission->assignment
+                                , "{$file_name}-".($submission->assignment->total_submits+1) 
                             );
         return TRUE;
     }
@@ -150,12 +141,12 @@ class submission_controller extends Controller
         $submission->file_name = $file_name;
         $submission->save();
 
-        $queue_item = new Queue_item;
-        $queue_item = (object) [
+        $queue_item = new Queue_item ([
             'submission_id' => $submission->id,
             'type' => 'judge',
             'processid' => null,
-        ];
+        ]);
+        $queue_item->save();
         process_the_queue();
     }
 
@@ -242,8 +233,7 @@ class submission_controller extends Controller
                 abort(403,'This file type is not allowed for this problem.');
         }
 
-        $submission = new Submission;
-        $submission = (object)[
+        $submission = new Submission ([
             'assignment_id' => $assignment->id,
             'problem_id' => $problem->id,
             'user_id' => Auth::user()->id,
@@ -253,7 +243,7 @@ class submission_controller extends Controller
             'coefficient' => $coefficient,
             'file_name' => null,
             'language_id' => $language->id,
-        ];
+        ]);
 
         $user_dir = $this->get_path(Auth::user()->username, $assignment->id, $problem->id);
 
@@ -262,14 +252,12 @@ class submission_controller extends Controller
 
         $code = $request->code;
         if ($code != NULL)
-            return $this->upload_post_code($assignment, $problem, $language, $code, $user_dir, $submission);
+            return $this->upload_post_code($code, $user_dir, $submission);
         else 
         {
             if ($request->hasFile('userfile')) 
             {
-                $file_name = $request->userfile->getClientOriginalName();
-                $submission->file_name = $file_name;
-                return $this->upload_file_code($assignment, $problem, $language, $user_dir, $submission);
+                return $this->upload_file_code($request, $user_dir, $submission);
             }
             else abort(403,'No file chosen');
         }

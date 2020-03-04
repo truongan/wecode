@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 class Submission extends Model
 {
-    protected $fillable = ['id', 'username','assignment_id','problem_id','is_final','time','status','pre_score'
+    protected $fillable = ['id', 'user_id','assignment_id','problem_id','is_final','time','status','pre_score'
                             ,'coefficient','file_name','language_id'];
 
     public function problem()
@@ -28,5 +28,6 @@ class Submission extends Model
     {
     	return $this->belongsTo('App\User');
     }
+    
 
 }
