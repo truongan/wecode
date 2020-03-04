@@ -123,6 +123,9 @@
 
 			@if ($all_problems != NULL)
 				<input type="hidden" name="assignment" value="{{ $assignment->id }}"/>
+			@else 
+			{{-- Default assignment to practice --}}
+				<input type="hidden" name="assignment" value="0"/>
 			@endif
 			<input type="hidden" name="problem" value="{{ $problem->id }}"/>
 			<fieldset class="form-group form-row">
