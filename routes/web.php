@@ -28,10 +28,7 @@ Route::get('/users/add_multiple', 'UserController@add_multiple');
 Route::post('/users/adds', 'UserController@add')->name('users.add');
 Route::delete('users/{id}', 'UserController@destroy')->name('users.destroy');
 
-
-// Route::get('/problems/show/{id}', 'problem_controller@show');
 Route::get('/problems/download/{id}', 'problem_controller@pdf')->name('problems.pdf');
-Route::get('/problems/test', 'problem_controller@test');
 Route::post('/problems/edit_description/{problem_id}', 'problem_controller@edit_description')->name('problems.edit_description');
 Route::get('/view_problem/{problem_id}', 'view_problem_controller@index');
 
@@ -43,7 +40,7 @@ Route::post('/submissions/view_code/', 'submission_controller@view_code')->name(
 
 
 Route::get('/practice', 'practice_controller@index');
-Route::get('/practice/show/{problem_id}', 'practice_controller@show');
+Route::get('/practice/show/{problem_id}', 'practice_controller@show')->name('practices.show');
 
 //Resource route phải được  ghi cuối cùng, nếu không các route sau dính tới /usres sẽ ăn shit 
 Route::resource('users','UserController');
@@ -54,5 +51,5 @@ Route::resource('tags','tag_controller');
 Route::resource('problems','problem_controller');
 Route::resource('assignments','assignment_controller');
 Route::resource('queue','queue_controller');
-// Route::resource('practice','practice_controller');
+
 Route::get('/assignment/{assignment}/{problem_id}/', 'assignment_controller@show')->name('assignments.show');

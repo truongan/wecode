@@ -29,12 +29,11 @@ class practice_controller extends Controller
 	}
 	
 	public function show($problem_id){
-
 		$problem = Problem::find($problem_id);
 		if (!$problem){
 			return view('problems.show',['error'=>'not found problem']);
 		}
-		if ($problem->allow_practice == 1)
+		if ($problem->allow_practice == 0)
 		{
 			return view('problems.show',['error'=>'the problem is not public']);
 		}

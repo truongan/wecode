@@ -36,7 +36,7 @@
 					<td>{{$loop->iteration}}</td>
 					<td>{{$problem->id}}</td>
 					<td>
-					<a href="{{url("/practice/show/$problem->id")}}">{{$problem->name}}</a>
+					<a href="{{ route('practices.show', $problem->id)}}">{{$problem->name}}</a>
 					</td>
 					<td>
 						@foreach ($problem->lang as $lang_name)
