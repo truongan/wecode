@@ -89,6 +89,13 @@
                     <i class="fa fa-fw fa-refresh fa-spin fa-lg"></i>
                 </div>
             </div>
+            
+            <div class="bg-danger pl-3 pr-3 pt-2" style="height: 40.8px;">
+                <a href="{{url('/practice')}}" class="nav-link">
+                    <span class="text-light"><i class="fas fa-khanda text-light"></i> WAR !!</span>
+                </a>
+                
+            </div>
 
             <div class="navbar-nav">
                 <div class="top_object countdown d-flex flex-column justify-content-center" id="countdown">

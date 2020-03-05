@@ -13,7 +13,7 @@
 	}
 </script>
 @endsection
-
+@if (!in_array( Auth::user()->role->name, ['student']))
 @section('title_menu')
 <small><nav class="nav nav-pills">
 	<a class="nav-link" href="{{ route('assignments.create') }}"><i class="fa fa-plus color8"></i> Add</a>
@@ -22,7 +22,7 @@
 	<a class="nav-link" href="{{ url('assignments/scores/sum') }}"><i class="far fa-star color1"></i>Assignments score olp</a>
 </nav></small>
 @endsection
-
+@endif
 @section('content')
 <div class="row">
     <div class="col">

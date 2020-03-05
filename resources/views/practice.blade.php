@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@php($selected = 'users')
 @section('head_title','Practice')
 @section('icon', 'fas fa-folder-open')
 
@@ -34,17 +35,19 @@
 				<tr data-id="{{$problem->id}}">
 					<td>{{$loop->iteration}}</td>
 					<td>{{$problem->id}}</td>
-					<td>{{$problem->name}}</td>
+					<td>
+					<a href="{{url("/practice/show/$problem->id")}}">{{$problem->name}}</a>
+					</td>
 					<td>
 						@foreach ($problem->lang as $lang_name)
-							<p>{{$lang_name->name}}</p>
+						<span class="badge badge-pill badge-secondary">{{$lang_name->name}}</span>
 						@endforeach
 					</td>
 					<td>{{$problem->total_submission}}</td>
 					<td>{{$problem->accepted_submission}}</td>
 					<td>
 						@foreach ($problem->tag as $tag_name)
-							<p>{{$tag_name->text}}</p>
+						<span class="badge badge-pill badge-info">{{$tag_name->text}}</span>
 						@endforeach
 					</td>
 				</tr>

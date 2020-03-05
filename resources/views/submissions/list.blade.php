@@ -136,12 +136,23 @@
 					</td>
 					<td>{{$submission->time}}</small></td>
 					<td>{{$submission->score}}</td>
-					<td>Delay</td>
+					<td>
+						<span class="small" {{ $submission->delay > 0 ? 'style="color:red;"' :'' }}'>
+							@if ($submission->delay <= 0)
+								No Delay
+							@else
+								<span title="HH:MM">{{ time_hhmm($submission->delay) }}</span>
+							@endif
+							</span><br>
+						<small>{{ $submission->coefficient }}%</small>
+					</td>
 					<td>{{$submission->language->name}}</td>
 					<td>Status</td>
 					<td>Code</td>
+					@if (!in_array( Auth::user()->role->name, ['student']))
 					<td>Log</td>
 					<td>Rejudge</td>
+					@endif
 				</tr>
 				@endforeach
 			</table>
