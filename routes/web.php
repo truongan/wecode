@@ -55,4 +55,4 @@ Route::resource('problems','problem_controller');
 Route::resource('assignments','assignment_controller');
 Route::resource('queue','queue_controller');
 
-Route::get('/assignment/{assignment}/{problem}/', 'assignment_controller@show')->name('assignments.show');
+Route::get('/assignment/{assignment}/{problem_id}/', 'assignment_controller@show')->name('assignments.show');

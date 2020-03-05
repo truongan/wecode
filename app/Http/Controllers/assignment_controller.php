@@ -154,9 +154,14 @@ class assignment_controller extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Assignment $assignment, Problem $problem){
+    public function show(Assignment $assignment, $problem_id ){
+        
+        if ($problem_id == 0 )
+        {
+            $error = "no problem in the assignment";
+            return view('problems.show',['error' => $error]);
+        }
         $assignment_id = $assignment->id;
-        $problem_id = $problem ==NULL ? NULL:$problem->id;
         Auth::user()->selected_assignment_id = $assignment_id;
         Auth::user()->save(); 
         
@@ -221,15 +226,12 @@ class assignment_controller extends Controller
             $a = $assignment->can_submit(Auth::user());
             $data['can_submit'] = $a->can_submit;
             $data['sum_score'] = 0;
-            $all_score = $assignment->submissions->where('user_id',Auth::user()->id);
-            
-            // current score 
-            foreach( $all_score as $p)
+            foreach( $assignment->problems as $p)
             {
-                $data['sum_score'] = $data['sum_score'] + $p->status;
+                $data['sum_score'] = $data['sum_score'] + $p->pivot->score;
             }
            
-            $data['error'] = 'none';
+            $data['error'] = NULL;
            
             $probs = [];
            

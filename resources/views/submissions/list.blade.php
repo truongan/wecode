@@ -124,7 +124,7 @@
 					<td>{{$submission->user->display_name}}</td>
 					@endif
 					<td>
-						<a href="{{route('assignments.show', ['assignment'=>$assignment,'problem'=>$submission->problem])}}">
+						<a href="{{route('assignments.show', ['assignment'=>$assignment,'problem_id'=>$submission->problem_id])}}">
 							@if ($assignment->id == 0)
 								{{$submission->problem->name}}
 							@else

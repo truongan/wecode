@@ -12,9 +12,10 @@
     }
 </style>
 @endsection
-
+@if (!isset($error))
 @section('title_menu')
-@if ($problem->has_pdf)
+
+	@if($problem->has_pdf)
 	<span class="title_menu_item"><a href="
 	@if (isset($all_problems))
 		{{ url("view_problem/pdf/$problem->id/$assignment->id") }}
@@ -28,7 +29,8 @@
 @endif
 @if (in_array( Auth::user()->role->name, ['admin', 'head_instructor']))
 	<span class="title_menu_item ml-auto"><a href="#" class="btn btn-info save-button"><i class="fa fa-floppy-o "></i> Save</a></span>
-@endif
+@endif 
+
 @endsection
 
 @section('body_end')
@@ -67,7 +69,7 @@
     });
 </script>
 @endsection
-
+@endif
 @section('content')
 @if (isset($error))
 <div class="alert alert-danger"> {{$error}} </div>
@@ -102,7 +104,7 @@
 						<td>{{ $i }}</td>
 						<td>
 							@php($t = $assignment != NULL ?$assignment->id:"")
-							<a href="{{route('assignments.show', ['assignment'=>$assignment,'problem'=>$one_problem])}}">{{ $one_problem->pivot->problem_name }}</a>
+							<a href="{{route('assignments.show', ['assignment'=>$assignment,'problem_id'=>$one_problem->id])}}">{{ $one_problem->pivot->problem_name }}</a>
 						</td>
 						<td  class="{{ isset($problem_status[$one_problem->id])? $problem_status[$one_problem->id] :'' }}"><span>{{ $one_problem->pivot->score }}</span></td>
 					</tr>
