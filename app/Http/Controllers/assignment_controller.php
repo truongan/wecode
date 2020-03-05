@@ -214,7 +214,7 @@ class assignment_controller extends Controller
 				break;
             }
       
-            if ($assignment->open == 0  && in_array( Auth::user()->role->name, ['admin', 'head_instructor'])){
+            if ($assignment->open == 0  && in_array( Auth::user()->role->name, ['student'])){
 				$data['error'] =("assignment " . $assignment['id'] . " has ben closed");
 				break;
             }
@@ -223,6 +223,7 @@ class assignment_controller extends Controller
 				$data['error'] = "You are not registered to participate in this assignment";
 				break;
             }
+            
             // dd($assignment);
             $a = $assignment->can_submit(Auth::user());
             $data['can_submit'] = $a->can_submit;
