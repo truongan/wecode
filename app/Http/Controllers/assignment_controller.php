@@ -155,18 +155,19 @@ class assignment_controller extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Assignment $assignment, $problem_id ){
+        $assignment_id = $assignment->id;
+
+        if ($assignment_id > Assignment::count())
+            abort(404);
+        
+        Auth::user()->selected_assignment_id = $assignment_id;
+        Auth::user()->save(); 
         
         if ($problem_id == 0 )
         {
             $error = "no problem in the assignment";
             return view('problems.show',['error' => $error]);
         }
-        $assignment_id = $assignment->id;
-        Auth::user()->selected_assignment_id = $assignment_id;
-        Auth::user()->save(); 
-        
-        if ($assignment_id > Assignment::count())
-            abort(404);
          
         if ($assignment_id === NULL){
             redirect(view('problems.show'));
