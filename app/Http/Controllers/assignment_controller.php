@@ -156,6 +156,9 @@ class assignment_controller extends Controller
      */
     public function show($assignment_id = NULL, $problem_id = NULL)
     {
+        Auth::user()->selected_assignment_id = $assignment_id;
+        Auth::user()->save(); 
+
         if ($assignment_id > Assignment::count())
             abort(404);
          
@@ -176,7 +179,7 @@ class assignment_controller extends Controller
           
             if (!$assignment->problems->count()==0) $problem_id = $assignment->problems->first()->id;
             else {
-                abort(404);
+                $data['error'] = 'not found any problem in the assignment';
             }
         }
         
