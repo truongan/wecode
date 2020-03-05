@@ -7,6 +7,10 @@
 @section('other_assets')
 <link rel='stylesheet' type='text/css' href='https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css'/>
 <script>
+	if(!!window.performance && window.performance.navigation.type === 2)
+	{
+		window.location.reload();
+	}
 </script>
 @endsection
 
