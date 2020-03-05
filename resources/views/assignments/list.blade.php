@@ -54,7 +54,7 @@
 						</span>
 					</td>
 					<td>
-						<a href="{{ route('assignments.show',$assignment->id, NULL) }}" data-toggle="tooltip" title="Click to view problem(s)">
+						<a href="{{ route('assignments.show',['assignment'=>$assignment,'problem'=>$assignment->problems->first()]) }}" data-toggle="tooltip" title="Click to view problem(s)">
 							<strong>{{ $assignment->name }}</strong>
 							<br/>
 							({{ $assignment->no_of_problems }} problems)
