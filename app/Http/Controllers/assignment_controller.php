@@ -154,11 +154,12 @@ class assignment_controller extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($assignment_id = NULL, $problem_id = NULL)
-    {
+    public function show(Assignment $assignment, Problem $problem){
+        $assignment_id = $assignment->id;
+        $problem_id = $problem ==NULL ? NULL:$problem->id;
         Auth::user()->selected_assignment_id = $assignment_id;
         Auth::user()->save(); 
-
+        
         if ($assignment_id > Assignment::count())
             abort(404);
          
@@ -174,15 +175,6 @@ class assignment_controller extends Controller
         
         $assignment = Assignment::find($assignment_id);
        
-        if ($problem_id == NULL)
-        {
-          
-            if (!$assignment->problems->count()==0) $problem_id = $assignment->problems->first()->id;
-            else {
-                $data['error'] = 'not found any problem in the assignment';
-            }
-        }
-        
         $check = False;
         foreach($assignment->problems as $item)
         {
@@ -197,7 +189,7 @@ class assignment_controller extends Controller
         $problem = Problem::find($problem_id);
         $problem['has_pdf'] = $result['has_pdf'];
         $problem['description'] = $result['description'];
-        $problem['error'] = 'none';
+        $problem['error'] = NULL;
         $data['problem'] = $problem;
         $data['language'] = $problem->languages(); 
         $data['all_problems'] = $assignment->problems;

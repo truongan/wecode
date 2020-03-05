@@ -48,18 +48,6 @@
 
     <script	src="{{ asset('assets/js/notify.min.js') }}"></script>
 
-    {{-- <script type="text/javascript">
-        shj={};
-        shj.site_url = '{{ rtrim(site_url(),'/')|e('js') }}/';
-        shj.base_url = '{{ rtrim(base_url(),'/')|e('js') }}/';
-        shj.csrf_token = $.cookie('csrf_cookie');
-        shj.offset = moment('{{ shj_now_str() }}').diff(moment());
-        shj.time = moment();
-        shj.finish_time = moment("{{ user.selected_assignment.finish_time|raw }}");
-        shj.extra_time = moment.duration({{ user.selected_assignment.extra_time|raw }}, 'seconds');
-        shj.color_scheme = 'github';
-    </script> --}}
-    {{-- Thẻ script dưới đây copy tạm thời từ mã nguồn html của wecode-J --}}
     <script type="text/javascript">
         shj={};
         shj.csrf_token = $.cookie('csrf_cookie');

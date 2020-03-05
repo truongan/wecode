@@ -96,7 +96,6 @@ class problem_controller extends Controller
         $problem = Problem::find($id);
         $problem['has_pdf'] = $result['has_pdf'];
         $problem['description'] = $result['description'];
-        $problem['error'] = 'none';
         return view('problems.show', ['problem'=>$problem,
                                       'all_problems'=>NULL,
                                       'can_submit'=>TRUE,

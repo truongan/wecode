@@ -41,8 +41,6 @@ Route::post('/submissions/store/', 'submission_controller@store')->name('submiss
 Route::post('/submissions/get_template/', 'submission_controller@get_template')->name('submissions.get_template');
 Route::post('/submissions/view_code/', 'submission_controller@view_code')->name('submissions.view_code');
 
-Route::get('/assignment/{assignment_id}/problem/{problem_id}/', 'assignment_controller@show')->name('submissions.show');
-
 
 Route::get('/practice', 'practice_controller@index');
 
@@ -56,3 +54,5 @@ Route::resource('tags','tag_controller');
 Route::resource('problems','problem_controller');
 Route::resource('assignments','assignment_controller');
 Route::resource('queue','queue_controller');
+
+Route::get('/assignment/{assignment}/{problem}/', 'assignment_controller@show')->name('assignments.show');

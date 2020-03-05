@@ -124,16 +124,12 @@
 					<td>{{$submission->user->display_name}}</td>
 					@endif
 					<td>
-						<a href="{{route('assignment.show', $assignment->id,$submission->problem_id)}}">
+						<a href="{{route('assignments.show', ['assignment'=>$assignment,'problem'=>$submission->problem])}}">
 							@if ($assignment->id == 0)
 								{{$submission->problem->name}}
 							@else
-								@foreach($assignment->problems as $p)
-									@if ($p->id == $submission->problem->id)
-										{{$p->pivot->problem_name}}
-										@break
-									@endif
-								@endforeach
+							@php($p = $assignment->problems->keyBy('id'))
+								{{$p[$submission->problem->id]->pivot->problem_name}}
 							@endif
 						</a><br>
 						<a href="{{route('submissions.index', [$assignment->id, $user_id, strval($submission->problem_id), 'all'])}}"><span class="btn btn-info btn-sm"><i class="fas fa-filter"></i></span></a>

@@ -103,9 +103,9 @@
 						<td>{{ $i }}</td>
 						<td>
 							@php($t = $assignment != NULL ?$assignment->id:"")
-							<a href="{{ url("view_problem/$t/$one_problem->id") }}">{{ $one_problem->pivot->problem_name }}</a>
+							<a href="{{route('assignments.show', ['assignment'=>$assignment,'problem'=>$one_problem])}}">{{ $one_problem->pivot->problem_name }}</a>
 						</td>
-						<td  class="{{ isset($problem_status[$one_problem->id]) ?$problem_status[$one_problem->id]:'' }}"><span>{{ $one_problem->pivot->score }}</span></td>
+						<td  class="{{ isset($problem_status[$one_problem->id])? $problem_status[$one_problem->id] :'' }}"><span>{{ $one_problem->pivot->score }}</span></td>
 					</tr>
 				@endforeach
 			</table>
