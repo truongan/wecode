@@ -118,7 +118,7 @@
 
 			<span><i class="fa fa-upload fa-lg color11"></i> Submit</span>
 			
-			<form action="{{ route('submissions.store') }}" method="POST">
+			<form action="{{ route('submissions.store') }}" method="POST" enctype="multipart/form-data">
 			@csrf
 
 			@if ($all_problems != NULL)
