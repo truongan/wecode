@@ -5,7 +5,9 @@
 @section('title', 'Assignments')
 
 @section('other_assets')
-  <link rel='stylesheet' type='text/css' href='https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css'/>
+<link rel='stylesheet' type='text/css' href='https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css'/>
+<script>
+</script>
 @endsection
 
 @section('title_menu')
@@ -20,7 +22,6 @@
 @section('content')
 <div class="row">
     <div class="col">
-        <div class="table-responsive">
 			<table class="wecode_table table table-striped table-bordered">
 				<thead class="thead-dark">
 					<tr>
@@ -34,7 +35,9 @@
 						<th>Scoreboard</th>
 						<th>PDF</th>
 						<th>Status</th>
-						<th>Action</th>
+						@if (!in_array( Auth::user()->role->name, ['student']))
+							<th>Action</th>
+						@endif
 					</tr>
 				</thead>
 				
@@ -55,11 +58,11 @@
 					</td>
 					<td>
 						@if ( in_array( Auth::user()->role->name, ['student']) )
-							<a href="{{ route('submissions.index', [$assignment->id, Auth::user()->id, 'all', 'all'])}}">
+							<a href="{{ route('submissions.index', [$assignment->id, Auth::user()->id, 'all', 'all'])}}" data-toggle="tooltip" title="View all submissions">
 								<small>{{$assignment->total_submits}} submission{{ $assignment->total_submits > 1 ? 's' : ''}}</small>
 							</a>
 						@else
-							<a href="{{ route('submissions.index', [$assignment->id, 'all', 'all', 'all'])}}">
+							<a href="{{ route('submissions.index', [$assignment->id, 'all', 'all', 'all'])}}" data-toggle="tooltip" title="View all submissions">
 								<small>{{$assignment->total_submits}} submission{{ $assignment->total_submits > 1 ? 's' : ''}}</small>
 							</a>
 						@endif
@@ -94,17 +97,17 @@
 							<span class="text-danger">Close</span>
 						@endif
 					</td>
+					@if (!in_array( Auth::user()->role->name, ['student']))
 					<td>
 						<a title="Edit" href="{{ route('assignments.edit', $assignment) }}"><i class="fas fa-edit fa-lg color9"></i></a>
 					</td>
+					@endif
 				</tr>
 				@endforeach
 			</table>
-		</div>
 	</div>
 </div>
 @endsection
-
 @section('body_end')
 <script type='text/javascript' src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 <script type='text/javascript' src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
