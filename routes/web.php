@@ -43,7 +43,7 @@ Route::post('/submissions/view_code/', 'submission_controller@view_code')->name(
 
 
 Route::get('/practice', 'practice_controller@index');
-
+Route::get('/practice/show/{problem_id}', 'practice_controller@show');
 
 //Resource route phải được  ghi cuối cùng, nếu không các route sau dính tới /usres sẽ ăn shit 
 Route::resource('users','UserController');
@@ -54,5 +54,5 @@ Route::resource('tags','tag_controller');
 Route::resource('problems','problem_controller');
 Route::resource('assignments','assignment_controller');
 Route::resource('queue','queue_controller');
-
+// Route::resource('practice','practice_controller');
 Route::get('/assignment/{assignment}/{problem_id}/', 'assignment_controller@show')->name('assignments.show');
