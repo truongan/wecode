@@ -1,6 +1,8 @@
 @extends('layouts.app')
 @php($selected = 'all_submissions')
+{{-- @inject('submission_controller', 'App\Http\Controllers\submission_controller') --}}
 @section('other_assets')
+	<script type='text/javascript' src="{{ asset('assets/resources/js/submission.js')}}"></script>
 	<link rel='stylesheet' type='text/css' href='https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css'/>
 	<link rel='stylesheet' type='text/css' href='{{ asset("assets/prismjs/prism.css") }}'/>
 	<style type="text/css">
@@ -83,7 +85,6 @@
 						@if (in_array( Auth::user()->role->name, ['student']))
 							<th width="20%">Problem</th>
 							<th width="10%">Submit Time</th>
-							<th width="7%">Score</th>
 							<th width="7%">Delay (%)</th>
 							<th width="1%">Language</th>
 							<th width="30%">Status</th>
@@ -129,15 +130,17 @@
 								{{$submission->problem->name}}
 							@else
 							@php($p = $assignment->problems->keyBy('id'))
-								{{$p[$submission->problem->id]->pivot->problem_name}}
+								{{-- {{$p[$submission->problem->id]->pivot->problem_name}} --}}
 							@endif
 						</a><br>
 						<a href="{{route('submissions.index', [$assignment->id, $user_id, strval($submission->problem_id), 'all'])}}"><span class="btn btn-info btn-sm"><i class="fas fa-filter"></i></span></a>
 					</td>
 					<td>{{$submission->time}}</small></td>
-					<td>{{$submission->score}}</td>
+					@if (!in_array( Auth::user()->role->name, ['student']))
+						<td>{{$submission->score}}</td>
+					@endif
 					<td>
-						<span class="small" {{ $submission->delay > 0 ? 'style="color:red;"' :'' }}'>
+						<span class="small" {{ $submission->delay > 0 ? 'style="color:red;"' :'' }}>
 							@if ($submission->delay <= 0)
 								No Delay
 							@else
@@ -147,10 +150,26 @@
 						<small>{{ $submission->coefficient }}%</small>
 					</td>
 					<td>{{$submission->language->name}}</td>
-					<td>Status</td>
-					<td>Code</td>
+					<td>
+						@if (strtolower($submission->status) == "pending")
+							<div class="btn btn-secondary">Pending</div>
+						@elseif (strtolower($submission->status) == "score")
+							@if ($submission->pre_score == 10000)
+								<div class="btn btn-success">{{$submission->final_score}}</div>
+							@else
+								<div class="btn btn-danger">{{$submission->final_score}}</div>
+							@endif
+						@else 
+							<div class="btn btn-danger">{{$submission->status}}</div>
+						@endif
+					</td>
+					<td>
+						<div class="btn btn-warning">Code</div>
+					</td>
 					@if (!in_array( Auth::user()->role->name, ['student']))
-					<td>Log</td>
+					<td>
+						<div class="btn btn-secondary">Log</div>
+					</td>
 					<td>Rejudge</td>
 					@endif
 				</tr>

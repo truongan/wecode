@@ -11,6 +11,7 @@ use App\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class submission_controller extends Controller
 {
@@ -50,8 +51,13 @@ class submission_controller extends Controller
             if ($problem_id != 'all')
                 $submissions = collect($submissions->where('problem_id',intval($problem_id))->all());
         }
-        // dd($submissions);
-            return view('submissions.list',['submissions' => $submissions, 'assignment' => $assignment, 'user_id' => $user_id, 'problem_id' => $problem_id, 'choose' => $choose]); 
+        
+        $all_problem = Assignment::find($assignment_id)->problems;
+        foreach ($submissions as $submission)
+            $this->status($all_problem, $submission);
+
+
+        return view('submissions.list',['submissions' => $submissions, 'assignment' => $assignment, 'user_id' => $user_id, 'problem_id' => $problem_id, 'choose' => $choose]); 
     }
 
     public function create(Assignment $assignment, Problem $problem){
@@ -93,10 +99,9 @@ class submission_controller extends Controller
         $ext = $request->userfile->extension();
         $file_name = basename($request->userfile->getClientOriginalName(), ".{$ext}"); // uploaded file name without extension    
         $file_name = preg_replace('/[^a-zA-Z0-9_\-()]+/', '', $file_name);
-        $ext = $submission->language->extension;
-        $file_name = $file_name."-".($submission->assignment->total_submits+1).".".$ext;
 
         $path = $request->userfile->storeAs($user_dir, $file_name, 'my_local');
+
         if ($path)
         {      
             $this->add_to_queue($submission, $submission->assignment, $file_name);   
@@ -265,18 +270,75 @@ class submission_controller extends Controller
         }
     }
 
+    private function view($request, $type)
+    {
+        $validated = $request->validate([
+            'submission' => ['integer', 'gt:0'],
+        ]);
+
+        $submission = Submission::find($request->submission);
+
+        if (!$submission) abort(403,"Submission not found");
+        if (in_array(Auth::user()->role->name, ['student']) && $submission->user_id!=Auth::user()->id)
+            abort(403,"You don't have permission to view another user's code");
+
+        $submit_path = $this->get_path(Auth::user()->username, $submission->assignment_id, $submission->problem_id);
+        $file_extension = $submission->language->extension;
+
+        if ($type == "code")
+            $file_path = $submit_path . "/{$submission->file_name}.". $file_extension;
+        elseif ($type == "log")
+            $file_path = $submit_path . "/log-{$submission->id}";
+        elseif ($type == "result")
+            $file_path = $submit_path . "/result-{$submission->id}.html";
+
+        $result = array(
+                'file_name' => $submission->file_name .'.'. $file_extension,
+                'text' => Storage::disk('my_local')->exists($file_path) ? Storage::disk('my_local')->get($file_path):"File Not Found");
+
+        return $result;
+    }
+
     public function view_code(Request $request)
     {
-
+        $result = $this->view($request, "code");
+        return response()->json($result);
     }
 
     public function view_log(Request $request)
     {
+        $result = $this->view($request, "log");
+        return response()->json($result);
+    }
 
+    public function view_result(Request $request)
+    {
+        $result = $this->view($request, "result");
+        return response()->json($result);
     }
 
     public function select_final(Request $request)
     {
-        
+        $submission_curr = Submission::find($request->submission);
+        if (!$submission_curr) abort(403,"Submission not found");
+
+        $submission_final = Submission::where(array('user_id' => Auth::user()->id, 'assignment_id' => $submission_curr->assignment_id, 'problem_id' => $submission_curr->problem_id, 'is_final' => 1))->get();
+
+        $submission_final->is_final = 0;
+        $submission_final->save;
+
+        $submission_curr->is_final = 1;
+        $submission_curr->save();
+    }
+
+    public function status($all_problem, $submission)
+    {
+        $score = ceil($submission->pre_score*
+                            ($submission->assignment->problems->keyBy('id')[$submission->problem_id]->pivot->score??0)
+                            /10000);
+        if ($submission->coefficient == 'error')
+            $submission->final_score = 0;
+        else
+            $submission->final_score = ceil($score*$submission->coefficient/100);
     }
 }
