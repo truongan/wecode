@@ -53,8 +53,8 @@ class work_queue extends Command
         $limit = Setting::get('concurent_queue_process', 2);
         
 
-		$queue_item = Queue_item::acquire($limit);
-		if ($queue_item === NULL) {
+		$item = Queue_item::acquire($limit);
+		if ($item === NULL) {
 			// Queue is full, exit this process
 			var_dump("Exit casue no item");
 			exit;
@@ -65,25 +65,22 @@ class work_queue extends Command
 
 		do { // loop over queue items
 
-			$submit_id = $queue_item['submit_id'];
-			$username = $queue_item['username'];
-			$assignment = $queue_item['assignment'];
-			$problem = $this->problem_model->problem_info($queue_item['problem']);
-
+			$submit_id = $item->submission->id;
+			$username = $item->submission->user->username;
+			// $assignment = $item['assignment'];
+			// $problem = $this->problem_model->problem_info($item['problem']);
 			
-			$type = $queue_item['type'];  // $type can be 'judge' or 'rejudge'
-			
-			$submission = $this->submit_model->get_submission( $assignment, $submit_id);
-
-			$language = $this->problem_model->all_languages($problem['id'])[$submission['language_id']];
+			// $type = $item['type'];  // $type can be 'judge' or 'rejudge'
+			// $submission = $this->submit_model->get_submission( $assignment, $submit_id);
+			// $language = $this->problem_model->all_languages($problem['id'])[$submission['language_id']];
 
 			$file_extension = $language->extension;
+			$raw_filename = $item->submission->file_name;
 
-			$raw_filename = $submission['file_name'];
-
-			$tester_path = rtrim($this->settings_model->get_setting('tester_path'), '/');
+			$tester_path = Setting::get_setting('tester_path', '/');
 			
-			$problemdir = $this->problem_files_model->get_directory_path($problem['id']);
+			$problemdir = $submission->problem->get_directory_path();
+			
 			$userdir = $this->submit_model->get_path($username, $assignment, $problem['id']);
 			
 			$op1 = $this->settings_model->get_setting('enable_log');
@@ -135,12 +132,12 @@ class work_queue extends Command
 			$this->queue_model->save_judge_result_in_db($submission, $type);
 
 			// Remove the judged item from queue
-			$this->queue_model->remove_item($queue_item['id']);
+			$this->queue_model->remove_item($item['id']);
 
 			// Get next item from queue
-			$queue_item = $this->queue_model->acquire($limit);
+			$item = $this->queue_model->acquire($limit);
 
-		}while($queue_item !== NULL);
+		}while($item !== NULL);
 
 		var_dump("Exit, no more item");
     }
