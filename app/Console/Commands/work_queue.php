@@ -74,24 +74,28 @@ class work_queue extends Command
 			// $submission = $this->submit_model->get_submission( $assignment, $submit_id);
 			// $language = $this->problem_model->all_languages($problem['id'])[$submission['language_id']];
 
-			$file_extension = $language->extension;
+			$file_extension = $item->language->extension;
 			$raw_filename = $item->submission->file_name;
 
 			$tester_path = Setting::get_setting('tester_path', '/');
-			
-			$problemdir = $submission->problem->get_directory_path();
-			
-			$userdir = $this->submit_model->get_path($username, $assignment, $problem['id']);
-			
-			$op1 = $this->settings_model->get_setting('enable_log');
 
-			$time_limit = $language->time_limit/1000;
+			
+			
+			$problemdir = $item->submission->problem->get_directory_path(); 
+			
+			$userdir = $item->directory();//->get_path($username, $assignment, $problem['id']);
+			
+			$op1 = Setting::get_setting('enable_log', 1);
+
+			$time_limit = $item->language->time_limit/1000;
 			$time_limit = round($time_limit, 3);
 			$time_limit_int = floor($time_limit) + 1;
-			$memory_limit = $language->memory_limit;
-			$diff_cmd = $problem['diff_cmd'];
-			$diff_arg = $problem['diff_arg'];
-			$output_size_limit = $this->settings_model->get_setting('output_size_limit') * 1024;
+
+			$memory_limit = $$item->language->memory_limit;
+			$diff_cmd = $item->problem->diff_cmd;
+			$diff_arg = $item->problem->diff_arg;
+
+			$output_size_limit = Setting::get_setting('output_size_limit') * 1024;
 
 			$result_file = "$userdir/result-{$submit_id}.html";
 			$log_file = "$userdir/log-{$submit_id}";
