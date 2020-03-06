@@ -78,9 +78,6 @@ class work_queue extends Command
 			$raw_filename = $item->submission->file_name;
 
 			$tester_path = Setting::get_setting('tester_path', '/');
-
-			
-			
 			$problemdir = $item->submission->problem->get_directory_path(); 
 			
 			$userdir = $item->directory();//->get_path($username, $assignment, $problem['id']);
@@ -120,18 +117,16 @@ class work_queue extends Command
 			
 			// Saving judge result
 			if (is_numeric($output)) {
-				$submission['pre_score'] = $output;
-				$submission['status'] = 'SCORE';
+				$item->submission->pre_score = $output;
+				$item->submission->status = 'SCORE';
 			}
 			else {
-				$submission['pre_score'] = 0;
-				$submission['status'] = $output;
+				$item->submission->pre_score = 0;
+				$item->submission->status = $output;
 			}
 			var_dump($output);
 
-			//reconnect to database incase we have run test for a long time.
-			$this->db->reconnect();
-
+			$item->save_and_remove();
 			// Save the result
 			$this->queue_model->save_judge_result_in_db($submission, $type);
 
@@ -139,7 +134,7 @@ class work_queue extends Command
 			$this->queue_model->remove_item($item['id']);
 
 			// Get next item from queue
-			$item = $this->queue_model->acquire($limit);
+			$item = Queue_item::acquire($limit);
 
 		}while($item !== NULL);
 
