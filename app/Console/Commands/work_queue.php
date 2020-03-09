@@ -127,11 +127,6 @@ class work_queue extends Command
 			var_dump($output);
 
 			$item->save_and_remove();
-			// Save the result
-			$this->queue_model->save_judge_result_in_db($submission, $type);
-
-			// Remove the judged item from queue
-			$this->queue_model->remove_item($item['id']);
 
 			// Get next item from queue
 			$item = Queue_item::acquire($limit);

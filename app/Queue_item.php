@@ -39,10 +39,17 @@ class Queue_item extends Model
 			'status' => $submission['status'],
 			'pre_score' => $submission['pre_score'],
 		);
+		
+		$submission = $this->submission;
 
-		$final_sub = $this->submit_model->get_final_submission(
-			$submission['username'], $submission['assignment_id'], $submission['problem_id']
-		);
+		$final_sub = Submission::where([
+			'user_id' => $submission->user_id,
+			'assignment_id' => $submission->assignment_id,
+			'problem_id' => $submission->problem_id,
+			'is_final' => 1
+		])->first();
+
+
 
 		if (
 			$final_sub == NULL 
@@ -51,25 +58,19 @@ class Queue_item extends Model
 				|| $final_sub->pre_score * $final_sub->coefficient < $submission['pre_score'] * $submission['coefficient']
 			)
 		){
-			$this->db->where(array(
-				'is_final' => 1,
-				'username' => $submission['username'],
-				'assignment_id' => $submission['assignment_id'],
-				'problem_id' => $submission['problem_id'],
-			))->update('submissions', array('is_final'=>0));
-
-			$arr['is_final'] = 1;
+			if ($final_sub){
+				$final_sub->is_final = 0;
+				$final_sub->save();
+			}
+			$submission->is_final = 1;
 		}
 
-		$this->db->where(array(
-			'submit_id' => $submission['submit_id'],
-			'username' => $submission['username'],
-			'assignment_id' => $submission['assignment_id'],
-			'problem_id' => $submission['problem_id']
-		))->update('submissions', $arr);
+		$submission->save();
+
+		$this->delete();
 
 		// update scoreboard:
-		$this->load->model('scoreboard_model');
-		$this->scoreboard_model->update_scoreboard($submission['assignment_id']);
+		// $this->load->model('scoreboard_model');
+		// $this->scoreboard_model->update_scoreboard($submission['assignment_id']);
 	}
 }

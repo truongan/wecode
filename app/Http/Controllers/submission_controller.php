@@ -325,7 +325,7 @@ class submission_controller extends Controller
         $submission_final = Submission::where(array('user_id' => Auth::user()->id, 'assignment_id' => $submission_curr->assignment_id, 'problem_id' => $submission_curr->problem_id, 'is_final' => 1))->get();
 
         $submission_final->is_final = 0;
-        $submission_final->save;
+        $submission_final->save();
 
         $submission_curr->is_final = 1;
         $submission_curr->save();

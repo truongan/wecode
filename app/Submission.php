@@ -34,7 +34,11 @@ class Submission extends Model
     {
         $assignment_root = rtrim(Setting::get("assignments_root"),'/');
         return $assignment_root . "/assignment_{$assignment_id}/problem_{$problem_id}/{$username}";
-	}
+    }
+
+    public function find_final(){
+
+    }
 	
 	public function directory(){
 		return Submission::get_path($this->user->username, $this->assignment_id, $this->problem_id);
