@@ -148,13 +148,8 @@ class submission_controller extends Controller
         $submission->file_name = $file_name;
         $submission->save();
 
-        $queue_item = new Queue_item ([
-            'submission_id' => $submission->id,
-            'type' => 'judge',
-            'processid' => null,
-        ]);
-        $queue_item->save();
-        process_the_queue();
+        Queue_item::add_and_process($submission->id, 'judge');
+        
     }
 
     private function get_path($username, $assignment_id, $problem_id)

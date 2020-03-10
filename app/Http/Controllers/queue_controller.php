@@ -23,33 +23,16 @@ class queue_controller extends Controller
         //
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
             abort(404);
-        return view('admin.queue', ['queue' => Queue_item::all()] );
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Queue_item  $queue
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Queue $queue)
-    {
-        //
+            return view('admin.queue', ['queue' => Queue_item::latest()->get()] ); 
+        }
+    
+    public function work(){
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
             abort(404);
+        // dd('php ' . escapeshellarg(base_path() . '/artisan').  ' work_queue');
+        $a = shell_exec('php ' . escapeshellarg(base_path() . '/artisan').  ' work_queue');
+        dd($a);
+        return redirect(route('queue.index'));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Queue  $queue
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Queue $queue)
-    {
-        //
-        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
-            abort(404);
-    }
 }

@@ -1,8 +1,9 @@
 <?php
 
 namespace App;
-
+use App\submission;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Queue_item extends Model
 {
@@ -22,8 +23,10 @@ class Queue_item extends Model
 	{
 		DB::beginTransaction(); // We use the queue table as a mutex, so this function must be atomic
 		$item = NULL;
+		dd(Queue_item::whereNotNull('processid')->count());
 		if(Queue_item::whereNotNull('processid')->count() < $limit){
-			$item = Queue_item::whereNull('processid')::with('submission.problem', 'submission.user', 'submission.language')->first();
+			$item = Queue_item::whereNull('processid')->with('submission.problem', 'submission.user', 'submission.language')->first();
+			// dd($item);
 			if ($item != NULL){
 				$item->processid = getmypid();
 				$item->save();
@@ -34,6 +37,14 @@ class Queue_item extends Model
 		return $item;
 	}
 
+	public static function add_and_process($submit_id, $type){
+		Queue_item::create([
+			'submission_id' => $submit_id,
+			'type' => $type
+		]);
+
+		shell_exec('php ' . escapeshellarg(base_path() . 'artisan work_queue'));
+	}
 	public function save_and_remove(){
 		$arr = array(
 			'status' => $submission['status'],
