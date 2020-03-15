@@ -8,6 +8,12 @@
 
 shj.modal_open = false;
 
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
+
 Prism.plugins.toolbar.registerButton('select-code', function(env) {
 	var button = document.createElement('button');
 	button.innerHTML = 'Select Code';
@@ -108,15 +114,15 @@ $(document).ready(function () {
 	$(".shj_rejudge").attr('title', 'Rejudge');
 	$(".shj_rejudge").click(function () {
 		var row = $(this).parents('tr');
+		console.log(row);
+		console.log(row.data());
+		console.log(row.data('id'));
 		$.ajax({
 			type: 'POST',
-			url: shj.site_url + 'rejudge/rejudge_single',
+			url: site_url + '/submissions/rejudge/',
 			data: {
-				username: row.data('u'),
-				assignment: row.data('a'),
-				problem: row.data('p'),
-				submit_id: row.data('s'),
-				wcj_csrf_name: shj.csrf_token
+				
+				submission_id: row.data('id'),
 			},
 			error: shj.loading_error,
 			success: function (response) {
@@ -182,7 +188,6 @@ function update_status(){
 					assignment: $(this).data('a'),
 					problem: $(this).data('p'),
 					submit_id: $(this).data('s'),
-					wcj_csrf_name: shj.csrf_token
 				},
 				error: shj.loading_error,
 				success: function (response) {

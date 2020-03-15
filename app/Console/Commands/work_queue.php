@@ -52,20 +52,20 @@ class work_queue extends Command
 	
         $limit = Setting::get('concurent_queue_process', 2);
         // dd($limit);
-
 		$item = Queue_item::acquire($limit);
 		if ($item === NULL) {
 			// Queue is full, exit this process
 			var_dump("Exit casue no item");
 			exit;
 		}
-
+		
 		//To pause the queue when debugging, just exit here
 		// exit;
-
+		
 		do { // loop over queue items
+			sleep(5);
 
-			var_dump($item);
+			// var_dump($item);
 
 			$submit_id = $item->submission->id;
 			$username = $item->submission->user->username;

@@ -50,7 +50,6 @@
 
     <script type="text/javascript">
         shj={};
-        shj.csrf_token = $.cookie('csrf_cookie');
         var date = new Date(),
         utc = new Date(Date.UTC(
           date.getFullYear(),

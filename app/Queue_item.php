@@ -15,6 +15,15 @@ class Queue_item extends Model
         return $this->belongsTo('App\Submission');
     }
 
+
+	public  static function work(){
+		/* But this function here in case I need
+		changing the command parameter
+		*/
+		$a = shell_exec('php ' . escapeshellarg(base_path() . '/artisan').  ' work_queue >/dev/null 2>/dev/null &');
+		return $a;
+	}
+
     /**
 	 * If the number of queue item being processed is less than limit
 	 * Returns the first item of the queue that are not being processed
@@ -42,15 +51,12 @@ class Queue_item extends Model
 			'submission_id' => $submit_id,
 			'type' => $type
 		]);
+		Queue_item::work();
 
-		shell_exec('php ' . escapeshellarg(base_path() . 'artisan work_queue'));
+		return $a;
 	}
 	public function save_and_remove(){
-		$arr = array(
-			'status' => $submission['status'],
-			'pre_score' => $submission['pre_score'],
-		);
-		
+
 		$submission = $this->submission;
 
 		$final_sub = Submission::where([

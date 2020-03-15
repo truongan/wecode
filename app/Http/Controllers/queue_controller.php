@@ -29,9 +29,7 @@ class queue_controller extends Controller
     public function work(){
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
             abort(404);
-        // dd('php ' . escapeshellarg(base_path() . '/artisan').  ' work_queue');
-        $a = shell_exec('php ' . escapeshellarg(base_path() . '/artisan').  ' work_queue');
-        // dd($a);
+        Queue_item::work();
         return redirect(route('queue.index'));
     }
     
