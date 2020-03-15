@@ -23,9 +23,9 @@ class Queue_item extends Model
 	{
 		DB::beginTransaction(); // We use the queue table as a mutex, so this function must be atomic
 		$item = NULL;
-		dd(Queue_item::whereNotNull('processid')->count());
+		// dd(Queue_item::whereNotNull('processid')->count());
 		if(Queue_item::whereNotNull('processid')->count() < $limit){
-			$item = Queue_item::whereNull('processid')->with('submission.problem', 'submission.user', 'submission.language')->first();
+			$item = Queue_item::whereNull('processid')->with('submission.problem', 'submission.user', 'submission.language')->oldest()->first();
 			// dd($item);
 			if ($item != NULL){
 				$item->processid = getmypid();
@@ -59,8 +59,6 @@ class Queue_item extends Model
 			'problem_id' => $submission->problem_id,
 			'is_final' => 1
 		])->first();
-
-
 
 		if (
 			$final_sub == NULL 

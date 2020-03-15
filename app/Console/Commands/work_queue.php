@@ -65,7 +65,7 @@ class work_queue extends Command
 
 		do { // loop over queue items
 
-			// var_dump($item);
+			var_dump($item);
 
 			$submit_id = $item->submission->id;
 			$username = $item->submission->user->username;

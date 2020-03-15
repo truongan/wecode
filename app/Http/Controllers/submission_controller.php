@@ -26,38 +26,38 @@ class submission_controller extends Controller
      */
     public function index($assignment_id = NULL, $user_id = 'all', $problem_id = 'all', $choose = 'all')
     {
-        if ($assignment_id == 0)
-            abort(403,'You have not selected assignment');
+        // if ($assignment_id == 0)
+        //     abort(403,'You have not selected assignment');
         Auth::user()->selected_assignment_id = $assignment_id;
         Auth::user()->save(); 
+
         $assignment = Assignment::with('submissions.user', 'submissions.problem')->find($assignment_id);
         if ( in_array( Auth::user()->role->name, ['student']) )
         {
-            if ($choose == 'final')
-                $submissions =$assignment->submissions()->where('user_id',Auth::user()->id)->where('is_final',1)->get();
-            else
-                $submissions =$assignment->submissions()->where('user_id',Auth::user()->id)->get();
-            if ($problem_id != 'all')
-                $submissions = collect($submissions->where('problem_id',intval($problem_id))->all());
+            $submissions =$assignment->submissions()->where('user_id',Auth::user()->id);
         }
         else 
         {
-            if ($choose == 'final')
-                $submissions =$assignment->submissions()->where('is_final',1)->get();
-            else  
-                $submissions =$assignment->submissions()->get();
-            if ($user_id != 'all')
-                $submissions = collect($submissions->where('user_id',intval($user_id))->all());
-            if ($problem_id != 'all')
-                $submissions = collect($submissions->where('problem_id',intval($problem_id))->all());
+            $submissions =$assignment->submissions();
+            if ($user_id != 'all'){
+                $submissions = $submissions->where('user_id',intval($user_id));
+            }
+        }
+
+        if ($choose == 'final'){
+            $submissions = $submissions->where('is_final',1);
+        }
+        if ($problem_id != 'all'){
+            $submissions = $submissions->where('problem_id',intval($problem_id));
         }
         
-        $all_problem = Assignment::find($assignment_id)->problems;
+        $submissions = $submissions->with(['language','user'])->latest()->get();
+        $all_problems = Assignment::find($assignment_id)->problems->keyBy('id');
         foreach ($submissions as $submission)
-            $this->status($all_problem, $submission);
+            $this->status($all_problems, $submission);
 
 
-        return view('submissions.list',['submissions' => $submissions, 'assignment' => $assignment, 'user_id' => $user_id, 'problem_id' => $problem_id, 'choose' => $choose]); 
+        return view('submissions.list',['submissions' => $submissions, 'assignment' => $assignment, 'user_id' => $user_id, 'problem_id' => $problem_id, 'choose' => $choose, 'all_problems' => $all_problems]); 
     }
 
     public function create(Assignment $assignment, Problem $problem){
@@ -72,7 +72,7 @@ class submission_controller extends Controller
         ]);
         
         if ($this->upload($request))
-            return index($request->assignment);
+            return redirect()->route('submissions.index', [$request->assignment, 'all', 'all', 'all']);
         else
             abort(403,'Error Uploading File');
     }
@@ -156,6 +156,10 @@ class submission_controller extends Controller
     {
         $assignment_root = rtrim(Setting::get("assignments_root"),'/');
         return $assignment_root . "/assignment_{$assignment_id}/problem_{$problem_id}/{$username}";
+    }
+
+    public function rejudge(Request $request){
+
     }
 
     public function get_template(Request $request){
@@ -326,10 +330,10 @@ class submission_controller extends Controller
         $submission_curr->save();
     }
 
-    public function status($all_problem, $submission)
+    private function status($all_problem, $submission)
     {
         $score = ceil($submission->pre_score*
-                            ($submission->assignment->problems->keyBy('id')[$submission->problem_id]->pivot->score??0)
+                            ($submission->assignment->problems[$submission->problem_id]->pivot->score??0)
                             /10000);
         if ($submission->coefficient == 'error')
             $submission->final_score = 0;

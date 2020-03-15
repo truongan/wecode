@@ -41,7 +41,8 @@ Route::post('/submissions/view_code/', 'submission_controller@view_code')->name(
 
 Route::get('/queue', 'queue_controller@index')->name('queue.index');
 Route::post('/queue', 'queue_controller@work')->name('queue.work');
-Route::post('/queue/{id}/unlock', 'queue_controller@unlock')->name('queue.unlock');
+Route::post('/queue/{item}/unlock', 'queue_controller@unlock')->name('queue.unlock');
+Route::post('/queue/empty', 'queue_controller@empty')->name('queue.empty');
 
 Route::get('/practice', 'practice_controller@index');
 Route::get('/practice/show/{problem_id}', 'practice_controller@show')->name('practices.show');
