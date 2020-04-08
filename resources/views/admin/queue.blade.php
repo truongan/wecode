@@ -14,14 +14,20 @@
 
 @section('content')
 
-<div class="col-12">
+<div class="col">
   <p>
     {{-- Total submissions in queue: {{ $queue->count() }} --}}
   </p>
   <p>
-    {# <a href="#" class="shj_act" id="pause"><i class="fa fa-pause"></i> Pause</a> | #}
-    <a href="#" class="shj_act btn btn-primary" id="spawn" data-toggle="tooltip" data-placement="right" title="A queue processor process is spawned every time there is a submission or rejudging request. You can manually spawn one with this link"><i class="fa fa-play"></i> Spawn new queue process </a>
-    <a href="#" class="shj_act btn btn-danger" id="empty_queue"  data-toggle="tooltip" data-placement="right" title="Empty the queue, all queue processor process should exit on their own, leaving submission in PENDING state"><i class="fa fa-times-circle"></i> Empty Queue</a>
+    <form class="form-row" action="{{ route('queue.work') }}" method="POST">
+      @csrf
+      <button href="#" class="shj_act btn btn-primary" id="spawn" data-toggle="tooltip" data-placement="right" title="A queue processor process is spawned every time there is a submission or rejudging request. You can manually spawn one with this link" type="submit"><i class="fa fa-play"></i> Spawn new queue process </button>
+    </form>
+    
+    <form class="form-row" action="{{ route('queue.empty') }}" method="POST">
+      @csrf
+      <button href="#" class="shj_act btn btn-danger" id="empty_queue"  data-toggle="tooltip" data-placement="right" title="Empty the queue, all queue processor process should exit on their own, leaving submission in PENDING state"><i class="fa fa-times-circle"></i> Empty Queue</button>
+    </form>
   </p>
   <table class="wecode_table table table-striped table-bordered">
     <thead class="thead-dark">
@@ -40,14 +46,17 @@
       <tr>
         <td>{{ $item->id }}</td>
         <td>{{ $item->submission_id }}</td>
-        <td>{{ $item->submission->username }}</td>
+        <td>{{ $item->submission->user->username }}</td>
         <td>{{ $item->submission->assignment->id }} (<span>{{ $item->submission->assignment->name }}</span>)</td>
         <td>{{ $item->submission->problem->id }}</td>
         <td>{{ $item->type }}</td>
-        <td>{{ $item->process_id }}</td>
+        <td>{{ $item->processid }}</td>
         <td>
-          @if ($item->process_id)
-            <a href="#" class="shj_act btn btn-danger" id="unlock/{{ $item->id }}"  data-toggle="tooltip" data-placement="right" title="Unlock this queue item, allow it to be processed. Should only be used if its processor process has terminated somehow. MUST DOUBLE CHECK BEFORE USE"><i class="fas fa-lock-open"></i></a>
+          @if ($item->processid)
+            <form action="{{ route('queue.unlock', $item->id) }}" method="POST" >
+              @csrf
+              <button href="#" type="submit" class="shj_act btn btn-danger" id="unlock/{{ $item->id }}"  data-toggle="tooltip" data-placement="right" title="Unlock this queue item, allow it to be processed. Should only be used if its processor process has terminated somehow. MUST DOUBLE CHECK BEFORE USE"><i class="fas fa-lock-open"></i></button>
+            </form>
           @endif
         </td>
       </tr>

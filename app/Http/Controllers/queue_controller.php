@@ -23,33 +23,29 @@ class queue_controller extends Controller
         //
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
             abort(404);
-        return view('admin.queue', ['queue' => Queue_item::all()] );
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Queue_item  $queue
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Queue $queue)
-    {
-        //
+            return view('admin.queue', ['queue' => Queue_item::latest()->get()] ); 
+        }
+    
+    public function work(){
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
             abort(404);
+        Queue_item::work();
+        return redirect(route('queue.index'));
     }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Queue  $queue
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Queue $queue)
-    {
-        //
-        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
-            abort(404);
+    
+    public function unlock( $item){
+        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) ) abort(403);
+        $item = Queue_item::find($item);
+        // dd($item);
+        $item->processid = NULL;
+        $item->save();
+        return redirect(route('queue.index'));
     }
+    
+    public function empty(){
+        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) ) abort(403);
+        Queue_item::truncate();
+        return redirect(route('queue.index'));
+    }
+    
 }

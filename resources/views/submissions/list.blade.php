@@ -36,31 +36,32 @@
 @section('body_end')
 <div class="modal fade" id="submission_modal" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
 	<div class="modal-dialog modal-lg" role="document">
-	  <div class="modal-content">
-		<div class="modal-header">
-		  <h6 class="modal-title" id="exampleModalLongTitle">Modal title</h6>
-		  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-			<span aria-hidden="true">&times;</span>
-		  </button>
+		<div class="modal-content">
+			<div class="modal-header">
+				<h6 class="modal-title" id="exampleModalLongTitle">Modal title</h6>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="text-center">
+					<div class="spinner-border" role="status">
+						<span class="sr-only">Loading...</span>
+					</div>
+				</div>
+			</div>
 		</div>
-		<div class="modal-body">
-  <div class="text-center">
-	<div class="spinner-border" role="status">
-	  <span class="sr-only">Loading...</span>
 	</div>
-  </div>
-		</div>
-  
-	  	</div>
-	</div>
-  </div>
-  
-	  <script type='text/javascript' src="{{ asset("assets/prismjs/prism.js") }}"></script>
-	  <script type='text/javascript' src="{{ asset("assets/js/shj_submissions.js") }}"></script>
-	  <script type='text/javascript' src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-	  <script type='text/javascript' src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
-  
-	  <script type="text/javascript">$("nav  > ul.pagination a").addClass("page-link");</script>
+</div>
+	<script type="text/javascript">
+		site_url = '{{ url('/') }}';
+	</script>
+	<script type='text/javascript' src="{{ asset("assets/prismjs/prism.js") }}"></script>
+	<script type='text/javascript' src="{{ asset("assets/js/shj_submissions.js") }}"></script>
+	<script type='text/javascript' src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+	<script type='text/javascript' src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
+
+	<script type="text/javascript">$("nav  > ul.pagination a").addClass("page-link");</script>
 @endsection
 @section('content')
 @if($choose == 'all')
@@ -77,35 +78,35 @@
 <div class="row">
     <div class="col">
         <div class="table-responsive">
-			<table class="wecode_table table table-bordered {{$choose == 'all' ? 'table-striped' : 'data-table'}}">
+			<table class=" text-center table-responsive table table-bordered {{$choose == 'all' ? 'table-striped' : 'data-table'}}">
 				<thead class="thead-dark">
 					<tr>
 						@if ($choose == 'all')
-							<th width="1%" rowspan="1">Final</th>
+							<th width="1%" rowspan="1"><small> Final</small></th>
 						@endif
 						@if ($choose == 'final')
 							<th width="1%" rowspan="1">#</th>
 						@endif
-							<th width="2%" rowspan="1">Submit ID</th>
+							<th width="2%" rowspan="1"><small> Submit ID</small></th>
 						@if (in_array( Auth::user()->role->name, ['student']))
-							<th width="20%">Problem</th>
-							<th width="10%">Submit Time</th>
-							<th width="7%">Delay (%)</th>
-							<th width="1%">Language</th>
-							<th width="30%">Status</th>
-							<th width="15%">Code</th>
+							<th width="20%"><small> Problem</small></th>
+							<th width="10%"><small> Submit Time</small></th>
+							<th width="7%"><small> Delay (%)</small></th>
+							<th width="1%"><small> Language</small></th>
+							<th width="30%"><small> Status</small></th>
+							<th width="15%"><small> Code</small></th>
 						@else
-							<th width="5%">Username</th>
-							<th width="20%">Name</th>
-							<th width="20%">Problem</th>
-							<th width="10%">Submit Time</th>
-							<th width="1%">Score</th>
-							<th width="1%">Delay %</th>
-							<th width="1%">Lang</th>
-							<th width="6%">Status</th>
-							<th width="6%">Code</th>
-							<th width="6%">Log</th>
-							<th width="1%">Rejudge</th>
+							<th width="5%"><small> Username</small></th>
+							<th width="20%"><small> Name</small></th>
+							<th width="20%"><small> Problem</small></th>
+							<th width="10%"><small> Submit Time</small></th>
+							<th width="1%"><small> Score</small></th>
+							<th width="1%"><small> Delay %</small></th>
+							<th width="1%"><small> Lang</small></th>
+							<th width="6%"><small> Status</small></th>
+							<th width="6%"><small> Code</small></th>
+							<th width="6%"><small> Log</small></th>
+							<th width="1%"><small> Rejudge</small></th>
 						@endif
 					</tr>
 				</thead>
@@ -134,13 +135,12 @@
 							@if ($assignment->id == 0)
 								{{$submission->problem->name}}
 							@else
-							@php($p = $assignment->problems->keyBy('id'))
-								{{-- {{$p[$submission->problem->id]->pivot->problem_name}} --}}
+								{{ $all_problems[$submission->problem_id]->pivot->problem_name}}
 							@endif
 						</a><br>
 						<a href="{{route('submissions.index', [$assignment->id, $user_id, strval($submission->problem_id), 'all'])}}"><span class="btn btn-info btn-sm"><i class="fas fa-filter"></i></span></a>
 					</td>
-					<td>{{$submission->time}}</small></td>
+					<td>{{$submission->created_at}}</small></td>
 					@if (!in_array( Auth::user()->role->name, ['student']))
 						<td>{{$submission->score}}</td>
 					@endif
@@ -171,11 +171,14 @@
 					<td>
 						<div class="btn btn-warning">Code</div>
 					</td>
+
 					@if (!in_array( Auth::user()->role->name, ['student']))
 					<td>
 						<div class="btn btn-secondary">Log</div>
 					</td>
-					<td>Rejudge</td>
+					<td>
+					<div class="shj_rejudge pointer"><i class="fa fa-redo fa-lg color10"></i></div>
+					</td>
 					@endif
 				</tr>
 				@endforeach
@@ -185,15 +188,3 @@
 </div>
 @endsection
 
-@section('body_end')
-<script type='text/javascript' src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-<script type='text/javascript' src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
-<script>
-$(document).ready(function () {
-    $("table").DataTable({
-		"pageLength": 10,
-		"lengthMenu": [ [10, 20, 30, 50, -1], [10, 20, 30, 50, "All"] ]
-	});
-});
-</script>
-@endsection
