@@ -34,7 +34,7 @@
     </div>
   </div>
 
-  <div class="m-3">
+  {{-- <div class="m-3">
     <div class="card" style="width: 18rem;">
       <i class="text-center card-img-top fas fa-school fa-8x p-4"></i>
       <div class="card-body bg-light">
@@ -43,7 +43,7 @@
         <a href="{{ route('lops.index') }}" class="stretched-link"></a>
       </div>
     </div>
-  </div>
+  </div> --}}
 
   <div class="m-3">
     <div class="card" style="width: 18rem;">

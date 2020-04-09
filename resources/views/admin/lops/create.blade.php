@@ -1,4 +1,4 @@
-@php($selected = 'notifications')
+@php($selected = 'settings')
 @extends('layouts.app')
 @section('head_title','New Class')
 @section('icon', 'fas fa-school')

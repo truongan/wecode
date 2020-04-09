@@ -27,7 +27,6 @@ Users - {{$user->username}}
 		{% elseif form_status == 'error' %}
 		  <div class="alert alert-danger">Error updating profile.</div>
 		{% endif %} --}}
-		{{-- {{ form_open('profile/'~id) }} --}}
 		<div class="form-group form-row form-row">
 		  <label for="col-2 form_username" class="col-4">Username:	</label>
 		  <div class="col-8">
@@ -35,6 +34,16 @@ Users - {{$user->username}}
 			<small class="form-text text-muted">You cannot change username.</small>
 		  </div>
 		</div>
+
+		<div class="form-group form-row form-row">
+			<label for="col-2 form_username" class="col-4">Class:	</label>
+			<div class="col-8" disabled>
+				@foreach ($user->lops as $item)
+					<span class="badge badge-light">{{$item->name}}</span>;
+				@endforeach
+			</div>
+		</div>
+
 		<div class="form-group form-row">
 		  <label for="form_name" class="col-4">Name:</label>
 		  
