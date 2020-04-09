@@ -48,6 +48,7 @@ Route::post('/queue/empty', 'queue_controller@empty')->name('queue.empty');
 Route::get('/practice', 'practice_controller@index');
 Route::get('/practice/show/{problem_id}', 'practice_controller@show')->name('practices.show');
 
+Route::get('/scoreboard/full/{id}', 'scoreboard_controller@index')->name('scoreboards.index');
 //Resource route phải được  ghi cuối cùng, nếu không các route sau dính tới /usres sẽ ăn shit 
 Route::resource('users','UserController');
 Route::resource('notifications','notification_controller');

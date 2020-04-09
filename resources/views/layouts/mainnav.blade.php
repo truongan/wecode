@@ -36,13 +36,6 @@
                             <span class="nav-link-text">Admin panel</span>
                         </a>
                     </li>
-                @else
-                    <li class="nav-item color-settings {{ ($selected=="settings") ? "selected" : ""}}" >
-                        <a class="nav-link" href="{{ route('lops.index') }}">
-                            <i class="fa fa-fw fa-sliders-h fa-lg"></i>
-                            <span class="nav-link-text">Classes</span>
-                        </a>
-                    </li>
                 @endif
 
                 <li class="nav-item color-assignments {{ ($selected=="assignments") ? "selected" : ""}}">
@@ -69,7 +62,7 @@
                     </a>
                 </li>
                 <li class="nav-item color-scoreboard {{ ($selected=="scoreboard") ? "selected" : ""}}">
-                    <a class="nav-link" href="{{ url('scoreboard') }}">
+                    <a class="nav-link" href="{{ route('scoreboards.index', 1) }}">
                         <i class="fa fa-fw fa-star fa-lg"></i>
                         <span class="nav-link-text">Scoreboard</span>
                     </a>

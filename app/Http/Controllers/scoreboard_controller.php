@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class ScoreboardController extends Controller
+class scoreboard_controller extends Controller
 {
     /**
      * Create a new controller instance.
