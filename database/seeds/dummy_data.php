@@ -8,6 +8,7 @@ use App\Assignment;
 use App\User;
 use App\Queue_item;
 use App\Submission;
+use App\Setting;
 class dummy_data extends Seeder
 {
     /**
@@ -62,7 +63,7 @@ class dummy_data extends Seeder
                 'start_time' => new DateTime,
                 'finish_time' => new DateTime,
                 'extra_time'=> $i,
-                'late_rule'=>$i,
+                'late_rule'=> Setting::get('default_late_rule'),
                 'moss_update'=>$i,
             ]);
         }
