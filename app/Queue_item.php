@@ -51,7 +51,7 @@ class Queue_item extends Model
 			'submission_id' => $submit_id,
 			'type' => $type
 		]);
-		Queue_item::work();
+		$a  = Queue_item::work();
 
 		return $a;
 	}

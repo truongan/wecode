@@ -34,7 +34,7 @@
 					<option value="{{ $problem->id }}" data-statement="{{ route('problems.show', $problem->id) }}">#{{$problem->id}}--{{ $problem->name }}</option>
 				@endif
 				@foreach ($assignment->problems as $problem)
-					<option value="{{ $problem->id }}" data-statement="{{ route('assignments.show', ['problem' => $problem->id])}}">#{{$problem->id}}--{{ $problem->problem_name }}</option>
+					<option value="{{ $problem->id }}" data-statement="{{ route('assignments.show', [ 'assignment' =>$assignment->id , 'problem_id' => $problem->id])}}">#{{$problem->id}}--{{ $problem->problem_name }}</option>
 				@endforeach
 			</select>
 

@@ -63,7 +63,7 @@ class work_queue extends Command
 		// exit;
 		
 		do { // loop over queue items
-			sleep(5);
+			// sleep(5);
 
 			// var_dump($item);
 
