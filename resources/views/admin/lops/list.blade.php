@@ -1,4 +1,4 @@
-@php($selected = 'settings')
+@php($selected = 'problem_list')
 @extends('layouts.app')
 @section('head_title','Classes')
 @section('icon', 'fas fa-school')
@@ -6,10 +6,9 @@
 @section('title', 'Classes')
 
 @section('title_menu')
-    {{-- Nếu là admin thì hiển thị --}}
-
+@if ( in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
     <span class="title_menu_item"><a href="{{ route('lops.create') }}"><i class="fa fa-plus color11"></i>Add class</a></span>
-
+@endif
 @endsection
 
 @section('content')
@@ -39,8 +38,10 @@
           <td>{{$lop->assignments()->count() }}</td>
           <td>
             <a title="Profile" href="{{ route('lops.show', $lop->id) }}" class = "fas fa-clipboard-list fa-lg color8"></a>
+            @if ( in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
             <a title="Edit" href="{{ route('lops.edit', $lop->id) }}"><i class="fas fa-edit fa-lg color9"></i></a>
             <span title="Delete lop" class="delete-btn del_n delete_lop pointer" href="{{ route('lops.destroy', $lop->id) }}"><i class="fa fa-times-circle fa-lg color1"></i></span>
+            @endif
           </td>
         </tr>
         @endforeach
