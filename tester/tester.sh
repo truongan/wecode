@@ -73,11 +73,14 @@ DIFFTOOL=${11}
 # diff options (default: -bB)
 DIFFOPTION=${12}
 # enable/disable judge log
-if [ ${13} = "1" ]; then
-	LOG_ON=true
-else
-	LOG_ON=false
-fi
+# if [ ${13} = "1" ]; then
+# 	LOG_ON=true
+# else
+# 	LOG_ON=false
+# fi
+
+LOG_ON=true
+
 # enable/disable easysandbox
 # if [ ${13} = "1" ]; then
 # 	SANDBOX_ON=true

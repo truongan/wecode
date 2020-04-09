@@ -155,6 +155,7 @@ class submission_controller extends Controller
 
 			$a = Queue_item::add_and_process($sub->id, 'rejudge');
 			$sub->status = 'PENDING';
+			$sub->save();
 			
 			return response()->json(
 				['done' => 1]

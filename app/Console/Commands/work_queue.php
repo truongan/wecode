@@ -97,15 +97,18 @@ class work_queue extends Command
 
 			}
 			else {
-
 				$file_extension = $language->extension;
 				$raw_filename = $item->submission->file_name;
 				
-				$time_limit = $language->time_limit/1000;
+				$time_limit = $language->pivot->time_limit/1000;
+				var_dump($time_limit);
 				$time_limit = round($time_limit, 3);
+				var_dump($time_limit);
 				$time_limit_int = floor($time_limit) + 1;
+				var_dump($time_limit_int);
 				
-				$memory_limit = $language->memory_limit;
+
+				$memory_limit = $language->pivot->memory_limit;
 				$diff_cmd = $item->submission->problem->diff_cmd;
 				$diff_arg = $item->submission->problem->diff_arg;
 				
