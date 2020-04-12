@@ -59,19 +59,21 @@
 	<script type="text/javascript">$("nav  > ul.pagination a").addClass("page-link");</script>
 @endsection
 @section('content')
-@if($choose == 'all')
-<a href="{{route('submissions.index', [$assignment->id, $user_id, $problem_id, 'all'])}}" class="btn btn-primary active" role="button">All <i class="fas fa-chevron-down"></i></a>
-<a style="opacity: 0.3;" href="{{route('submissions.index', [$assignment->id, $user_id, $problem_id, 'final'])}}" class="btn btn-light active" role="button">Final <i class="fas fa-chevron-right"></i></a>
-@else
-<a style="opacity: 0.3;" href="{{route('submissions.index', [$assignment->id, $user_id, $problem_id, 'all'])}}" class="btn btn-light active" role="button">All <i class="fas fa-chevron-right"></i></a>
-<a href="{{route('submissions.index', [$assignment->id, $user_id, $problem_id, 'final'])}}" class="btn btn-primary active" role="button">Final <i class="fas fa-chevron-down"></i></a>
-@endif
-<hr>
-@if ($choose == 'all')
-<p><i class="fa fa-warning color3"></i> You cannot change your final submissions after assignment finishes.</p>
-@endif
+<div class="row ">
+	@if($choose == 'all')
+	<a href="{{route('submissions.index', [$assignment->id, $user_id, $problem_id, 'all'])}}" class="btn btn-primary active" role="button">All <i class="fas fa-chevron-down"></i></a>
+	<a style="opacity: 0.3;" href="{{route('submissions.index', [$assignment->id, $user_id, $problem_id, 'final'])}}" class="btn btn-light active" role="button">Final <i class="fas fa-chevron-right"></i></a>
+	@else
+	<a style="opacity: 0.3;" href="{{route('submissions.index', [$assignment->id, $user_id, $problem_id, 'all'])}}" class="btn btn-light active" role="button">All <i class="fas fa-chevron-right"></i></a>
+	<a href="{{route('submissions.index', [$assignment->id, $user_id, $problem_id, 'final'])}}" class="btn btn-primary active" role="button">Final <i class="fas fa-chevron-down"></i></a>
+	@endif
+	<hr>
+	@if ($choose == 'all')
+	<p><i class="fa fa-warning color3"></i> You cannot change your final submissions after assignment finishes.</p>
+	@endif
+</div>
 <div class="row">
-    <div class="col">
+
         <div class="table-responsive">
 			<table class=" text-center table-responsive table table-bordered {{$choose == 'all' ? 'table-striped' : 'data-table'}}">
 				<thead class="thead-dark">
@@ -178,7 +180,7 @@
 				</tr>
 				@endforeach
 			</table>
-		</div>
+
 	</div>
 </div>
 @endsection

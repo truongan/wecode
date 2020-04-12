@@ -32,7 +32,7 @@
                 @yield('title_menu')
             </div>
         </div>
-        <div id="main_content" class="row" > 
+        <div id="main_content" > 
             @yield('content')
         </div>
     
