@@ -134,7 +134,7 @@ $(document).ready(function(){
 		$(".confirm-user-delete").click(function(){
       console.log(del_submssion);
 			$.ajax({
-				url: (del_submssion ? ('users/delete_submissions/'+user_id) : ('users/'+user_id)),
+				url: (del_submssion ? ('users/delete_submissions/'+user_id) : ('{{ route('users.index') }}/'+user_id)),
         type: (del_submssion ? 'POST' : 'DELETE'),
 				data: {
 					user_id: user_id,

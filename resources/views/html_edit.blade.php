@@ -45,7 +45,7 @@ $(document).ready(function(){
     $('.save-button').click(function(){
             $.ajax({
                 type: 'POST',
-                url: 'htmleditor/autosave',
+                url: '{{ route('htmleditor.autosave') }}',
                 data: {
                     '_token': "{{ csrf_token() }}",
                     'content' : CKEDITOR.instances.editor.getData()

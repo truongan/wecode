@@ -76,7 +76,7 @@ $('.del_n').click(function () {
     $("#language_delete").modal("hide");
     $.ajax({
       type: 'DELETE',
-      url: 'languages/'+id,
+      url: '{{ route('languages.index') }}/'+id,
       data: {
                   '_token': "{{ csrf_token() }}",
       },

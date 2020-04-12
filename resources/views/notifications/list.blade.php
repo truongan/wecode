@@ -58,7 +58,7 @@ $(document).ready(function () {
 		$(".confirm-notifycation-delete").click(function(){
 			$.ajax({
 				type: 'DELETE',
-				url: 'notifications/'+id,
+				url: '{{ route('notifications.index') }}/'+id,
 				data: {
                     '_token': "{{ csrf_token() }}",
 				},
