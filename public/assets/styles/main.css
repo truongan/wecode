@@ -273,6 +273,6 @@ div.problems_widget {
 	/* background-color: #FCFCFC; */
 	border: 2px dashed #DDD;
 	box-shadow: 0 0 6px -2px #AAA;
-	margin: 15px 0 15px 15px;
+	margin: 15px 0 15px 0px;
 	padding: 10px;
 }

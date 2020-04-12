@@ -46,7 +46,8 @@ class practice_controller extends Controller
         return view('problems.show', ['problem'=>$problem,
                                       'all_problems'=>NULL,
                                       'can_submit'=>TRUE,
-                                      'assignment'=>NULL,
+									  'assignment'=>NULL,
+									  'selected' => "users"
                                       ]);    
 	}
 

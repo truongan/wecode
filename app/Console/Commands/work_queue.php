@@ -17,14 +17,16 @@ class work_queue extends Command
      *
      * @var string
      */
-    protected $signature = 'work_queue';
+    protected $signature = 'work_queue {--f|force}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Working the submissions in the queue';
+	protected $description = 'Working the submissions in the queue
+							{--f|force : whether to start working queue even if the number of concurent queue process is already reached. Useful when debbugging 
+		';
 
     /**
      * Create a new command instance.
@@ -50,8 +52,13 @@ class work_queue extends Command
 		// Because we are in cli mode, base_url is not available, and we get
 		// it from an environment variable that we have set in shj_helper.php
 	
+		
+
         $limit = Setting::get('concurent_queue_process', 2);
-        // dd($limit);
+		// dd($limit);
+		
+		if ($this->option('force')) $limit = 999999;
+
 		$item = Queue_item::acquire($limit);
 		if ($item === NULL) {
 			// Queue is full, exit this process
@@ -70,7 +77,7 @@ class work_queue extends Command
 			$submit_id = $item->submission->id;
 			$username = $item->submission->user->username;
 
-			$language = $item->submission->problem->languages->find($item->language_id);
+			$language = $item->submission->problem->languages->find($item->submission->language_id);
 			
 			$userdir = $item->submission->directory();
 			
@@ -90,21 +97,24 @@ class work_queue extends Command
 
 			}
 			else {
-
 				$file_extension = $language->extension;
 				$raw_filename = $item->submission->file_name;
 				
-				$time_limit = $language->time_limit/1000;
+				$time_limit = $language->pivot->time_limit/1000;
+				var_dump($time_limit);
 				$time_limit = round($time_limit, 3);
+				var_dump($time_limit);
 				$time_limit_int = floor($time_limit) + 1;
+				var_dump($time_limit_int);
 				
-				$memory_limit = $language->memory_limit;
-				$diff_cmd = $item->problem->diff_cmd;
-				$diff_arg = $item->problem->diff_arg;
+
+				$memory_limit = $language->pivot->memory_limit;
+				$diff_cmd = $item->submission->problem->diff_cmd;
+				$diff_arg = $item->submission->problem->diff_arg;
 				
 				$output_size_limit = Setting::get('output_size_limit') * 1024;
 				// AN - note: Since cmd start bash, this process have to be exit when run from cli to debugg
-				$cmd = "cd $tester_path;\n./tester.sh $problemdir $userdir $result_file $log_file ".escapeshellarg($raw_filename)." $file_extension $time_limit $time_limit_int $memory_limit $output_size_limit $diff_cmd '$diff_arg' $op1 ";
+				$cmd = "cd $tester_path;\n./tester.sh $problemdir $userdir $result_file $log_file ".escapeshellarg($raw_filename)." $file_extension $time_limit $time_limit_int $memory_limit $output_size_limit $diff_cmd '$diff_arg' 1 ";
 				
 				file_put_contents($userdir.'/log', $cmd);
 				

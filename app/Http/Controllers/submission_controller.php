@@ -148,13 +148,19 @@ class submission_controller extends Controller
 			$validated = $request->validate([
 				'submission_id' => ['integer'],
 			]);	
-		}
-		
-		$a = Queue_item::add_and_process($request->submission_id, 'rejudge');
+			
+			$sub = Submission::find($request->submission_id);
+			
+			if ($sub == NULL) abort(404);
 
-		return response()->json(
-			['done' => 1]
-		);
+			$a = Queue_item::add_and_process($sub->id, 'rejudge');
+			$sub->status = 'PENDING';
+			$sub->save();
+			
+			return response()->json(
+				['done' => 1]
+			);
+		}
 	}
 
 	public function get_template(Request $request){

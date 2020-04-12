@@ -22,6 +22,12 @@
                         <span class="nav-link-text">Notifications</span>
                     </a>
                 </li>
+                <li class="nav-item color-problem_list {{ ($selected=="problem_list") ? "selected" : ""}}">
+                    <a class="nav-link" href="{{ route('lops.index') }}">
+                        <i class="fas fa-school fa-fw fa-lg"></i>
+                        <span class="nav-link-text">Classes</span>
+                    </a>
+                </li>
                 @if ( in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
                     
                     <li class="nav-item color-settings {{ ($selected=="settings") ? "selected" : ""}}" >
@@ -30,7 +36,6 @@
                             <span class="nav-link-text">Admin panel</span>
                         </a>
                     </li>
-
                 @endif
 
                 <li class="nav-item color-assignments {{ ($selected=="assignments") ? "selected" : ""}}">
@@ -39,12 +44,7 @@
                         <span class="nav-link-text">Assignments</span>
                     </a>
                 </li>
-                {{-- <li class="nav-item color-problems {{ ($selected=="problems") ? "selected" : ""}}">
-                    <a class="nav-link" href="{{ url('view_problem') }}">
-                        <i class="fa fa-fw fa-puzzle-piece fa-lg"></i>
-                        <span class="nav-link-text">Problems</span>
-                    </a>
-                </li> --}}
+                
                 <li class="nav-item color-submit {{ ($selected=="submit") ? "selected" : ""}}">
                     <a class="nav-link" href="{{ url('submit') }}">
                         <i class="fas fa-fw fa-code fa-lg"></i>
@@ -62,7 +62,7 @@
                     </a>
                 </li>
                 <li class="nav-item color-scoreboard {{ ($selected=="scoreboard") ? "selected" : ""}}">
-                    <a class="nav-link" href="{{ url('scoreboard') }}">
+                    <a class="nav-link" href="{{ route('scoreboards.index', 1) }}">
                         <i class="fa fa-fw fa-star fa-lg"></i>
                         <span class="nav-link-text">Scoreboard</span>
                     </a>
