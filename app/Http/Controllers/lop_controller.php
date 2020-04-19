@@ -105,7 +105,7 @@ class lop_controller extends Controller
         //
         
         $data = $request->only('name');
-        $data['open'] = $request->input('open') == 'open';
+        $data['open'] = $request->input('open') == 'on';
 
         $lop->update($data);
 

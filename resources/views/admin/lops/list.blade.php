@@ -23,8 +23,8 @@
           <th>ID</th>
           <th>Name</th>
           <th>Open</th>
-          <th>No. of Users</th>
-          <th>No. of Assignment</th>
+          <th><small>Users count</small></th>
+          <th><small>Assignments count</small></th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -33,7 +33,7 @@
           <td>{{$loop->iteration}} </td>
           <td>{{$lop->id}} </td>
           <td>{{$lop->name}}</td>
-          <td>{{$lop->open}}</td>
+          <td><i  class=" far {{ $lop->open ? 'fa-check-square color6' : 'fa-square' }} fa-2x"></i></td>
           <td>{{$lop->users()->count() }}</td>
           <td>{{$lop->assignments()->count() }}</td>
           <td>
