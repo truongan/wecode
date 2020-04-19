@@ -1,13 +1,28 @@
-@php($selected = 'settings')
+@php($selected = 'problem_list')
+@php($ed = Route::currentRouteName() == 'lops.show' ? '0' : '1')
 @extends('layouts.app')
-@section('head_title','Edit Class')
+@section('head_title')
+	@if ($ed)
+		Edit Classes
+	@else
+		Classes list
+	@endif
+@endsection
 @section('icon', 'fas fa-school')
 
-@section('title', 'Edit Class')
+@section('title')
+	@if ($ed)
+		Edit Classes
+	@else
+		Classes list
+	@endif
+@endsection
 
 @section('title_menu')
 	<span class="title_menu_item"><a href="{{ route('lops.index') }}"><i class="fa fa-list color11"></i>Back to list of class</a></span>
+	@if (in_array( Auth::user()->role->name, ['admin', 'head_instructor']))
 	<span class="title_menu_item"><a href="{{ route('lops.create') }}"><i class="fa fa-plus color11"></i>Add class</a></span>
+	@endif
 @endsection
 
 @section('content')
@@ -17,25 +32,21 @@
   	<form action="{{route('lops.update', $lop->id)}}" method="POST">
 	@method('PUT')
 	@csrf
-	<fieldset 
-  		@if (Route::currentRouteName() == 'lops.show')
-	  		disabled
-		@endif
-	>
+	<fieldset>
 		<div class="form-group">
 		<label for="name">Class name</label>
-		<input type="text"
+		<input {{$ed == 0 ? 'disabled' : ''}} type="text"
 			class="form-control" name="name" id="name" aria-describedby="_name_desc" placeholder="name" value={{$lop->name}}>
-		<small id="_name_desc" class="form-text text-muted">The name of this new class</small>
+		<small id="_name_desc" class="form-text text-muted" {{$ed == 0 ? 'hidden' : ''}}>The name of this new class</small>
 		</div>
-		<div class="custom-control custom-checkbox">
-		<input type="checkbox" class="custom-control-input" name="open"  id="customCheck1" value="{{$lop->open ? "check" : "" }}" value="open">
+		<div class="custom-control custom-checkbox" >
+		<input {{$ed == 0 ? 'disabled' : ''}} type="checkbox" class="custom-control-input" name="open"  id="customCheck1" {{$lop->open ? "checked" : "" }}>
 		<label class="custom-control-label" for="customCheck1">Open for enrollment</label>
-		<small id="helpId" class="form-text text-muted">User will be able to join any classes that are open for enrollment</small>
+		<small id="helpId" class="form-text text-muted" {{$ed == 0 ? 'hidden' : ''}} >User will be able to join any classes that are open for enrollment</small>
 		</div>
 		
 
-		<label>Select users you wish to remove from the class</label>
+		<label {{$ed == 0 ? 'hidden' : ''}}>Select users you wish to remove from the class</label>
 		<div class="table-responsive">
 		<table class="table table-striped table-bordered">
 			<thead class="thead-dark">
@@ -45,7 +56,9 @@
 				<th>Username</th>
 				<th>Display Name</th>
 				<th>Email</th>
-				<th>Select for removal</th>
+				@if ($ed)
+					<th>Select for removal</th>
+				@endif
 			</tr>
 			</thead>
 			@foreach ($lop->users as $user)
@@ -55,16 +68,18 @@
 				<td id="un"> {{$user->username}} </td>
 				<td>{{$user->display_name}}</td>
 				<td>{{$user->email}}</td>
+				@if ($ed)
 				<td>
 				<div class="custom-control custom-switch">
 					<input type="checkbox" class="custom-control-input" id="remove{{$user->id}}" name='remove[]' value="{{$user->id}}">
 					<label class="custom-control-label" for="remove{{$user->id}}">remove</label>
 				</div>
 				</td>
+				@endif
 			</tr>
 			@endforeach
 		</table>
-		@if (Route::currentRouteName() == 'lops.edit')
+		@if ($ed)
 			<div class="form-group">
 			<label for="">Enroll more users</label>
 			<textarea
