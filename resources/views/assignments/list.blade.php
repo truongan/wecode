@@ -114,11 +114,11 @@
 <script type='text/javascript' src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 <script type='text/javascript' src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
 <script>
-$(document).ready(function () {
+{{-- $(document).ready(function () {
     $("table").DataTable({
 		"pageLength": 10,
 		"lengthMenu": [ [10, 20, 30, 50, -1], [10, 20, 30, 50, "All"] ]
 	});
-}); 
+});  --}}
 </script>
 @endsection

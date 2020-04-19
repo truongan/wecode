@@ -59,7 +59,7 @@
 	<script type="text/javascript">$("nav  > ul.pagination a").addClass("page-link");</script>
 @endsection
 @section('content')
-<div class="row ">
+<div class="row mb-2">
 	@if($choose == 'all')
 	<a href="{{route('submissions.index', [$assignment->id, $user_id, $problem_id, 'all'])}}" class="btn btn-primary active" role="button">All <i class="fas fa-chevron-down"></i></a>
 	<a style="opacity: 0.3;" href="{{route('submissions.index', [$assignment->id, $user_id, $problem_id, 'final'])}}" class="btn btn-light active" role="button">Final <i class="fas fa-chevron-right"></i></a>
