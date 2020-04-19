@@ -69,18 +69,14 @@ $(document).ready(function () {
 		var button = $(this);
 		var row = button.parents('tr');
 		var type = button.data('type');
-
 		var view_code_request = $.ajax({
 			cache: true,
 			type: 'POST',
 			url: '/submissions/view_code',
 			data: {
+				'_token': $('input[name=_token]').val(),
 				type: type,
-				username: row.data('u'),
-				assignment: row.data('a'),
-				problem: row.data('p'),
-				submit_id: row.data('s'),
-				wcj_csrf_name: shj.csrf_token
+				submit_id: row.data('id')
 			},
 			success: function (data) {
 				if (type == 'code')
