@@ -291,13 +291,10 @@ class submission_controller extends Controller
 	}
 	public function view_code()
 	{
-		$request->submit_id = $_POST['submit_id'];
+		$submit_id = $_POST['submit_id'];
 		$type = $_POST['type'];
-		$validated = $request->validate([
-			'submit_id' => ['integer', 'gt:0'],
-		]);
 
-		$submission = Submission::find($request->submit_id);
+		$submission = Submission::find($submit_id);
 
 		if (!$submission) abort(403,"Submission not found");
 		if (in_array(Auth::user()->role->name, ['student']) && $submission->user_id!=Auth::user()->id)
