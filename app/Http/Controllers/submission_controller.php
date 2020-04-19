@@ -60,7 +60,13 @@ class submission_controller extends Controller
 		return view('submissions.list',['submissions' => $submissions, 'assignment' => $assignment, 'user_id' => $user_id, 'problem_id' => $problem_id, 'choose' => $choose, 'all_problems' => $all_problems]); 
 	}
 
-	public function create(Assignment $assignment, Problem $problem){
+	public function create($assignment_id, $problem_id){
+		$assignment = Assignment::find($assignment_id);
+
+		if ($problem_id != 0)
+			$problem = Problem::find($problem_id);
+		else
+			$problem = $assignment->problems->first();
 		return view('submissions.create', ['assignment' => $assignment, 'problem' => $problem]);
 	}
 
@@ -270,19 +276,19 @@ class submission_controller extends Controller
 		}
 	}
 
-	public function view_code(Request $request)
+	public function view_code()
 	{
 		$result = $this->view($request, "code");
 		return response()->json($result);
 	}
 
-	public function view_log(Request $request)
+	public function view_log()
 	{
 		$result = $this->view($request, "log");
 		return response()->json($result);
 	}
 
-	public function view_result(Request $request)
+	public function view_result()
 	{
 		$result = $this->view($request, "result");
 		return response()->json($result);

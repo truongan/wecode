@@ -46,7 +46,11 @@
                 </li>
                 
                 <li class="nav-item color-submit {{ ($selected=="submit") ? "selected" : ""}}">
-                    <a class="nav-link" href="{{ url('submit') }}">
+                    @if (Auth::user()->selected_assignment_id == null)
+                        <a class="nav-link" href="{{ route('submissions.create', [0, 0]) }}">
+                    @else
+                        <a class="nav-link" href="{{ route('submissions.create', [Auth::user()->selected_assignment_id, 0]) }}">
+                    @endif
                         <i class="fas fa-fw fa-code fa-lg"></i>
                         <span class="nav-link-text">Code Editor</span>
                     </a>

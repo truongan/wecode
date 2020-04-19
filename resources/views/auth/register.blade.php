@@ -16,7 +16,7 @@
                                 <label for="registration_code" class="col-md-4 col-form-label text-md-right">{{ __('Registration code') }}</label>
 
                                 <div class="col-md-6">
-                                    <input id="registration_code" type="number"" class="form-control @error('registration_code') is-invalid @enderror" name="registration_code" value="{{ old('registration_code') }}" required autocomplete="registration_code" autofocus>
+                                    <input id="registration_code" type="number" class="form-control @error('registration_code') is-invalid @enderror" name="registration_code" value="{{ old('registration_code') }}" required autocomplete="registration_code" autofocus>
                                     <small class="text-muted">This site require a secret registration code. You must obtain the code from administrators before registering</small>
                                     @error('registration_code')
                                         <span class="invalid-feedback" role="alert">
