@@ -2,7 +2,6 @@
 @php($selected = 'all_submissions')
 {{-- @inject('submission_controller', 'App\Http\Controllers\submission_controller') --}}
 @section('other_assets')
-	<script type='text/javascript' src="{{ asset('assets/resources/js/submission.js')}}"></script>
 	<link rel='stylesheet' type='text/css' href='https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css'/>
 	<link rel='stylesheet' type='text/css' href='{{ asset("assets/prismjs/prism.css") }}'/>
 	<style type="text/css">
@@ -13,6 +12,12 @@
 		font-size: 0.70em;
 	}
 	</style>
+@endsection
+@section('body_end')
+	<script type='text/javascript' src="{{ asset('assets/prismjs/prism.js')}}"></script>
+	<script type='text/javascript' src="{{ asset('assets/js/submission.js')}}"></script>
+	<script type='text/javascript' src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+	<script type='text/javascript' src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
 @endsection
 @section('icon')
 	fas {{$choose =='all' ? 'fa-bars' : 'fa-map-marker'}}
