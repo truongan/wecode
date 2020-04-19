@@ -82,7 +82,7 @@ $(document).ready(function () {
 				if (type == 'code')
 					 data.text = shj.html_encode(data.text);
 				$('.modal-body').html('<pre class="code-column line-numbers"><code>'+data.text+'</code></pre>');
-				$('.modal-title').html('<code>'+data.file_name+' | Submit ID: '+row.data('s')+' | Username: '+row.data('u')+' | Problem: '+row.data('p')+'</code>');
+				$('.modal-title').html('<code>'+data.file_name+' | Submit ID: '+row.data('id')+' | Username: '+row.data('u')+' | Problem: '+row.data('p')+'</code>');
 				if (type == 'code'){
 					// $('code.code-column').snippet(data.lang, {style: shj.color_scheme});
 					$('pre.code-column').addClass('lang-' + data.lang);

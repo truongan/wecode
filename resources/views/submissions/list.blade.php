@@ -107,7 +107,13 @@
 					</tr>
 				</thead>
 				@foreach ($submissions as $submission)
-				<tr data-id="{{$submission->id}}">
+				<tr data-u="{{$submission->user->username}}" data-a="{{ $assignment->id }}" data-p="
+							@if ($assignment->id == 0)
+								{{$submission->problem->name}}
+							@else
+								{{ $all_problems[$submission->problem_id]->pivot->problem_name}}
+							@endif
+					" data-id="{{$submission->id}}">
 					@if ($choose == 'all')
 						<td>
 							<i class="pointer set_final far {{ $submission->is_final ? 'fa-check-circle color11' : 'fa-circle' }} fa-2x"></i>
