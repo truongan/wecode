@@ -289,7 +289,7 @@ class submission_controller extends Controller
 		$submission_curr->is_final = 1;
 		$submission_curr->save();
 	}
-	private function view_code()
+	public function view_code()
 	{
 		$request->submit_id = $_POST['submit_id'];
 		$type = $_POST['type'];
