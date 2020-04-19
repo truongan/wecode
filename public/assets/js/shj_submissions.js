@@ -73,7 +73,7 @@ $(document).ready(function () {
 		var view_code_request = $.ajax({
 			cache: true,
 			type: 'POST',
-			url: shj.site_url + 'submissions/view_code',
+			url: '/submissions/view_code',
 			data: {
 				type: type,
 				username: row.data('u'),

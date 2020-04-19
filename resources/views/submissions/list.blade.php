@@ -13,12 +13,6 @@
 	}
 	</style>
 @endsection
-@section('body_end')
-	<script type='text/javascript' src="{{ asset('assets/prismjs/prism.js')}}"></script>
-	<script type='text/javascript' src="{{ asset('assets/js/submission.js')}}"></script>
-	<script type='text/javascript' src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-	<script type='text/javascript' src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
-@endsection
 @section('icon')
 	fas {{$choose =='all' ? 'fa-bars' : 'fa-map-marker'}}
 @endsection
