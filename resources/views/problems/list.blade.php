@@ -116,7 +116,7 @@
 		  $("#problem_delete").modal("hide");
 			$.ajax({
 			  type: 'DELETE',
-			  url: '/problems/'+id,
+			  url: '{{ route('problems.index') }}/'+id,
 			  data: {
 						  '_token': "{{ csrf_token() }}",
 			  },

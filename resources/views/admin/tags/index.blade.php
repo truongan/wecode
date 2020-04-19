@@ -83,14 +83,14 @@
 */
 $(document).ready(function () {
 $('.del_n').click(function () {
-    var row = $(this).parents('tr');
+  var row = $(this).parents('tr');
 	var id = row.data('id');
   $(".confirm-tag-delete").off();
   $(".confirm-tag-delete").click(function(){
     $("#tag_delete").modal("hide");
     $.ajax({
       type: 'DELETE',
-      url: 'tags/'+id,
+      url: '{{ route('tags.index') }}/'+id,
       data: {
                   '_token': "{{ csrf_token() }}",
       },

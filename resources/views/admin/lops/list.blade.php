@@ -74,13 +74,13 @@
 $(document).ready(function () {
 $('.del_n').click(function () {
   var row = $(this).parents('tr');
-	var id = row.data('id');
+  var id = row.data('id');
   $(".confirm-lop-delete").off();
   $(".confirm-lop-delete").click(function(){
     $("#lop_delete").modal("hide");
     $.ajax({
       type: 'DELETE',
-      url: 'lops/'+id,
+      url: '{{ route('lops.index') }}/'+id,
       data: {
                   '_token': "{{ csrf_token() }}",
       },
