@@ -276,24 +276,6 @@ class submission_controller extends Controller
 		}
 	}
 
-	public function view_code()
-	{
-		$result = $this->view($request, "code");
-		return response()->json($result);
-	}
-
-	public function view_log()
-	{
-		$result = $this->view($request, "log");
-		return response()->json($result);
-	}
-
-	public function view_result()
-	{
-		$result = $this->view($request, "result");
-		return response()->json($result);
-	}
-
 	public function select_final(Request $request)
 	{
 		$submission_curr = Submission::find($request->submission);
@@ -307,13 +289,15 @@ class submission_controller extends Controller
 		$submission_curr->is_final = 1;
 		$submission_curr->save();
 	}
-	private function view($request, $type)
+	private function view_code()
 	{
+		$request->submit_id = $_POST['submit_id'];
+		$type = $_POST['type'];
 		$validated = $request->validate([
-			'submission' => ['integer', 'gt:0'],
+			'submit_id' => ['integer', 'gt:0'],
 		]);
 
-		$submission = Submission::find($request->submission);
+		$submission = Submission::find($request->submit_id);
 
 		if (!$submission) abort(403,"Submission not found");
 		if (in_array(Auth::user()->role->name, ['student']) && $submission->user_id!=Auth::user()->id)
@@ -325,7 +309,7 @@ class submission_controller extends Controller
 		if ($type == "code")
 			$file_path = $submit_path . "/{$submission->file_name}.". $file_extension;
 		elseif ($type == "log")
-			$file_path = $submit_path . "/log-{$submission->id}";
+			$file_path = $submit_path . "/result-{$submission['submit_id']}.html";
 		elseif ($type == "result")
 			$file_path = $submit_path . "/result-{$submission->id}.html";
 
