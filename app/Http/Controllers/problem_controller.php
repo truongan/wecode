@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Problem;
 use App\Setting;
 use App\Language;
+use App\Tag;
 use App\Submission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -47,6 +48,8 @@ class problem_controller extends Controller
                                       'messages'=>[],
                                       'languages'=>[],
                                       'max_file_uploads'=>1000,    
+                                      'all_tags' => Tag::all(),
+                                      'tags' => [],
                                   ]);
                                 
     }
@@ -120,12 +123,15 @@ class problem_controller extends Controller
             {
                 $languages[$lang->id] = $lang;
             }
+        $tags = $problem->tags->keyBy('id');
         return view('problems.create', ['problem'=>$problem,
                                       'all_languages'=>Language::all(),
                                       'messages'=>[],  
                                       'languages'=>$languages,
                                       'tree_dump'=>shell_exec("tree -h " . $this->get_directory_path($problem->id)),  
                                       'max_file_uploads'=>1000,
+                                      'all_tags' => Tag::all(),
+                                      'tags' => $tags,
                                   ]);
     }
 
