@@ -29,7 +29,7 @@ class problem_controller extends Controller
     {
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
             abort(404);  
-        return view('problems.list',['problems'=>Problem::all()]); 
+        return view('problems.list',['problems'=>Problem::latest()->get()]); 
     }
 
     /**
