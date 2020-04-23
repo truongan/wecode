@@ -64,7 +64,7 @@ class submission_controller extends Controller
 		$assignment = Assignment::find($assignment_id);
 
 		if ($problem_id != 0)
-			$problem = Problem::find($problem_id);
+			$problem = $assignment->problems->find($problem_id);
 		else
 			$problem = $assignment->problems->first();
 		return view('submissions.create', ['assignment' => $assignment, 'problem' => $problem]);

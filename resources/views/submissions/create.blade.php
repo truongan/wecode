@@ -7,9 +7,8 @@
 <link rel="stylesheet" type='text/css' href="{{ asset('assets/styles/submit_page.css') }}"/>
   <meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
-
-@section('title_menu')
-@endsection
+@section('icon', 'fas fa-code')
+@section('title')</i> Assignment: {{ $assignment->name }}@endsection
 
 
 
@@ -34,7 +33,7 @@
 						<option value="{{ $problem->id }}" data-statement="{{ route('problems.show', $problem->id) }}">#{{$problem->id}}--{{ $problem->name }}</option>
 					@endif
 					@foreach ($assignment->problems as $problem)
-						<option value="{{ $problem->id }}" data-statement="{{ route('assignments.show', [ 'assignment' =>$assignment->id , 'problem_id' => $problem->id])}}">#{{$problem->id}}--{{ $problem->problem_name }}</option>
+						<option value="{{ $problem->id }}" data-statement="{{ route('assignments.show', [ 'assignment' =>$assignment->id , 'problem_id' => $problem->id])}}">#{{$problem->id}}--{{ $problem->pivot->problem_name }}</option>
 					@endforeach
 				</select>
 
