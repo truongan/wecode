@@ -16,7 +16,6 @@
 
 @section('content')
 <div class="row">
-  <div class="col">
 	<div class="table-responsive">
 	{{-- {% set msgclasses = {'success': 'text-success', 'notice': 'text-info', 'error': 'text-danger'} %}
 	{% for message in messages %}
@@ -78,7 +77,6 @@
 	  @endforeach
 	</table>
 	</div>
-  </div>
 </div>
 
 <div class="modal fade" id="problem_delete" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
