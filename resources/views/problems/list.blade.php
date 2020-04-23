@@ -28,6 +28,7 @@
 	<table class="table table-striped table-bordered">
 		<thead class="thead-dark">
 			<tr>
+				<th>#</th>
 				<th>ID</th>
 				<th style="width: 20%">Name</th>
 				<th style="width: 20%">Note</th>
@@ -41,6 +42,7 @@
 		</thead>
 	  @foreach ($problems as $item)
 		<tr data-id="{{$item->id}}">
+			<td> {{$loop->index}}</td>
 			<td>{{ $item->id}}</td>
 			<td><a href="{{ url("problems/$item->id") }}">{{ $item->name }}</a></td>
 			<td>{{$item->admin_note}}</td>
