@@ -69,24 +69,20 @@ $(document).ready(function () {
 		var button = $(this);
 		var row = button.parents('tr');
 		var type = button.data('type');
-
 		var view_code_request = $.ajax({
 			cache: true,
 			type: 'POST',
 			url: '/submissions/view_code',
 			data: {
+				'_token': $('input[name=_token]').val(),
 				type: type,
-				username: row.data('u'),
-				assignment: row.data('a'),
-				problem: row.data('p'),
-				submit_id: row.data('s'),
-				wcj_csrf_name: shj.csrf_token
+				submit_id: row.data('id')
 			},
 			success: function (data) {
 				if (type == 'code')
 					 data.text = shj.html_encode(data.text);
 				$('.modal-body').html('<pre class="code-column line-numbers"><code>'+data.text+'</code></pre>');
-				$('.modal-title').html('<code>'+data.file_name+' | Submit ID: '+row.data('s')+' | Username: '+row.data('u')+' | Problem: '+row.data('p')+'</code>');
+				$('.modal-title').html('<code>'+data.file_name+' | Submit ID: '+row.data('id')+' | Username: '+row.data('u')+' | Problem: '+row.data('p')+'</code>');
 				if (type == 'code'){
 					// $('code.code-column').snippet(data.lang, {style: shj.color_scheme});
 					$('pre.code-column').addClass('lang-' + data.lang);

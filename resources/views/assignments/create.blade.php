@@ -91,10 +91,10 @@
 							<input id="start_time" type="hidden" name="start_time" class="form-control" value="" />
 							<div class="form-row">
 								<div class="col-xl-7">
-									<input id="start_date" type="date" name="start_date" class="form-control" value="{{ $edit ? date('Y-m-d', strtotime($assignment->start_time)) : old('start_date') }}" />
+									<input id="start_time_date" type="date" name="start_time_date" class="form-control" value="{{ $edit ? date('Y-m-d', strtotime($assignment->start_time)) : old('start_time_date') }}" />
 								</div>
 								<div class="col-xl-5">
-									<input id="start__time" type="time" name="start__time" class="form-control" value="{{ $edit ? date('H:i', strtotime($assignment->start_time)) : old('start__time',0) }}" />
+									<input id="start_time_time" type="time" name="start_time_time" class="form-control" value="{{ $edit ? date('H:i', strtotime($assignment->start_time)) : old('start_time_time',0) }}" />
 								</div>
 							</div>
 							{{-- {{ form_error('start_time', '<div class="alert alert-danger">', '</div>') }} --}}
@@ -113,10 +113,10 @@
 							<input id="finish_time" type="hidden" name="finish_time" class="form-control" value="" />
 							<div class="form-row">
 								<div class="col-xl-7">
-									<input id="finish_date" type="date" name="finish_date" class="form-control" value="{{ $edit ? date('Y-m-d', strtotime($assignment->finish_time)) : old('finish_date') }}" />
+									<input id="finish_time_date" type="date" name="finish_time_date" class="form-control" value="{{ $edit ? date('Y-m-d', strtotime($assignment->finish_time)) : old('finish_time_date') }}" />
 								</div>
 								<div class="col-xl-5">
-									<input id="finish__time" type="time" name="finish__time" class="form-control" value="{{ $edit ? date('H:i', strtotime($assignment->finish_time)) : old('finish__time') }}" />
+									<input id="finish_time_time" type="time" name="finish_time_time" class="form-control" value="{{ $edit ? date('H:i', strtotime($assignment->finish_time)) : old('finish_time_time') }}" />
 								</div>
 							</div>
 							{{-- {{ form_error('finish_time', '<div class="alert alert-danger">', '</div>') }} --}}

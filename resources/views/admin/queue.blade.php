@@ -1,9 +1,9 @@
 @php($selected = 'settings')
 @extends('layouts.app')
 @section('head_title','')
-@section('icon', 'fas fa-school')
+@section('icon', 'fas fa-play')
 
-@section('title', 'Classes')
+@section('title', 'Submission queue')
 
 @section('title_menu')
     {{-- Nếu là admin thì hiển thị --}}

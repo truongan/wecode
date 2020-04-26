@@ -45,7 +45,7 @@ class CreateAllTable extends Migration
             $table->tinyInteger('allow_practice');
             $table->char('diff_cmd', 20);
             $table->char('diff_arg', 20);
-            $table->text('admin_note');
+            $table->text('admin_note')->nullable();
             $table->timestamps();
         });
         Schema::create('settings', function (Blueprint $table) {

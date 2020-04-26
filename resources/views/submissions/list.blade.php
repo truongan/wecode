@@ -107,7 +107,13 @@
 					</tr>
 				</thead>
 				@foreach ($submissions as $submission)
-				<tr data-id="{{$submission->id}}">
+				<tr data-u="{{$submission->user->username}}" data-a="{{ $assignment->id }}" data-p="
+							@if ($assignment->id == 0)
+								{{$submission->problem->name}}
+							@else
+								{{ $all_problems[$submission->problem_id]->pivot->problem_name}}
+							@endif
+					" data-id="{{$submission->id}}">
 					@if ($choose == 'all')
 						<td>
 							<i class="pointer set_final far {{ $submission->is_final ? 'fa-check-circle color11' : 'fa-circle' }} fa-2x"></i>
@@ -156,21 +162,21 @@
 							<div class="btn btn-secondary">Pending</div>
 						@elseif (strtolower($submission->status) == "score")
 							@if ($submission->pre_score == 10000)
-								<div class="btn btn-success">{{$submission->final_score}}</div>
+								<div class="btn btn-success" data-type="result">{{$submission->final_score}}</div>
 							@else
-								<div class="btn btn-danger">{{$submission->final_score}}</div>
+								<div class="btn btn-danger" data-type="result">{{$submission->final_score}}</div>
 							@endif
 						@else 
-							<div class="btn btn-danger">{{$submission->status}}</div>
+							<div class="btn btn-danger" data-type="result">{{$submission->status}}</div>
 						@endif
 					</td>
 					<td>
-						<div class="btn btn-warning">Code</div>
+						<div class="btn btn-warning" data-type="code">Code</div>
 					</td>
 
 					@if (!in_array( Auth::user()->role->name, ['student']))
 					<td>
-						<div class="btn btn-secondary">Log</div>
+						<div class="btn btn-secondary" data-type="log">Log</div>
 					</td>
 					<td>
 					<div class="shj_rejudge pointer"><i class="fa fa-redo fa-lg color10"></i></div>
