@@ -50,7 +50,7 @@ class scoreboard_controller extends Controller
 			return false;//$message = array('error' => 'Scoreboard not found');
 		else
 		{
-			return $query;
+			return $query->first()->scoreboard;
 		}
 	}
 
