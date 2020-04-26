@@ -58,7 +58,7 @@ class scoreboard_controller extends Controller
 	}
 
 	private function _strip_scoreboard($assignment_id){
-		$a = Assignment::find($assignment_id)->get_scoreboard();
+		$a = $this->get_scoreboard($assignment_id);
 
 		//Remove excess info
 		$a = preg_replace('/[0-9]+:[0-9]+(\*\*)?/', '', $a);
@@ -84,9 +84,10 @@ class scoreboard_controller extends Controller
 		$data = array(
 			'place' => 'plain',
 			'assignment' => $assignment,
-			'scoreboard' => strip_tags( $this->_strip_scoreboard($assignment_id), "<table><thead><th><tbody><tr><td><br>")
+			'scoreboard' => strip_tags( $this->_strip_scoreboard($assignment_id), "<table><thead><th><tbody><tr><td><br>"),
+			'selected' => 'scoreboard'
 		);
-
+		
 		return view('scoreboard', $data);
 	}
 
@@ -96,10 +97,11 @@ class scoreboard_controller extends Controller
 		$data = array(
 			'place' => 'simplify',
 			'assignment' => $assignment,
-			'scoreboard' => $this->_strip_scoreboard($assignment_id)
+			'scoreboard' => $this->_strip_scoreboard($assignment_id),
+			'selected' => 'scoreboard',
 		);
 
-		return view('scoreboard.data', $data);
+		return view('scoreboard', $data);
 	}
 
 
