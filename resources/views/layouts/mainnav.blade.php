@@ -28,6 +28,11 @@
                         <span class="nav-link-text">Classes</span>
                     </a>
                 </li>
+                <li class="nav-item color-users {{ ($selected=="users") ? "selected" : ""}}">
+                    <a href="{{url('/practice')}}" class="nav-link">
+                        <span class="nav-link-text"><i class="fas fa-khanda fa-fw fa-lg"></i> WAR !!</span>
+                    </a>
+                </li>
                 @if ( in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
                     
                     <li class="nav-item color-settings {{ ($selected=="settings") ? "selected" : ""}}" >
@@ -42,17 +47,6 @@
                     <a class="nav-link" href="{{ url('assignments') }}">
                         <i class="fa fa-fw fa-folder-open fa-lg"></i>
                         <span class="nav-link-text">Assignments</span>
-                    </a>
-                </li>
-                
-                <li class="nav-item color-submit {{ ($selected=="submit") ? "selected" : ""}}">
-                    @if (Auth::user()->selected_assignment_id == null)
-                        <a class="nav-link" href="{{ route('submissions.create', [0, 0]) }}">
-                    @else
-                        <a class="nav-link" href="{{ route('submissions.create', [Auth::user()->selected_assignment_id, 0]) }}">
-                    @endif
-                        <i class="fas fa-fw fa-code fa-lg"></i>
-                        <span class="nav-link-text">Code Editor</span>
                     </a>
                 </li>
                 <li class="nav-item color-all_submissions {{ ($selected=="all_submissions") ? "selected" : ""}}">
@@ -93,15 +87,11 @@
                     <i class="fa fa-fw fa-refresh fa-spin fa-lg"></i>
                 </div>
             </div>
-            
-            <div class="bg-danger pl-3 pr-3 pt-2" style="height: 40.8px;">
-                <a href="{{url('/practice')}}" class="nav-link">
-                    <span class="text-light"><i class="fas fa-khanda text-light"></i> WAR !!</span>
-                </a>
-                
-            </div>
 
             <div class="navbar-nav">
+                <div class="bg-secondary pl-3 pr-3 pt-2 text-light" style="height: 40.8px;">
+                    {{Auth::user()->selected_assignment->name}}                    
+                </div>
                 <div class="top_object countdown d-flex flex-column justify-content-center" id="countdown">
                     <div class="time_block">
                         <span id="time_days" class="countdown_num"></span>
