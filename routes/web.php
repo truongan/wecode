@@ -49,6 +49,8 @@ Route::get('/practice', 'practice_controller@index');
 Route::get('/practice/show/{problem_id}', 'practice_controller@show')->name('practices.show');
 
 Route::get('/scoreboard/full/{id}', 'scoreboard_controller@index')->name('scoreboards.index');
+Route::get('/scoreboard/simplify/{id}', 'scoreboard_controller@simplify')->name('scoreboards.simplify');
+Route::get('/scoreboard/plain/{id}', 'scoreboard_controller@plain')->name('scoreboards.plain');
 //Resource route phải được  ghi cuối cùng, nếu không các route sau dính tới /usres sẽ ăn shit 
 Route::resource('users','UserController');
 Route::resource('notifications','notification_controller');

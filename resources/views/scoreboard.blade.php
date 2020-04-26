@@ -6,7 +6,6 @@
 
 @section('title_menu')
 {{-- thêm assignment.id vào --}}
-@php($place="full")
 @php($sl = 0)
 @if (isset(Auth::user()->selected_assignment_id))
 	@php($sl = 1)
@@ -26,9 +25,9 @@
 		<li class="nav-item">
 			<a class="nav-link {{$place=="simplify" ? "active" :""}}" 
 			@if ($sl)
-                href="{{ route('scoreboards.index', Auth::user()->selected_assignment_id) }}"
+                href="{{ route('scoreboards.simplify', Auth::user()->selected_assignment_id) }}"
             @else
-                href="{{ route('scoreboards.index', 0 )}}"
+                href="{{ route('scoreboards.simplify', 0 )}}"
             @endif
 			>
 			<i class="fas fa-star-half-alt color10"></i> Minimal information </a>
@@ -36,9 +35,9 @@
 		<li class="nav-item">
 			<a class="nav-link {{$place=="plain" ? "active" :""}}" 
 			@if ($sl)
-                href="{{ route('scoreboards.index', Auth::user()->selected_assignment_id) }}"
+                href="{{ route('scoreboards.plain', Auth::user()->selected_assignment_id) }}"
             @else
-                href="{{ route('scoreboards.index', 0 )}}"
+                href="{{ route('scoreboards.plain', 0 )}}"
             @endif
 			>
 			<i class="fas fa-star-half-alt color10"></i> Plain text Minimal </a>
