@@ -30,11 +30,14 @@ class scoreboard_controller extends Controller
     public function index($assignment_id)
     {
 		$assignment = Assignment::find($assignment_id);
-		
-		$this->update_scoreboard($assignment_id); 
+		$scoreboard = NULL;
+		if ($assignment)
+		{
+			$this->update_scoreboard($assignment_id); 
 
-		$scoreboard = $this->get_scoreboard($assignment_id);
+			$scoreboard = $this->get_scoreboard($assignment_id);
 		
+		}
 		return view('scoreboard', ['selected' => 'scoreboard',
 									'place' => 'full',	
 									'assignment' => $assignment,
@@ -202,16 +205,22 @@ class scoreboard_controller extends Controller
     public function update_scoreboard($assignment_id)
 	{
 
-		if ($assignment_id == 0)
+		if ($assignment_id == 1)
 			return false;
 		
+		$assignment =Assignment::find($assignment_id);
+
+		if (!$assignment)
+		{
+			return false;
+		}
+
 		list ($scores, $scoreboard) = $this->_generate_scoreboard($assignment_id);
-		
-		$all_problems = Assignment::find($assignment_id)->problems;
+		$all_problems = $assignment->problems;
 		
 		$total_score = 0;
-		foreach($all_problems as $i)
-			$total_score += $i['score'];
+		foreach($all_problems as $item)
+			$total_score += $item->pivot->score;
 	
 		$all_name = User::all();
 		foreach($all_name as $row)
@@ -225,9 +234,9 @@ class scoreboard_controller extends Controller
 			'total_score' => $total_score,
 			'scores' => $scores,
 			'scoreboard' => $scoreboard,
-			'names' => $result
+			'names' => $result,
+			'no_of_problems'=> $assignment->problems->count()
 		);
-		
 		$scoreboard_table = view('scoreboard_table', $data)->render();
 		
 		#Minify the scoreboard's html code
