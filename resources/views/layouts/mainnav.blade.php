@@ -89,9 +89,13 @@
             </div>
 
             <div class="navbar-nav">
-                <div class="bg-secondary pl-3 pr-3 pt-2 text-light" style="height: 40.8px;">
-                    {{Auth::user()->selected_assignment->name}}                    
-                </div>
+                
+                    @if(isset(Auth::user()->selected_assignment->name))
+                        <div class="bg-secondary pl-3 pr-3 pt-2 text-light" style="height: 40.8px;">
+                            {{Auth::user()->selected_assignment->name}}  
+                        </div>
+                    @endif
+                
                 <div class="top_object countdown d-flex flex-column justify-content-center" id="countdown">
                     <div class="time_block">
                         <span id="time_days" class="countdown_num"></span>
