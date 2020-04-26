@@ -106,7 +106,7 @@ class dummy_data extends Seeder
             $assignment->total_submits = $assignment->submissions->count();
             $assignment->save();
         }
-
+        
         // We don't need this. queue page is done
         // for ($i=1; $i < 10; $i++) { 
         //     Queue_item::create([
@@ -150,5 +150,6 @@ class dummy_data extends Seeder
             shuffle($a);
             Lop::find($i)->users()->attach(array_slice($a,0,rand()%7));
         }
+        
     }
 }

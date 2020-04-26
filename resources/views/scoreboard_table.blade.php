@@ -20,8 +20,8 @@
             </th>
         </tr>
     </thead>
-    
-    @foreach ($scoreboard->username as $sc_username)
+   
+    @foreach ($scoreboard['username'] as $sc_username)
         <tr>
         <td>{{ $loop->index }}</td>
         <td>{{ $sc_username }}</td>
@@ -50,18 +50,18 @@
         @endforeach
         <td>
             <a class="text-muted" href="#" >
-                <span>{{ $scoreboard['score'][$loop->index0] }}</span>
+                <span>{{ $scoreboard['score'][$loop->index] }}</span>
                 <br>
-                <span class="small" title="Total Time + Submit Penalty">{{ time_hhmm($scoreboard['submit_penalty'][$loop->index0]) }}</span>
+                <span class="small" title="Total Time + Submit Penalty"> {{($scoreboard['submit_penalty'][$loop->index]) }}</span>
             </a>
         </td>
         <td class="bg-success text-light" >
-        <span class="lead"><strong>{{ $scoreboard['accepted_score'][$loop->index0] }}</strong></span>
+        <span class="lead"><strong>{{ $scoreboard['accepted_score'][$loop->index] }}</strong></span>
         <br>
-        <span class="small" title="Solved : Attack ratio">{{ $scoreboard['solved'][$loop->index0]}}:{{ $scoreboard['tried_to_solve'][$loop->index0]}}</span>
+        <span class="small" title="Solved : Attack ratio">{{ $scoreboard['solved'][$loop->index]}}:{{ $scoreboard['tried_to_solve'][$loop->index]}}</span>
         </td>
         </tr>
-    @endfor
+    @endforeach
     
     </table>
     *: Not full mark
