@@ -45,7 +45,7 @@ class CreateAllTable extends Migration
             $table->tinyInteger('allow_practice');
             $table->char('diff_cmd', 20);
             $table->char('diff_arg', 20);
-            $table->text('admin_note');
+            $table->text('admin_note')->nullable();
             $table->timestamps();
         });
         Schema::create('settings', function (Blueprint $table) {
@@ -71,7 +71,7 @@ class CreateAllTable extends Migration
             $table->dateTime('finish_time');
             $table->integer('extra_time');
             $table->text('late_rule')->nullable();
-            $table->text('description')->nullable();
+            $table->text('description')->nullable(); 
             $table->char('moss_update', 30)->nullable();
             $table->timestamps();
         });
@@ -113,11 +113,13 @@ class CreateAllTable extends Migration
             $table->unsignedInteger('last_author');
             $table->timestamps();
         });
-        Schema::create('scoreboard', function (Blueprint $table) {
+
+        Schema::create('scoreboards', function (Blueprint $table) {
             $table->unsignedSmallInteger('assigment'); 
             $table->longText('scoreboard'); 
             $table->timestamps();
         });
+        
     }
 
     /**
@@ -140,6 +142,6 @@ class CreateAllTable extends Migration
         Schema::dropIfExists('submissions');
         Schema::dropIfExists('language_problem');
         Schema::dropIfExists('notifications');
-        Schema::dropIfExists('scoreboard');
+        Schema::dropIfExists('scoreboards');
     }
 }

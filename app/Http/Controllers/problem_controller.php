@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Problem;
 use App\Setting;
 use App\Language;
+use App\Tag;
 use App\Submission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -28,7 +29,7 @@ class problem_controller extends Controller
     {
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
             abort(404);  
-        return view('problems.list',['problems'=>Problem::all()]); 
+        return view('problems.list',['problems'=>Problem::latest()->get()]); 
     }
 
     /**
@@ -47,6 +48,8 @@ class problem_controller extends Controller
                                       'messages'=>[],
                                       'languages'=>[],
                                       'max_file_uploads'=>1000,    
+                                      'all_tags' => Tag::all(),
+                                      'tags' => [],
                                   ]);
                                 
     }
@@ -59,7 +62,7 @@ class problem_controller extends Controller
      */
     public function store(Request $request)
     {
-       
+        // dd($request->input('tag_id'));
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
             abort(404);
         
@@ -72,7 +75,10 @@ class problem_controller extends Controller
         $the_id = $this->new_problem_id();
         $problem = $request->input();
         $problem["allow_practice"] = isset($request["allow_practice"]) ? 1 : 0;
-        Problem::create($problem);
+        $p = Problem::create($problem);
+
+        $p->tags()->sync($request->input('tag_id'));
+
         // Processing file 
         $this->_take_test_file_upload($request, $the_id, $messages);  
         
@@ -120,12 +126,15 @@ class problem_controller extends Controller
             {
                 $languages[$lang->id] = $lang;
             }
+        $tags = $problem->tags->keyBy('id');
         return view('problems.create', ['problem'=>$problem,
                                       'all_languages'=>Language::all(),
                                       'messages'=>[],  
                                       'languages'=>$languages,
                                       'tree_dump'=>shell_exec("tree -h " . $this->get_directory_path($problem->id)),  
                                       'max_file_uploads'=>1000,
+                                      'all_tags' => Tag::all(),
+                                      'tags' => $tags,
                                   ]);
     }
 
@@ -149,6 +158,8 @@ class problem_controller extends Controller
         $req["allow_practice"] = isset($request["allow_practice"]) ? 1 : 0;
 
         $problem->update($req); 
+        $problem->tags()->sync($request->input('tag_id'));
+
         $this->replace_problem($request,$problem->id,$problem);
         $this->_take_test_file_upload($request, $problem->id, $messages);  
         

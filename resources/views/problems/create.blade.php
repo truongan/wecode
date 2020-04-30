@@ -6,9 +6,14 @@
 @section('title', 'New Problem')
 
 @section('other_assets')
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/select2/select2.min.css') }}">
 <style type="text/css">
 	input[type='number']{
 		min-width: 80px!important;
+	}
+
+	#choice_multi_assignment .select2-selection__choice{
+		display:none !important;
 	}
 </style>
 @endsection
@@ -20,13 +25,8 @@
 @endsection
 
 @section('body_end')
-<script src="{{ asset('assets/ckeditor/ckeditor.js') }}" charset="utf-8"></script>
-<script>
-$(document).ready(function(){
-	CKEDITOR.replace("notif_text");
-});
-</script>
-
+<script type="text/javascript" src="{{ asset('assets/select2/select2.min.js') }}"></script>
+<script type='text/javascript' src="{{ asset('assets/js/taboverride.min.js') }}"></script>
 <script type="text/javascript">
 	$(".add_language").click(function(){
 		var lang = $(this).data('lang');
@@ -46,6 +46,11 @@ $(document).ready(function(){
 		row.children('.lang_checkbox').val(0);
 
 		$('.add_language_' + lang).toggleClass('d-none');
+	});
+
+	$(document).ready(function(){
+		tabOverride.set(document.getElementsByTagName('textarea'));
+		$('.js-example-basic-multiple').select2();
 	});
 </script>
 @endsection
@@ -69,14 +74,14 @@ $(document).ready(function(){
 	@endif
 	
 	
-<form method="POST"
-	@if ($edit)
-		action="{{ route('problems.update', $problem) }}"
-	@else  
-		action="{{ route('problems.store') }}"
-	@endif
-	enctype="multipart/form-data"
->
+	<form method="POST"
+		@if ($edit)
+			action="{{ route('problems.update', $problem) }}"
+		@else  
+			action="{{ route('problems.store') }}"
+		@endif
+		enctype="multipart/form-data"
+	>
 	@if ($edit)
 		@method("PUT")
 	@endif
@@ -131,6 +136,22 @@ $(document).ready(function(){
 							<input id="form_tests_dir" type="file" webkitdirectory  multiple name="tests_dir[]" class="custom-file-input" />
 							<label class="custom-file-label text-muted"><small>Test cases and description folder</small></label>
 						</div>
+					</div>
+				</div>
+			</fieldset>
+			<fieldset class="form-group">
+				<div class="form-row">
+					<div class="col-sm-4">
+						<label>Select tag(s)</label>
+					</div>
+					<div class="col-sm-8">
+						<select class="js-example-basic-multiple form-control" multiple="multiple" name="tag_id[]">
+							@foreach( $all_tags as $t)
+							<option value="{{ $t->id }}" data-text="{{$t->text}}" data-id="{{$t->id}}" 
+								{{ isset($tags[$t->id]) ? 'selected="selected"' : ''  }}
+								> {{$t->text}}</option>
+							@endforeach
+						</select>
 					</div>
 				</div>
 			</fieldset>

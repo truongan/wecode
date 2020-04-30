@@ -16,7 +16,6 @@
 
 @section('content')
 <div class="row">
-  <div class="col">
 	<div class="table-responsive">
 	{{-- {% set msgclasses = {'success': 'text-success', 'notice': 'text-info', 'error': 'text-danger'} %}
 	{% for message in messages %}
@@ -29,6 +28,7 @@
 	<table class="table table-striped table-bordered">
 		<thead class="thead-dark">
 			<tr>
+				<th>#</th>
 				<th>ID</th>
 				<th style="width: 20%">Name</th>
 				<th style="width: 20%">Note</th>
@@ -42,6 +42,7 @@
 		</thead>
 	  @foreach ($problems as $item)
 		<tr data-id="{{$item->id}}">
+			<td> {{$loop->index}}</td>
 			<td>{{ $item->id}}</td>
 			<td><a href="{{ url("problems/$item->id") }}">{{ $item->name }}</a></td>
 			<td>{{$item->admin_note}}</td>
@@ -78,7 +79,6 @@
 	  @endforeach
 	</table>
 	</div>
-  </div>
 </div>
 
 <div class="modal fade" id="problem_delete" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">

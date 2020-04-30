@@ -1,5 +1,5 @@
 {{--Code editer--}}
-@php($selected = 'submit')
+@php($selected = 'assignments')
 
 @extends('layouts.app')
 
