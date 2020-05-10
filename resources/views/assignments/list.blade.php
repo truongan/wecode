@@ -53,7 +53,11 @@
 					<i  class=" far {{ (isset(Auth::user()->selected_assignment->id) && $assignment->id == Auth::user()->selected_assignment->id) ? 'fa-check-square color6' : 'fa-square' }} fa-2x" data-id="{{ $assignment->id }}"></i>
 				</span>
 			</td>
-			<td>Class</td>
+			<td>
+				@foreach ($assignment->lops as $lop)
+					<span class="badge badge-pill badge-secondary"><a href="{{ route('lops.show', $lop->id) }}" class="text-white">{{$lop->name}}</a></span><br>
+				@endforeach
+			</td>
 			<td>
 				<a href="{{ route('assignments.show',['assignment'=>$assignment,'problem_id'=>$assignment->problems->first()->id??0]) }}" data-toggle="tooltip" title="Click to view problem(s)">
 					<strong>{{ $assignment->name }}</strong>
