@@ -62,7 +62,7 @@ class submission_controller extends Controller
 
 	public function create($assignment_id, $problem_id){
 		$assignment = Assignment::find($assignment_id);
-
+		
 		if ($assignment_id == 0){
 			$problem = Problem::find($problem_id);
 			if ($problem->allow_practice == 0 && in_array( Auth::user()->role->name, ['student']) ){
@@ -73,6 +73,8 @@ class submission_controller extends Controller
 			$problem = $assignment->problems->find($problem_id);
 		else
 			$problem = $assignment->problems->first();
+		
+		if ($problem == NULL) abort(404);
 		return view('submissions.create', ['assignment' => $assignment, 'problem' => $problem]);
 	}
 

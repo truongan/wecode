@@ -29,10 +29,10 @@ Download the latest release by cloning this repository.
 
 For running Wecode judge, a Linux server with following requirements is needed:
 
-  * Webserver running PHP version 5.3 or later with `mysqli` extension
-  * PHP CLI (PHP command line interface, i.e. `php` shell command)
+  * Written using laravel 7, wecode judge share the server requirement with its [framework](https://laravel.com/docs/7.x#server-requirements)
   * MySql or PostgreSql database
-  * PHP must have permission to run shell commands using [`shell_exec()`](http://www.php.net/manual/en/function.shell-exec.php) php function (specially `shell_exec("php");`)
+  * PHP must have permission to run shell commands using [`shell_exec()`](http://www.php.net/manual/en/function.shell-exec.php) php function (specially `shell_exec("php");`). 
+  * composer should be install 
   * Docker! (wecode judge can use native tools for compiling and running submitted codes but that's a severe security risk, planned to be removed)
   * It is better to have `perl` installed for more precise time and memory limit and imposing size limit on output of submitted code.
 
@@ -41,6 +41,7 @@ For running Wecode judge, a Linux server with following requirements is needed:
   1. Clone latest release from [github repository](https://github.com/truongan/wecode) into a directory with read/write permission. Then put the index.php file in your webserver's serving directory
   3. Create a MySql or PostgreSql database for Wecode judge.
   5. Copy `.env.example` to `.env` and edit database settings
+  6. cd into your `wecode` directory and run `./install.sh`
   6. install necessary library with `composer install` then generate a specific encryption key with `php artisan key:generate`
   7. Open the main page of Wecode in a web browser and follow the installation process.
 

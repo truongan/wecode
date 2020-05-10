@@ -49,6 +49,10 @@ Route::get('/practice', 'practice_controller@index');
 Route::get('/practice/show/{problem_id}', 'practice_controller@show')->name('practices.show');
 
 Route::get('/scoreboard/full/{id}', 'scoreboard_controller@index')->name('scoreboards.index');
+
+Route::get('/assignment/{assignment}/{problem_id}/', 'assignment_controller@show')->name('assignments.show');
+Route::get('/assignment/download/{assignment}/{type}/', 'assignment_controller@show')->name('assignments.download');
+
 //Resource route phải được  ghi cuối cùng, nếu không các route sau dính tới /usres sẽ ăn shit 
 Route::resource('users','UserController');
 Route::resource('notifications','notification_controller');
@@ -56,6 +60,5 @@ Route::resource('lops','lop_controller');
 Route::resource('languages','language_controller');
 Route::resource('tags','tag_controller');
 Route::resource('problems','problem_controller');
-Route::resource('assignments','assignment_controller');
 
-Route::get('/assignment/{assignment}/{problem_id}/', 'assignment_controller@show')->name('assignments.show');
+Route::resource('assignments','assignment_controller')->except(['show']);
