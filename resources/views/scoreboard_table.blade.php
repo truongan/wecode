@@ -6,9 +6,9 @@
             <th>Name</th>
             @foreach ($problems as $problem)
             <th>
-                <a class="small" href="#">{{ $problem->problem_name }}</a>
+                <a class="small" href="#">{{ $problem->pivot->problem_name }}</a>
                 <br>
-                <a class="text-light" href="#">{{ $problem->score }}</a>
+                <a class="text-light" href="#">{{ $problem->pivot->score }}</a>
             </th>
             @endforeach
             <th>

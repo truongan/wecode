@@ -30,6 +30,7 @@
 			<tr>
 				<th>#</th>
 				<th>Select</th>
+				<th>Class</th>
 				<th>Name</th>
 				<th>Submissions</th>
 				<th>Coefficient</th>
@@ -52,6 +53,7 @@
 					<i  class=" far {{ (isset(Auth::user()->selected_assignment->id) && $assignment->id == Auth::user()->selected_assignment->id) ? 'fa-check-square color6' : 'fa-square' }} fa-2x" data-id="{{ $assignment->id }}"></i>
 				</span>
 			</td>
+			<td>Class</td>
 			<td>
 				<a href="{{ route('assignments.show',['assignment'=>$assignment,'problem_id'=>$assignment->problems->first()->id??0]) }}" data-toggle="tooltip" title="Click to view problem(s)">
 					<strong>{{ $assignment->name }}</strong>
@@ -114,11 +116,11 @@
 <script type='text/javascript' src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 <script type='text/javascript' src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
 <script>
-{{-- $(document).ready(function () {
+$(document).ready(function () {
     $("table").DataTable({
 		"pageLength": 10,
 		"lengthMenu": [ [10, 20, 30, 50, -1], [10, 20, 30, 50, "All"] ]
 	});
-});  --}}
+});
 </script>
 @endsection

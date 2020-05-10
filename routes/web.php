@@ -38,6 +38,7 @@ Route::post('/submissions/store/', 'submission_controller@store')->name('submiss
 Route::post('/submissions/get_template/', 'submission_controller@get_template')->name('submissions.get_template');
 Route::post('/submissions/rejudge/', 'submission_controller@rejudge')->name('submissions.rejudge');
 Route::post('/submissions/view_code/', 'submission_controller@view_code')->name('submissions.view_code');
+Route::get('/rejudge', 'submission_controller@rejudge_view')->name('submissions.rejudge_view');
 
 
 Route::get('/queue', 'queue_controller@index')->name('queue.index');
@@ -52,6 +53,8 @@ Route::get('/scoreboard/full/{id}', 'scoreboard_controller@index')->name('scoreb
 
 Route::get('/assignment/{assignment}/{problem_id}/', 'assignment_controller@show')->name('assignments.show');
 Route::get('/assignment/download/{assignment}/{type}/', 'assignment_controller@show')->name('assignments.download');
+Route::get('/scoreboard/simplify/{id}', 'scoreboard_controller@simplify')->name('scoreboards.simplify');
+Route::get('/scoreboard/plain/{id}', 'scoreboard_controller@plain')->name('scoreboards.plain');
 
 //Resource route phải được  ghi cuối cùng, nếu không các route sau dính tới /usres sẽ ăn shit 
 Route::resource('users','UserController');

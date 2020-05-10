@@ -6,19 +6,40 @@
 
 @section('title_menu')
 {{-- thêm assignment.id vào --}}
-@php($place="full")
+@php($sl = 0)
+@if (isset(Auth::user()->selected_assignment_id))
+	@php($sl = 1)
+@endif
 <small>
 	<ul class="nav nav-pills">
 		<li class="nav-item">
-			<a class="nav-link {{$place=="full" ? "active" :""}}" href="{{ url('scoreboard/full/assignment.id') }}">
+			<a class="nav-link {{$place=="full" ? "active" :""}}"
+			@if ($sl)
+                href="{{ route('scoreboards.index', Auth::user()->selected_assignment_id) }}"
+            @else
+                href="{{ route('scoreboards.index', 0 )}}"
+            @endif
+			>
 			<i class="fas fa-star color10"></i> Full information </a>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link {{$place=="simplify" ? "active" :""}}" href="{{ url('scoreboard/simplify/assignment.id') }}">
+			<a class="nav-link {{$place=="simplify" ? "active" :""}}" 
+			@if ($sl)
+                href="{{ route('scoreboards.simplify', Auth::user()->selected_assignment_id) }}"
+            @else
+                href="{{ route('scoreboards.simplify', 0 )}}"
+            @endif
+			>
 			<i class="fas fa-star-half-alt color10"></i> Minimal information </a>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link {{$place=="plain" ? "active" :""}}" href="{{ url('scoreboard/plain/assignment.id') }}">
+			<a class="nav-link {{$place=="plain" ? "active" :""}}" 
+			@if ($sl)
+                href="{{ route('scoreboards.plain', Auth::user()->selected_assignment_id) }}"
+            @else
+                href="{{ route('scoreboards.plain', 0 )}}"
+            @endif
+			>
 			<i class="fas fa-star-half-alt color10"></i> Plain text Minimal </a>
 		</li>
 	</ul>

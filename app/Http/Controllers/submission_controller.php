@@ -157,6 +157,18 @@ class submission_controller extends Controller
 		return $assignment_root . "/assignment_{$assignment_id}/problem_{$problem_id}/{$username}";
 	}
 
+
+	public function rejudge_view()
+	{
+		if (in_array( Auth::user()->role->name, ['student']))
+			abort(403,"You don't have permission to do that");
+		if (Auth::user()->selected_assignment_id != null)
+			$assignment = Assignment::find(Auth::user()->selected_assignment_id);
+		else
+			$assignment = Assignment::find(0);
+		return view('submissions.rejudge', ['assignment' => $assignment]);
+	}
+
 	public function rejudge(Request $request){
 		if (!in_array( Auth::user()->role->name, ['student'])){
 			$validated = $request->validate([

@@ -60,7 +60,14 @@
                     </a>
                 </li>
                 <li class="nav-item color-scoreboard {{ ($selected=="scoreboard") ? "selected" : ""}}">
-                    <a class="nav-link" href="{{ route('scoreboards.index', 1) }}">
+                    <a class="nav-link" 
+                    @if (isset(Auth::user()->selected_assignment_id))
+                    href="{{ route('scoreboards.index', (int)Auth::user()->selected_assignment_id) }}"
+                    @else
+                    href="{{ route('scoreboards.index', 0 )}}"
+                    @endif
+
+                    >
                         <i class="fa fa-fw fa-star fa-lg"></i>
                         <span class="nav-link-text">Scoreboard</span>
                     </a>

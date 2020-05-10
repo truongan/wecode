@@ -94,7 +94,7 @@
       <div class="card-body bg-light">
         <h5 class="card-title">Rejudge</h5>
         <p  class="card-text">Zậy đó</p>
-        <a href="{{ url('htmleditor') }}" class="stretched-link"></a>
+        <a href="{{ url('rejudge') }}" class="stretched-link"></a>
       </div>
     </div>
   </div>
