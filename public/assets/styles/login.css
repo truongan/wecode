@@ -9,7 +9,6 @@
 body {
 	background: #333;
 	color: #8d8d8d;
-	font-size: 12px;
 	font-family: sans-serif;
 }
 
@@ -59,6 +58,7 @@ div.login_form {
 }
 
 div.login1 {
+	font-size: 12px;
 	background-color: #fbfbfb;
 	padding: 10px 20px 20px 20px;
 	box-shadow: rgba(0, 0, 0, 0.2) 0 0 5px -1px;
@@ -68,6 +68,7 @@ div.login1 {
 }
 
 div.login2 {
+	font-size: 12px;
 	padding: 15px;
 	border: 1px solid #ccc;
 	border-top:none;
