@@ -14,7 +14,7 @@
 <div class="ml-4">
     <form method="POST"  action="{!! route('tags.store') !!}">
         <input type="hidden"  name ="_token" value="{!! csrf_token() !!}"/>
-        <input placeholder="Tag's name here" type="text" name="text">
+        <input placeholder="Tag's name here" type="text" name="text" required>
         <button type="submit" class="bg-transparent border-0 text-primary"><i class="fas fa-plus fa-lg color8"></i> Add</button>
     </form>    
 </div>
@@ -23,36 +23,34 @@
 
 @section('content')
 <div class="row">
-    <div class="col">
-        <div class="table-responsive">
-            <table class="table table-striped table-bordered">
-                <thead class="thead-dark">
-                <tr>
-                    <th>#</th>
-                    <th>ID</th>
-                    <th>Text</th>
-                    <th>No. of Problems</th>
-                    <th>Tools</th>
-                </tr>
-                </thead>
-                @foreach ($tags as $item)
-                <tr data-id="{{$item->id}}">
-                    <td> {{$loop->iteration}} </td>
-                    <td>{{ $item->id}}</td>
-                    <td><a href="{{ route('tags.show', $item->id) }}">{{ $item->text }}</a></td>
-                    <td>
-                        {{$item->problems->count()}}
-                    </td>
-                    <td> 
-                        <a title="Edit" href="{{ route('tags.edit', $item) }}"><i class="fas fa-edit fa-lg color9"></i></a>
-                        <span title="Delete Tag" class="del_n delete_tag pointer"><i title="Delete Tag" class="far fa-trash-alt fa-lg color1"></i></span>
-                    </td>
-                
-                </tr>
-                @endforeach
-            </table>
-        </div>  
-    </div>
+  <div class="table-responsive">
+    <table class="table table-striped table-bordered">
+        <thead class="thead-dark">
+        <tr>
+            <th>#</th>
+            <th>ID</th>
+            <th>Text</th>
+            <th>No. of Problems</th>
+            <th>Tools</th>
+        </tr>
+        </thead>
+        @foreach ($tags as $item)
+        <tr data-id="{{$item->id}}">
+            <td> {{$loop->iteration}} </td>
+            <td>{{ $item->id}}</td>
+            <td><a href="{{ route('tags.show', $item->id) }}">{{ $item->text }}</a></td>
+            <td>
+                {{$item->problems->count()}}
+            </td>
+            <td> 
+                <a title="Edit" href="{{ route('tags.edit', $item) }}"><i class="fas fa-edit fa-lg color9"></i></a>
+                <span title="Delete Tag" class="del_n delete_tag pointer"><i title="Delete Tag" class="far fa-trash-alt fa-lg color1"></i></span>
+            </td>
+        
+        </tr>
+        @endforeach
+    </table>
+  </div>  
 </div>
 
 

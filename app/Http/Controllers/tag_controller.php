@@ -46,6 +46,7 @@ class tag_controller extends Controller
     {
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
             abort(404);
+        $request->validate(['text' => 'required']);
         Tag::create($request->input());
         return redirect('tags'); 
     }
