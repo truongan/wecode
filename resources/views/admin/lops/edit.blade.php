@@ -36,7 +36,7 @@
 		<div class="form-group">
 		<label for="name">Class name</label>
 		<input {{$ed == 0 ? 'disabled' : ''}} type="text"
-			class="form-control" name="name" id="name" aria-describedby="_name_desc" placeholder="name" value={{$lop->name}}>
+			class="form-control" name="name" id="name" aria-describedby="_name_desc" placeholder="name" value="{{$lop->name}}">
 		<small id="_name_desc" class="form-text text-muted" {{$ed == 0 ? 'hidden' : ''}}>The name of this new class</small>
 		</div>
 		<div class="custom-control custom-checkbox" >
