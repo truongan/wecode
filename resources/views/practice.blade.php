@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @php($selected = 'users')
 @section('head_title','Practice')
-@section('icon', 'fas fa-folder-open')
+@section('icon', 'fas fa-khanda fa-fw fa-lg')
 
 @section('title', 'Practice')
 
@@ -10,10 +10,8 @@
 @endsection
 
 @section('title_menu')
-<th>Practice</th>
 @endsection
 
-@section('content')
 @section('content')
 <div class="row">
     <div class="col">

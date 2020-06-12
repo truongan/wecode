@@ -30,7 +30,7 @@
                 </li>
                 <li class="nav-item color-users {{ ($selected=="users") ? "selected" : ""}}">
                     <a href="{{url('/practice')}}" class="nav-link">
-                        <span class="nav-link-text"><i class="fas fa-khanda fa-fw fa-lg"></i> WAR !!</span>
+                        <span class="nav-link-text"><i class="fas fa-khanda fa-fw fa-lg"></i> Practice</span>
                     </a>
                 </li>
                 @if ( in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
