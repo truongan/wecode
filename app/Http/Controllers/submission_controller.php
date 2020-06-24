@@ -179,7 +179,10 @@ class submission_controller extends Controller
 			$assignment = Assignment::with('problems')->find(Auth::user()->selected_assignment_id);
 		else
 			$assignment = Assignment::with('problems')->find(0);
-		$submissions = Submission::where('assignment_id',$assignment->id)->where('problem_id', $request->problem_id)->get();
+		if ($request->problem_id == 'all')
+			$submissions = Submission::where('assignment_id',$assignment->id)->get();
+		else
+			$submissions = Submission::where('assignment_id',$assignment->id)->where('problem_id', $request->problem_id)->get();
 		foreach ($submissions as $submission)
 		{
 			$a = Queue_item::add_and_process($submission->id, 'rejudge');
