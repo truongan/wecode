@@ -143,6 +143,18 @@
 					</div>
 				</div>
 			</fieldset>
+			
+			<fieldset class="form-group">
+				<div class="form-row">
+					<div class="col-sm-4">
+						<label>Select ...</label>
+					</div>
+					<div class="col-sm-8">
+						<input type="range" class="custom-range" min="1" max="5" id="customRange2" name="difficult">
+					</div>
+				</div>
+			</fieldset>
+
 			<fieldset class="form-group">
 				<div class="form-row">
 					<div class="col-sm-4">
@@ -175,11 +187,11 @@
 					</label>
 				</div>
 			</fieldset>
-			<fieldset class="form-group" data-toggle="tooltip" data-html="true" title="Rename all files in <strong>in</strong> and <strong>out</strong> folder after unziping. This is assuming that all files in these two folder are perfectly corresponding to each when sorted by file name. This could useful when importing dataset from another format but should be use with care ">
+			<fieldset class="form-group" data-toggle="tooltip" data-html="true" title="Add this problem into practice">
 				<div class="custom-control custom-switch">
 					<input type="checkbox" class="custom-control-input" id="customSwitch2" name = "allow_practice">
 					<label class="custom-control-label" for="customSwitch2">
-						Nội dung
+						Allow practice
 					</label>
 				</div>
 			</fieldset>
