@@ -60,7 +60,14 @@ Users - {{$user->username}}
 		  </div>
 		</div>
 		<div class="form-group form-row">
-		  <label for="form_password" class="col-4">Password:<br>
+			<label for="form_password_2" class="col-4">Old Password:</label>
+			<div class="col-8">
+			  <input id="form_password_2" type="password" name="old_password" class="form-control"/>
+			  {{-- {{ form_error('password_again', '<div class="form-text text-danger">', '</div>') }} --}}
+			</div>
+		  </div>
+		<div class="form-group form-row">
+		  <label for="form_password" class="col-4">New Password:<br>
 		  </label>
 		  <div class="col-8">
 			<input id="form_password" type="password" name="password" class="form-control"/>
@@ -69,12 +76,13 @@ Users - {{$user->username}}
 		  </div>
 		</div>
 		<div class="form-group form-row">
-		  <label for="form_password_2" class="col-4">Password, Again:</label>
+		  <label for="form_password_2" class="col-4">New Password, Again:</label>
 		  <div class="col-8">
-			<input id="form_password_2" type="password" name="password_again" class="form-control"/>
+			<input id="form_password_2" type="password" name="password_confirmation" class="form-control"/>
 			{{-- {{ form_error('password_again', '<div class="form-text text-danger">', '</div>') }} --}}
 		  </div>
 		</div>
+		
 		@if ( in_array( Auth::user()->role->name, ['admin']) )
 		<div class="form-group form-row">
 		  <label for="form_role" class="col-4">User Role:</label>

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -105,27 +106,35 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        if (Auth::user()->role != 'admin' && Auth::user()->id != $user->id){
+        if (Auth::user()->role->name != 'admin' && Auth::user()->id != $user->id){
             //Non admin only can update their own user profile
             abort(403);
         }
-        //
+
         $validated = $request->validate([
-            'username' => ['required', 'string', 'max:50', 'unique:users'],
+            'username' => ['string', 'max:50', 'unique:users'],
             'display_name' => ['nullable', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'email' => ['required', 'string', 'email', 'max:255'],
+            'password' => ['nullable','string', 'min:8', 'confirmed'],
+            'old_password' => ['required', function ($attribute, $value, $fail) use ($user) {
+                if (!\Hash::check($value, $user->password)) {
+                    return $fail(__('The current password is incorrect.'));
+                }
+            }],
         ]);
 
-        $user->fill($request->input());
-
-        if ($request->password!="")
-            $user->password=Hash::make($request->password);
-        if ($request->role_id!=NULL &&  Auth::user()->role->name == 'admin') {
-            $user->role_id = $request->role_id;
+        $data = $request->input();
+        if (!isset($data['password']))
+        {
+            unset($data['password']);
+            unset($data['password_confirmation']);
         }
+        else
+            $data['password'] = Hash::make($data['password']);
+        
+        $user->fill($data);
         $user->save();
-
+        
         return back()->withInput();
     }
 
