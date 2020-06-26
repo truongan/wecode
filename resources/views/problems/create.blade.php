@@ -52,6 +52,10 @@
 		tabOverride.set(document.getElementsByTagName('textarea'));
 		$('.js-example-basic-multiple').select2();
 	});
+	$(".js-example-tokenizer").select2({
+    tags: true,
+    tokenSeparators: [',', ' ']
+})
 </script>
 @endsection
 
@@ -145,7 +149,7 @@
 						<label>Select tag(s)</label>
 					</div>
 					<div class="col-sm-8">
-						<select class="js-example-basic-multiple form-control" multiple="multiple" name="tag_id[]">
+						<select class="js-example-tokenizer form-control" multiple="multiple" name="tag_id[]">
 							@foreach( $all_tags as $t)
 							<option value="{{ $t->id }}" data-text="{{$t->text}}" data-id="{{$t->id}}" 
 								{{ isset($tags[$t->id]) ? 'selected="selected"' : ''  }}

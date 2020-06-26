@@ -22,7 +22,7 @@
     @yield('other_assets')
 </head>
 <body id="body" class="fixed-nav ">
-    @yield('mainnav', View::make('layouts.mainnav', ['selected' => $selected]))
+    @yield('mainnav', View::make('layouts.mainnav', ['selected' => $selected ?? '']))
 
     <div class="content-wrapper"><div class="container-fluid">
         <div class="row">

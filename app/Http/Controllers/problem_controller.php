@@ -62,13 +62,26 @@ class problem_controller extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->input('tag_id'));
+        //dd($request->input('tag_id'));
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
             abort(404);
         
         $validatedData = $request->validate([
             'name' => ['required','max:255'],
         ]);
+
+        $tags = $request->input('tag_id');
+        foreach ($tags as $i => $tag) 
+        {
+            if (Tag::find($tag) == null)
+            {
+                $new_tag = new Tag;
+                $new_tag->text = $tag;
+                $new_tag->save();
+                $tags[$i]=(string)$new_tag->id;
+            }
+
+        }
 
         $default_language = Language::find(1);
         
@@ -77,7 +90,7 @@ class problem_controller extends Controller
         $problem["allow_practice"] = isset($request["allow_practice"]) ? 1 : 0;
         $p = Problem::create($problem);
 
-        $p->tags()->sync($request->input('tag_id'));
+        $p->tags()->sync($tags);
 
         // Processing file 
         $this->_take_test_file_upload($request, $the_id, $messages);  

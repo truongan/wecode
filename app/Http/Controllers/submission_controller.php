@@ -8,6 +8,7 @@ use App\Problem;
 use App\Queue_item;
 use App\Language;
 use App\Setting;
+use Redirect;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -163,10 +164,32 @@ class submission_controller extends Controller
 		if (in_array( Auth::user()->role->name, ['student']))
 			abort(403,"You don't have permission to do that");
 		if (Auth::user()->selected_assignment_id != null)
-			$assignment = Assignment::find(Auth::user()->selected_assignment_id);
+			$assignment = Assignment::with('problems')->find(Auth::user()->selected_assignment_id);
 		else
-			$assignment = Assignment::find(0);
-		return view('submissions.rejudge', ['assignment' => $assignment]);
+			$assignment = Assignment::with('problems')->find(0);
+		return view('submissions.rejudge', ['assignment' => $assignment, 'problems' => $assignment->problems]);
+	}
+
+
+	public function rejudge_all_problems_assignment(Request $request)
+	{
+		if (in_array( Auth::user()->role->name, ['student']))
+			abort(403,"You don't have permission to do that");
+		if (Auth::user()->selected_assignment_id != null)
+			$assignment = Assignment::with('problems')->find(Auth::user()->selected_assignment_id);
+		else
+			$assignment = Assignment::with('problems')->find(0);
+		if ($request->problem_id == 'all')
+			$submissions = Submission::where('assignment_id',$assignment->id)->get();
+		else
+			$submissions = Submission::where('assignment_id',$assignment->id)->where('problem_id', $request->problem_id)->get();
+		foreach ($submissions as $submission)
+		{
+			$a = Queue_item::add_and_process($submission->id, 'rejudge');
+			$submission->status = 'PENDING';
+			$submission->save();
+		}
+		return redirect()->back()->with('success', 'Rejudge in progress');   
 	}
 
 	public function rejudge(Request $request){

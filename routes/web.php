@@ -39,6 +39,7 @@ Route::post('/submissions/get_template/', 'submission_controller@get_template')-
 Route::post('/submissions/rejudge/', 'submission_controller@rejudge')->name('submissions.rejudge');
 Route::post('/submissions/view_code/', 'submission_controller@view_code')->name('submissions.view_code');
 Route::get('/rejudge', 'submission_controller@rejudge_view')->name('submissions.rejudge_view');
+Route::post('/submissions/rejudge_all_problems_assignment/', 'submission_controller@rejudge_all_problems_assignment')->name('submissions.rejudge_all_problems_assignment');
 
 
 Route::get('/queue', 'queue_controller@index')->name('queue.index');
