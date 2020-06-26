@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class Problem extends Model
 {
-    protected $fillable = ['id','name','diff_cmd','diff_arg','allow_practice','admin_note'];
+    protected $fillable = ['id','name','diff_cmd','diff_arg','allow_practice','admin_note','difficult'];
 
     public function get_directory_path(){
 		$assignments_root = Setting::get("assignments_root");

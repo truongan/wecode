@@ -100,7 +100,7 @@ class problem_controller extends Controller
             return back()->withInput()->withErrors(["messages"=>$messages]);
         
         
-        return redirect('problems');
+        return redirect()->route('problems.list');
     }
 
     /**
