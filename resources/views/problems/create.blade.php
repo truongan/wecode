@@ -55,7 +55,8 @@
 	$(".js-example-tokenizer").select2({
     tags: true,
     tokenSeparators: [',', ' ']
-})
+	})
+
 </script>
 @endsection
 
@@ -147,10 +148,19 @@
 			<fieldset class="form-group">
 				<div class="form-row">
 					<div class="col-sm-4">
-						<label>Select ...</label>
+						<label>Select difficult</label>
 					</div>
 					<div class="col-sm-8">
+						<div class="row">
+							<div class="col-6">
+								1
+							</div>
+							<div class="col-6 text-right">
+								5
+							</div>
+						</div>
 						<input type="range" class="custom-range" min="1" max="5" id="customRange2" name="difficult">
+						<output class="bubble"></output>
 					</div>
 				</div>
 			</fieldset>
