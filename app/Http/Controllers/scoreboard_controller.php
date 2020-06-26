@@ -58,6 +58,7 @@ class scoreboard_controller extends Controller
 	}
 
 	private function _strip_scoreboard($assignment_id){
+	
 		$a = $this->get_scoreboard($assignment_id);
 
 		//Remove excess info
