@@ -176,9 +176,9 @@
 					<div class="col-sm-8">
 						<select class="js-example-tokenizer form-control" multiple="multiple" name="tag_id[]">
 							@foreach( $all_tags as $t)
-							<!-- <option value="{{ $t->id }}" data-text="{{$t->text}}" data-id="{{$t->id}}" 
+							<option value="{{ $t->id }}" data-text="{{$t->text}}" data-id="{{$t->id}}" 
 								{{ isset($tags[$t->id]) ? 'selected="selected"' : ''  }}
-								> {{$t->text}}</option> -->
+								> {{$t->text}}</option>
 							@endforeach
 						</select>
 					</div>
