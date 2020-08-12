@@ -100,7 +100,7 @@ class problem_controller extends Controller
             return back()->withInput()->withErrors(["messages"=>$messages]);
         
         
-        return redirect()->route('problems.list');
+        return redirect()->route('problems.index');
     }
 
     /**
@@ -179,7 +179,7 @@ class problem_controller extends Controller
         if ($messages)
             return back()->withInput()->withErrors(["messages"=>$messages]);
         
-        return redirect('problems');
+        return redirect()->route('problems.index');
     }
 
     public function _take_test_file_upload(Request $request, $the_id,  &$messages){
