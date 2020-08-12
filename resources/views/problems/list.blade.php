@@ -17,14 +17,14 @@
 @section('content')
 <div class="row">
 	<div class="table-responsive">
-	{{-- {% set msgclasses = {'success': 'text-success', 'notice': 'text-info', 'error': 'text-danger'} %}
-	{% for message in messages %}
-		<p class="{{ msgclasses[message.type] }} {{message.type}}">{{ message.text }}</p>
-	{% endfor %}
-	 --}}
-	{{-- {% if all_problems|length == 0 %}
-		<p style="text-align: center;">Nothing to show...</p>
-	{% else %} --}}
+	@error('messages')
+		@php( $msgclasses = array('text-success'=> 'text-success', 'text-info'=> 'text-warning', 'text-danger'=> 'text-danger') )
+		{{-- @php(dd($errors->get('messages'))) --}}
+		{{-- @php(dd($message['type'])) --}}
+		@foreach ($errors->get('messages') as $msg)
+			<p class="text-danger">{{ $msg }}</p>
+		@endforeach
+	@enderror
 	<table class="table table-striped table-bordered">
 		<thead class="thead-dark">
 			<tr>

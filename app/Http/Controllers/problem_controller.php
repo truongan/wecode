@@ -100,13 +100,8 @@ class problem_controller extends Controller
 
         // Processing file 
         $this->_take_test_file_upload($request, $the_id, $messages);  
-        
-        // handler error
-        if ($messages)
-            return back()->withInput()->withErrors(["messages"=>$messages]);
-        
-        
-        return redirect()->route('problems.index');
+
+        return redirect()->route('problems.index')->withInput()->withErrors(["messages"=>$messages]);
     }
 
     /**
@@ -208,8 +203,7 @@ class problem_controller extends Controller
         $up_dir = $request->tests_dir;
 		$up_zip = $request->tests_zip;
         if (!$up_dir && !$up_zip){
-            $messages['type'] = 'Error';
-            $messages['text'] = "Notice: You did not upload test case and description. If needed, upload by editing assignment.";
+            //             $messages = "Notice: You did not upload test case and description. If needed, upload by editing assignment.";
             return ;
         }		
         $assignments_root = Setting::get("assignments_root");
@@ -330,7 +324,7 @@ class problem_controller extends Controller
 				shell_exec("cd $problem_dir; rm -f *.pdf");
 
 			shell_exec("cp -R $tmp_dir/* $problem_dir;");
-			// $messages[] = array(
+			// rray(
 			// 	'type' => 'success',
 			// 	'text' => 'Tests (zip file) extracted successfully.'
 			// );
@@ -341,8 +335,7 @@ class problem_controller extends Controller
 				//rename input and output file base on file name order
 				if ($rename_inputoutput){
 					if (count($in) != count($out)){
-						$messages['type'] = 'Error';
-						$messages['text'] = 'The zip contain mismatch number of input and output files: ' . count($in) . ' input files vs ' . count($out) . ' output files';					}
+                        $messages[] = 'The zip contain mismatch number of input and output files: ' . count($in) . ' input files vs ' . count($out) . ' output files';					}
 					else {
 						for($i = 1; $i <= count($in); $i++){
 							rename($in[$i-1], "$problem_dir/in/input$i.txt");
@@ -355,12 +348,10 @@ class problem_controller extends Controller
 					for($i = 0; $i < count($in); $i++){
                         $real_id = $i+1;
 						if (!in_array($problem_dir."/in/input$real_id.txt",$in)){
-                            $messages['type']= 'Error';
-                            $messages['text'] = "A file name input$real_id.txt seem to be missing in your folder";
+                                                        $messages[]= "A file name input$real_id.txt seem to be missing in your folder";
 						} else {
 							if (!in_array($problem_dir."/out/output$real_id.txt",$out)){
-                                $messages['type'] = 'Error';
-                                $messages['text'] = "A file name output$real_id.txt seem to be missing in your folder";
+                                $messages[] = "A file name output$real_id.txt seem to be missing in your folder";
 							}
 						}
 					}
@@ -369,10 +360,7 @@ class problem_controller extends Controller
 		}
 		else
 		{
-			$messages[] = array(
-				'type' => 'error',
-				'text' => 'Error: Error extracting zip archive.'
-			);
+			$messages[] = 'Error: Error extracting zip archive.';
 		}
 
 		// Remove temp directory
@@ -518,8 +506,7 @@ class problem_controller extends Controller
         //
         if (!in_array($tmp_dir.'/desc.html',$data))
         {
-            $messages['type'] = 'Error';
-            $messages['text'] = "Your test folder doesn't have desc.html file for problem description";
+            $messages[] = "Your test folder doesn't have desc.html file for problem description";
         }
 
         for($i = 0; $i<count($data);$i++)
@@ -540,17 +527,15 @@ class problem_controller extends Controller
         }
         
         if (!isset($files['desc.html'])){
-			$messages[] = array('type' => 'error', 'text' => "Your test folder doesn't have desc.html file for problem description");
+			$messages[] = "Your test folder doesn't have desc.html file for problem description";
         }
     
         for($i = 1; $i < count($in); $i++){
 			if (!isset($in["input$i.txt"])){
-                $messages['type'] = 'Error';
-                $messages['text'] = "A file name input$i.txt seem to be missing in your folder";
+                $messages[] = "A file name input$i.txt seem to be missing in your folder";
 			} else {
 				if (!isset($out["output$i.txt"])){
-                    $messages['type'] = 'Error';
-                    $messages['text'] = "A file name output$i.txt seem to be missing in your folder";
+                    $messages[] = "A file name output$i.txt seem to be missing in your folder";
 				}
 			}
         }
