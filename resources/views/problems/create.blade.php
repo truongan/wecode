@@ -103,7 +103,11 @@
 					</div>
 					<div class="col-sm-7">
 						<input id="name" type="text" name="name" class="form-control col-xs-7" value="{{ old('name',  $edit ? $problem->name : '') }}"/>
-						{{-- {{ form_error('name', '<div class="alert alert-danger">', '</div>') }} --}}
+						@error('name')
+							<div class="alert alert-danger" role="alert">
+								<strong>{{ $message }}</strong>
+							</div>
+						@enderror
 					</div>
 				</div>
 			</fieldset>
