@@ -71,18 +71,22 @@ class problem_controller extends Controller
         ]);
 
         $tags = $request->input('tag_id');
-
         if ($tags != null)
         {
             foreach ($tags as $i => $tag) 
             {
-                if ((Tag::find($tag) == null) && (Tag::where('text', $tag)->first() == []))
-                {
-                    $new_tag = new Tag;
-                    $new_tag->text = $tag;
-                    $new_tag->save();
-                    $tags[$i]=(string)$new_tag->id;
-                }
+                if (Tag::find($tag) == null)
+                    if (Tag::where('text', $tag)->first() == [])
+                    {
+                        $new_tag = new Tag;
+                        $new_tag->text = $tag;
+                        $new_tag->save();
+                        $tags[$i]=(string)$new_tag->id;
+                    }
+                    else
+                    {
+                         \array_splice($tags, $i, 1);
+                    }
             }
         }
         
@@ -180,13 +184,18 @@ class problem_controller extends Controller
         {
             foreach ($tags as $i => $tag) 
             {
-                if ((Tag::find($tag) == null) && (Tag::where('text', $tag)->first() == []))
-                {
-                    $new_tag = new Tag;
-                    $new_tag->text = $tag;
-                    $new_tag->save();
-                    $tags[$i]=(string)$new_tag->id;
-                }
+                if (Tag::find($tag) == null)
+                    if (Tag::where('text', $tag)->first() == [])
+                    {
+                        $new_tag = new Tag;
+                        $new_tag->text = $tag;
+                        $new_tag->save();
+                        $tags[$i]=(string)$new_tag->id;
+                    }
+                    else
+                    {
+                         \array_splice($tags, $i, 1);
+                    }
             }
         } 
         $problem->tags()->sync($tags);
