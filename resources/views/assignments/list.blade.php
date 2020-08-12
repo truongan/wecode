@@ -108,8 +108,25 @@
 			</td>
 			@if (!in_array( Auth::user()->role->name, ['student']))
 			<td>
-				<a title="Edit" href="{{ route('assignments.edit', $assignment) }}"><i class="fas fa-edit fa-lg color9"></i></a>
-			</td>
+				
+				<!-- {% if user.level >= 1 %} -->
+				<a href="#"><i title="Download Final Submissions (by user)" class="fa fa-download fa-lg color12"></i></a>
+				<a href="#"><i title="Download Final Submissions (by problem)" class="fa fa-download fa-lg color2"></i></a>
+				<a href="#"><i title="Download all submissions" class="fas fa-cloud-download-alt"></i></a>
+				<!-- {% endif %}
+				{% if user.level >= 2 %} -->
+					<a href="#"><i title="Detect Similar Codes" class="fa fa-user-secret fa-lg color7"></i></a>
+				<!-- {% endif %}
+				{% if user.level >= 2 %} -->
+					<a href="#"><i title="Force reload scoreboard" class="fa fa-retweet fa-lg color11"></i></a>
+				<!-- {% endif %}
+				{% if user.level >= 2 %} -->
+					<a title="Edit" href="{{ route('assignments.edit', $assignment) }}"><i class="fas fa-edit fa-lg color9"></i></a>
+				<!-- {% endif %}
+				{% if user.level >= 2 %} -->
+					<a href="#"><i title="Delete" class="fa fa-times fa-lg color1"></i></a>
+				<!-- {% endif %} -->
+					</td>
 			@endif
 		</tr>
 		@endforeach
