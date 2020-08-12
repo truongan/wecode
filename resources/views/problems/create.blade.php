@@ -15,6 +15,9 @@
 	#choice_multi_assignment .select2-selection__choice{
 		display:none !important;
 	}
+	span.select2{
+		width: 100% !important;
+	}
 </style>
 @endsection
 
@@ -177,9 +180,9 @@
 					<div class="col-sm-8">
 						<select class="js-example-tokenizer form-control" multiple="multiple" name="tag_id[]">
 							@foreach( $all_tags as $t)
-							<option value="{{ $t->id }}" data-text="{{$t->text}}" data-id="{{$t->id}}" 
+							<!-- <option value="{{ $t->id }}" data-text="{{$t->text}}" data-id="{{$t->id}}" 
 								{{ isset($tags[$t->id]) ? 'selected="selected"' : ''  }}
-								> {{$t->text}}</option>
+								> {{$t->text}}</option> -->
 							@endforeach
 						</select>
 					</div>
