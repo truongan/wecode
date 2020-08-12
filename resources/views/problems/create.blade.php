@@ -182,7 +182,7 @@
 							@foreach( $all_tags as $t)
 							<option value="{{ $t->id }}" data-text="{{$t->text}}" data-id="{{$t->id}}" 
 								{{ isset($tags[$t->id]) ? 'selected="selected"' : ''  }}
-								> {{$t->text}}</option>
+								>{{$t->text}}</option>
 							@endforeach
 						</select>
 					</div>
