@@ -56,8 +56,7 @@
 		$('.js-example-basic-multiple').select2();
 	});
 	$(".js-example-tokenizer").select2({
-    tags: true,
-    tokenSeparators: [',']
+    tags: true
 	})
 
 </script>
