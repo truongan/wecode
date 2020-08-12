@@ -76,7 +76,7 @@ class problem_controller extends Controller
         {
             foreach ($tags as $i => $tag) 
             {
-                if ((Tag::find($tag) == null) && (Tag::where('text', $tag)->first() != []))
+                if ((Tag::find($tag) == null) && (Tag::where('text', $tag)->first() == []))
                 {
                     $new_tag = new Tag;
                     $new_tag->text = $tag;
@@ -184,7 +184,7 @@ class problem_controller extends Controller
         {
             foreach ($tags as $i => $tag) 
             {
-                if ((Tag::find($tag) == null) && (Tag::where('text', $tag)->first() != []))
+                if ((Tag::find($tag) == null) && (Tag::where('text', $tag)->first() == []))
                 {
                     $new_tag = new Tag;
                     $new_tag->text = $tag;
@@ -194,7 +194,7 @@ class problem_controller extends Controller
             }
         } 
         $problem->tags()->sync($tags);
-        
+
         $this->replace_problem($request,$problem->id,$problem);
         $this->_take_test_file_upload($request, $problem->id, $messages);  
         
