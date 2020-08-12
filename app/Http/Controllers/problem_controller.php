@@ -91,6 +91,7 @@ class problem_controller extends Controller
         
         $the_id = $this->new_problem_id();
         $problem = $request->input();
+        $problem['id'] = $the_id;
         $problem["allow_practice"] = isset($request["allow_practice"]) ? 1 : 0;
         $p = Problem::create($problem);
         if ($tags != null)
