@@ -71,17 +71,21 @@ class problem_controller extends Controller
         ]);
 
         $tags = $request->input('tag_id');
-        foreach ($tags as $i => $tag) 
-        {
-            if ((Tag::find($tag) == null) && (Tag::where('text', $tag)->first() != []))
-            {
-                $new_tag = new Tag;
-                $new_tag->text = $tag;
-                $new_tag->save();
-                $tags[$i]=(string)$new_tag->id;
-            }
 
+        if ($tags != null)
+        {
+            foreach ($tags as $i => $tag) 
+            {
+                if ((Tag::find($tag) == null) && (Tag::where('text', $tag)->first() != []))
+                {
+                    $new_tag = new Tag;
+                    $new_tag->text = $tag;
+                    $new_tag->save();
+                    $tags[$i]=(string)$new_tag->id;
+                }
+            }
         }
+        
 
         $default_language = Language::find(1);
         
@@ -89,8 +93,10 @@ class problem_controller extends Controller
         $problem = $request->input();
         $problem["allow_practice"] = isset($request["allow_practice"]) ? 1 : 0;
         $p = Problem::create($problem);
-
-        $p->tags()->sync($tags);
+        if ($tags != null)
+        {
+            $p->tags()->sync($tags);
+        }
 
         // Processing file 
         $this->_take_test_file_upload($request, $the_id, $messages);  
@@ -173,19 +179,22 @@ class problem_controller extends Controller
         $problem->update($req); 
 
         $tags = $request->input('tag_id');
-        foreach ($tags as $i => $tag) 
+
+        if ($tags != null)
         {
-            if ((Tag::find($tag) == null) && (Tag::where('text', $tag)->first() != []))
+            foreach ($tags as $i => $tag) 
             {
-                $new_tag = new Tag;
-                $new_tag->text = $tag;
-                $new_tag->save();
-                $tags[$i]=(string)$new_tag->id;
+                if ((Tag::find($tag) == null) && (Tag::where('text', $tag)->first() != []))
+                {
+                    $new_tag = new Tag;
+                    $new_tag->text = $tag;
+                    $new_tag->save();
+                    $tags[$i]=(string)$new_tag->id;
+                }
             }
-
-        }
+        } 
         $problem->tags()->sync($tags);
-
+        
         $this->replace_problem($request,$problem->id,$problem);
         $this->_take_test_file_upload($request, $problem->id, $messages);  
         
