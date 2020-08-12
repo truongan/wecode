@@ -73,7 +73,7 @@ class problem_controller extends Controller
         $tags = $request->input('tag_id');
         foreach ($tags as $i => $tag) 
         {
-            if (Tag::find($tag) == null)
+            if ((Tag::find($tag) == null) && (Tag::where('text', $tag)->first() != []))
             {
                 $new_tag = new Tag;
                 $new_tag->text = $tag;
@@ -171,7 +171,20 @@ class problem_controller extends Controller
         $req["allow_practice"] = isset($request["allow_practice"]) ? 1 : 0;
 
         $problem->update($req); 
-        $problem->tags()->sync($request->input('tag_id'));
+
+        $tags = $request->input('tag_id');
+        foreach ($tags as $i => $tag) 
+        {
+            if ((Tag::find($tag) == null) && (Tag::where('text', $tag)->first() != []))
+            {
+                $new_tag = new Tag;
+                $new_tag->text = $tag;
+                $new_tag->save();
+                $tags[$i]=(string)$new_tag->id;
+            }
+
+        }
+        $problem->tags()->sync($tags);
 
         $this->replace_problem($request,$problem->id,$problem);
         $this->_take_test_file_upload($request, $problem->id, $messages);  
