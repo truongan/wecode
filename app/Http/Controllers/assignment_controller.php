@@ -409,5 +409,31 @@ class assignment_controller extends Controller
     public function destroy($id)
     {
         //
+
+        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
+            abort(404);
+            
+        elseif ($id === NULL)
+        {
+            $json_result = array('done' => 0, 'message' => 'Input Error');
+        }
+        else
+        {
+           
+            //TO DO SOMETHING HERE
+
+            /*
+            if (Tìm không được assignment có id này)
+                $json_result = array('done' => 0, 'message' => 'Not found detailed');
+            else
+            {
+                //CODE DELETE $assignment
+                $json_result = array('done' => 1);
+            }
+            */
+        }
+        
+		header('Content-Type: application/json; charset=utf-8');  
+        return ($json_result);
     }
 }

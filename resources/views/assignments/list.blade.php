@@ -124,7 +124,7 @@
 					<a title="Edit" href="{{ route('assignments.edit', $assignment) }}"><i class="fas fa-edit fa-lg color9"></i></a>
 				<!-- {% endif %}
 				{% if user.level >= 2 %} -->
-					<a href="#"><i title="Delete" class="fa fa-times fa-lg color1"></i></a>
+					<span title="Delete Assignment" class="del_n delete_Assignment pointer"><i title="Delete Assignment" class="far fa-trash-alt fa-lg color1"></i></span>
 				<!-- {% endif %} -->
 					</td>
 			@endif
@@ -132,12 +132,56 @@
 		@endforeach
 	</table>
 </div>
+
+<div class="modal fade" id="assignment_delete" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Are you sure you want to delete this assignment?</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-danger confirm-assignment-delete">YES</button>
+      <button type="button" class="btn btn-primary" data-dismiss="modal">NO</button>
+        </div>
+      </div>
+    </div>
+</div>
 @endsection
 @section('body_end')
 <script type='text/javascript' src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 <script type='text/javascript' src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
 <script>
 $(document).ready(function () {
+	$('.del_n').click(function () {
+	var row = $(this).parents('tr');
+		var id = row.data('id');
+	$(".confirm-assignment-delete").off();
+	$(".confirm-assignment-delete").click(function(){
+		$("#assignment_delete").modal("hide");
+		$.ajax({
+		type: 'DELETE',
+		url: '{{ route('assignments.index') }}/'+id,
+		data: {
+					'_token': "{{ csrf_token() }}",
+		},
+		error: shj.loading_error,
+		success: function (response) {
+			if (response.done) {
+			row.animate({backgroundColor: '#FF7676'},100, function(){row.remove();});
+			$.notify('assignment deleted'	, {position: 'bottom right', className: 'success', autoHideDelay: 5000});
+			$("#assignment_delete").modal("hide");
+			}
+			else
+			shj.loading_failed(response.message);
+		}
+		});
+	});
+	$("#assignment_delete").modal("show");
+	});
+
     $("table").DataTable({
 		"pageLength": 10,
 		"lengthMenu": [ [10, 20, 30, 50, -1], [10, 20, 30, 50, "All"] ]
