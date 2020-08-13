@@ -5,6 +5,14 @@
 
 @section('title', 'Admin panel')
 
+@section('other_assets')
+<style>
+.card{
+  width:7rem;
+}
+</style>
+@endsection
+
 @section('title_menu')
 	{{-- Nếu là admin thì hiển thị --}}
 	<span class="title_menu_item"><a href="{{ url('assignments/add') }}"><i class="fa fa-plus color8"></i> Add</a></span>
@@ -13,8 +21,8 @@
 @section('content')
 <div class="card-group">
   <div class="m-3">
-    <div class="card" style="width: 18rem;">
-      <i class="text-center card-img-top fas fa-cogs fa-8x p-4"></i>
+    <div class="card" >
+      <i class="text-center card-img-top fas fa-cogs fa-4x p-4"></i>
       <div class="card-body bg-light">
         <h5 class="card-title">SETTING</h5>
         <p  class="card-text">Chỉnh sửa và ...</p>
@@ -24,8 +32,8 @@
   </div>
     
   <div class="m-3">
-    <div class="card" style="width: 18rem;">
-      <i class="text-center card-img-top fas fa-users fa-8x p-4"></i>
+    <div class="card" >
+      <i class="text-center card-img-top fas fa-users fa-4x p-4"></i>
       <div class="card-body bg-light">
         <h5 class="card-title">USERS</h5>
         <p  class="card-text">Quản lý người dùng</p>
@@ -35,8 +43,8 @@
   </div>
 
   {{-- <div class="m-3">
-    <div class="card" style="width: 18rem;">
-      <i class="text-center card-img-top fas fa-school fa-8x p-4"></i>
+    <div class="card" >
+      <i class="text-center card-img-top fas fa-school fa-4x p-4"></i>
       <div class="card-body bg-light">
         <h5 class="card-title">CLASSES</h5>
         <p  class="card-text">Quản lý lớp học</p>
@@ -46,8 +54,8 @@
   </div> --}}
 
   <div class="m-3">
-    <div class="card" style="width: 18rem;">
-      <i class="text-center card-img-top fas fa-laptop-code fa-8x p-4"></i>
+    <div class="card" >
+      <i class="text-center card-img-top fas fa-laptop-code fa-4x p-4"></i>
       <div class="card-body bg-light">
         <h5 class="card-title">LANGUAGES</h5>
         <p  class="card-text">Thiết lập ngôn ngữ lập trình</p>
@@ -57,8 +65,8 @@
   </div>
 
   <div class="m-3">
-    <div class="card" style="width: 18rem;">
-      <i class="text-center card-img-top fas fa-clipboard-list fa-8x p-4"></i>
+    <div class="card" >
+      <i class="text-center card-img-top fas fa-clipboard-list fa-4x p-4"></i>
       <div class="card-body bg-light">
         <h5 class="card-title">PROBLEMS</h5>
         <p  class="card-text">Danh sách bài tập</p>
@@ -67,8 +75,8 @@
     </div>
   </div>
   <div class="m-3">
-    <div class="card" style="width: 18rem;">
-      <i class="text-center card-img-top fas fa-tags fa-8x p-4"></i>
+    <div class="card" >
+      <i class="text-center card-img-top fas fa-tags fa-4x p-4"></i>
       <div class="card-body bg-light">
         <h5 class="card-title">TAGS</h5>
         <p  class="card-text">Đánh đầu các dạng thuật toán</p>
@@ -78,8 +86,8 @@
   </div>
 
   <div class="m-3">
-    <div class="card" style="width: 18rem;">
-      <i class="text-center card-img-top fas fa-edit fa-8x p-4"></i>
+    <div class="card" >
+      <i class="text-center card-img-top fas fa-edit fa-4x p-4"></i>
       <div class="card-body bg-light">
         <h5 class="card-title">EDIT BY HTML</h5>
         <p  class="card-text">Soạn văn bản trên web</p>
@@ -89,8 +97,8 @@
   </div>
 
   <div class="m-3">
-    <div class="card" style="width: 18rem;">
-      <i class="text-center card-img-top fas fa-redo fa-8x p-4"></i>
+    <div class="card" >
+      <i class="text-center card-img-top fas fa-redo fa-4x p-4"></i>
       <div class="card-body bg-light">
         <h5 class="card-title">Rejudge</h5>
         <p  class="card-text">Zậy đó</p>
@@ -100,8 +108,8 @@
   </div>
 
   <div class="m-3">
-    <div class="card" style="width: 18rem;">
-      <i class="text-center card-img-top fas fa-play fa-8x p-4"></i>
+    <div class="card" >
+      <i class="text-center card-img-top fas fa-play fa-4x p-4"></i>
       <div class="card-body bg-light">
         <h5 class="card-title">Submission Queue</h5>
         <p  class="card-text">Zậy đó</p>
@@ -111,8 +119,8 @@
   </div>
 
   <div class="m-3">
-    <div class="card" style="width: 18rem;">
-      <i class="text-center card-img-top fas fa-user-secret fa-8x p-4"></i>
+    <div class="card" >
+      <i class="text-center card-img-top fas fa-user-secret fa-4x p-4"></i>
       <div class="card-body bg-light">
         <h5 class="card-title">Detect Similar Codes</h5>
         <p  class="card-text">Zậy đó</p>
