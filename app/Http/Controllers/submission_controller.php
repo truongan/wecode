@@ -98,7 +98,7 @@ class submission_controller extends Controller
 	{
 		$ext = $request->userfile->extension();
 		$file_name = basename($request->userfile->getClientOriginalName(), ".{$ext}"); // uploaded file name without extension    
-		$file_name = preg_replace('/[^a-zA-Z0-9_\-()]+/', '', $file_name);
+		$file_name = preg_replace('/[^a-zA-Z0-9]+/', 'x', $file_name);
 
 		$path = $request->userfile->storeAs($user_dir, $file_name, 'my_local');
 
