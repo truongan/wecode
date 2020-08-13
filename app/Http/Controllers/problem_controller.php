@@ -330,7 +330,7 @@ class problem_controller extends Controller
         shell_exec("cd $assignments_root; unzip ". escapeshellarg($name_zip) . " -d $tmp_dir");
 
         // Remove the zip file
-        shell_exec("cd $assignments_root; rm -rf $name_zip");
+        shell_exec("cd $assignments_root; rm -rf " . escapeshellarg( $name_zip) );
         
         $a=1;
         if ($a==1)
@@ -341,10 +341,7 @@ class problem_controller extends Controller
                 shell_exec("cd $problem_dir; rm -f *.pdf");
 
             shell_exec("cp -R $tmp_dir/* $problem_dir;");
-            // rray(
-            //  'type' => 'success',
-            //  'text' => 'Tests (zip file) extracted successfully.'
-            // );
+
             $in = glob("$problem_dir/in/*");
             $out = glob("$problem_dir/out/*");
             

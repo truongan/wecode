@@ -201,6 +201,10 @@ class submission_controller extends Controller
 			$sub = Submission::find($request->submission_id);
 			
 			if ($sub == NULL) abort(404);
+			
+			if (Queue_item::where('submission_id', $sub->id)->count() > 0){
+				return response()->json(['done' => 0, 'message' => 'Submission is already in queue for judging']);
+			}
 
 			$a = Queue_item::add_and_process($sub->id, 'rejudge');
 			$sub->status = 'PENDING';
