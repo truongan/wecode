@@ -436,4 +436,21 @@ class assignment_controller extends Controller
 		header('Content-Type: application/json; charset=utf-8');  
         return ($json_result);
     }
+
+    public function score_accepted()
+    {
+        //
+        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
+            abort(404);
+        return view('assignments.score_accepted');
+    }
+
+    public function score_sum()
+    {
+        //
+
+        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
+            abort(404);
+        return view('assignments.score_sum');
+    }
 }

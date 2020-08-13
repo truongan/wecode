@@ -52,8 +52,11 @@ Route::get('/practice/show/{problem_id}', 'practice_controller@show')->name('pra
 
 Route::get('/scoreboard/full/{id}', 'scoreboard_controller@index')->name('scoreboards.index');
 
-Route::get('/assignment/{assignment}/{problem_id}/', 'assignment_controller@show')->name('assignments.show');
+Route::get('/assignment/{assignment}/{problem_id}/', 'assignment_controller@show')->where(['assignment'=>'[0-9]+','problem_id'=>'[0-9]+'])->name('assignments.show');
 Route::get('/assignment/download/{assignment}/{type}/', 'assignment_controller@show')->name('assignments.download');
+Route::get('/assignment/scores/accepted/', 'assignment_controller@score_accepted')->name('assignments.score_accepted');
+Route::get('/assignment/scores/sum/', 'assignment_controller@score_sum')->name('assignments.score_sum');
+
 Route::get('/scoreboard/simplify/{id}', 'scoreboard_controller@simplify')->name('scoreboards.simplify');
 Route::get('/scoreboard/plain/{id}', 'scoreboard_controller@plain')->name('scoreboards.plain');
 
