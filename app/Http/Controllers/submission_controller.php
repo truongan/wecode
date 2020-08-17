@@ -98,7 +98,7 @@ class submission_controller extends Controller
 	{
 		$ext = $request->userfile->extension();
 		$file_name = basename($request->userfile->getClientOriginalName(), ".{$ext}"); // uploaded file name without extension    
-		$file_name = preg_replace('/[^a-zA-Z0-9_\-()]+/', '', $file_name);
+		$file_name = preg_replace('/[^a-zA-Z0-9]+/', 'x', $file_name);
 
 		$path = $request->userfile->storeAs($user_dir, $file_name, 'my_local');
 
@@ -201,6 +201,10 @@ class submission_controller extends Controller
 			$sub = Submission::find($request->submission_id);
 			
 			if ($sub == NULL) abort(404);
+			
+			if (Queue_item::where('submission_id', $sub->id)->count() > 0){
+				return response()->json(['done' => 0, 'message' => 'Submission is already in queue for judging']);
+			}
 
 			$a = Queue_item::add_and_process($sub->id, 'rejudge');
 			$sub->status = 'PENDING';

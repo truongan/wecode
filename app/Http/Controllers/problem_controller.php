@@ -200,7 +200,7 @@ class problem_controller extends Controller
                     }
                     else
                     {
-                         \array_splice($tags, $i, 1);
+                        array_splice($tags, $i, 1);
                     }
             }
         } 
@@ -227,17 +227,16 @@ class problem_controller extends Controller
         $problem_dir = $this->get_directory_path($the_id);
      
         if ( ! file_exists($problem_dir) ){
-                mkdir($problem_dir, 0700, TRUE); 
+            mkdir($problem_dir, 0700, TRUE); 
         }
 
         if ($up_zip) {
             //Upload Tests (zip file)
-            
             shell_exec('rm -f '.$assignments_root.'/*.zip');
             
-            $name_zip = $request->tests_zip->getClientOriginalName();
+            $name_zip = ($request->tests_zip->getClientOriginalName());
             $path_zip = $request->tests_zip->storeAs($assignments_root,$name_zip,'my_local');
-    
+            
             $this->unload_zip_test_file($request , $assignments_root, $problem_dir, $messages, $name_zip);
 
         } else {
@@ -320,6 +319,7 @@ class problem_controller extends Controller
         // Create a temp directory
         $tmp_dir_name = "shj_tmp_directory";
         $tmp_dir = "$assignments_root/$tmp_dir_name";
+        // dd("rm -rf $tmp_dir; mkdir $tmp_dir;");
         shell_exec("rm -rf $tmp_dir; mkdir $tmp_dir;");
        
         // get new name
@@ -327,10 +327,10 @@ class problem_controller extends Controller
 
         // extract file 
         
-        shell_exec("cd $assignments_root; unzip $name_zip -d $tmp_dir");
+        shell_exec("cd $assignments_root; unzip ". escapeshellarg($name_zip) . " -d $tmp_dir");
 
         // Remove the zip file
-        shell_exec("cd $assignments_root; rm -rf $name_zip");
+        shell_exec("cd $assignments_root; rm -rf " . escapeshellarg( $name_zip) );
         
         $a=1;
         if ($a==1)
@@ -341,10 +341,7 @@ class problem_controller extends Controller
                 shell_exec("cd $problem_dir; rm -f *.pdf");
 
             shell_exec("cp -R $tmp_dir/* $problem_dir;");
-            // rray(
-            //  'type' => 'success',
-            //  'text' => 'Tests (zip file) extracted successfully.'
-            // );
+
             $in = glob("$problem_dir/in/*");
             $out = glob("$problem_dir/out/*");
             
