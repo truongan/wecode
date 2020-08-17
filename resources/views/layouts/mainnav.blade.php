@@ -1,14 +1,16 @@
 <nav id="mainNav" class="mainNav navbar navbar-expand-lg navbar-dark fixed-top color-{{ $selected }}" style="background-color: #2d3238">
-        <a href="#">
-            <img src="{{ asset('images/logo_uit.png') }}" height="30px" />
-        </a>
-        <a href="#">
-            <img src="{{ asset('images/logo_cs.png') }}" height="30px"/>
-        </a>
-        <a  class="navbar-brand" href="{{ url('/home') }}">
-            <img src="{{ asset('images/logo.png') }}" height="30px" />
+        <div  class="navbar-brand">
+            <a target="_blank" href="https://www.uit.edu.vn/">
+                <img src="{{ asset('images/logo_uit.png') }}" height="30px" />
+            </a>
+            <a target="_blank" href="https://cs.uit.edu.vn/">
+                <img src="{{ asset('images/logo_cs.png') }}" height="30px"/>
+            </a>
+            <a href="{{ url('/home') }}">
+                <img src="{{ asset('images/logo.png') }}" height="30px" />
+            </a>
             {{ $settings['site_name'] }}
-        </a>
+        </div>
     
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
