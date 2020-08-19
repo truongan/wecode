@@ -422,15 +422,17 @@ class assignment_controller extends Controller
            
             //TO DO SOMETHING HERE
 
-            /*
-            if (Tìm không được assignment có id này)
+            if (Assignment::find($id) == null)
                 $json_result = array('done' => 0, 'message' => 'Not found detailed');
             else
             {
-                //CODE DELETE $assignment
+                $assignment = Assignment::find($id);
+                DB::table('submissions')->where('assignment_id', '=', $id)->delete();
+                DB::table('assignment_lop')->where('assignment_id', '=', $id)->delete();
+                DB::table('assignment_problem')->where('assignment_id', '=', $id)->delete();
+                Assignment::destroy($id);
                 $json_result = array('done' => 1);
             }
-            */
         }
         
 		header('Content-Type: application/json; charset=utf-8');  
@@ -456,17 +458,19 @@ class assignment_controller extends Controller
 
     public function download_all_submissions($assignment_id)
     {
-        print($assignment_id);
+        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
+            abort(404);
     }
 
     public function download_submissions($type, $assignment_id)
     {
-        print($type);
-        print($assignment_id);
+        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
+            abort(404);
     }
     
     public function reload_scoreboard($assignment_id)
     {
-        print($assignment_id);
+        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
+            abort(404);
     }
 }
