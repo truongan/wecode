@@ -7,6 +7,9 @@ use App\Setting;
 use App\Problem;
 use App\Lop;
 use App\Language;
+use ZipArchive;
+use RecursiveIteratorIterator;
+use RecursiveDirectoryIterator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -157,9 +160,9 @@ class assignment_controller extends Controller
     public function show(Assignment $assignment, $problem_id ){
         $assignment_id = $assignment->id;
 
-        if ($assignment_id > Assignment::count())
-            abort(404);
         
+        if (Assignment::find($assignment_id) == null)
+            abort(404);
         Auth::user()->selected_assignment_id = $assignment_id;
         Auth::user()->save(); 
         
@@ -411,7 +414,7 @@ class assignment_controller extends Controller
         //
 
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
-            abort(404);
+            abort(403);
             
         elseif ($id === NULL)
         {
@@ -443,7 +446,7 @@ class assignment_controller extends Controller
     {
         //
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
-            abort(404);
+            abort(403);
         return view('assignments.score_accepted');
     }
 
@@ -452,25 +455,39 @@ class assignment_controller extends Controller
         //
 
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
-            abort(404);
+            abort(403);
         return view('assignments.score_sum');
     }
 
     public function download_all_submissions($assignment_id)
     {
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
+            abort(403);
+        if (Assignment::find($assignment_id) == null)
             abort(404);
+        $assignments_root = rtrim(Setting::get("assignments_root"),'/');
+        if (!file_exists($assignments_root)) 
+            return redirect('assignments'); 
+        $zip_name = $assignments_root . "/assignment_" . (string)$assignment_id . (string)date('Y-m-d H:i:s') . ".zip";
+        shell_exec("rm $zip_name");
+        $zip = new ZipArchive();
+        $zip->open($zip_name, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+
     }
 
     public function download_submissions($type, $assignment_id)
     {
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
+            abort(403);
+        if (Assignment::find($assignment_id) == null)
             abort(404);
     }
     
     public function reload_scoreboard($assignment_id)
     {
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
+            abort(403);
+        if (Assignment::find($assignment_id) == null)
             abort(404);
     }
 }

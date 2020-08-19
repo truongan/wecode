@@ -20,7 +20,7 @@ class tag_controller extends Controller
     public function index()
     {
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
-            abort(404);
+            abort(403);
         return view('admin.tags.index',['tags'=>Tag::all()]); 
     }
 
@@ -32,7 +32,7 @@ class tag_controller extends Controller
     public function create()
     {
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
-            abort(404);
+            abort(403);
         return view('tags.create');
     }
 
@@ -45,7 +45,7 @@ class tag_controller extends Controller
     public function store(Request $request)
     {
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
-            abort(404);
+            abort(403);
         $request->validate(['text' => 'required']);
         Tag::create($request->input());
         return redirect('tags'); 
@@ -72,6 +72,8 @@ class tag_controller extends Controller
     public function edit(Tag $tag)
     {
         //
+        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
+            abort(403);
         return view('admin.tags.edit', ['tag'=>$tag]);
     }
 
@@ -85,6 +87,8 @@ class tag_controller extends Controller
     public function update(Request $request, Tag $tag)
     {
         //
+        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
+            abort(403);
         $tag->update($request->input());
         $remove = $request->input('remove');
         if($remove != NULL){
@@ -102,7 +106,7 @@ class tag_controller extends Controller
     public function destroy($id)
     {
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
-            abort(404);
+            abort(403);
         elseif ($id === NULL)
 			$json_result = array('done' => 0, 'message' => 'Input Error');
         else

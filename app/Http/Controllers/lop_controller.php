@@ -28,6 +28,8 @@ class lop_controller extends Controller
     public function index()
     {
         //
+        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
+            abort(403);
         return view('admin.lops.list', ['lops' => Lop::all()]);
     }
 
@@ -39,6 +41,8 @@ class lop_controller extends Controller
     public function create()
     {
         //
+        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
+            abort(403);
         return view('admin.lops.create');
     }
 
@@ -50,6 +54,8 @@ class lop_controller extends Controller
      */
     public function store(Request $request)
     {
+        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
+            abort(403);
         //
         // var_dump($request->input());die();
         $a = $request->only('name');
@@ -66,7 +72,7 @@ class lop_controller extends Controller
             
             $new->users()->sync($userids);
         }
-        return redirect()->route('lops.show', ['id' => $new->id]);
+        return redirect()->route('lops.show', ['lop' => $new]);
     }
 
     /**
@@ -78,6 +84,8 @@ class lop_controller extends Controller
     public function show(Lop $lop)
     {
         //
+        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
+            abort(403);
         return view('admin.lops.edit', ['lop' => $lop]);
     }
     
@@ -89,6 +97,8 @@ class lop_controller extends Controller
      */
     public function edit(Lop $lop)
     {
+        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
+            abort(403);
         return view('admin.lops.edit', ['lop' => $lop]);
         //
     }
@@ -103,7 +113,8 @@ class lop_controller extends Controller
     public function update(Request $request, Lop $lop)
     {
         //
-        
+        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
+            abort(403);
         $data = $request->only('name');
         $data['open'] = $request->input('open') == 'on';
 
@@ -140,7 +151,7 @@ class lop_controller extends Controller
     {
         // 
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
-            abort(404);
+            abort(403);
         elseif ($id === NULL)
 			$json_result = array('done' => 0, 'message' => 'Input Error');
         else

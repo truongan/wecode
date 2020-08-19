@@ -29,9 +29,13 @@ class submission_controller extends Controller
 	{
 		// if ($assignment_id == 0)
 		//     abort(403,'You have not selected assignment');
+		
+		if (Assignment::find($assignment_id) == null)
+		{
+			return redirect()->route('submissions.index', [0, 'all', 'all', 'all']);
+		}
 		Auth::user()->selected_assignment_id = $assignment_id;
 		Auth::user()->save(); 
-
 		$assignment = Assignment::with('submissions.user', 'submissions.problem')->find($assignment_id);
 		if ( in_array( Auth::user()->role->name, ['student']) )
 		{
@@ -163,7 +167,7 @@ class submission_controller extends Controller
 	{
 		if (in_array( Auth::user()->role->name, ['student']))
 			abort(403,"You don't have permission to do that");
-		if (Auth::user()->selected_assignment_id != null)
+		if (Auth::user()->selected_assignment_id != null && Assignment::find(Auth::user()->selected_assignment_id) != null)
 			$assignment = Assignment::with('problems')->find(Auth::user()->selected_assignment_id);
 		else
 			$assignment = Assignment::with('problems')->find(0);

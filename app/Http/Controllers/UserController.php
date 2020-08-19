@@ -45,6 +45,9 @@ class UserController extends Controller
      */
     public function show($id)
     {
+        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']))
+            if (Auth::user()->id != $id)
+                abort(403);
         return view('users.show', ['user' => User::findOrFail($id)]);
     }
 
@@ -94,6 +97,9 @@ class UserController extends Controller
     public function edit(User $user)
     {
         //
+        if(Auth::user()->role->name != 'admin'){
+            abort(403);
+        }
         return view('users.edit', ['user'=>$user]);
     }
 
@@ -146,6 +152,9 @@ class UserController extends Controller
      */
     public function destroy(Request $request)
     {
+        if(Auth::user()->role->name != 'admin'){
+            abort(403);
+        }
         $user_id = $request['user_id'];
 		if ( ! is_numeric($user_id) )
 			$json_result = array('done' => 0, 'message' => 'Input Error');
@@ -278,5 +287,12 @@ class UserController extends Controller
 		return ['users_ok'=>$users_ok,'users_error'=>$users_error];
     }
     
+    public function admin_index()
+    {
+        if(Auth::user()->role->name != 'admin'){
+            abort(403);
+        }
+        return view('admin.admin');
+    }
     
 }
