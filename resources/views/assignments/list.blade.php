@@ -159,6 +159,7 @@ $(document).ready(function () {
 	var row = $(this).parents('tr');
 		var id = row.data('id');
 	$(".confirm-assignment-delete").off();
+	console.log("{{ csrf_token() }}");
 	$(".confirm-assignment-delete").click(function(){
 		$("#assignment_delete").modal("hide");
 		$.ajax({
