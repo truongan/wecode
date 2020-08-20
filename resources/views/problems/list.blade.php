@@ -65,7 +65,7 @@
 			<td>{{ $item->diff_arg }}</td>
 			
 			<td>
-				<a href="{{ route('problems.pdf',$item->id) }}">
+				<a href="{{ route('problems.download_zip',$item->id) }}">
 					<i title="Download Tests and Descriptions" class="fa fa-cloud-download-alt fa-lg color11"></i>
 				</a>
 				<a href="{{ route('problems.edit', $item) }}"> <i title="Edit" class="far fa-edit fa-lg color3"> </i> </a>

@@ -84,7 +84,7 @@ class lop_controller extends Controller
     public function show(Lop $lop)
     {
         //
-        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
+        // if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
             abort(403);
         return view('admin.lops.edit', ['lop' => $lop]);
     }

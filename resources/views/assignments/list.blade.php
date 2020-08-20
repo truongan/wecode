@@ -24,6 +24,14 @@
 @endsection
 @endif
 @section('content')
+@if (\Session::has('success'))
+	    <div class="alert alert alert-success fade show" role="alert">
+		  	<strong>Success!</strong> {!! \Session::get('success') !!}.
+		  	<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+		    	<span aria-hidden="true">&times;</span>
+		  	</button>
+		</div>
+	@endif
 <div class="row">
 	<table class="wecode_table table table-striped table-bordered">
 		<thead class="thead-dark">

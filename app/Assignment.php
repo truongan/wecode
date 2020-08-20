@@ -25,6 +25,11 @@ class Assignment extends Model
         return $this->belongsToMany('App\Lop');
     }
 
+    public function scoreboard()
+    {
+        return $this->hasOne('App\Scoreboard');
+    }
+
     public function can_submit(User $user)
     {   
         $result = new class{};

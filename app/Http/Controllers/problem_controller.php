@@ -471,6 +471,20 @@ class problem_controller extends Controller
         return response()->download($pdf_files);
     
     }
+
+
+    public function downloadtestsdesc($problem_id)
+    {
+        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
+            abort(403);
+        if (Problem::find($problem_id) == null)
+            abort(404);
+        $assignments_root = Setting::get("assignments_root");
+        $zipFile = $assignments_root . "/problem" . (string)$problem_id . "_tests_and_descriptions_" . (string)date('Y-m-d_H-i') . ".zip";
+        $pathdir = $assignments_root . '/problems/' . (string)$problem_id . '/';
+        shell_exec("zip -r $zipFile $pathdir");
+        return response()->download($zipFile)->deleteFileAfterSend();
+    }
     
 
     public function get_template_path($problem_id = NULL){
