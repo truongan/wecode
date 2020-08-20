@@ -358,7 +358,7 @@ class submission_controller extends Controller
 		if ($type == "code")
 			$file_path = $submit_path . "/{$submission->file_name}.". $file_extension;
 		elseif ($type == "log")
-			$file_path = $submit_path . "/result-{$submission['submit_id']}.html";
+			$file_path = $submit_path . "/log-{$submission->id}";
 		elseif ($type == "result")
 			$file_path = $submit_path . "/result-{$submission->id}.html";
 
