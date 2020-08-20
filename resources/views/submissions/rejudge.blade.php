@@ -1,7 +1,9 @@
 @extends('layouts.app')
+@php($selected = 'settings')
+@section('head_title','Rejudge')
+@section('icon', 'fas fa-redo')
 
-@section('title')</i> Rejudge 
-@endsection
+@section('title', 'Rejudge')
 
 @section('content')
 <div class="col-12">		

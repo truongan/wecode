@@ -5,30 +5,24 @@
 
 @section('title', 'Submission queue')
 
-@section('title_menu')
-    {{-- Nếu là admin thì hiển thị --}}
-
-    <span class="title_menu_item"><a href="{{ route('lops.create') }}"><i class="fa fa-plus color11"></i>Add class</a></span>
-
-@endsection
-
 @section('content')
 
 <div class="col">
   <p>
-    {{-- Total submissions in queue: {{ $queue->count() }} --}}
+    Total submissions in queue: {{$queue->count()}}
   </p>
-  <p>
-    <form class="form-row" action="{{ route('queue.work') }}" method="POST">
+  <div style="float: left;" class="pr-1">
+    <form action="{{ route('queue.work') }}" method="POST">
       @csrf
       <button href="#" class="shj_act btn btn-primary" id="spawn" data-toggle="tooltip" data-placement="right" title="A queue processor process is spawned every time there is a submission or rejudging request. You can manually spawn one with this link" type="submit"><i class="fa fa-play"></i> Spawn new queue process </button>
     </form>
-    
-    <form class="form-row" action="{{ route('queue.empty') }}" method="POST">
+  </div>
+  <div style="float: left;" class="pb-3">
+    <form action="{{ route('queue.empty') }}" method="POST">
       @csrf
       <button href="#" class="shj_act btn btn-danger" id="empty_queue"  data-toggle="tooltip" data-placement="right" title="Empty the queue, all queue processor process should exit on their own, leaving submission in PENDING state"><i class="fa fa-times-circle"></i> Empty Queue</button>
     </form>
-  </p>
+  </div>
   <table class="wecode_table table table-striped table-bordered">
     <thead class="thead-dark">
     <tr>
@@ -64,3 +58,4 @@
   </table>
 </div>
 @endsection
+
