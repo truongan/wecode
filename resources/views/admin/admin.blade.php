@@ -122,9 +122,9 @@
     <div class="card" >
       <i class="text-center card-img-top fas fa-user-secret fa-2x p-3"></i>
       <div class="card-body bg-light">
-        <small><strong class="card-title">Detect Similar Codes</strong></small>
-        <small><p  class="card-text">Zậy đó</p></small>
-        <a href="{{ url('htmleditor') }}" class="stretched-link"></a>
+        <h5 class="card-title">Detect Similar Codes</h5>
+        <p  class="card-text">Zậy đó</p>
+        <a href="{{ route('moss.index' , Auth::user()->selected_assignment_id) }}" class="stretched-link"></a>
       </div>
     </div>
   </div>
