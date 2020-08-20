@@ -7,12 +7,13 @@ use App\Setting;
 use App\Problem;
 use App\Lop;
 use App\Language;
+use App\Submission;
+use App\Scoreboard;
 use ZipArchive;
-use RecursiveIteratorIterator;
-use RecursiveDirectoryIterator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class assignment_controller extends Controller
 {
@@ -120,10 +121,8 @@ class assignment_controller extends Controller
         if ($request->scoreboard == 1)
             $assignment->score_board = True;
         else $assignment->score_board = False;
-        
-        $assignment->start_time = date('Y-m-d H:i:s', strtotime($request->start_time));
-        $assignment->finish_time = date('Y-m-d H:i:s', strtotime($request->finish_time));
-
+        $assignment->start_time = date('Y-m-d H:i:s', strtotime((string)$request->start_time_date . " " .(string)date('H:i:s', strtotime($request->start_time_time))));
+        $assignment->finish_time = date('Y-m-d H:i:s', strtotime((string)$request->finish_time_date . " " .(string)date('H:i:s', strtotime($request->finish_time_time))));
         $assignment->save();
         if ($request->hasFile('pdf')) {
             $path_pdf = Setting::get("assignments_root");
@@ -433,6 +432,10 @@ class assignment_controller extends Controller
                 DB::table('submissions')->where('assignment_id', '=', $id)->delete();
                 DB::table('assignment_lop')->where('assignment_id', '=', $id)->delete();
                 DB::table('assignment_problem')->where('assignment_id', '=', $id)->delete();
+                $path_pdf = Setting::get('assignments_root') . "/assignment_" .  strval($assignment->id);
+                if (file_exists($path_pdf)) {
+                    shell_exec("rm -r -f $path_pdf");
+                }
                 Assignment::destroy($id);
                 $json_result = array('done' => 1);
             }
@@ -459,20 +462,19 @@ class assignment_controller extends Controller
         return view('assignments.score_sum');
     }
 
+
     public function download_all_submissions($assignment_id)
     {
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
             abort(403);
         if (Assignment::find($assignment_id) == null)
             abort(404);
-        $assignments_root = rtrim(Setting::get("assignments_root"),'/');
-        if (!file_exists($assignments_root)) 
-            return redirect('assignments'); 
-        $zip_name = $assignments_root . "/assignment_" . (string)$assignment_id . (string)date('Y-m-d H:i:s') . ".zip";
-        shell_exec("rm $zip_name");
-        $zip = new ZipArchive();
-        $zip->open($zip_name, ZipArchive::CREATE | ZipArchive::OVERWRITE);
 
+        $assignments_root = Setting::get("assignments_root");
+        $zipFile = $assignments_root . "/assignment" . (string)$assignment_id . "." . (string)date('Y-m-d_H-i') . ".zip";
+        $pathdir = $assignments_root . '/assignment_' . $assignment_id . "/";
+        shell_exec("zip -r $zipFile $pathdir");
+        return response()->download($zipFile)->deleteFileAfterSend();
     }
 
     public function download_submissions($type, $assignment_id)
@@ -481,6 +483,36 @@ class assignment_controller extends Controller
             abort(403);
         if (Assignment::find($assignment_id) == null)
             abort(404);
+        if ($type !== 'by_user' && $type !== 'by_problem')
+            abort(404);
+
+        $assignments_root = Setting::get("assignments_root");
+        $final_subs = Submission::get_final_submissions($assignment_id);
+
+        $zip = new ZipArchive;
+        if ($type === 'by_user')
+            $zip_name = $assignments_root . "/assignment" . (string)$assignment_id . "_submissions_by_user_" . (string)date('Y-m-d_H-i') . ".zip";
+        elseif ($type === 'by_problem') 
+            $zip_name = $assignments_root . "/assignment" . (string)$assignment_id . "_submissions_by_problem_" . (string)date('Y-m-d_H-i') . ".zip";
+        $zip->open($zip_name, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+
+        foreach ($final_subs as $final_sub)
+        {
+            $file_path = Submission::get_path($final_sub->username, $assignment_id, $final_sub->problem_id) 
+            . "/" . (string)$final_sub->file_name . "." .(string)Language::find($final_sub->language_id)->extension;
+            if ( ! file_exists($file_path))
+                continue;
+            $file = file_get_contents($file_path);
+            if ($type === 'by_user')
+                $zip->addFromString("{$final_sub->username}/problem_{$final_sub->problem_id}." . (string)Language::find($final_sub->language_id)->extension, $file);
+            elseif ($type === 'by_problem')
+                $zip->addFromString("problem_{$final_sub->problem_id}/{$final_sub->username}." . (string)Language::find($final_sub->language_id)->extension, $file);
+
+        }
+
+        $zip->close();
+
+        return response()->download($zip_name)->deleteFileAfterSend();
     }
     
     public function reload_scoreboard($assignment_id)
@@ -489,5 +521,7 @@ class assignment_controller extends Controller
             abort(403);
         if (Assignment::find($assignment_id) == null)
             abort(404);
+        $assignments_root = Setting::get("assignments_root");
+
     }
 }

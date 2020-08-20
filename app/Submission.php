@@ -39,4 +39,9 @@ class Submission extends Model
 	public function directory(){
 		return Submission::get_path($this->user->username, $this->assignment_id, $this->problem_id);
 	}
+
+    public static function get_final_submissions($assignment_id)
+    {
+        return DB::table('users')->join('submissions', 'users.id', '=', 'submissions.user_id')->select('users.username', 'submissions.*')->where(['assignment_id' => $assignment_id, 'is_final' => 1])->orderBy('username','asc')->orderBy('problem_id','asc')->get();
+    }
 }
