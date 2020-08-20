@@ -414,7 +414,9 @@ class assignment_controller extends Controller
 
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
             abort(403);
+        elseif ($id == 0){
             
+        }
         elseif ($id === NULL)
         {
             $json_result = array('done' => 0, 'message' => 'Input Error');

@@ -65,12 +65,11 @@ class Queue_item extends Model
 			'problem_id' => $submission->problem_id,
 			'is_final' => 1
 		])->first();
-
 		if (
 			$final_sub == NULL 
 			|| 
 			(	$final_sub->pre_score < $submission['pre_score']
-				|| $final_sub->pre_score * $final_sub->coefficient < $submission['pre_score'] * $submission['coefficient']
+				|| $final_sub->pre_score * intval($final_sub->coefficient) < $submission['pre_score'] * intval($submission['coefficient'])
 			)
 		){
 			if ($final_sub){
