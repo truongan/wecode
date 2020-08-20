@@ -24,7 +24,7 @@
 		<div class="form-group">
 		<label for="name">Tag name</label>
 		<input type="text"
-			class="form-control" name="text" id="name" aria-describedby="_name_desc" placeholder="text" value={{$tag->text}}>
+			class="form-control" name="text" id="name" aria-describedby="_name_desc" placeholder="text" value="{{$tag->text}}">
 		<small id="_name_desc" class="form-text text-muted">The name of this new class</small>
 		</div>
 		
