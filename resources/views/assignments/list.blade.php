@@ -38,8 +38,8 @@
 				<th>Finish Time</th>
 				<th>Scoreboard</th>
 				<th>PDF</th>
-				<th>Status</th>
 				@if (!in_array( Auth::user()->role->name, ['student']))
+					<th>Status</th>
 					<th>Action</th>
 				@endif
 			</tr>
@@ -99,34 +99,22 @@
 			<td>
 				<a href="{{ url("assignments/pdf/$assignment->id") }}"><i class="far fa-lg fa-file-pdf"></i></a>
 			</td>
-			<td>
-				@if ($assignment->open)
-					<span class="text-success">Open</span>
-				@else
-					<span class="text-danger">Close</span>
-				@endif
-			</td>
 			@if (!in_array( Auth::user()->role->name, ['student']))
 			<td>
-				
-				<!-- {% if user.level >= 1 %} -->
+				<div class="custom-control custom-switch">
+					<input id="ass{{$assignment->id}}" class="custom-control-input"  type="checkbox" value="{{$assignment->open}}" {{$assignment->open ? 'checked' : ''}} />
+					<label for="ass{{$assignment->id}}" class="custom-control-label">Open</label>
+				</div>
+			</td>
+			<td>
 				<a href="{{ route('assignments.download_submissions', ['type'=>'by_user', 'assignment_id'=>$assignment->id]) }}"><i title="Download Final Submissions (by user)" class="fa fa-download fa-lg color12"></i></a>
 				<a href="{{ route('assignments.download_submissions', ['type'=>'by_problem', 'assignment_id'=>$assignment->id]) }}"><i title="Download Final Submissions (by problem)" class="fa fa-download fa-lg color2"></i></a>
 				<a href="{{ route('assignments.download_all_submissions', $assignment->id) }}"><i title="Download all submissions" class="fas fa-cloud-download-alt"></i></a>
-				<!-- {% endif %}
-				{% if user.level >= 2 %} -->
-					<a href="#"><i title="Detect Similar Codes" class="fa fa-user-secret fa-lg color7"></i></a>
-				<!-- {% endif %}
-				{% if user.level >= 2 %} -->
-					<a href="{{ route('assignments.reload_scoreboard', $assignment->id) }}"><i title="Force reload scoreboard" class="fa fa-retweet fa-lg color11"></i></a>
-				<!-- {% endif %}
-				{% if user.level >= 2 %} -->
-					<a title="Edit" href="{{ route('assignments.edit', $assignment) }}"><i class="fas fa-edit fa-lg color9"></i></a>
-				<!-- {% endif %}
-				{% if user.level >= 2 %} -->
-					<span title="Delete Assignment" class="del_n delete_Assignment pointer"><i title="Delete Assignment" class="far fa-trash-alt fa-lg color1"></i></span>
-				<!-- {% endif %} -->
-					</td>
+				<a href="#"><i title="Detect Similar Codes" class="fa fa-user-secret fa-lg color7"></i></a>
+				<a href="{{ route('assignments.reload_scoreboard', $assignment->id) }}"><i title="Force reload scoreboard" class="fa fa-retweet fa-lg color11"></i></a>
+				<a title="Edit" href="{{ route('assignments.edit', $assignment) }}"><i class="fas fa-edit fa-lg color9"></i></a>
+				<span title="Delete Assignment" class="del_n delete_Assignment pointer"><i title="Delete Assignment" class="far fa-trash-alt fa-lg color1"></i></span>
+			</td>
 			@endif
 		</tr>
 		@endforeach
@@ -180,6 +168,30 @@ $(document).ready(function () {
 		});
 	});
 	$("#assignment_delete").modal("show");
+	});
+
+	$('input').change(function(){
+		var row = $(this).parents('tr');
+		var id = row.data('id');
+		console.log(id);
+		$.ajax({
+		type: 'POST',
+		url: '{{ route('assignments.check_open') }}',
+		data: {
+					'_token': "{{ csrf_token() }}",
+					'assignment_id': id,
+		},
+		error: shj.loading_error,
+		success: function (response) {
+            if (response == "success"){
+                $.notify('Change sucessfully saved', {position: 'bottom right', className: 'success', autoHideDelay: 3500});
+                $('.save-button').removeClass('btn-info').addClass('btn-secondary');
+                }
+            },
+        error: function(response){
+            $.notify('Error while saving', {position: 'bottom right', className: 'error', autoHideDelay: 3500});
+        	}
+		});
 	});
 
     $("table").DataTable({

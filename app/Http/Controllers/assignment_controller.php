@@ -524,4 +524,17 @@ class assignment_controller extends Controller
         $assignments_root = Setting::get("assignments_root");
 
     }
+    public function check_open(Request $request)
+    {
+        $assignment_id = $request->assignment_id;
+        $assignment = Assignment::find($assignment_id);
+        if ($assignment != NULL){
+            $assignment->open=!$assignment->open;
+            $assignment->save();
+            echo "success";
+                return;
+        }
+        else 
+            echo "error";
+    }
 }
