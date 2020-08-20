@@ -100,11 +100,12 @@ class submission_controller extends Controller
  
 	public function upload_file_code($request, $user_dir, $submission)
 	{
-		$ext = $request->userfile->extension();
+		$ext = substr(strrchr($request->userfile->getClientOriginalName(),'.'),1);
 		$file_name = basename($request->userfile->getClientOriginalName(), ".{$ext}"); // uploaded file name without extension    
-		$file_name = preg_replace('/[^a-zA-Z0-9]+/', 'x', $file_name);
-
-		$path = $request->userfile->storeAs($user_dir, $file_name, 'my_local');
+		$file_name = preg_replace('/[^a-zA-Z0-9_\-()]+/', '', $file_name);
+		$assignment = Assignment::find(Auth::user()->selected_assignment_id);
+		$file_name = $file_name."-".($assignment->total_submits+1);
+		$path = $request->userfile->storeAs($user_dir, $file_name.".".$submission->language->extension, 'my_local');
 
 		if ($path)
 		{      
