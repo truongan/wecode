@@ -117,7 +117,8 @@ class CreateAllTable extends Migration
         });
 
         Schema::create('scoreboards', function (Blueprint $table) {
-            $table->unsignedSmallInteger('assigment'); 
+            $table->bigIncrements('id');
+            $table->unsignedSmallInteger('assignment_id'); 
             $table->longText('scoreboard'); 
             $table->timestamps();
         });

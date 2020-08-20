@@ -1,7 +1,7 @@
 <?php
 
 namespace App;
-use App\submission;
+use App\Submission;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 

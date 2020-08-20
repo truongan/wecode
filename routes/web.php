@@ -28,7 +28,7 @@ Route::get('/users/add_multiple', 'UserController@add_multiple');
 Route::post('/users/adds', 'UserController@add')->name('users.add');
 Route::delete('users/{id}', 'UserController@destroy')->name('users.destroy');
 
-Route::get('/problems/download/{id}', 'problem_controller@pdf')->name('problems.pdf');
+Route::get('/problems/download/{id}', 'problem_controller@downloadtestsdesc')->name('problems.downloadtestsdesc');
 Route::post('/problems/edit_description/{problem_id}', 'problem_controller@edit_description')->name('problems.edit_description');
 // Route::get('/view_problem/{problem_id}', 'view_problem_controller@index');
 

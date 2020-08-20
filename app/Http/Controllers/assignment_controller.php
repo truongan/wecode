@@ -429,6 +429,8 @@ class assignment_controller extends Controller
             else
             {
                 $assignment = Assignment::find($id);
+                $submissions_in_queue = Submission::Where(['assignment_id' => $id, 'status' => 'pending'])->pluck('id')->toArray();
+                DB::table('queue_items')->whereIn('submission_id', $submissions_in_queue)->delete();
                 DB::table('submissions')->where('assignment_id', '=', $id)->delete();
                 DB::table('assignment_lop')->where('assignment_id', '=', $id)->delete();
                 DB::table('assignment_problem')->where('assignment_id', '=', $id)->delete();
@@ -519,9 +521,11 @@ class assignment_controller extends Controller
     {
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
             abort(403);
-        if (Assignment::find($assignment_id) == null)
+        $assignment = Assignment::find($assignment_id);
+        if ($assignment == null)
             abort(404);
-        $assignments_root = Setting::get("assignments_root");
-
+        if (Scoreboard::update_scoreboard($assignment_id)){     
+            return redirect()->back()->with('success', 'Reload Scoreboard sucecss');   
+        }
     }
 }
