@@ -97,7 +97,6 @@ $(document).ready(function () {
 			shj.modal_open = true;
 			$("#submission_modal").modal('show');
 			$("#submission_modal").on("hidden.bs.modal", function(){
-				$(".modal-body").html('<div style="text-align: center;">Loading<br><img src="'+shj.base_url+'assets/images/loading.gif"/></div>');
 				shj.modal_open = false;
 			});
 			$("#submission_modal").on("hide.bs.modal", function(){
