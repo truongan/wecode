@@ -103,8 +103,7 @@ class submission_controller extends Controller
 		$ext = substr(strrchr($request->userfile->getClientOriginalName(),'.'),1);
 		$file_name = basename($request->userfile->getClientOriginalName(), ".{$ext}"); // uploaded file name without extension    
 		$file_name = preg_replace('/[^a-zA-Z0-9_\-()]+/', '', $file_name);
-		$assignment = Assignment::find(Auth::user()->selected_assignment_id);
-		$file_name = $file_name."-".($assignment->total_submits+1);
+		$file_name = "solution-upload-".($submission->assignment->total_submits+1);
 		$path = $request->userfile->storeAs($user_dir, $file_name.".".$submission->language->extension, 'my_local');
 
 		if ($path)
