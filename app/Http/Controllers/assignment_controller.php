@@ -95,6 +95,26 @@ class assignment_controller extends Controller
         return view('assignments.create',['all_problems' => Problem::all(), 'all_lops' => Lop::all(), 'lops' => [], 'messages' => [], 'problems' => $problems, 'selected' => 'assignments']);
     }
 
+
+    private function _process_form($request, &$assignment){
+        if ($request->open == 1)
+            $assignment->open = True;
+        else $assignment->open = False;
+        
+        if ($request->scoreboard == 1)
+            $assignment->score_board = True;
+        else $assignment->score_board = False;
+
+        $extra_time = 1;
+        foreach( explode('*',$request->extra_time ) as $t){
+            $extra_time *= $t;
+        }
+        $assignment->extra_time = $extra_time;
+        $assignment->start_time = date('Y-m-d H:i:s', strtotime((string)$request->start_time_date . " " .(string)date('H:i:s', strtotime($request->start_time_time))));
+        $assignment->finish_time = date('Y-m-d H:i:s', strtotime((string)$request->finish_time_date . " " .(string)date('H:i:s', strtotime($request->finish_time_time))));
+      
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -114,23 +134,9 @@ class assignment_controller extends Controller
         
         $assignment = new Assignment;
         $assignment->fill($request->input());
-        
-        if ($request->open == 1)
-            $assignment->open = True;
-        else $assignment->open = False;
-        
-        if ($request->scoreboard == 1)
-            $assignment->score_board = True;
-        else $assignment->score_board = False;
 
-        $extra_time = 1;
-        foreach( explode('*',$request->extra_time ) as $t){
-            $extra_time *= $t;
-        }
-        
-        $assignment->extra_time = $extra_time;
-        $assignment->start_time = date('Y-m-d H:i:s', strtotime((string)$request->start_time_date . " " .(string)date('H:i:s', strtotime($request->start_time_time))));
-        $assignment->finish_time = date('Y-m-d H:i:s', strtotime((string)$request->finish_time_date . " " .(string)date('H:i:s', strtotime($request->finish_time_time))));
+        $this->_process_form($request, $assignment);
+  
         $assignment->save();
         if ($request->hasFile('pdf')) {
             $path_pdf = Setting::get("assignments_root");
@@ -362,18 +368,10 @@ class assignment_controller extends Controller
         ]);
 
         $assignment->fill($request->input());
-        if ($request->open == 1)
-            $assignment->open = True;
-        else $assignment->open = False;
-        if ($request->scoreboard == 1)
-            $assignment->score_board = True;
-        else $assignment->score_board = False;
-       
-        $start_time = strval($request->start_time_date) . " " . strval($request->start_time_time);
-        $assignment->start_time = date('Y-m-d H:i:s', strtotime($start_time));
-        $finish_time = strval($request->finish_time_date) . " " . strval($request->finish_time_time);
-        $assignment->finish_time = date('Y-m-d H:i:s', strtotime($finish_time));
-        $assignment->total_submits = 0;
+        
+        $this->_process_form($request, $assignment);
+        
+        // $assignment->total_submits = 0;
 
         $assignment->save();
         if ($request->hasFile('pdf')) {
@@ -459,7 +457,6 @@ class assignment_controller extends Controller
 
     public function score_accepted()
     {
-        //
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
             abort(403);
         return view('assignments.score_accepted');
@@ -467,8 +464,6 @@ class assignment_controller extends Controller
 
     public function score_sum()
     {
-        //
-
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
             abort(403);
         return view('assignments.score_sum');
