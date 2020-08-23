@@ -118,9 +118,17 @@ class assignment_controller extends Controller
         if ($request->open == 1)
             $assignment->open = True;
         else $assignment->open = False;
+        
         if ($request->scoreboard == 1)
             $assignment->score_board = True;
         else $assignment->score_board = False;
+
+        $extra_time = 1;
+        foreach( explode('*',$request->extra_time ) as $t){
+            $extra_time *= $t;
+        }
+        
+        $assignment->extra_time = $extra_time;
         $assignment->start_time = date('Y-m-d H:i:s', strtotime((string)$request->start_time_date . " " .(string)date('H:i:s', strtotime($request->start_time_time))));
         $assignment->finish_time = date('Y-m-d H:i:s', strtotime((string)$request->finish_time_date . " " .(string)date('H:i:s', strtotime($request->finish_time_time))));
         $assignment->save();

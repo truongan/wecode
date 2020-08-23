@@ -20,6 +20,16 @@ class submission_controller extends Controller
 	{
 		$this->middleware('auth'); // phải login
 	}
+
+	private function _do_access_check($submission){
+		if (in_array(Auth::user()->role->name, ['student'])){
+			if ($submission->user_id!=Auth::user()->id)
+				abort(403,"You don't have permission to view another user's submissions");
+			if (!$submission->assignment->open)
+				abort(403,"This assignment has been close for students");
+		}  
+	}
+
 	/**
 	 * Display a listing of the resource.
 	 *
@@ -93,7 +103,7 @@ class submission_controller extends Controller
 		if ($this->upload($request))
 			return redirect()->route('submissions.index', [$request->assignment, 'all', 'all', 'all']);
 		else
-			abort(403,'Error Uploading File');
+			abort(501,'Error Uploading File');
 	}
 	
 
@@ -240,7 +250,7 @@ class submission_controller extends Controller
 			)
 		)
 		{
-			abort(403, 'Invalid problem ID');
+			abort(404, 'Invalid problem ID');
 		}
 
 		$template = $problem->template_content('cpp');
@@ -279,9 +289,9 @@ class submission_controller extends Controller
 		$language = Language::find($request->language);
 
 		$coefficient = 100;
-		if ($assignment->id == 0)
-			if (!in_array( Auth::user()->role->name, ['admin']) && $problem->allow_practice!=1)
-				abort(403,'Only admin can submit without assignment');
+		if ($assignment->id == 0) //Practice 
+			if (!in_array( Auth::user()->role->name, ['admin, head_instructor']) && $problem->allow_practice!=1)
+				abort(403,'This problem is not open for practice');
 		else
 		{
 			$coefficient = $this->eval_coefficient($assignment);
@@ -345,11 +355,10 @@ class submission_controller extends Controller
 		$submit_id = $_POST['submit_id'];
 		$type = $_POST['type'];
 
-		$submission = Submission::find($submit_id);
+		$submission = Submission::with('assignment')->find($submit_id);
 
 		if (!$submission) abort(403,"Submission not found");
-		if (in_array(Auth::user()->role->name, ['student']) && $submission->user_id!=Auth::user()->id)
-			abort(403,"You don't have permission to view another user's code");
+		$this->_do_access_check($submission);
 
 		$submit_path = $this->get_path(Auth::user()->username, $submission->assignment_id, $submission->problem_id);
 		$file_extension = $submission->language->extension;
