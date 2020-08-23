@@ -32,36 +32,36 @@ shj.sync_server_time = function () {
 }
 
 shj.update_clock = function(){
-	if (Math.abs(moment().diff(shj.time))>3500){
-		//console.log('moment: '+moment()+' time: '+time+' diff: '+Math.abs(moment().diff(time)));
-		shj.sync_server_time();
-	}
-	shj.time = moment();
-	var now = moment().add(shj.offset, 'milliseconds');
-	$('.timer').html('Server time: '+now.format('DD/MM - HH:mm:ss'));
+	// if (Math.abs(moment().diff(shj.time))>3500){
+	// 	//console.log('moment: '+moment()+' time: '+time+' diff: '+Math.abs(moment().diff(time)));
+	// 	shj.sync_server_time();
+	// }
+	// shj.time = moment();
+	// var now = moment().add(shj.offset, 'milliseconds');
+	// $('.timer').html('Server time: '+now.format('DD/MM - HH:mm:ss'));
 
-	var countdown = shj.finish_time.diff(now);
+	// var countdown = shj.finish_time.diff(now);
 
-	if (isNaN(countdown)){
-		countdown = 0;
-	}
-	if (countdown<=0 && countdown + shj.extra_time.asMilliseconds()>0){
-		countdown = countdown + shj.extra_time.asMilliseconds();
-		$("div#extra_time").css("display","block");
-	}
-	else
-		$("div#extra_time").css("display","none");
-	if (countdown<=0){
-		countdown=0;
-	}
+	// if (isNaN(countdown)){
+	// 	countdown = 0;
+	// }
+	// if (countdown<=0 && countdown + shj.extra_time.asMilliseconds()>0){
+	// 	countdown = countdown + shj.extra_time.asMilliseconds();
+	// 	$("div#extra_time").css("display","block");
+	// }
+	// else
+	// 	$("div#extra_time").css("display","none");
+	// if (countdown<=0){
+	// 	countdown=0;
+	// }
 
-	countdown = Math.floor(moment.duration(countdown).asSeconds());
-	var seconds = countdown%60; countdown=(countdown-seconds)/60;
-	var minutes = countdown%60; countdown=(countdown-minutes)/60;
-	var hours = countdown%24; countdown=(countdown-hours)/24;
-	var days = countdown;
+	// countdown = Math.floor(moment.duration(countdown).asSeconds());
+	// var seconds = countdown%60; countdown=(countdown-seconds)/60;
+	// var minutes = countdown%60; countdown=(countdown-minutes)/60;
+	// var hours = countdown%24; countdown=(countdown-hours)/24;
+	// var days = countdown;
 
-	$("#time_days").html( days + "☀️" + hours + ":" + minutes + ":" + seconds);
+	// $("#time_days").html( days + "☀️" + hours + ":" + minutes + ":" + seconds);
 }
 
 /**

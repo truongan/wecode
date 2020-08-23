@@ -26,6 +26,6 @@ class home_controller extends Controller
      */
     public function index()
     {
-        return view('home', ['selected' => 'dashboard', 'notifications'=>Notification::latest()->paginate(3),'all_assignments'=> Assignment::all()]);
+        return view('home', ['selected' => 'dashboard', 'notifications'=>Notification::latest()->paginate(3),'all_assignments'=> Assignment::where('id', '>', 0)->get()]);
     }
 }
