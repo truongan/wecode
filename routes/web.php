@@ -68,6 +68,8 @@ Route::post('/assignment/check_open/', 'assignment_controller@check_open')->name
 Route::get('/scoreboard/simplify/{id}', 'scoreboard_controller@simplify')->name('scoreboards.simplify');
 Route::get('/scoreboard/plain/{id}', 'scoreboard_controller@plain')->name('scoreboards.plain');
 
+Route::get('/server_time', function(){echo  date(DATE_ISO8601);});
+
 //Resource route phải được  ghi cuối cùng, nếu không các route sau dính tới /usres sẽ ăn shit 
 Route::resource('users','UserController');
 Route::resource('notifications','notification_controller');

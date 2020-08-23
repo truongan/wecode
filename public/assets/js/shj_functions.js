@@ -20,25 +20,23 @@ shj.loading_failed = function(message)
 
 shj.sync_server_time = function () {
 	$.ajax({
-		type: 'POST',
-		url: shj.site_url + 'server_time',
-		data: {
-			wcj_csrf_name: shj.csrf_token
-		},
+		type: 'GET',
+		url: site_url + '/server_time',
+
 		success: function (response) {
-			shj.offset = moment(response).diff(moment());
+			shj.offset = new Date(response) - new Date();
 		}
 	});
 }
 
 shj.update_clock = function(){
-	// if (Math.abs(moment().diff(shj.time))>3500){
-	// 	//console.log('moment: '+moment()+' time: '+time+' diff: '+Math.abs(moment().diff(time)));
-	// 	shj.sync_server_time();
-	// }
-	// shj.time = moment();
-	// var now = moment().add(shj.offset, 'milliseconds');
-	// $('.timer').html('Server time: '+now.format('DD/MM - HH:mm:ss'));
+	if (Math.abs(new Date() - shj.time)/1000>3500){
+		shj.sync_server_time();
+	}
+	shj.time = new Date();
+	var now = new Date(new Date().getTime() + shj.offset);
+	// console.log(now);
+	$('.timer').html('Server time: '+now);
 
 	// var countdown = shj.finish_time.diff(now);
 
@@ -113,6 +111,7 @@ shj.setup_save = function(save_button, post_url, ckeditor_instance){
  */
 $(document).ready(function () {
 	// update the clock and countdown timer every 1 second
+	shj.sync_server_time();
 	shj.update_clock();
 	window.setInterval(shj.update_clock, 1000);
 });

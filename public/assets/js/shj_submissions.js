@@ -8,12 +8,6 @@
 
 shj.modal_open = false;
 
-$.ajaxSetup({
-    headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }
-});
-
 Prism.plugins.toolbar.registerButton('select-code', function(env) {
 	var button = document.createElement('button');
 	button.innerHTML = 'Select Code';
