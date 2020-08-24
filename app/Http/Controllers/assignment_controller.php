@@ -96,22 +96,23 @@ class assignment_controller extends Controller
     }
 
 
-    private function _process_form($request, &$assignment){
-        if ($request->open == 1)
-            $assignment->open = True;
-        else $assignment->open = False;
+    private function _process_form(&$request){
+        if ($request['open']??0 == 1)
+            $request['open'] = True;
+        else $request['open'] = False;
         
-        if ($request->scoreboard == 1)
-            $assignment->score_board = True;
-        else $assignment->score_board = False;
+        if ($request['scoreboard']??0 == 1)
+            $request['score_board'] = True;
+        else $request['score_board'] = False;
 
         $extra_time = 1;
-        foreach( explode('*',$request->extra_time ) as $t){
+        foreach( explode('*',$request['extra_time'] ) as $t){
             $extra_time *= $t;
         }
-        $assignment->extra_time = $extra_time;
-        $assignment->start_time = date('Y-m-d H:i:s', strtotime((string)$request->start_time_date . " " .(string)date('H:i:s', strtotime($request->start_time_time))));
-        $assignment->finish_time = date('Y-m-d H:i:s', strtotime((string)$request->finish_time_date . " " .(string)date('H:i:s', strtotime($request->finish_time_time))));
+        $request['extra_time'] = $extra_time;
+
+        $request['start_time'] = date('Y-m-d H:i:s', strtotime((string)$request['start_time_date'] . " " .(string)date('H:i:s', strtotime($request['start_time_time']))));
+        $request['finish_time'] = date('Y-m-d H:i:s', strtotime((string)$request['finish_time_date'] . " " .(string)date('H:i:s', strtotime($request['finish_time_time']))));
       
     }
 
@@ -132,10 +133,13 @@ class assignment_controller extends Controller
             'pdf_file' => 'mimes:pdf',
         ]);
         
+        $input = $request->input();
+        // dd($input);
+        $this->_process_form($input);
+        
         $assignment = new Assignment;
-        $assignment->fill($request->input());
+        $assignment->fill($input);
 
-        $this->_process_form($request, $assignment);
   
         $assignment->save();
         if ($request->hasFile('pdf')) {
@@ -364,9 +368,10 @@ class assignment_controller extends Controller
             'pdf' => 'mimes:pdf',
         ]);
 
-        $assignment->fill($request->input());
+        $input = $request->input();
+        $this->_process_form($input);
+        $assignment->fill($input);
         
-        $this->_process_form($request, $assignment);
         
         // $assignment->total_submits = 0;
 
