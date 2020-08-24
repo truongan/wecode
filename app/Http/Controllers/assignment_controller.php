@@ -173,21 +173,13 @@ class assignment_controller extends Controller
     public function show(Assignment $assignment, $problem_id ){
         $assignment_id = $assignment->id;
 
-        
-        if (Assignment::find($assignment_id) == null)
-            abort(404);
-        Auth::user()->selected_assignment_id = $assignment_id;
-        Auth::user()->save(); 
-        
-        if ($problem_id == 0 )
-        {
-            $error = "no problem in the assignment";
-            return view('problems.show',['error' => $error]);
+        if ($assignment->id == 0){
+            return redirect()->route('practice');
         }
-         
-        if ($assignment_id === NULL){
-            redirect(view('problems.show'));
-        }
+        
+        // if ($assignment_id === NULL){
+        //     redirect(view('problems.show'));
+        // }
         
         $data=array(
             'can_submit' => TRUE,
@@ -207,6 +199,7 @@ class assignment_controller extends Controller
             }
         }
         if (!$check) abort(404);
+        
         $result = $this->get_description($problem_id);
         $problem = Problem::find($problem_id);
         $problem['has_pdf'] = $result['has_pdf'];
@@ -272,6 +265,10 @@ class assignment_controller extends Controller
             $data['problem_status'] = $probs;
             break;
         }
+
+        Auth::user()->selected_assignment_id = $assignment_id;
+        Auth::user()->save(); 
+
         return view('problems.show',$data);
     }
 
