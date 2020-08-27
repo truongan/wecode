@@ -42,14 +42,21 @@
     <script type="text/javascript" src="{{ asset('js/bootstrap.min.js') }}"></script>
 
 
-    <script type="text/javascript" src="{{ asset('assets/js/moment.min.js') }}"></script>
+    {{-- <script type="text/javascript" src="{{ asset('assets/js/moment.min.js') }}"></script> --}}
     <script type="text/javascript" src="{{ asset('assets/js/jquery.cookie.js') }}"></script>
     <script type='text/javascript' src="{{ asset('assets/sbadmin/js/sb-admin.min.js') }}"></script>
 
     <script	src="{{ asset('assets/js/notify.min.js') }}"></script>
 
     <script type="text/javascript">
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
         shj={};
+        wcj={};
+        wcj.site_url = site_url = "{{ URL::to('/') }}";
         var date = new Date(),
         utc = new Date(Date.UTC(
           date.getFullYear(),
@@ -59,13 +66,15 @@
           date.getMinutes(),
           date.getSeconds()
         ));
+
         shj_now_str = utc.toLocaleTimeString();
-        shj.offset = moment(shj_now_str).diff(moment());
-        shj.time = moment();
-        {{-- Thông số finish_time và extra_time cần được chỉnh sửa sau khi có assignment --}}
+
+
+        shj.time = new Date();
+
         
-        shj.finish_time = moment("{!! (Auth::user()->selected_assignment->finish_time)?? now() !!}"); 
-        shj.extra_time = moment.duration({!! (Auth::user()->selected_assignment->extra_time) ?? 0 !!}, 'seconds');
+        shj.finish_time = new Date("{!! (Auth::user()->selected_assignment->finish_time)?? now() !!}"); 
+        shj.extra_time = {!! (Auth::user()->selected_assignment->extra_time) ?? 0 !!}; 
         shj.color_scheme = 'github';
     </script>
 

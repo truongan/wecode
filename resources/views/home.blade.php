@@ -5,11 +5,12 @@
 @section('title', 'Dashboard')
 
 @section('other_assets')
-<link rel="stylesheet" type='text/css' href="{{ asset('assets/fullcalendar/fullcalendar.min.css') }}">
+<link rel="stylesheet" type='text/css' href="{{ asset('assets/fullcalendar/main.min.css') }}">
 @endsection
 
 @section('body_end')
-<script type='text/javascript' src="{{ asset('assets/fullcalendar/fullcalendar.js') }}"></script>
+<script type='text/javascript' src="{{ asset('assets/fullcalendar/main.min.
+js') }}"></script>
 <script type='text/javascript' src="{{ asset('assets/js/jquery.autoellipsis-1.0.10.min.js') }}"></script>
 {{-- <script>
 $(document).ready(function () {
@@ -34,24 +35,29 @@ $(document).ready(function () {
 <script>
     $(document).ready(function () {
         var all_assignments = @json($all_assignments);
-        $('#calendar').fullCalendar({
-            timeFormat: 'HH:mm { - HH:mm}',
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl,{
+            díplayEventTime: true,
             editable: false,
             height: "auto",
             firstDay: 1,
+
             events: [
                 @php($colors = ['#812C8C','#FF750D','#2C578C','#013440','#A6222C','#42758C','#02A300','#BA6900'])
                 @foreach ($all_assignments as $assignment )
-                        {id:{{ $assignment->id }},
-                        title:'{{ $assignment->name }}', 
-                        start:'{{ $assignment->start_time }}', 
-                        end:'{{ $assignment->finish_time }}',
-                        allDay:false,
-                        color:'{{ $colors[($loop->index)%count($colors)] }}'},
+                    {
+                    id:{{ $assignment->id }},
+                    title:'{{ $assignment->name }}', 
+                    start:'{{ $assignment->start_time }}', 
+                    end:'{{ $assignment->finish_time }}',
+                    allDay:false,
+                    color:'{{ $colors[($loop->index)%count($colors)] }}',
+                    url:'{{  route('assignments.show',['assignment'=>$assignment,'problem_id'=>$assignment->problems->first()->id??0]) }}',
+                    },
                 @endforeach
             ]
         });
-        
+        calendar.render();
         //$('.notif_text').ellipsis();
     });
 </script>

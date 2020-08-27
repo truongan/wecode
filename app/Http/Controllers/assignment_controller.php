@@ -95,6 +95,27 @@ class assignment_controller extends Controller
         return view('assignments.create',['all_problems' => Problem::all(), 'all_lops' => Lop::all(), 'lops' => [], 'messages' => [], 'problems' => $problems, 'selected' => 'assignments']);
     }
 
+
+    private function _process_form(&$request){
+        if ($request['open']??0 == 1)
+            $request['open'] = True;
+        else $request['open'] = False;
+        
+        if ($request['scoreboard']??0 == 1)
+            $request['score_board'] = True;
+        else $request['score_board'] = False;
+
+        $extra_time = 1;
+        foreach( explode('*',$request['extra_time'] ) as $t){
+            $extra_time *= $t;
+        }
+        $request['extra_time'] = $extra_time;
+
+        $request['start_time'] = date('Y-m-d H:i:s', strtotime((string)$request['start_time_date'] . " " .(string)date('H:i:s', strtotime($request['start_time_time']))));
+        $request['finish_time'] = date('Y-m-d H:i:s', strtotime((string)$request['finish_time_date'] . " " .(string)date('H:i:s', strtotime($request['finish_time_time']))));
+      
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -112,17 +133,14 @@ class assignment_controller extends Controller
             'pdf_file' => 'mimes:pdf',
         ]);
         
-        $assignment = new Assignment;
-        $assignment->fill($request->input());
+        $input = $request->input();
+        // dd($input);
+        $this->_process_form($input);
         
-        if ($request->open == 1)
-            $assignment->open = True;
-        else $assignment->open = False;
-        if ($request->scoreboard == 1)
-            $assignment->score_board = True;
-        else $assignment->score_board = False;
-        $assignment->start_time = date('Y-m-d H:i:s', strtotime((string)$request->start_time_date . " " .(string)date('H:i:s', strtotime($request->start_time_time))));
-        $assignment->finish_time = date('Y-m-d H:i:s', strtotime((string)$request->finish_time_date . " " .(string)date('H:i:s', strtotime($request->finish_time_time))));
+        $assignment = new Assignment;
+        $assignment->fill($input);
+
+  
         $assignment->save();
         if ($request->hasFile('pdf')) {
             $path_pdf = Setting::get("assignments_root");
@@ -159,21 +177,13 @@ class assignment_controller extends Controller
     public function show(Assignment $assignment, $problem_id ){
         $assignment_id = $assignment->id;
 
-        
-        if (Assignment::find($assignment_id) == null)
-            abort(404);
-        Auth::user()->selected_assignment_id = $assignment_id;
-        Auth::user()->save(); 
-        
-        if ($problem_id == 0 )
-        {
-            $error = "no problem in the assignment";
-            return view('problems.show',['error' => $error]);
+        if ($assignment->id == 0){
+            return redirect()->route('practice');
         }
-         
-        if ($assignment_id === NULL){
-            redirect(view('problems.show'));
-        }
+        
+        // if ($assignment_id === NULL){
+        //     redirect(view('problems.show'));
+        // }
         
         $data=array(
             'can_submit' => TRUE,
@@ -193,6 +203,7 @@ class assignment_controller extends Controller
             }
         }
         if (!$check) abort(404);
+        
         $result = $this->get_description($problem_id);
         $problem = Problem::find($problem_id);
         $problem['has_pdf'] = $result['has_pdf'];
@@ -259,6 +270,10 @@ class assignment_controller extends Controller
             $data['problem_status'] = $probs;
             break;
         }
+
+        Auth::user()->selected_assignment_id = $assignment_id;
+        Auth::user()->save(); 
+
         return view('problems.show',$data);
     }
 
@@ -337,19 +352,12 @@ class assignment_controller extends Controller
             'pdf' => 'mimes:pdf',
         ]);
 
-        $assignment->fill($request->input());
-        if ($request->open == 1)
-            $assignment->open = True;
-        else $assignment->open = False;
-        if ($request->scoreboard == 1)
-            $assignment->score_board = True;
-        else $assignment->score_board = False;
-       
-        $start_time = strval($request->start_time_date) . " " . strval($request->start_time_time);
-        $assignment->start_time = date('Y-m-d H:i:s', strtotime($start_time));
-        $finish_time = strval($request->finish_time_date) . " " . strval($request->finish_time_time);
-        $assignment->finish_time = date('Y-m-d H:i:s', strtotime($finish_time));
-        $assignment->total_submits = 0;
+        $input = $request->input();
+        $this->_process_form($input);
+        $assignment->fill($input);
+        
+        
+        // $assignment->total_submits = 0;
 
         $assignment->save();
         if ($request->hasFile('pdf')) {
@@ -398,7 +406,9 @@ class assignment_controller extends Controller
 
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
             abort(403);
+        elseif ($id == 0){
             
+        }
         elseif ($id === NULL)
         {
             $json_result = array('done' => 0, 'message' => 'Input Error');
@@ -433,7 +443,6 @@ class assignment_controller extends Controller
 
     public function score_accepted()
     {
-        //
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
             abort(403);
         return view('assignments.score_accepted');
@@ -441,8 +450,6 @@ class assignment_controller extends Controller
 
     public function score_sum()
     {
-        //
-
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
             abort(403);
         return view('assignments.score_sum');

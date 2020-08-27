@@ -20,33 +20,31 @@ shj.loading_failed = function(message)
 
 shj.sync_server_time = function () {
 	$.ajax({
-		type: 'POST',
-		url: shj.site_url + 'server_time',
-		data: {
-			wcj_csrf_name: shj.csrf_token
-		},
+		type: 'GET',
+		url: site_url + '/server_time',
+
 		success: function (response) {
-			shj.offset = moment(response).diff(moment());
+			shj.offset = new Date(response) - new Date();
 		}
 	});
 }
 
 shj.update_clock = function(){
-	if (Math.abs(moment().diff(shj.time))>3500){
-		//console.log('moment: '+moment()+' time: '+time+' diff: '+Math.abs(moment().diff(time)));
+	if (Math.abs(new Date() - shj.time)/1000>3500){
 		shj.sync_server_time();
 	}
-	shj.time = moment();
-	var now = moment().add(shj.offset, 'milliseconds');
-	$('.timer').html('Server time: '+now.format('DD/MM - HH:mm:ss'));
+	shj.time = new Date();
+	var now = new Date(new Date().getTime() + shj.offset);
+	// console.log(now);
+	$('.timer').html('Server time: '+now);
 
-	var countdown = shj.finish_time.diff(now);
+	var countdown = shj.finish_time - (now);
 
 	if (isNaN(countdown)){
 		countdown = 0;
 	}
-	if (countdown<=0 && countdown + shj.extra_time.asMilliseconds()>0){
-		countdown = countdown + shj.extra_time.asMilliseconds();
+	if (countdown<=0 && countdown + shj.extra_time * 60000 >0){
+		countdown = countdown + shj.extra_time * 60000;
 		$("div#extra_time").css("display","block");
 	}
 	else
@@ -55,13 +53,13 @@ shj.update_clock = function(){
 		countdown=0;
 	}
 
-	countdown = Math.floor(moment.duration(countdown).asSeconds());
+	countdown = Math.floor(countdown/1000);
 	var seconds = countdown%60; countdown=(countdown-seconds)/60;
 	var minutes = countdown%60; countdown=(countdown-minutes)/60;
 	var hours = countdown%24; countdown=(countdown-hours)/24;
 	var days = countdown;
 
-	$("#time_days").html( days + "☀️" + hours + ":" + minutes + ":" + seconds);
+	$("#time_days").html( days + "☀" + hours + ":" + minutes + ":" + seconds);
 }
 
 /**
@@ -113,6 +111,7 @@ shj.setup_save = function(save_button, post_url, ckeditor_instance){
  */
 $(document).ready(function () {
 	// update the clock and countdown timer every 1 second
+	shj.sync_server_time();
 	shj.update_clock();
 	window.setInterval(shj.update_clock, 1000);
 });

@@ -37,17 +37,17 @@
 		<thead class="thead-dark">
 			<tr>
 				<th>#</th>
-				<th>Select</th>
+				<th><small>Select</small></th>
 				<th>Class</th>
 				<th>Name</th>
-				<th>Submissions</th>
-				<th>Coefficient</th>
-				<th>Start Time</th>
-				<th>Finish Time</th>
-				<th>Scoreboard</th>
+				<th><small>Submissions</small></th>
+				<th>Coef</th>
+				<th>Start</th>
+				<th>Finish</th>
+				<th><small>Score-board</small></th>
 				<th>PDF</th>
 				@if (!in_array( Auth::user()->role->name, ['student']))
-					<th>Status</th>
+					<th><small>Open</small></th>
 					<th>Action</th>
 				@endif
 			</tr>
@@ -111,7 +111,7 @@
 			<td>
 				<div class="custom-control custom-switch">
 					<input id="ass{{$assignment->id}}" class="custom-control-input"  type="checkbox" value="{{$assignment->open}}" {{$assignment->open ? 'checked' : ''}} />
-					<label for="ass{{$assignment->id}}" class="custom-control-label">Open</label>
+					<label for="ass{{$assignment->id}}" class="custom-control-label"></label>
 				</div>
 			</td>
 			<td>

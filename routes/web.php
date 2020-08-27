@@ -24,6 +24,7 @@ Route::get('/moss/{id}', 'moss_controller@index')->name('moss.index');
 Route::post('/moss/{id}', 'moss_controller@update')->name('moss.update');
 Route::post('/moss/detect/{id}', 'moss_controller@detect')->name('moss.detect');
 
+
 Route::get('/settings', 'setting_controller@index')->name('settings.index');
 Route::post('/settings', 'setting_controller@update')->name('settings.update');
 
@@ -53,7 +54,7 @@ Route::post('/queue', 'queue_controller@work')->name('queue.work');
 Route::post('/queue/{item}/unlock', 'queue_controller@unlock')->name('queue.unlock');
 Route::post('/queue/empty', 'queue_controller@empty')->name('queue.empty');
 
-Route::get('/practice', 'practice_controller@index');
+Route::get('/practice', 'practice_controller@index')->name('practice');
 Route::get('/practice/show/{problem_id}', 'practice_controller@show')->name('practices.show');
 
 Route::get('/scoreboard/full/{id}', 'scoreboard_controller@index')->name('scoreboards.index');
@@ -71,6 +72,8 @@ Route::post('/assignment/check_open/', 'assignment_controller@check_open')->name
 
 Route::get('/scoreboard/simplify/{id}', 'scoreboard_controller@simplify')->name('scoreboards.simplify');
 Route::get('/scoreboard/plain/{id}', 'scoreboard_controller@plain')->name('scoreboards.plain');
+
+Route::get('/server_time', function(){echo  date(DATE_ISO8601);});
 
 //Resource route phải được  ghi cuối cùng, nếu không các route sau dính tới /usres sẽ ăn shit 
 Route::resource('users','UserController');

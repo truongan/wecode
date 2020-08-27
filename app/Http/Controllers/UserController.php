@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use App\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Hash;
@@ -34,7 +35,7 @@ class UserController extends Controller
         if(!in_array(Auth::user()->role->name, ['admin', 'head_instructor'])){
             abort(403);
         }
-        return view('users.list',['users'=>User::all(), 'selected' => 'settings']); 
+        return view('users.list',['users'=>User::all(), 'selected' => 'settings', 'timezone' => Setting::get('timezone')]); 
     }
 
     /**

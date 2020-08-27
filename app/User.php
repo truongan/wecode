@@ -40,8 +40,10 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'last_login_time' => 'datetime:Y-m-d\TH:i:sP'
     ];
-
+    protected $dates = ['first_login_time', 'last_login_time'];
+    protected $dateFormat = 'Y-m-d\TH:i:sP';
 
 
     public function role(){

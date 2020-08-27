@@ -8,12 +8,6 @@
 
 shj.modal_open = false;
 
-$.ajaxSetup({
-    headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }
-});
-
 Prism.plugins.toolbar.registerButton('select-code', function(env) {
 	var button = document.createElement('button');
 	button.innerHTML = 'Select Code';
@@ -122,6 +116,7 @@ $(document).ready(function () {
 			error: shj.loading_error,
 			success: function (response) {
 				if (response.done) {
+					// console.log(row.children());
 					row.children('.status').html('<div class="btn btn-secondary pending" data-code="0">PENDING</div>');
 					$.notify('Rejudge in progress', {position: 'bottom right', className: 'info', autoHideDelay: 2500});
 					setTimeout(update_status, update_status_interval);
@@ -139,7 +134,7 @@ $(document).ready(function () {
 			var username = row.data('u');
 			$.ajax({
 				type: 'POST',
-				url: shj.site_url + 'submissions/select',
+				url: site_url + '/submissions/select',
 				data: {
 					submit_id: submit_id,
 					problem: problem,
@@ -177,7 +172,7 @@ function update_status(){
 		if (status.children('div').hasClass('pending')){
 			$.ajax({
 				type: 'POST',
-				url: shj.site_url + 'submissions/status',
+				url: site_url + '/submissions/status',
 				data: {
 					username: $(this).data('u'),
 					assignment: $(this).data('a'),
