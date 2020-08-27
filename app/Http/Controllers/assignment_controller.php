@@ -197,6 +197,7 @@ class assignment_controller extends Controller
         $problem = Problem::find($problem_id);
         $problem['has_pdf'] = $result['has_pdf'];
         $problem['description'] = $result['description'];
+        $problem['has_template'] = $result['has_template'];
         $problem['error'] = NULL;
         $data['problem'] = $problem;
         $data['language'] = $problem->languages(); 
@@ -289,23 +290,6 @@ class assignment_controller extends Controller
 		return $result;
     }
     
-    public function assignment_info($assignment_id)
-	{
-        $query = Assignment::find($assignment_id);
-      
-		if ($query->count() != 1)
-			return array(
-				'id' => 0,
-				'name' => "instructors'submit",
-				'finish_time' => 0,
-				'extra_time' => 0,
-				'problems' => 0,
-				'open' => 0,
-				'total_submits' => $query->submissions->count(),
-			);
-        
-		return $query->first();
-	}
 
     /**
      * Show the form for editing the specified resource.
@@ -481,8 +465,8 @@ class assignment_controller extends Controller
 
     public function download_submissions($type, $assignment_id)
     {
-        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
-            abort(403);
+        // if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
+        //     abort(403);
         if (Assignment::find($assignment_id) == null)
             abort(404);
         if ($type !== 'by_user' && $type !== 'by_problem')

@@ -35,7 +35,7 @@ class scoreboard_controller extends Controller
 		{
 			Scoreboard::update_scoreboard($assignment_id); 
 
-			$scoreboard = Scoreboard::get_scoreboard($assignment_id);
+			$scoreboard = $this->get_scoreboard($assignment_id);
 		
 		}
 		return view('scoreboard', ['selected' => 'scoreboard',
@@ -47,7 +47,7 @@ class scoreboard_controller extends Controller
 	
 	public function get_scoreboard($assignment_id)
 	{
-		$query =  DB::table('scoreboards')->where('assignment',$assignment_id)->get();
+		$query =  DB::table('scoreboards')->where('assignment_id',$assignment_id)->get();
 
 		if ($query->count() != 1)
 			return false;//$message = array('error' => 'Scoreboard not found');

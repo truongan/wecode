@@ -72,4 +72,21 @@ class Assignment extends Model
         return strtotime(date("Y-m-d H:i:s")) >= strtotime($this->start_time) //now should be larger than start time
                 || !in_array( Auth::user()->role->name, ['student']); ///instructor can view assignment before start time
     }
+
+    public static function assignment_info($assignment_id)
+    {
+        $query = Assignment::where('id', $assignment_id);
+        if ($query->count() != 1)
+            return array(
+                'id' => 0,
+                'name' => "instructors'submit",
+                'finish_time' => 0,
+                'extra_time' => 0,
+                'problems' => 0,
+                'open' => 0,
+                'total_submits' => $query->submissions->count(),
+            );
+        
+        return $query->first();
+    }
 }

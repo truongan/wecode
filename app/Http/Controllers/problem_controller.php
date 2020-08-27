@@ -127,7 +127,7 @@ class problem_controller extends Controller
         $problem = Problem::find($id);
         $problem['has_pdf'] = $result['has_pdf'];
         $problem['description'] = $result['description'];
-        
+        $problem['has_template'] = $result['has_template'];
         return view('problems.show', ['problem'=>$problem,
                                       'all_problems'=>NULL,
                                       'can_submit'=>TRUE,
@@ -471,6 +471,26 @@ class problem_controller extends Controller
         // Download the file to browser
         return response()->download($pdf_files);
     
+    }
+
+    public function template($problem_id, $assignment_id)
+    {
+        if ($assignment_id == 'null')
+            $assignment_id = NULL;
+        if ($assignment_id == NULL && !in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']))
+            abort(403, "Only admin can view template without assignment");
+        if ($assignment_id != NULL && Assignment::find($assignment_id)->problems->find($problem_id) == null)
+            abort(404);
+        if ($assignment_id == NULL && Problem::find($problem_id) == null)
+            abort(404); 
+        
+
+        $template_file = $this->get_template_path($problem_id);
+        if(!$template_file)
+            abort(404, "File note found");
+
+        // Download the file to browser
+        return response()->download($template_file[0]);
     }
 
 

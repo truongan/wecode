@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\Setting;
 class Submission extends Model
 {
@@ -42,6 +43,9 @@ class Submission extends Model
 
     public static function get_final_submissions($assignment_id)
     {
-        return DB::table('users')->join('submissions', 'users.id', '=', 'submissions.user_id')->select('users.username', 'submissions.*')->where(['assignment_id' => $assignment_id, 'is_final' => 1])->orderBy('username','asc')->orderBy('problem_id','asc')->get();
+        if ( in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
+            return DB::table('users')->join('submissions', 'users.id', '=', 'submissions.user_id')->select('users.username', 'submissions.*')->where(['assignment_id' => $assignment_id, 'is_final' => 1])->orderBy('username','asc')->orderBy('problem_id','asc')->get();
+        else
+            return DB::table('users')->join('submissions', 'users.id', '=', 'submissions.user_id')->select('users.username', 'submissions.*')->where(['assignment_id' => $assignment_id, 'is_final' => 1, 'username' => Auth::user()->username])->orderBy('username','asc')->orderBy('problem_id','asc')->get();
     }
 }

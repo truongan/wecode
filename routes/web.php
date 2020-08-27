@@ -21,6 +21,8 @@ Route::get('/htmleditor', 'html_editor_controller@index');
 Route::post('/htmleditor/autosave', 'html_editor_controller@autosave')->name('htmleditor.autosave');
 
 Route::get('/moss/{id}', 'moss_controller@index')->name('moss.index');
+Route::post('/moss/{id}', 'moss_controller@update')->name('moss.update');
+Route::post('/moss/detect/{id}', 'moss_controller@detect')->name('moss.detect');
 
 Route::get('/settings', 'setting_controller@index')->name('settings.index');
 Route::post('/settings', 'setting_controller@update')->name('settings.update');
@@ -30,7 +32,9 @@ Route::get('/users/add_multiple', 'UserController@add_multiple');
 Route::post('/users/adds', 'UserController@add')->name('users.add');
 Route::delete('users/{id}', 'UserController@destroy')->name('users.destroy');
 
-Route::get('/problems/download/{id}', 'problem_controller@downloadtestsdesc')->name('problems.downloadtestsdesc');
+Route::get('/problems/downloadtestsdesc/{id}', 'problem_controller@downloadtestsdesc')->name('problems.downloadtestsdesc');
+Route::get('/problems/downloadpdf/{id}', 'problem_controller@pdf')->name('problems.pdf');
+Route::get('/problems/downloadtemplate/{problem_id}/{assignment_id}', 'problem_controller@template')->name('problems.template');
 Route::post('/problems/edit_description/{problem_id}', 'problem_controller@edit_description')->name('problems.edit_description');
 // Route::get('/view_problem/{problem_id}', 'view_problem_controller@index');
 
