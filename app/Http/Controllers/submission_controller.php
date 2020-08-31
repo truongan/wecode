@@ -373,7 +373,15 @@ class submission_controller extends Controller
 		$result = array(
 				'file_name' => $submission->file_name .'.'. $file_extension,
 				'text' => Storage::disk('my_local')->exists($file_path) ? Storage::disk('my_local')->get($file_path):"File Not Found");
-
+		
+		if ($type === 'code') {
+				$result['lang'] = $file_extension;
+				if ($result['lang'] == 'py2' || $result['lang'] == 'py3')
+					$result['lang'] = 'python';
+				else if ($result['lang'] == 'pas')
+					$result['lang'] = 'pascal';
+			}
+			
 		return $result;
 	}
 
