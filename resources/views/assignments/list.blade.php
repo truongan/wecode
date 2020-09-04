@@ -54,6 +54,9 @@
 		</thead>
 		
 		@foreach ($assignments as $assignment)
+			@if($assignment->id==0 && in_array( Auth::user()->role->name, ['student']))
+				@continue
+			@endif
 		<tr data-id="{{$assignment->id}}">
 			<td>{{$loop->iteration}} </td>
 			<td>

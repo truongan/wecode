@@ -69,7 +69,7 @@
 
         shj_now_str = utc.toLocaleTimeString();
 
-
+        shj.offset = new Date("{{ date(DATE_ISO8601) }}") - new Date();
         shj.time = new Date();
 
         
