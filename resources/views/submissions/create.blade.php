@@ -2,7 +2,7 @@
 @php($selected = 'assignments')
 
 @extends('layouts.app')
-
+@section('head_title','Code editer')
 @section('other_assets')
 <link rel="stylesheet" type='text/css' href="{{ asset('assets/styles/submit_page.css') }}"/>
   <meta name="csrf-token" content="{{ csrf_token() }}">
