@@ -7,6 +7,7 @@ use App\Setting;
 use App\Language;
 use App\Tag;
 use App\Submission;
+use App\Assignment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;

@@ -31,7 +31,7 @@
                     </a>
                 </li>
                 <li class="nav-item color-users {{ ($selected=="users") ? "selected" : ""}}">
-                    <a href="{{url('/practice')}}" class="nav-link">
+                    <a href="{{route('practice')}}" class="nav-link">
                         <span class="nav-link-text"><i class="fas fa-khanda fa-fw fa-lg"></i> Practice</span>
                     </a>
                 </li>

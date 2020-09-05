@@ -17,6 +17,8 @@ class practice_controller extends Controller
 	
     public function index()
     {
+    	Auth::user()->selected_assignment_id = 0;
+    	Auth::user()->save(); 
     	$problems = Problem::where('allow_practice',1)->get();
     	foreach ($problems as $problem)
     	{

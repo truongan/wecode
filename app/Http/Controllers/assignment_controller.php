@@ -52,8 +52,6 @@ class assignment_controller extends Controller
             $assignments = Auth::user()->available_assignments()->sortByDesc('created_at');
         }
         else $assignments = Assignment::latest()->get();
-
-
         foreach ($assignments as $assignment)
         {
             $extra_time = $assignment->extra_time;
