@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('icon', 'fas fa-star')
-
+@section('head_title', 'Scoreboard')
 @section('title', 'Scoreboard')
 
 @section('title_menu')

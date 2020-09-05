@@ -54,7 +54,7 @@
 		</thead>
 		
 		@foreach ($assignments as $assignment)
-			@if($assignment->id==0 && in_array( Auth::user()->role->name, ['student']))
+			@if($assignment->id==0)
 				@continue
 			@endif
 		<tr data-id="{{$assignment->id}}">

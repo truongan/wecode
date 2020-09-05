@@ -1,5 +1,8 @@
 @extends('layouts.app')
 @php($selected = 'all_submissions')
+@section('head_title')
+	{{$choose =='all' ? 'All submissions' : 'Final submissions'}}
+@endsection
 {{-- @inject('submission_controller', 'App\Http\Controllers\submission_controller') --}}
 @section('other_assets')
 	<link rel='stylesheet' type='text/css' href='https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css'/>
