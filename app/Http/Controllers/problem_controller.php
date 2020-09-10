@@ -431,15 +431,14 @@ class problem_controller extends Controller
         // dd($id);
         DB::beginTransaction();  
 
+        Submission::where('problem_id', $id)->delete();
+
+
         $problem = Problem::find($id);
         Problem::destroy($id);  
         
         $problem->languages()->detach();
         $problem->assignments()->detach();
-        
-        $problem->submissions->each(function($item,$key){
-            Submission::destroy($item);
-        });
 
         $problem->tags()->detach();
             
@@ -451,6 +450,7 @@ class problem_controller extends Controller
         // Delete assignment's folder (all test cases and submitted codes)
         
         shell_exec($cmd);
+
     }
 
   

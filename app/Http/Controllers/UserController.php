@@ -116,19 +116,32 @@ class UserController extends Controller
         if (Auth::user()->role->name != 'admin' && Auth::user()->id != $user->id){
             //Non admin only can update their own user profile
             abort(403);
-        }
+        }   
 
-        $validated = $request->validate([
-            'username' => ['string', 'max:50', 'unique:users'],
-            'display_name' => ['nullable', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255'],
-            'password' => ['nullable','string', 'min:8', 'confirmed'],
-            'old_password' => ['required', function ($attribute, $value, $fail) use ($user) {
-                if (!\Hash::check($value, $user->password)) {
-                    return $fail(__('The current password is incorrect.'));
-                }
-            }],
-        ]);
+        if (Auth::user()->role->name != 'admin')
+        {
+            $validated = $request->validate([
+                'username' => ['string', 'max:50', 'unique:users'],
+                'display_name' => ['nullable', 'string', 'max:255'],
+                'email' => ['required', 'string', 'email', 'max:255'],
+                'password' => ['nullable','string', 'min:8', 'confirmed'],
+                'old_password' => ['required', function ($attribute, $value, $fail) use ($user) {
+                    if (!\Hash::check($value, $user->password)) {
+                        return $fail(__('The current password is incorrect.'));
+                    }
+                }],
+            ]);
+        }
+        else
+        {
+            $validated = $request->validate([
+                'username' => ['string', 'max:50', 'unique:users'],
+                'display_name' => ['nullable', 'string', 'max:255'],
+                'email' => ['required', 'string', 'email', 'max:255'],
+                'password' => ['nullable','string', 'min:8', 'confirmed'],
+                'old_password' => ['nullable','string', 'min:8', 'confirmed'],
+            ]);
+        }
 
         $data = $request->input();
         if (!isset($data['password']))
