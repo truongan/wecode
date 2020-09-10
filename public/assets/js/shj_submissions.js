@@ -117,7 +117,7 @@ $(document).ready(function () {
 			success: function (response) {
 				if (response.done) {
 					// console.log(row.children());
-					row.children('.status').html('<div class="btn btn-secondary pending" data-code="0">PENDING</div>');
+					row.children('.status').html('<div class="btn btn-secondary pending" data-type="code">PENDING</div>');
 					$.notify('Rejudge in progress', {position: 'bottom right', className: 'info', autoHideDelay: 2500});
 					setTimeout(update_status, update_status_interval);
 				}
@@ -172,12 +172,9 @@ function update_status(){
 		if (status.children('div').hasClass('pending')){
 			$.ajax({
 				type: 'POST',
-				url: site_url + '/submissions/status',
+				url: site_url + '/submissions/view_status',
 				data: {
-					username: $(this).data('u'),
-					assignment: $(this).data('a'),
-					problem: $(this).data('p'),
-					submit_id: $(this).data('s'),
+					submit_id: $(this).data('id'),
 				},
 				error: shj.loading_error,
 				success: function (response) {
@@ -187,7 +184,7 @@ function update_status(){
 					var element;
 					switch (response.status.toLowerCase() ){
 						case 'pending':
-							element = ('<div class="btn btn-secondary pending" data-type="result" data-code="0">PENDING</div>');
+							element = ('<div class="btn btn-secondary pending" data-type="result" data-type="code">PENDING</div>');
 							$.notify('Still pending', {position: 'bottom right', className: 'info', autoHideDelay: 2000});
 
 						break;
@@ -200,8 +197,7 @@ function update_status(){
 						break;
 
 						default:
-							element = ('<div class="btn btn-primary" data-code="0" data-type="result">'
-															+ response.status + '</div>');
+							element = ('<div class="btn btn-primary" data-type="code" data-type="result">' + response.status + '</div>');
 					}
 					status.html(element);
 

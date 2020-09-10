@@ -69,7 +69,7 @@ class submission_controller extends Controller
 		$submissions = $submissions->with(['language','user'])->latest()->get();
 		$all_problems = Assignment::find($assignment_id)->problems->keyBy('id');
 		foreach ($submissions as $submission)
-			$this->status($all_problems, $submission);
+			$this->status($submission);
 
 
 		return view('submissions.list',['submissions' => $submissions, 'assignment' => $assignment, 'user_id' => $user_id, 'problem_id' => $problem_id, 'choose' => $choose, 'all_problems' => $all_problems]); 
@@ -401,7 +401,7 @@ class submission_controller extends Controller
 		ob_end_clean();
 		return $coefficient;
 	}
-	private function status($all_problem, $submission)
+	private function status(&$submission)
 	{
 		$score = ceil($submission->pre_score*
 							($submission->assignment->problems[$submission->problem_id]->pivot->score??0)
@@ -410,5 +410,20 @@ class submission_controller extends Controller
 			$submission->final_score = 0;
 		else
 			$submission->final_score = ceil($score*$submission->coefficient/100);
+	}
+
+	public function view_status(){
+		
+		$submit_id = $_POST['submit_id'];
+
+		$submission = Submission::with('assignment')->find($submit_id);
+
+		if (!$submission) abort(403,"Submission not found");
+		$this->_do_access_check($submission);
+
+		$this->status($submission);
+		
+		echo json_encode($submission);
+		
 	}
 }
