@@ -30,6 +30,7 @@ class scoreboard_controller extends Controller
     public function index($assignment_id)
     {
 		$assignment = Assignment::find($assignment_id);
+		// dd($assignment);
 		$scoreboard = NULL;
 		if ($assignment)
 		{
@@ -38,6 +39,7 @@ class scoreboard_controller extends Controller
 			$scoreboard = $this->get_scoreboard($assignment_id);
 		
 		}
+
 		return view('scoreboard', ['selected' => 'scoreboard',
 									'place' => 'full',	
 									'assignment' => $assignment,

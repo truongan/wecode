@@ -20,7 +20,7 @@ Route::get('/home', 'home_controller@index')->name('home');
 Route::get('/htmleditor', 'html_editor_controller@index');
 Route::post('/htmleditor/autosave', 'html_editor_controller@autosave')->name('htmleditor.autosave');
 
-Route::get('/moss/{id}', 'moss_controller@index')->name('moss.index');
+Route::get('/moss/{id?}', 'moss_controller@index')->name('moss.index');
 Route::post('/moss/{id}', 'moss_controller@update')->name('moss.update');
 Route::post('/moss/detect/{id}', 'moss_controller@detect')->name('moss.detect');
 

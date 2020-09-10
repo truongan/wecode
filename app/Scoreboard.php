@@ -158,11 +158,8 @@ class Scoreboard extends Model
 		
 		#Minify the scoreboard's html code
 		// $scoreboard_table = $this->output->minify($scoreboard_table, 'text/html');
-
-		DB::table('scoreboards')->updateOrInsert([
-			'assignment_id'  => $assignment->id,
-			'scoreboard' => $scoreboard_table,
-		]);
+		$this->scoreboard = $scoreboard_table;
+		$this->save();
 		
 		return true;
 	}
