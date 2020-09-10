@@ -9,6 +9,7 @@
 <style>
 .card{
   width:9rem;
+  height: 100%;
 }
 </style>
 @endsection
@@ -20,7 +21,8 @@
 
 @section('content')
 <div class="card-group">
-  <div class="m-3">
+<div class="row">
+<div class="m-3">
     <div class="card" >
       <i class="text-center card-img-top fas fa-cogs fa-2x p-3"></i>
       <div class="card-body bg-light">
@@ -74,6 +76,7 @@
       </div>
     </div>
   </div>
+
   <div class="m-3">
     <div class="card" >
       <i class="text-center card-img-top fas fa-tags fa-2x p-3"></i>
@@ -122,12 +125,14 @@
     <div class="card" >
       <i class="text-center card-img-top fas fa-user-secret fa-2x p-3"></i>
       <div class="card-body bg-light">
-        <h5 class="card-title">Detect Similar Codes</h5>
-        <p  class="card-text">Zậy đó</p>
+        <small><strong class="card-title">Detect Similar Codes</strong></small>
+        <small><p  class="card-text">Zậy đó</p></small>
         <a href="{{ route('moss.index' , Auth::user()->selected_assignment_id) }}" class="stretched-link"></a>
       </div>
     </div>
   </div>
+</div>
+  
 </div>
 
 

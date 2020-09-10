@@ -85,7 +85,7 @@ class lop_controller extends Controller
     {
         //
         // if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
-            abort(403);
+            // abort(403);
         return view('admin.lops.edit', ['lop' => $lop]);
     }
     

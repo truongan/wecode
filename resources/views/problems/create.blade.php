@@ -166,7 +166,7 @@
 								5
 							</div>
 						</div>
-						<input type="range" class="custom-range" min="1" max="5" id="customRange2" name="difficult">
+						<input type="range" class="custom-range" min="1" max="5" id="customRange2" name="difficult" value="{{ old('difficult',  $edit ? $problem->difficult : '') }}">
 						<output class="bubble"></output>
 					</div>
 				</div>

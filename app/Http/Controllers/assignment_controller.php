@@ -227,7 +227,7 @@ class assignment_controller extends Controller
             }
       
             if ($assignment->open == 0  && in_array( Auth::user()->role->name, ['student'])){
-				$data['error'] =("assignment " . $assignment['id'] . " has ben closed");
+				$data['error'] =("assignment " . $assignment['name'] . " has been closed");
 				break;
             }
            
