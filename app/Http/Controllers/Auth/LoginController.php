@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Setting;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
@@ -55,8 +57,8 @@ class LoginController extends Controller
             return redirect()->intended('home');
         } else {
             return back()->withInput()->withErrors([
-                'username' => 'Either your username or password are incorrect, and we are too lazy to check which one is wrong. Please check both of them.',
-                'password' => 'Either your username or password are incorrect, and we are too lazy to check which one is wrong. Please check both of them.',
+                'username' => 'Either your username or password are incorrect.',
+                'password' => 'Either your username or password are incorrect.',
             ]);;
         }
     }
