@@ -98,7 +98,7 @@ class UserController extends Controller
     public function edit(User $user)
     {
         //
-        if(Auth::user()->role->name != 'admin'){
+        if(Auth::user()->role->name != 'admin' && Auth::user()->id != $user->id){
             abort(403);
         }
         return view('users.edit', ['user'=>$user]);
@@ -125,8 +125,8 @@ class UserController extends Controller
                 'display_name' => ['nullable', 'string', 'max:255'],
                 'email' => ['required', 'string', 'email', 'max:255'],
                 'password' => ['nullable','string', 'min:8', 'confirmed'],
-                'old_password' => ['required', function ($attribute, $value, $fail) use ($user) {
-                    if (!\Hash::check($value, $user->password)) {
+                'old_password' => ['required_with:password', function ($attribute, $value, $fail) use ($user) {
+                    if (isset($value) && !\Hash::check($value, $user->password)) {
                         return $fail(__('The current password is incorrect.'));
                     }
                 }],
