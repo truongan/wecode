@@ -28,6 +28,9 @@
     <div id="app">
         <nav style="background-color: rgb(46, 46, 46)" class="navbar navbar-expand-md navbar-light shadow-sm">
             <div class="container">
+                <a class="navbar-brand" href="https://www.uit.edu.vn/">
+                    <img src="{{ asset('images/logo_uit.png') }}" height="60px"/>
+                </a>
                 <a class="navbar-brand" href="{{ url('/') }}">
                     <img src="{{ url('assets/images/banner.png') }}"/>
                 </a>
