@@ -237,7 +237,9 @@ class problem_controller extends Controller
             shell_exec('rm -f '.$assignments_root.'/*.zip');
             
             $name_zip = ($request->tests_zip->getClientOriginalName());
-            $path_zip = $request->tests_zip->storeAs($assignments_root,$name_zip,'my_local');
+
+
+            $path_zip = $request->tests_zip->storeAs('',$name_zip,'assignment_root');
             
             $this->unload_zip_test_file($request , $assignments_root, $problem_dir, $messages, $name_zip);
 
@@ -539,7 +541,7 @@ class problem_controller extends Controller
         
         foreach($request->tests_dir as $item)
         {
-            $item->storeAs($tmp_dir,$item->getClientOriginalName(),'my_local');
+            $item->storeAs($tmp_dir_name,$item->getClientOriginalName(),'assignment_root');
         }
 
         // path data
