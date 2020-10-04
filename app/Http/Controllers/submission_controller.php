@@ -377,7 +377,7 @@ class submission_controller extends Controller
 
 		$result = array(
 				'file_name' => $submission->file_name .'.'. $file_extension,
-				'text' => file_exists('$file_path') ? file_get_contents($file_path) : "File not found"
+				'text' => file_exists($file_path) ? file_get_contents($file_path) : "File not found"
 				// 'text' => Storage::disk('my_local')->exists($file_path) ? Storage::disk('my_local')->get($file_path):"File Not Found"
 			);
 		
