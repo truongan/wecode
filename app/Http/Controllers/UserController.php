@@ -117,14 +117,16 @@ class UserController extends Controller
             //Non admin only can update their own user profile
             abort(403);
         }   
-
-        if (Auth::user()->role->name != 'admin')
+        $request->validate([
+            'username' => ['string', 'max:50', 'unique:users'],
+            'display_name' => ['nullable', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255'],
+            'password' => ['nullable','string', 'min:8', 'confirmed'],
+        ]);
+        if (Auth::user()->id == $user->id ) 
         {
-            $validated = $request->validate([
-                'username' => ['string', 'max:50', 'unique:users'],
-                'display_name' => ['nullable', 'string', 'max:255'],
-                'email' => ['required', 'string', 'email', 'max:255'],
-                'password' => ['nullable','string', 'min:8', 'confirmed'],
+            // When changing oneself's password (ofc you have to be admin at thí point)
+            $request->validate([
                 'old_password' => ['required_with:password', function ($attribute, $value, $fail) use ($user) {
                     if (isset($value) && !\Hash::check($value, $user->password)) {
                         return $fail(__('The current password is incorrect.'));
@@ -132,16 +134,7 @@ class UserController extends Controller
                 }],
             ]);
         }
-        else
-        {
-            $validated = $request->validate([
-                'username' => ['string', 'max:50', 'unique:users'],
-                'display_name' => ['nullable', 'string', 'max:255'],
-                'email' => ['required', 'string', 'email', 'max:255'],
-                'password' => ['nullable','string', 'min:8', 'confirmed'],
-                'old_password' => ['nullable','string', 'min:8', 'confirmed'],
-            ]);
-        }
+
 
         $data = $request->input();
         if (!isset($data['password']))

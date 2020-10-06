@@ -111,10 +111,15 @@ class submission_controller extends Controller
 	public function upload_file_code($request, $user_dir, $submission)
 	{
 		$ext = substr(strrchr($request->userfile->getClientOriginalName(),'.'),1);
-		$file_name = basename($request->userfile->getClientOriginalName(), ".{$ext}"); // uploaded file name without extension    
-		$file_name = preg_replace('/[^a-zA-Z0-9_\-()]+/', '', $file_name);
+		// $file_name = basename($request->userfile->getClientOriginalName(), ".{$ext}"); // uploaded file name without extension    
+		// $file_name = preg_replace('/[^a-zA-Z0-9_\-()]+/', '', $file_name);
+
 		$file_name = "solution-upload-".($submission->assignment->total_submits+1);
-		$path = $request->userfile->storeAs($user_dir, $file_name.".".$submission->language->extension, 'my_local');
+		
+		$path = Storage::disk('assignment_root')->path();
+		$user_dir = substr($user_dir, len($path));
+
+		$path = $request->userfile->storeAs($user_dir, $file_name.".".$submission->language->extension, 'assignment_root');
 
 		if ($path)
 		{      
@@ -290,7 +295,7 @@ class submission_controller extends Controller
 
 		$coefficient = 100;
 		if ($assignment->id == 0) //Practice 
-			if (!in_array( Auth::user()->role->name, ['admin, head_instructor']) && $problem->allow_practice!=1)
+			if (!in_array( Auth::user()->role->name, ['admin', 'head_instructor']) && $problem->allow_practice!=1)
 				abort(403,'This problem is not open for practice');
 		else
 		{
@@ -372,7 +377,9 @@ class submission_controller extends Controller
 
 		$result = array(
 				'file_name' => $submission->file_name .'.'. $file_extension,
-				'text' => Storage::disk('my_local')->exists($file_path) ? Storage::disk('my_local')->get($file_path):"File Not Found");
+				'text' => file_exists($file_path) ? file_get_contents($file_path) : "File not found"
+				// 'text' => Storage::disk('my_local')->exists($file_path) ? Storage::disk('my_local')->get($file_path):"File Not Found"
+			);
 		
 		if ($type === 'code') {
 				$result['lang'] = $file_extension;

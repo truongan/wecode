@@ -16,7 +16,7 @@ Route::get('/', function () {
 });
 
 Auth::routes();
-Route::get('/home', 'home_controller@index')->name('home');
+Route::get('/home/', 'home_controller@index')->name('home');
 Route::get('/htmleditor', 'html_editor_controller@index');
 Route::post('/htmleditor/autosave', 'html_editor_controller@autosave')->name('htmleditor.autosave');
 
