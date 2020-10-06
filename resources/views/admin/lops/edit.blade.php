@@ -28,8 +28,8 @@
 @section('content')
 
 
-<div class="row">
-  	<form action="{{route('lops.update', $lop->id)}}" method="POST">
+
+  	<form  action="{{route('lops.update', $lop->id)}}" method="POST">
 	@method('PUT')
 	@csrf
 	<fieldset>
@@ -91,7 +91,7 @@
 
 	</fieldset>
 	</form>
-</div>
+
 
 @endsection
 

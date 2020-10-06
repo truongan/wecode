@@ -28,8 +28,8 @@ class lop_controller extends Controller
     public function index()
     {
         //
-        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
-            abort(403);
+        // if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
+        //     abort(403);
         return view('admin.lops.list', ['lops' => Lop::all()]);
     }
 
