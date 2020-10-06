@@ -108,7 +108,7 @@ $(document).ready(function () {
 		console.log(row.data('id'));
 		$.ajax({
 			type: 'POST',
-			url: site_url + '/submissions/rejudge/',
+			url: site_url + '/submissions/rejudge',
 			data: {
 				
 				submission_id: row.data('id'),
