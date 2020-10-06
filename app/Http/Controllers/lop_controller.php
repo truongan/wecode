@@ -162,4 +162,14 @@ class lop_controller extends Controller
         header('Content-Type: application/json; charset=utf-8');  
         return ($json_result);
     }
+
+    public function enrol(Request $request, Lop $lop, $in){
+        if($in == 1){
+            if ($lop->open == 1) $lop->users()->attach(Auth::user()->id);
+        }
+        else {
+            $lop->users()->detach(Auth::user()->id);
+        }
+        return redirect()->back();
+    }
 }

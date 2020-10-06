@@ -24,6 +24,7 @@ Route::get('/moss/{id?}', 'moss_controller@index')->name('moss.index');
 Route::post('/moss/{id}', 'moss_controller@update')->name('moss.update');
 Route::post('/moss/detect/{id}', 'moss_controller@detect')->name('moss.detect');
 
+Route::post('lops/{lop}/enrol/{in}', 'lop_controller@enrol')->name('lops.enrol');
 
 Route::get('/settings', 'setting_controller@index')->name('settings.index');
 Route::post('/settings', 'setting_controller@update')->name('settings.update');
