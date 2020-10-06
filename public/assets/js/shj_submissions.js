@@ -66,7 +66,7 @@ $(document).ready(function () {
 		var view_code_request = $.ajax({
 			cache: true,
 			type: 'POST',
-			url: '/submissions/view_code',
+			url: site_url + '/submissions/view_code',
 			data: {
 				'_token': $('input[name=_token]').val(),
 				type: type,
