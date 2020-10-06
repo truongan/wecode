@@ -360,7 +360,7 @@ class submission_controller extends Controller
 		if (!$submission) abort(403,"Submission not found");
 		$this->_do_access_check($submission);
 
-		$submit_path = $this->get_path(Auth::user()->username, $submission->assignment_id, $submission->problem_id);
+		$submit_path = $this->get_path($submission->user->username, $submission->assignment_id, $submission->problem_id);
 		$file_extension = $submission->language->extension;
 
 		if ($type == "code")
