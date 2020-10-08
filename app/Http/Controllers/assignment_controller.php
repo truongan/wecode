@@ -142,9 +142,9 @@ class assignment_controller extends Controller
         $assignment->save();
         if ($request->hasFile('pdf')) {
             $path_pdf = Setting::get("assignments_root");
-            $path_pdf = $path_pdf . "/assignment_" .  strval($assignment->id);
-            mkdir($path_pdf);
-            $path = $request->pdf->storeAs($path_pdf,$request->pdf->getClientOriginalName(),'my_local');
+            // $path_pdf = $path_pdf . "/assignment_" .  strval($assignment->id);
+            // mkdir($path_pdf);
+            $path = $request->pdf->storeAs("/assignment_" .  strval($assignment->id),$request->pdf->getClientOriginalName(),'assignment_root');
         }
         foreach ($request->problem_id as $i => $id)
         {
@@ -368,7 +368,7 @@ class assignment_controller extends Controller
             {
                 unlink($file);
             }
-            $path = $request->pdf->storeAs($path_pdf,$request->pdf->getClientOriginalName(),'my_local');
+            $path = $request->pdf->storeAs("/assignment_" .  strval($assignment->id),$request->pdf->getClientOriginalName(),'assignment_root');
         }
 
         $assignment->problems()->detach();

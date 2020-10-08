@@ -12,11 +12,11 @@
 */
 
 Route::get('/', function () {
-    return redirect('login');
+    return redirect(route('home'));
 });
 
 Auth::routes();
-Route::get('/home', 'home_controller@index')->name('home');
+Route::get('/home/', 'home_controller@index')->name('home');
 Route::get('/htmleditor', 'html_editor_controller@index');
 Route::post('/htmleditor/autosave', 'html_editor_controller@autosave')->name('htmleditor.autosave');
 
@@ -24,6 +24,7 @@ Route::get('/moss/{id?}', 'moss_controller@index')->name('moss.index');
 Route::post('/moss/{id}', 'moss_controller@update')->name('moss.update');
 Route::post('/moss/detect/{id}', 'moss_controller@detect')->name('moss.detect');
 
+Route::post('lops/{lop}/enrol/{in}', 'lop_controller@enrol')->name('lops.enrol');
 
 Route::get('/settings', 'setting_controller@index')->name('settings.index');
 Route::post('/settings', 'setting_controller@update')->name('settings.update');

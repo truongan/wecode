@@ -21,7 +21,7 @@ Users - {{$user->username}}
 	@csrf
 	@method('PATCH')
 
-	<div class="col-6">
+	<div class="col-md-6">
 		{{-- {% if form_status == 'ok' %}
 		<div class="alert alert-success">Profile updated successfully.</div>
 		{% elseif form_status == 'error' %}
@@ -63,6 +63,9 @@ Users - {{$user->username}}
 			<label for="form_password_2" class="col-4">Old Password:</label>
 			<div class="col-8">
 			  <input id="form_password_2" type="password" name="old_password" class="form-control"/>
+				<small class="form-text text-small text-muted">
+				This field would be checked only if you changed your own password. You have to supplied your old password in order to change it
+				</small>
 			  {{-- {{ form_error('password_again', '<div class="form-text text-danger">', '</div>') }} --}}
 			</div>
 		  </div>

@@ -30,7 +30,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/home/';
 
     /**
      * Create a new controller instance.
@@ -40,6 +40,7 @@ class RegisterController extends Controller
     public function __construct()
     {
         $this->middleware('guest');
+        if (Setting::get('enable_registration') == false) abort(403, 'admin has disable new user registration');
     }
 
     /**
@@ -69,6 +70,8 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        if (Setting::get('enable_registration') == false) abort(403, 'admin has disable new user registration');
+
         return User::create([
             'username' => $data['username'],
             'email' => $data['email'],

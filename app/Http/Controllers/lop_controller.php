@@ -28,8 +28,8 @@ class lop_controller extends Controller
     public function index()
     {
         //
-        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
-            abort(403);
+        // if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
+        //     abort(403);
         return view('admin.lops.list', ['lops' => Lop::all()]);
     }
 
@@ -161,5 +161,15 @@ class lop_controller extends Controller
         }
         header('Content-Type: application/json; charset=utf-8');  
         return ($json_result);
+    }
+
+    public function enrol(Request $request, Lop $lop, $in){
+        if($in == 1){
+            if ($lop->open == 1) $lop->users()->attach(Auth::user()->id);
+        }
+        else {
+            $lop->users()->detach(Auth::user()->id);
+        }
+        return redirect()->back();
     }
 }

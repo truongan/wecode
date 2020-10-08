@@ -28,8 +28,22 @@
 @section('content')
 
 
-<div class="row">
-  	<form action="{{route('lops.update', $lop->id)}}" method="POST">
+	@if ($ed == 0)
+		@if ($lop->users()->find(Auth::user()->id) )
+			<form  action="{{route('lops.enrol',['lop' => $lop->id, 'in' => 0])}}" method="POST">
+				@csrf
+				<button type="submit" name="unenroll" id="unenroll" class="btn btn-danger" btn-lg btn-block">Un enrol</button>
+			</form>
+		@elseif ($lop->open == 1)
+			<form  action="{{route('lops.enrol', ['lop' => $lop->id, 'in' => 1])}}" method="POST">
+				@csrf
+				<button type="submit" name="unenroll" id="unenroll" class="btn btn-primary" btn-lg btn-block">Enrol</button>
+			</form>
+
+		@endif 
+	@endif
+
+  	<form  action="{{route('lops.update', $lop->id)}}" method="POST">
 	@method('PUT')
 	@csrf
 	<fieldset>
@@ -91,7 +105,7 @@
 
 	</fieldset>
 	</form>
-</div>
+
 
 @endsection
 

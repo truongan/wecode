@@ -58,6 +58,14 @@ return [
             'driver' => 'local',
             'root' => "/",
         ],
+        'assignment_root' => [
+            'driver' => 'local',
+            'root' => base_path() . '/assignments' ,
+        ],
+        'tester_root' => [
+            'driver' => 'local',
+            'root' => base_path() . '/tester',
+        ],
 
         's3' => [
             'driver' => 's3',

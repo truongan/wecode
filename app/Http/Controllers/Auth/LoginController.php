@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Setting;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
@@ -27,7 +29,6 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
 
     /**
      * Create a new controller instance.
@@ -52,13 +53,19 @@ class LoginController extends Controller
             else Auth::user()->last_login_time=now();
             
             Auth::user()->save();
-            return redirect()->intended('home');
+            
+            return redirect()->route('home');
         } else {
             return back()->withInput()->withErrors([
-                'username' => 'Either your username or password are incorrect, and we are too lazy to check which one is wrong. Please check both of them.',
-                'password' => 'Either your username or password are incorrect, and we are too lazy to check which one is wrong. Please check both of them.',
+                'username' => 'Either your username or password are incorrect.',
+                'password' => 'Either your username or password are incorrect.',
             ]);;
         }
+    }
+
+    public function logout(Request $request){
+        Auth::logout();
+        return redirect()->route('login');
     }
     
 }
