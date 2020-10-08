@@ -66,7 +66,7 @@
 			</td>
 			<td>
 				@foreach ($assignment->lops as $lop)
-					<span class="badge badge-pill badge-secondary"><a href="{{ route('lops.show', $lop->id) }}" class="text-white">{{$lop->name}}</a></span><br>
+					<a href="{{ route('lops.show', $lop->id) }}" ><span class="badge badge-pill badge-secondary">{{$lop->name}}</span></a><br>
 				@endforeach
 			</td>
 			<td>

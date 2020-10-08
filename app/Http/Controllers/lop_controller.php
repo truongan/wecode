@@ -72,6 +72,8 @@ class lop_controller extends Controller
             
             $new->users()->sync($userids);
         }
+        $new->users()->attach(Auth::user()->id); //The user creating classes will be auto enrol
+
         return redirect()->route('lops.show', ['lop' => $new]);
     }
 
