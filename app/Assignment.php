@@ -65,7 +65,7 @@ class Assignment extends Model
     public function is_participant($user)
     {   
         if ($this->id == 0) return True;
-        if (in_array( $user->role->name, ['admin, head_instructor']) ) return True;
+        if (in_array( $user->role->name, ['admin', 'head_instructor']) ) return True;
         return in_array($user->id,$this->lops->pluck('users')->collapse()->pluck('id')->unique()->toArray());
     }
 

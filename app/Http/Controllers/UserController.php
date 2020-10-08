@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use App\Role;
 use App\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -255,6 +256,8 @@ class UserController extends Controller
         $users_ok = [];
 		$users_error = [];
         
+        $role_name_to_id = Role::all()->pluck('id', 'name');
+
 		// loop over lines of $text :
 		foreach ($lines as $line)
 		{
@@ -276,7 +279,7 @@ class UserController extends Controller
 					$parts[2] = str_random($len);
 				}
 			}
-
+            $parts[3] = $role_name_to_id[$parts[3]];
             $result = $this->add_user($parts[0], $parts[1], $parts[2], $parts[3], $parts[4]);
             
 			$infomation_user = array($parts[0], $parts[1], $parts[2], $parts[3], $parts[4]);

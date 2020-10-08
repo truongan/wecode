@@ -59,7 +59,7 @@ class lop_controller extends Controller
         //
         // var_dump($request->input());die();
         $a = $request->only('name');
-        $a['open'] = $request->input('open') === 'on';
+        $a['open'] = $request->input('open') == 'on';
 
         $new = Lop::create($a);
         $usernames = preg_split("/[\s,]+/", $request->input('user_list'));
