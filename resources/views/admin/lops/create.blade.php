@@ -28,7 +28,7 @@ $(document).ready(function(){
       <small id="_name_desc" class="form-text text-muted">The name of this new class</small>
     </div>
     <div class="custom-control custom-checkbox">
-      <input type="checkbox" class="custom-control-input" name="open" check="" value="abc" id="customCheck1" value="open">
+      <input type="checkbox" class="custom-control-input" name="open" check="" value="on" id="customCheck1" value="open">
       <label class="custom-control-label" for="customCheck1">Open for enrollment</label>
       <small id="helpId" class="form-text text-muted">User will be able to join any classes that are open for enrollment</small>
     </div>

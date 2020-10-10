@@ -231,7 +231,7 @@ class assignment_controller extends Controller
 				break;
             }
            
-            if (! $assignment->is_participant(Auth::user()->id)){
+            if (! $assignment->is_participant(Auth::user())){
 				$data['error'] = "You are not registered to participate in this assignment";
 				break;
             }

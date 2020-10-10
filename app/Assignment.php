@@ -52,7 +52,7 @@ class Assignment extends Model
             // but if start time is before finish time, the deadline is NEVER
             $result->error_message =  'Selected assignment has finished.';
         }
-        elseif ( !$this->is_participant($user->id) )
+        elseif ( !$this->is_participant($user) )
             $result->error_message = 'You are not registered for submitting.';
         else
         {
@@ -62,11 +62,11 @@ class Assignment extends Model
         return $result;
     }
 
-    public function is_participant($user_id)
+    public function is_participant($user)
     {   
         if ($this->id == 0) return True;
-        if ($user_id == 1) return True;
-        return in_array($user_id,$this->lops->pluck('users')->collapse()->pluck('id')->unique()->toArray());
+        if (in_array( $user->role->name, ['admin', 'head_instructor']) ) return True;
+        return in_array($user->id,$this->lops->pluck('users')->collapse()->pluck('id')->unique()->toArray());
     }
 
     public function started(){
