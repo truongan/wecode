@@ -3,6 +3,8 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class add_admin extends Command
 {
@@ -11,7 +13,7 @@ class add_admin extends Command
      *
      * @var string
      */
-    protected $signature = 'add_admin username email password';
+    protected $signature = 'add_admin {username} {email} {password}';
 
     /**
      * The console command description.
@@ -38,5 +40,14 @@ class add_admin extends Command
     public function handle()
     {
         //
+        DB::table('users')->insert([
+        // User::insert([
+            'username' => $this->argument('username'),
+            'email' => $this->argument("email"),
+            'display_name' => 'Tao la admin',
+            // 'email' => Str::random(10).'@gmail.com',
+            'password' => Hash::make($this->argument('password')),
+            'role_id' => '1' //Admin
+        ]);
     }
 }
