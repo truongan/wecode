@@ -26,7 +26,8 @@ db=''
 db_password=''
 base_url=''
 site_name=''
-while getopts "hi:o:u:p:d:n:" ops ; do
+default_admin_name=''
+while getopts "hi:o:u:p:d:n:a:" ops ; do
 	case "${ops}" in
 		h)	usage ;;
 		i)	install=${OPTARG};;
@@ -35,6 +36,7 @@ while getopts "hi:o:u:p:d:n:" ops ; do
 		p)	db_password=${OPTARG};;
 		d)	db=${OPTARG};;
 		n)  site_name=${OPTARG};;
+		a)  default_admin_name=${OPTARG};;
 		*)	usage; exit 1;;
 	esac
 done
@@ -111,4 +113,4 @@ else
 	fi
 fi
 
-$install/install.sh
+$install/install.sh   -a $default_admin_name  -u $db_user -p $db_password -s "$base_url"

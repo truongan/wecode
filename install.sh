@@ -18,7 +18,7 @@ db_user=""
 db=""
 password=""
 site_url=""
-while getopts "ha:e:p:" ops ; do
+while getopts "ha:e:p:u:d:s:" ops ; do
 	case "${ops}" in
 		h)	usage ;;
 		a)	username=${OPTARG};;
@@ -31,11 +31,11 @@ while getopts "ha:e:p:" ops ; do
 	esac
 done
 
-if [ "$db" = "" ]; then
-	usage; exit 1
-fi
 if [ "$db_user" = "" ]; then
 	usage; exit 1
+fi
+if [ "$db" = "" ]; then
+	db=$db_user
 fi
 if [ "$site_url" = "" ]; then
 	usage; exit 1
