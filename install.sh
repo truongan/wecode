@@ -11,7 +11,7 @@ OPTIONS:
 	-s site url
 EOF
 }
-
+echo "Running install.sh in `pwd`"
 username="abc"
 email="abc@def.com"
 db_user=""
@@ -49,7 +49,7 @@ php -r "if (hash_file('sha384', 'composer-setup.php') === '795f976fe0ebd8b75f26a
 php composer-setup.php --filename=composer
 php -r "unlink('composer-setup.php');"
 
-composer install
+php composer install
 cp .env.example .env
 site_url=`printf "%q" "site_url"`
 password=`printf "%q" "password"`

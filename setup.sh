@@ -112,5 +112,6 @@ else
 		exit 0
 	fi
 fi
-cd $install 
+
+cd $install
 $install/install.sh   -a $default_admin_name  -u $db_user -p $db_password -s "$base_url"
