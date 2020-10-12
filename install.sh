@@ -51,8 +51,8 @@ php -r "unlink('composer-setup.php');"
 
 php composer install
 cp .env.example .env
-site_url=`printf "%q" "site_url"`
-password=`printf "%q" "password"`
+site_url=`printf "%q" "$site_url"`
+password=`printf "%q" "$password"`
 sed -i "s/APP_URL.*/APP_URL=$site_url/g" .env
 sed -i "s/DB_USERNAME.*/DB_USERNAME=$db_user/g" .env
 sed -i "s/DB_DATABASE.*/DB_DATABASE=$db/g" .env
