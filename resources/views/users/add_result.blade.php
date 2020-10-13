@@ -32,4 +32,6 @@
 		</ol>
 		</div>
 	@endif
+	<div class="alert alert-secondary">A total of {{count($ok)  + count($error) }} list processed</div>
+
 </div>

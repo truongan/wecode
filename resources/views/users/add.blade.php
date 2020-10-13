@@ -7,6 +7,8 @@
 
 @section('title_menu')
     {{-- Nếu là admin thì hiển thị --}}
+
+    <span class="title_menu_item"><a href="{{ route('users.index') }}" ><i class="fa fa-list-alt color6"></i> Users list</a></span>
     <span class="title_menu_item"><a href="https://github.com/truongan/wecode-judge/blob/docs/v1.4/users.md#add-users" target="_blank"><i class="fa fa-question-circle color6"></i> Help</a></span>
 @endsection
 
@@ -22,7 +24,7 @@
 		$("#add_users_button").click(function(){
 			$("#loading").css('display','inline');
 			$.post(
-					{{ route('users.add') }}
+					"{{ route('users.add') }}",
 					// Chỗ ni bỏ cái đường link dẫn tới hàm add
 					{
 						'_token': $('meta[name=csrf-token]').attr('content'),

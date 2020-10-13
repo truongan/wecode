@@ -183,7 +183,6 @@ class UserController extends Controller
     public function add(Request $request)
     {
         if ($request->has(['new_users'])) {
-            
             $all = $this->add_users(
                 $request['new_users'],
                 $request['send_mail'],
