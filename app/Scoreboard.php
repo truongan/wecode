@@ -40,7 +40,7 @@ class Scoreboard extends Model
         {
             $number_of_submissions[$item->user_id][$item->problem_id]+=1;
 		}
-		
+		// dd($submissions);
         foreach($submissions as $submission)
         {
             $pre_score = ceil($submission['pre_score']*($problems[$submission['problem_id']]['score'] ?? 0 )/10000);
@@ -72,9 +72,9 @@ class Scoreboard extends Model
 			$tried_to_solve[$username] += 1;
 			$total_score[$username] += $final_score;
 			if ($fullmark) $total_accepted_score[$username] += $final_score;
-
+			
 			if($fullmark) $penalty[$username] += $delay 
-					+ $number_of_submissions[$username][$submission['problem_id']]
+					+ $number_of_submissions[$submission['user_id']][$submission['problem_id']]
 						*$submit_penalty;
 			$users[] = $username;
         }

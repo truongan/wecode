@@ -116,11 +116,11 @@ class submission_controller extends Controller
 
 		$file_name = "solution-upload-".($submission->assignment->total_submits+1);
 		
-		$path = Storage::disk('assignment_root')->path();
-		$user_dir = substr($user_dir, len($path));
+		$path = Storage::disk('assignment_root')->path('');
+		$user_dir = substr($user_dir, strlen($path));
 
 		$path = $request->userfile->storeAs($user_dir, $file_name.".".$submission->language->extension, 'assignment_root');
-
+		// dd($path);
 		if ($path)
 		{      
 			$this->add_to_queue($submission, $submission->assignment, $file_name);   

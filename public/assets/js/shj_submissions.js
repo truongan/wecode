@@ -174,7 +174,7 @@ function update_status(){
 				url: site_url + '/submissions/view_status',
 				data: {
 					submit_id: $(this).data('id'),
-				},
+				}, 
 				error: shj.loading_error,
 				success: function (response) {
 					response = JSON.parse(response);
@@ -189,7 +189,7 @@ function update_status(){
 						break;
 
 						case  'score' :
-							element = '<div class="btn ' + (response.fullmark ? 'btn-success' : 'btn-danger');
+							element = '<div class="btn ' + (response.pre_score == 10000 ? 'btn-success' : 'btn-danger');
 							element += '" data-type="result" >' + response.final_score + '</div>';
 							$.notify('Submission has been judged', {position: 'bottom right', className: 'success', autoHideDelay: 2000});
 
