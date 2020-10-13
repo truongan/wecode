@@ -1,6 +1,6 @@
 <nav id="mainNav" class="mainNav navbar navbar-expand-lg navbar-dark fixed-top color-{{ $selected }} bg-dark">
         <div  class="navbar-brand">
-            <a href="{{ url('/home') }}">
+            <a href="{{ route('home') }}">
                 <img src="{{ asset('images/logo.png') }}" height="30px" />
             </a>
             {{ $settings['site_name'] }}

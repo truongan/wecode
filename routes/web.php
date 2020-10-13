@@ -17,7 +17,7 @@ Route::get('/', function () {
 
 Auth::routes();
 Route::get('/home/', 'home_controller@index')->name('home');
-Route::get('/htmleditor', 'html_editor_controller@index');
+Route::get('/htmleditor', 'html_editor_controller@index')->name('htmleditor');
 Route::post('/htmleditor/autosave', 'html_editor_controller@autosave')->name('htmleditor.autosave');
 
 Route::get('/moss/{id?}', 'moss_controller@index')->name('moss.index');

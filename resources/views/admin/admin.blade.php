@@ -94,7 +94,7 @@
       <div class="card-body bg-light">
         <small><strong class="card-title">EDIT BY HTML</strong></small>
         <small><p  class="card-text">Soạn văn bản trên web</p></small>
-        <a href="{{ url('htmleditor') }}" class="stretched-link"></a>
+        <a href="{{ route('htmleditor') }}" class="stretched-link"></a>
       </div>
     </div>
   </div>
@@ -105,7 +105,7 @@
       <div class="card-body bg-light">
         <small><strong class="card-title">Rejudge</strong></small>
         <small><p  class="card-text">Zậy đó</p></small>
-        <a href="{{ url('rejudge') }}" class="stretched-link"></a>
+        <a href="{{ route('submissions.rejudge_view') }}" class="stretched-link"></a>
       </div>
     </div>
   </div>
