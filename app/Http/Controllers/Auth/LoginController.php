@@ -108,14 +108,16 @@ class LoginController extends Controller
     public function Login(Request $request)
     {
         $credentials = $request->only('username', 'password');
-
-        if ( Auth::viaRemember() || 
-            Auth::attempt($credentials, $request->input('remember') !== NULL)
-        ) {
+        $success = false;
+        if ( Auth::viaRemember() 
+            || ldap_authentication($credentials['username'], $credentials['password']) 
+            || Auth::attempt($credentials, $request->input('remember') !== NULL) 
+        )
+        {
 
             if (Auth::user()->first_login_time == NULL) Auth::user()->first_login_time = now();
             else Auth::user()->last_login_time=now();
-            
+        
             Auth::user()->save();
             
             return redirect()->route('home');
