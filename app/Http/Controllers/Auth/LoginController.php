@@ -86,10 +86,15 @@ class LoginController extends Controller
 		$ldap_user = $this->uit_ldap($username, $password);
 		if ($ldap_user){
 			//ldap login successfully
-			$user_id = $this->user_model->username_to_user_id($ldap_user['masv']);
-			if ( $user_id ){
-				///Super optional: reset display name after each login
-				$this->db->where('id', $user_id)->update('users', array('display_name' => $ldap_user['hoten']));
+            // $user_id = $this->user_model->username_to_user_id($ldap_user['masv']);
+            $user = User::where(['username'=>$ldap_user['masv']])->first();
+			if ( $user ){
+                Auth::login($user);
+                
+                ///Super optional: reset display name after each login
+                $user->display_name = $ldap_user['hoten'];
+                $user->save;
+				// $this->db->where('id', $user_id)->update('users', array('display_name' => $ldap_user['hoten']));
 				///
 				return true;
 			}
@@ -110,7 +115,7 @@ class LoginController extends Controller
         $credentials = $request->only('username', 'password');
         $success = false;
         if ( Auth::viaRemember() 
-            || ldap_authentication($credentials['username'], $credentials['password']) 
+            || $this->ldap_authentication($credentials['username'], $credentials['password']) 
             || Auth::attempt($credentials, $request->input('remember') !== NULL) 
         )
         {
@@ -120,7 +125,7 @@ class LoginController extends Controller
         
             Auth::user()->save();
             
-            return redirect()->route('home');
+            return redirect()->intended('home');
         } else {
             return back()->withInput()->withErrors([
                 'username' => 'Either your username or password are incorrect.',
