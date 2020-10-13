@@ -13,14 +13,6 @@ class Scoreboard extends Model
         return $this->belongsTo('App\Assignment');
 	}
 
-	public static function update_scoreboards()
-	{
-		$assignments = Assignment::all();
-		foreach ($assignments as $assignment){
-			$this->update_scoreboard($assignment['id']);
-		}
-	}
-
 	private function _generate_scoreboard()
     {
     	$assignment = $this->assignment;
