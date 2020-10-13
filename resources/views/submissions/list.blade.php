@@ -156,7 +156,7 @@
 					<td>{{$submission->language->name}}</td>
 					<td class="status">
 						@if (strtolower($submission->status) == "pending")
-							<div class="btn btn-secondary" data-type="result">Pending</div>
+							<div class="btn btn-secondary pending" data-type="result">Pending</div>
 						@elseif (strtolower($submission->status) == "score")
 							@if ($submission->pre_score == 10000)
 								<div class="btn btn-success" data-type="result">{{$submission->final_score}}</div>

@@ -129,24 +129,23 @@ $(document).ready(function () {
 	$(".set_final").click(
 		function () {
 			var row = $(this).parents('tr');
-			var submit_id = row.data('s');
+			var submit_id = row.data('id');
 			var problem = row.data('p');
 			var username = row.data('u');
+
 			$.ajax({
 				type: 'POST',
 				url: site_url + '/submissions/select',
 				data: {
-					submit_id: submit_id,
-					problem: problem,
-					username: username,
-					assignment : row.data('a'),
-					wcj_csrf_name: shj.csrf_token
+					'submission': submit_id,
+
+					'_token': $('input[name=_token]').val(),
 				},
 				error: shj.loading_error,
 				success: function (response) {
 					if (response.done) {
 						$("tr[data-u='" + username + "'][data-p='" + problem + "'] i.set_final").removeClass('fa-check-circle color11').addClass('fa-circle');
-						$("tr[data-u='" + username + "'][data-p='" + problem + "'][data-s='" + submit_id + "'] i.set_final").removeClass('fa-circle').addClass('fa-check-circle color11');
+						row.find("i.set_final").removeClass('fa-circle').addClass('fa-check-circle color11');
 					}
 					else
 						shj.loading_failed(response.message);

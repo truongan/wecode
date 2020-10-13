@@ -347,13 +347,13 @@ class submission_controller extends Controller
 		$submission_curr = Submission::find($request->submission);
 		if (!$submission_curr) abort(403,"Submission not found");
 
-		$submission_final = Submission::where(array('user_id' => Auth::user()->id, 'assignment_id' => $submission_curr->assignment_id, 'problem_id' => $submission_curr->problem_id, 'is_final' => 1))->get();
-
-		$submission_final->is_final = 0;
-		$submission_final->save();
+		$submission_final = Submission::where(array('user_id' => Auth::user()->id, 'assignment_id' => $submission_curr->assignment_id, 'problem_id' => $submission_curr->problem_id, 'is_final' => 1))->update(['is_final' => 0]);
 
 		$submission_curr->is_final = 1;
 		$submission_curr->save();
+		return response()->json(
+			['done' => 1]
+		);
 	}
 	public function view_code()
 	{
