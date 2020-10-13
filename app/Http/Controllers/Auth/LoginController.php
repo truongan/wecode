@@ -89,6 +89,7 @@ class LoginController extends Controller
 			//ldap login successfully
             // $user_id = $this->user_model->username_to_user_id($ldap_user['masv']);
             $user = User::where(['username'=>$ldap_user['masv']])->first();
+            $user_id = $user->id;
 			if ( $user ){
                 Auth::login($user);
                 

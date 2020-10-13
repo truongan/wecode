@@ -22,7 +22,7 @@
 		$("#add_users_button").click(function(){
 			$("#loading").css('display','inline');
 			$.post(
-					'/users/adds', 
+					{{ route('users.add') }}
 					// Chỗ ni bỏ cái đường link dẫn tới hàm add
 					{
 						'_token': $('meta[name=csrf-token]').attr('content'),
@@ -69,6 +69,6 @@
 <meta name="csrf-token" content="{!! Session::token() !!}">
 <div class="form-group col-12">
     <input type="submit" class="btn btn-primary" id="add_users_button" value="Add Users"/>
-    <span id="loading" style="display: none;"><img src="{{ asset('assets/images/loading.gif') }}" /> Adding users... Please wait</span>
+    <span id="loading" style="display: none;"><img src="{{ asset('images/loading.gif') }}" /> Adding users... Please wait</span>
 </div>
 @endsection
