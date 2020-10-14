@@ -41,7 +41,7 @@ class Assignment extends Model
             // if assignment is closed, non-student users (admin, instructors) still can submit
             $result->error_message = 'Selected assignment is closed.';
         }
-        elseif (!$this->started() || !in_array( $users->role->name, ['student']) ){
+        elseif (!$this->started() && in_array( $users->role->name, ['student']) ){
             // non-student users can submit to not started assignments
             $result->error_message = 'Selected assignment has not started.';
         }
