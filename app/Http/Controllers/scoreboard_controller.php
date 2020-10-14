@@ -34,12 +34,11 @@ class scoreboard_controller extends Controller
 		$scoreboard = NULL;
 		if ($assignment)
 		{
-			Scoreboard::update_scoreboard($assignment_id); 
+			// Scoreboard::update_scoreboard($assignment_id); 
 
 			$scoreboard = $this->get_scoreboard($assignment_id);
 		
 		}
-
 		return view('scoreboard', ['selected' => 'scoreboard',
 									'place' => 'full',	
 									'assignment' => $assignment,

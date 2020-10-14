@@ -2,6 +2,8 @@
 
 namespace App;
 
+use Carbon\Carbon;
+use Carbon\CarbonInterval;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 
@@ -28,7 +30,7 @@ class Scoreboard extends Model
 		$submit_penalty = Setting::find('submit_penalty');
         $scores = array();
         
-        $problems = $assignment->problems;
+        $problems = $assignment->problems->keyBy('id');
         
         foreach($assignment->submissions as $item)
         {
@@ -43,18 +45,22 @@ class Scoreboard extends Model
 		// dd($submissions);
         foreach($submissions as $submission)
         {
-            $pre_score = ceil($submission['pre_score']*($problems[$submission['problem_id']]['score'] ?? 0 )/10000);
-			if ($submission['coefficient'] === 'error')
-				$final_score = 0;
-			else
-				$final_score = ceil($pre_score*$submission['coefficient']/100);
+
+			$pre_score = ceil(
+						$submission['pre_score']*
+						($problems[$submission['problem_id']]->pivot->score ?? 0 )/10000
+			);
+			if ($submission['coefficient'] === 'error') $final_score = 0;
+			else $final_score = ceil($pre_score*$submission['coefficient']/100);
+
+			
 			$fullmark = ($submission['pre_score'] == 10000);
 			$delay = strtotime($submission['time'])-$start;
             $late = strtotime($submission['time'])-$end;
             $username = $submission->user->username;
 			$scores[$username][$submission['problem_id']]['score'] = $final_score;
 			$scores[$username][$submission['problem_id']]['time'] = $delay;
-			$scores[$username][$submission['problem_id']]['late'] = $late;
+			$scores[$username][$submission['problem_id']]['late'] = CarbonInterval::seconds($late);
 			$scores[$username][$submission['problem_id']]['fullmark'] = $fullmark;
 
 			if ( ! isset($total_score[$username])){
@@ -146,8 +152,8 @@ class Scoreboard extends Model
 			'names' => $result,
 			'no_of_problems'=> $assignment->problems->count()
 		);
+		// dd($data);
 		$scoreboard_table = view('scoreboard_table', $data)->render();
-		
 		#Minify the scoreboard's html code
 		// $scoreboard_table = $this->output->minify($scoreboard_table, 'text/html');
 		$this->scoreboard = $scoreboard_table;

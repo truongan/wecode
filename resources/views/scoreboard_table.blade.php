@@ -28,20 +28,20 @@
         <td><a class="text-muted small" href="#" >{{ $names[$sc_username] }}</a></td>
         @foreach ($problems as $problem)
         <td>
-            @if (isset($scores[$sc_username][$problem->id]->score))
+            @if (isset($scores[$sc_username][$problem->id]['score']))
                 <a href="#"
-                @if ($scores[$sc_username][$problem->id]->fullmark == true)
+                @if ($scores[$sc_username][$problem->id]['fullmark'] == true)
                     class="text-success" >
-                        {{ $scores[$sc_username][$problem->id]->score }}
+                        {{ $scores[$sc_username][$problem->id]['score'] }}
                 @else
                     class="text-danger">
-                        {{ $scores[$sc_username][$problem->id]->score }}*
+                        {{ $scores[$sc_username][$problem->id]['score'] }}*
                 @endif
                     </a><br/>
-                @if ($scores[$sc_username][$problem->id]->late > 0)
-                    <span class="small text-warning" title="Delay time" >{{ time_hhmm($scores[$sc_username][$problem->id]->late) }}**</span>
+                @if ($scores[$sc_username][$problem->id]['late']->seconds > 0)
+                    <span class="small text-warning" title="Delay time" >{{ $scores[$sc_username][$problem->id]['late']->forHumans() }}**</span>
                 @else
-                    <span class="small" title="Time">{{ time_hhmm($scores[$sc_username][$problem->id]->time) }}</span>
+                    <span class="small" title="Time">{{ $scores[$sc_username][$problem->id]['time'] }}</span>
                 @endif
             @else
                 -
