@@ -85,7 +85,7 @@ class LoginController extends Controller
     }
 	protected function ldap_authentication($username, $password){
         $ldap_user = $this->uit_ldap($username, $password);
-        $user_id == null;
+        $user_id = null;
 		if ($ldap_user){
 			//ldap login successfully
             // $user_id = $this->user_model->username_to_user_id($ldap_user['masv']);
