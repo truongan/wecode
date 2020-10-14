@@ -69,7 +69,7 @@ class submission_controller extends Controller
 		$submissions = $submissions->with(['language','user'])->latest()->get();
 		$all_problems = Assignment::find($assignment_id)->problems->keyBy('id');
 		foreach ($submissions as &$submission)
-			$this->_status($submission);
+			$this->_status($submission, $all_problems);
 
 
 		return view('submissions.list',['submissions' => $submissions, 'assignment' => $assignment, 'user_id' => $user_id, 'problem_id' => $problem_id, 'choose' => $choose, 'all_problems' => $all_problems]); 
@@ -299,7 +299,7 @@ class submission_controller extends Controller
 				abort(403,'This problem is not open for practice');
 		else
 		{
-			$coefficient = $this->eval_coefficient($assignment);
+			$coefficient = $assignment->eval_coefficient();
 
 			$a = $assignment->can_submit(Auth::user());
 			if(!$a->can_submit) abort(403, $a->error_message);
@@ -392,26 +392,13 @@ class submission_controller extends Controller
 		return $result;
 	}
 
-	private function eval_coefficient($assignment)
+
+	private function _status(&$submission, $all_problems = null)
 	{
-		ob_start();
-		try 
-		{
-			eval($assignment->late_rule);
-		}
-		catch (\Throwable $e) 
-		{
-			$coefficient = "error";
-		}
-		if (!isset($coefficient))
-			$coefficient = "error";
-		ob_end_clean();
-		return $coefficient;
-	}
-	private function _status(&$submission)
-	{
+		if ($all_problems == null) $all_problems = $submission->assignment->problems->keyBy('id');
+
 		$score = ceil($submission->pre_score*
-							($submission->assignment->problems[$submission->problem_id]->pivot->score??0)
+							($all_problems[$submission->problem_id]->pivot->score??0)
 							/10000);
 		if ($submission->coefficient == 'error')
 			$submission->final_score = 0;

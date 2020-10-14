@@ -3,6 +3,7 @@
 namespace App;
 
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Assignment extends Model
@@ -71,6 +72,48 @@ class Assignment extends Model
 
     public function started(){
         return strtotime(date("Y-m-d H:i:s")) >= strtotime($this->start_time) ; //now should be larger than start time
+    }
+
+    public function update_submissions_coefficient(){
+        foreach ($this->submissions as $sub){
+            ob_start();
+            try 
+            {
+                $delay = $this->finish_time->diffInSeconds($sub->created_at);
+                $extra_time = $this->extra_time;
+                eval($this->late_rule);
+            }
+            catch (\Throwable $e) 
+            {
+                // dd($e);
+                $coefficient = "error";
+            }
+            if (!isset($coefficient)  || !is_numeric($coefficient))
+                $coefficient = "error";
+            ob_end_clean();
+
+            $sub->coefficient = $coefficient;
+            $sub->save();
+        }
+    }
+
+    public function eval_coefficient(){
+        ob_start();
+		try 
+		{
+            $delay = $this->finish_time->diffInSeconds(Carbon::now());
+            $extra_time = $this->extra_time;
+			eval($this->late_rule);
+		}
+		catch (\Throwable $e) 
+		{
+            // dd($e);
+			$coefficient = "error";
+		}
+		if (!isset($coefficient)  || !is_numeric($coefficient))
+			$coefficient = "error";
+		ob_end_clean();
+		return $coefficient;
     }
 
     public static function assignment_info($assignment_id)

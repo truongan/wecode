@@ -60,7 +60,7 @@
 		<tr data-id="{{$assignment->id}}">
 			<td>{{$loop->iteration}} </td>
 			<td>
-				<span data-toggle="tooltip" title="View an assignment's problem or submission will set it as your default assignment">
+				<span title="View an assignment's problem or submission will set it as your default assignment">
 					<i  class=" far {{ (isset(Auth::user()->selected_assignment->id) && $assignment->id == Auth::user()->selected_assignment->id) ? 'fa-check-square color6' : 'fa-square' }} fa-2x" data-id="{{ $assignment->id }}"></i>
 				</span>
 			</td>
@@ -70,7 +70,7 @@
 				@endforeach
 			</td>
 			<td>
-				<a href="{{ route('assignments.show',['assignment'=>$assignment,'problem_id'=>$assignment->problems->first()->id??0]) }}" data-toggle="tooltip" title="Click to view problem(s)">
+				<a href="{{ route('assignments.show',['assignment'=>$assignment,'problem_id'=>$assignment->problems->first()->id??0]) }}" title="Click to view problem(s)">
 					<strong>{{ $assignment->name }}</strong>
 					<br/>
 					({{ $assignment->no_of_problems }} problems)
@@ -78,11 +78,11 @@
 			</td>
 			<td>
 				@if ( in_array( Auth::user()->role->name, ['student']) )
-					<a href="{{ route('submissions.index', [$assignment->id, Auth::user()->id, 'all', 'all'])}}" data-toggle="tooltip" title="View all submissions">
+					<a href="{{ route('submissions.index', [$assignment->id, Auth::user()->id, 'all', 'all'])}}" title="View all submissions">
 						<small>{{$assignment->total_submits}} submission{{ $assignment->total_submits > 1 ? 's' : ''}}</small>
 					</a>
 				@else
-					<a href="{{ route('submissions.index', [$assignment->id, 'all', 'all', 'all'])}}" data-toggle="tooltip" title="View all submissions">
+					<a href="{{ route('submissions.index', [$assignment->id, 'all', 'all', 'all'])}}" title="View all submissions">
 						<small>{{$assignment->total_submits}} submission{{ $assignment->total_submits > 1 ? 's' : ''}}</small>
 					</a>
 				@endif
@@ -91,10 +91,10 @@
 				@if ($assignment->finished)
 					<span style="color: red;">Finished</span>
 				@else
-					@if($assignment->coefficient != "error")
-						{{$assignment->coefficient}}%
-					@else
+					@if($assignment->eval_coefficient() === "error")
 						<span style="color: red;">! Error</span>
+					@else
+						{{$assignment->coefficient}}%
 					@endif
 				@endif
 			</td>
@@ -102,9 +102,9 @@
 			<td>{{$assignment->finish_time}}</td>
 			<td>
 				@if ($assignment->score_board)
-					<a href="{{ url("scoreboard/full/$assignment->id")}}" data-toggle="tooltip" title="Click to viewa assignment's scoreboard">View<i class="fas fa-external-link-alt"></i></a>
+					<a href="{{ url("scoreboard/full/$assignment->id")}}" title="Click to viewa assignment's scoreboard">View<i class="fas fa-external-link-alt"></i></a>
 				@else
-					<a href="{{ url("scoreboard/full/$assignment->id")}}"  data-toggle="tooltip" title="Scoreboard closed, admin view only" ><span class="text-secondary">View<i class="fas fa-external-link-alt "></i></span></a>
+					<a href="{{ url("scoreboard/full/$assignment->id")}}"  title="Scoreboard closed, admin view only" ><span class="text-secondary">View<i class="fas fa-external-link-alt "></i></span></a>
 				@endif
 			</td>
 			<td>

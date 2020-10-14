@@ -388,7 +388,7 @@ class assignment_controller extends Controller
                 $assignment->lops()->attach($id);
             }
         }
-
+        $assignment->update_submissions_coefficient();
         return redirect('assignments');
     }
 
