@@ -84,13 +84,14 @@ class LoginController extends Controller
         return $userinfo;
     }
 	protected function ldap_authentication($username, $password){
-		$ldap_user = $this->uit_ldap($username, $password);
+        $ldap_user = $this->uit_ldap($username, $password);
+        $user_id == null;
 		if ($ldap_user){
 			//ldap login successfully
             // $user_id = $this->user_model->username_to_user_id($ldap_user['masv']);
             $user = User::where(['username'=>$ldap_user['masv']])->first();
-            $user_id = $user->id;
 			if ( $user ){
+                $user_id = $user->id;
                 Auth::login($user);
                 
                 ///Super optional: reset display name after each login
