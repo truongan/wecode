@@ -221,7 +221,7 @@ class assignment_controller extends Controller
                 break;
             }
            
-            if (! $assignment->started()){
+            if (! $assignment->started() || !in_array( Auth::user()->role->name, ['student']) ){
 				$data['error'] = "selected assignment hasn't started yet";
 				break;
             }

@@ -41,7 +41,7 @@ class Assignment extends Model
             // if assignment is closed, non-student users (admin, instructors) still can submit
             $result->error_message = 'Selected assignment is closed.';
         }
-        elseif (!$this->started()){
+        elseif (!$this->started() || !in_array( $users->role->name, ['student']) ){
             // non-student users can submit to not started assignments
             $result->error_message = 'Selected assignment has not started.';
         }
@@ -70,8 +70,7 @@ class Assignment extends Model
     }
 
     public function started(){
-        return strtotime(date("Y-m-d H:i:s")) >= strtotime($this->start_time) //now should be larger than start time
-                || !in_array( Auth::user()->role->name, ['student']); ///instructor can view assignment before start time
+        return strtotime(date("Y-m-d H:i:s")) >= strtotime($this->start_time) ; //now should be larger than start time
     }
 
     public static function assignment_info($assignment_id)
