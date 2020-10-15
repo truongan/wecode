@@ -20,12 +20,11 @@ class practice_controller extends Controller
     	Auth::user()->selected_assignment_id = 0;
     	Auth::user()->save(); 
     	$problems = Problem::where('allow_practice',1)->get();
-    	foreach ($problems as $problem)
+    	foreach ($problems as &$problem)
     	{
-    		$problem->total_submission = $problem->submissions->count();
-    		$problem->accepted_submission = $problem->submissions->where('pre_score',10000)->count();
+    		$problem->total_submission = $problem->submissions()->where(['assignment_id'=>0])->count();
+    		$problem->accepted_submission = $problem->submissions()->where(['pre_score'=>10000, 'assignment_id'=>0])->count();
     		$problem->lang = $problem->languages;
-    		$problem->tag = $problem->tags;
     	}
     	return view('practice',['problems' => $problems, 'selected' => 'practice']);
 	}
