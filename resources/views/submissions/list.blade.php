@@ -20,14 +20,14 @@
 	fas {{$choose =='all' ? 'fa-bars' : 'fa-map-marker'}}
 @endsection
 @section('title')
-	{{$choose =='all' ? 'All submissions' : 'Final submissions'}}
+	{{$choose =='all' ? 'All submissions' : 'Final submissions'}}  for <a href=" @if($assignment->id !=0) {{ route('assignments.edit', $assignment)  }} @else # @endif "> {{$assignment->name}} </a>
 @endsection
 @section('title_menu')
 @if ($user_id != 'all' and !in_array( Auth::user()->role->name, ['student'])) 
-	<a href="{{route('submissions.index', [$assignment->id, 'all', $problem_id, 'all'])}}">Remove filter user</a>
+		<span class="title_menu_item"><a href="{{route('submissions.index', [$assignment->id, 'all', $problem_id, 'all'])}}">Remove filter user</a></span>
 @endif
 @if ($problem_id != 'all')
-	<a href="{{route('submissions.index', [$assignment->id, $user_id, 'all', 'all'])}}">Remove filter problem</a>
+	<span class="title_menu_item"><a href="{{route('submissions.index', [$assignment->id, $user_id, 'all', 'all'])}}">Remove filter problem</a></span>
 @endif
 @endsection
 @section('body_end')

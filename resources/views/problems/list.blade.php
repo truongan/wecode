@@ -35,7 +35,6 @@
 				<th>Tags</th>
 				<th>Languages</th>
 				<th>Used in assignmnets</th>
-				<th>diff<br/>command</th>
 				<th>diff<br/>argument</th>
 				<th>Tools</th>
 			</tr>
@@ -57,11 +56,11 @@
 			  @endforeach
 			</td>
 			<td>
-				{{-- {% for ass_id in item.assignments %}
-					<a href="{{ site_url("assignments/edit/#{ass_id}") }}" class="badge badge-primary">asgmt {{ ass_id}}</a>
-				{% endfor %} --}}
+				@foreach ($item->assignments as $assignment)
+					<a href="{{ route('assignments.edit', $assignment) }}" class="badge badge-primary">{{$assignment->name}}</a>
+				@endforeach
+
 			</td>
-			<td>{{ $item->diff_cmd }}</td>
 			<td>{{ $item->diff_arg }}</td>
 			
 			<td>
