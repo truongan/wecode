@@ -396,12 +396,12 @@ class submission_controller extends Controller
 	private function _status(&$submission, $all_problems = null)
 	{
 		if ($all_problems == null) $all_problems = $submission->assignment->problems->keyBy('id');
-
+//If we can't find the assignment's score for problem (in case of practice), default to 100
 		$score = ceil($submission->pre_score*
-							($all_problems[$submission->problem_id]->pivot->score??0)
+							($all_problems[$submission->problem_id]->pivot->score??100)
 							/10000);
 		if ($submission->coefficient == 'error')
-			$submission->final_score = 0;
+			$submission->final_score = $score;
 		else
 			$submission->final_score = ceil($score*$submission->coefficient/100);
 	}
