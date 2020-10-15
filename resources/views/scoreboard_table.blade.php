@@ -6,9 +6,9 @@
             <th>Name</th>
             @foreach ($problems as $problem)
             <th>
-                <a class="small" href="#">{{ $problem->pivot->problem_name }}</a>
+                <a class="small" href="{{ route('submissions.index', ['assignment_id' => $assignment_id, 'problem_id' => $problem->id, 'user_id' => 'all' , 'choose' => 'final']) }}">{{ $problem->pivot->problem_name }}</a>
                 <br>
-                <a class="text-light" href="#">{{ $problem->pivot->score }}</a>
+                <a class="text-light" href="{{ route('submissions.index', ['assignment_id' => $assignment_id, 'problem_id' => $problem->id, 'user_id' =>'all' , 'choose' => 'all']) }}">{{ $problem->pivot->score }}</a>
             </th>
             @endforeach
             <th>
@@ -21,7 +21,7 @@
         </tr>
     </thead>
    
-    @foreach ($scoreboard['username'] as $sc_username)
+    @foreach ($scoreboard['username'] as $i => $sc_username)
         <tr>
         <td>{{ $loop->index + 1}}</td>
         <td>{{ $sc_username }}</td>
@@ -29,7 +29,7 @@
         @foreach ($problems as $problem)
         <td>
             @if (isset($scores[$sc_username][$problem->id]['score']))
-                <a href="#"
+                <a href="{{ route('submissions.index', ['assignment_id' => $assignment_id, 'problem_id' => $problem->id, 'user_id' => $scoreboard['user_id'][$i] , 'choose' => 'all']) }}"
                 @if ($scores[$sc_username][$problem->id]['fullmark'] == true)
                     class="text-success" >
                         {{ $scores[$sc_username][$problem->id]['score'] }}
@@ -53,11 +53,11 @@
         </td>
         @endforeach
         <td>
-            <a class="text-muted" href="#" >
+
                 <span>{{ $scoreboard['score'][$loop->index] }}</span>
                 <br>
-                <span class="small" title="Total Time + Submit Penalty"> {{($scoreboard['submit_penalty'][$loop->index]) }}</span>
-            </a>
+                <span class="small" title="Total Time + Submit Penalty"> Penalty time: {{($scoreboard['submit_penalty'][$loop->index]) }}</span>
+
         </td>
         <td class="bg-success text-light" >
         <span class="lead"><strong>{{ $scoreboard['accepted_score'][$loop->index] }}</strong></span>

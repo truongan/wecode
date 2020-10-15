@@ -25,8 +25,7 @@ class Scoreboard extends Model
 		$tried_to_solve = array();
 		$penalty = array();
 		$users = array();
-		$start = ($assignment['start_time']);
-		$end = ($assignment['finish_time']);
+
 		$submit_penalty = Setting::find('submit_penalty');
         $scores = array();
         
@@ -55,12 +54,12 @@ class Scoreboard extends Model
 
 			// dd($submission['created_at']);
 			$fullmark = ($submission['pre_score'] == 10000);
-			$delay = $submission['created_at']->diffAsCarbonInterval($start);
-			$late = $submission['created_at']->diffAsCarbonInterval($end);
+			$time = $submission['created_at']->diffAsCarbonInterval($assignment->start_time);
+			$late = $submission['created_at']->diffAsCarbonInterval($assignment->end_time);
 			// dd($late);
             $username = $submission->user->username;
 			$scores[$username][$submission['problem_id']]['score'] = $final_score;
-			$scores[$username][$submission['problem_id']]['time'] = $delay;
+			$scores[$username][$submission['problem_id']]['time'] = $time;
 			$scores[$username][$submission['problem_id']]['late'] = $late;
 			$scores[$username][$submission['problem_id']]['fullmark'] = $fullmark;
 
@@ -80,7 +79,7 @@ class Scoreboard extends Model
 			$total_score[$username] += $final_score;
 			if ($fullmark) $total_accepted_score[$username] += $final_score;
 			
-			if($fullmark) $penalty[$username] += $delay->seconds
+			if($fullmark) $penalty[$username] += $time->seconds
 					+ $number_of_submissions[$submission->user->username][$submission['problem_id']]
 						*$submit_penalty;
 			$users[] = $username;
@@ -88,16 +87,18 @@ class Scoreboard extends Model
 
         $scoreboard = array(
 			'username' => array(),
+			'user_id' => array(),
 			'score' => array(),
 			'accepted_score' => array(),
 			'submit_penalty' => array()
 			,'solved' => array()
 			,'tried_to_solve' => array()
         );
-        
+		
         $users = array_unique($users);
 		foreach($users as $username){
 			array_push($scoreboard['username'], $username);
+			array_push($scoreboard['user_id'], $submission->user_id);
 			array_push($scoreboard['score'], $total_score[$username]);
 			array_push($scoreboard['accepted_score'], $total_accepted_score[$username]);
 			array_push($scoreboard['submit_penalty'], $penalty[$username]);
@@ -152,7 +153,8 @@ class Scoreboard extends Model
 			'scoreboard' => $scoreboard,
 			'names' => $result,
 			'no_of_problems'=> $assignment->problems->count(),
-			'number_of_submissions' => $number_of_submissions
+			'number_of_submissions' => $number_of_submissions,
+			'assignment_id' => $assignment->id
 		);
 		// dd($data);
 		$scoreboard_table = view('scoreboard_table', $data)->render();
