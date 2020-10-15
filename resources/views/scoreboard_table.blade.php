@@ -37,15 +37,15 @@
                     class="text-danger">
                         {{ $scores[$sc_username][$problem->id]['score'] }}*
                 @endif
-                    </a>
                 <br/>
                 Tried: {{$number_of_submissions[$sc_username][$problem->id]}}
+                    </a>
                     <br/>
                     {{-- {{ dd($scores[$sc_username][$problem->id]['late']->forHumans() )}} --}}
                 @if ($scores[$sc_username][$problem->id]['late']->seconds > 0)
-                    <span class="small text-warning" title="Delay time" >{{ $scores[$sc_username][$problem->id]['late']->forHumans() }}**</span>
+                    <span class="small text-warning" title="Delay time" >{{ $scores[$sc_username][$problem->id]['late']->forHumans(['short' => true]) }}**</span>
                 @else
-                    <span class="small" title="Time">{{ $scores[$sc_username][$problem->id]['time']->forHumans() }}</span>
+                    <span class="small" title="Time">{{ $scores[$sc_username][$problem->id]['time']->forHumans(['short' => true]) }}</span>
                 @endif
             @else
                 -
