@@ -25,8 +25,8 @@ class Scoreboard extends Model
 		$tried_to_solve = array();
 		$penalty = array();
 		$users = array();
-		$start = strtotime($assignment['start_time']);
-		$end = strtotime($assignment['finish_time']);
+		$start = ($assignment['start_time']);
+		$end = ($assignment['finish_time']);
 		$submit_penalty = Setting::find('submit_penalty');
         $scores = array();
         
@@ -34,15 +34,15 @@ class Scoreboard extends Model
         
         foreach($assignment->submissions as $item)
         {
-            $number_of_submissions[$item->user_id][$item->problem_id]=0;
+            $number_of_submissions[$item->user->username][$item->problem_id]=0;
         }
 
 		
         foreach($assignment->submissions as $item)
         {
-            $number_of_submissions[$item->user_id][$item->problem_id]+=1;
+            $number_of_submissions[$item->user->username][$item->problem_id]+=1;
 		}
-		// dd($submissions);
+		// dd($item);
         foreach($submissions as $submission)
         {
 
@@ -53,14 +53,15 @@ class Scoreboard extends Model
 			if ($submission['coefficient'] === 'error') $final_score = 0;
 			else $final_score = ceil($pre_score*$submission['coefficient']/100);
 
-			
+			// dd($submission['created_at']);
 			$fullmark = ($submission['pre_score'] == 10000);
-			$delay = strtotime($submission['time'])-$start;
-            $late = strtotime($submission['time'])-$end;
+			$delay = $submission['created_at']->diffAsCarbonInterval($start);
+			$late = $submission['created_at']->diffAsCarbonInterval($end);
+			// dd($late);
             $username = $submission->user->username;
 			$scores[$username][$submission['problem_id']]['score'] = $final_score;
 			$scores[$username][$submission['problem_id']]['time'] = $delay;
-			$scores[$username][$submission['problem_id']]['late'] = CarbonInterval::seconds($late);
+			$scores[$username][$submission['problem_id']]['late'] = $late;
 			$scores[$username][$submission['problem_id']]['fullmark'] = $fullmark;
 
 			if ( ! isset($total_score[$username])){
@@ -79,8 +80,8 @@ class Scoreboard extends Model
 			$total_score[$username] += $final_score;
 			if ($fullmark) $total_accepted_score[$username] += $final_score;
 			
-			if($fullmark) $penalty[$username] += $delay 
-					+ $number_of_submissions[$submission['user_id']][$submission['problem_id']]
+			if($fullmark) $penalty[$username] += $delay->seconds
+					+ $number_of_submissions[$submission->user->username][$submission['problem_id']]
 						*$submit_penalty;
 			$users[] = $username;
         }
@@ -114,7 +115,7 @@ class Scoreboard extends Model
 			,$scoreboard['tried_to_solve']
         );
     
-        return array($scores, $scoreboard);
+        return array($scores, $scoreboard, $number_of_submissions);
     }
 
 	public function _update_scoreboard()
@@ -130,7 +131,7 @@ class Scoreboard extends Model
 			return false;
 		}
 
-		list ($scores, $scoreboard) = $this->_generate_scoreboard();
+		list ($scores, $scoreboard, $number_of_submissions) = $this->_generate_scoreboard();
 		$all_problems = $assignment->problems;
 		
 		$total_score = 0;
@@ -150,7 +151,8 @@ class Scoreboard extends Model
 			'scores' => $scores,
 			'scoreboard' => $scoreboard,
 			'names' => $result,
-			'no_of_problems'=> $assignment->problems->count()
+			'no_of_problems'=> $assignment->problems->count(),
+			'number_of_submissions' => $number_of_submissions
 		);
 		// dd($data);
 		$scoreboard_table = view('scoreboard_table', $data)->render();

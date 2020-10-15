@@ -23,7 +23,7 @@
    
     @foreach ($scoreboard['username'] as $sc_username)
         <tr>
-        <td>{{ $loop->index }}</td>
+        <td>{{ $loop->index + 1}}</td>
         <td>{{ $sc_username }}</td>
         <td><a class="text-muted small" href="#" >{{ $names[$sc_username] }}</a></td>
         @foreach ($problems as $problem)
@@ -37,11 +37,15 @@
                     class="text-danger">
                         {{ $scores[$sc_username][$problem->id]['score'] }}*
                 @endif
-                    </a><br/>
+                    </a>
+                <br/>
+                Tried: {{$number_of_submissions[$sc_username][$problem->id]}}
+                    <br/>
+                    {{-- {{ dd($scores[$sc_username][$problem->id]['late']->forHumans() )}} --}}
                 @if ($scores[$sc_username][$problem->id]['late']->seconds > 0)
                     <span class="small text-warning" title="Delay time" >{{ $scores[$sc_username][$problem->id]['late']->forHumans() }}**</span>
                 @else
-                    <span class="small" title="Time">{{ $scores[$sc_username][$problem->id]['time'] }}</span>
+                    <span class="small" title="Time">{{ $scores[$sc_username][$problem->id]['time']->forHumans() }}</span>
                 @endif
             @else
                 -
