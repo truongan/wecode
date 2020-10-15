@@ -54,8 +54,8 @@ class Scoreboard extends Model
 
 			// dd($submission['created_at']);
 			$fullmark = ($submission['pre_score'] == 10000);
-			$time = $submission['created_at']->diffAsCarbonInterval($assignment->start_time);
-			$late = $submission['created_at']->diffAsCarbonInterval($assignment->end_time);
+			$time = $assignment->start_time->diffAsCarbonInterval($submission->created_at, false);
+			$late =  $assignment->finish_time->diffAsCarbonInterval($submission->created_at, false);
 			// dd($late);
             $username = $submission->user->username;
 			$scores[$username][$submission['problem_id']]['score'] = $final_score;
