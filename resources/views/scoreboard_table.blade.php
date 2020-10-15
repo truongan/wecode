@@ -41,7 +41,7 @@
                 Tried: {{$number_of_submissions[$sc_username][$problem->id]}}
                     </a>
                     <br/>
-                    {{-- {{ dd($scores[$sc_username][$problem->id]['late']->forHumans() )}} --}}
+
                 @if ($scores[$sc_username][$problem->id]['late']->totalSeconds > 0)
                     <span class="small text-warning" title="Delay time" >{{ $scores[$sc_username][$problem->id]['late']->forHumans(['short' => true]) }}**</span>
                 @else
