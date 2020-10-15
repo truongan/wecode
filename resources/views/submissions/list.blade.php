@@ -99,7 +99,6 @@
 							<th width="20%"><small> Name</small></th>
 							<th width="20%"><small> Problem</small></th>
 							<th width="10%"><small> Submit Time</small></th>
-							<th width="1%"><small> Score</small></th>
 							<th width="1%"><small> Delay %</small></th>
 							<th width="1%"><small> Lang</small></th>
 							<th width="6%"><small> Status</small></th>
@@ -140,9 +139,7 @@
 						<a href="{{route('submissions.index', [$assignment->id, $user_id, strval($submission->problem_id), 'all'])}}"><span class="btn btn-info btn-sm"><i class="fas fa-filter"></i></span></a>
 					</td>
 					<td>{{$submission->created_at}}</small></td>
-					@if (!in_array( Auth::user()->role->name, ['student']))
-						<td>{{$submission->score}}</td>
-					@endif
+
 					<td>
 						<span class="small" {{ $submission->delay > 0 ? 'style="color:red;"' :'' }}>
 							@if ($submission->delay <= 0)

@@ -57,6 +57,8 @@ class LoginController extends Controller
 
         ldap_set_option($ldap, LDAP_OPT_PROTOCOL_VERSION, 3);
         ldap_set_option($ldap, LDAP_OPT_REFERRALS, 0);
+        ldap_set_option($ldap, LDAP_OPT_TIMELIMIT, 1);
+        ldap_set_option($ldap, LDAP_OPT_NETWORK_TIMEOUT, 1);
 
         // var_dump($ldap);
         // verify user and password
