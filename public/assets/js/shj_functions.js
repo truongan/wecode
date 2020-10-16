@@ -59,7 +59,7 @@ shj.update_clock = function(){
 	var hours = countdown%24; countdown=(countdown-hours)/24;
 	var days = countdown;
 
-	$("#time_days").html( days + "☀" + hours + ":" + minutes + ":" + seconds);
+	$("#time_days").html( days + "☀ " + hours + ":" + minutes + ":" + seconds);
 }
 
 /**

@@ -1,7 +1,6 @@
 @extends('layouts.app')
 @section('head_title','Assignments')
 @section('icon', 'fas fa-folder-open')
-
 @section('title', 'Assignments')
 
 @section('other_assets')
@@ -98,8 +97,8 @@
 					@endif
 				@endif
 			</td>
-			<td>{{$assignment->start_time}}</td>
-			<td>{{$assignment->finish_time}}</td>
+			<td>{{$assignment->start_time->setTimezone($settings['timezone'])->locale('vi')->isoFormat('llll (UZZ)') }}</td>
+			<td>{{$assignment->finish_time->setTimezone($settings['timezone'])->locale('vi')->isoFormat('llll (UZZ)') }}</td>
 			<td>
 				@if ($assignment->score_board)
 					<a href="{{ url("scoreboard/full/$assignment->id")}}" title="Click to viewa assignment's scoreboard">View<i class="fas fa-external-link-alt"></i></a>

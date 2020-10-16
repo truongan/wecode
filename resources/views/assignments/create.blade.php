@@ -45,7 +45,7 @@
 @section('content')
 
 
-<div class="col">
+<div class="row">
 	{{-- {% set msgclasses = {'text-success': 'text-success', 'text-info': 'text-warning', 'text-danger': 'text-danger'} %} --}}
 	{{-- {% for message in messages %}
 		<p class="{{ msgclasses[message.type] }}">{{ message.text }}</p>

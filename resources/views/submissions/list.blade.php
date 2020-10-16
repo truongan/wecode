@@ -138,7 +138,7 @@
 						</a><br>
 						<a href="{{route('submissions.index', [$assignment->id, $user_id, strval($submission->problem_id), 'all'])}}"><span class="btn btn-info btn-sm"><i class="fas fa-filter"></i></span></a>
 					</td>
-					<td>{{$submission->created_at}}</small></td>
+					<td><small>{{$submission->created_at->setTimezone($settings['timezone'])->locale('vi')->isoFormat('llll (UZZ)') }}</small></td>
 
 					<td>
 						<span class="small" {{ $submission->delay > 0 ? 'style="color:red;"' :'' }}>
