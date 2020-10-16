@@ -35,11 +35,11 @@
 	<table class="wecode_table table table-striped table-bordered">
 		<thead class="thead-dark">
 			<tr>
-				<th>#</th>
+				{{-- <th>ID</th> --}}
 				<th><small>Select</small></th>
 				<th>Class</th>
 				<th>Name</th>
-				<th><small>Submissions</small></th>
+				<th><small>Submit</small></th>
 				<th>Coef</th>
 				<th>Start</th>
 				<th>Finish</th>
@@ -57,7 +57,7 @@
 				@continue
 			@endif
 		<tr data-id="{{$assignment->id}}">
-			<td>{{$loop->iteration}} </td>
+			{{-- <td>{{$assignment->id}} </td> --}}
 			<td>
 				<span title="View an assignment's problem or submission will set it as your default assignment">
 					<i  class=" far {{ (isset(Auth::user()->selected_assignment->id) && $assignment->id == Auth::user()->selected_assignment->id) ? 'fa-check-square color6' : 'fa-square' }} fa-2x" data-id="{{ $assignment->id }}"></i>
@@ -78,11 +78,11 @@
 			<td>
 				@if ( in_array( Auth::user()->role->name, ['student']) )
 					<a href="{{ route('submissions.index', [$assignment->id, Auth::user()->id, 'all', 'all'])}}" title="View all submissions">
-						<small>{{$assignment->total_submits}} submission{{ $assignment->total_submits > 1 ? 's' : ''}}</small>
+						<small>{{$assignment->total_submits}} </small>
 					</a>
 				@else
 					<a href="{{ route('submissions.index', [$assignment->id, 'all', 'all', 'all'])}}" title="View all submissions">
-						<small>{{$assignment->total_submits}} submission{{ $assignment->total_submits > 1 ? 's' : ''}}</small>
+						<small>{{$assignment->total_submits}} </small>
 					</a>
 				@endif
 			</td>
@@ -97,8 +97,8 @@
 					@endif
 				@endif
 			</td>
-			<td>{{$assignment->start_time->setTimezone($settings['timezone'])->locale('vi')->isoFormat('llll (UZZ)') }}</td>
-			<td>{{$assignment->finish_time->setTimezone($settings['timezone'])->locale('vi')->isoFormat('llll (UZZ)') }}</td>
+			<td>{{$assignment->start_time->setTimezone($settings['timezone'])->locale('en')->isoFormat('llll (UZZ)') }}</td>
+			<td>{{$assignment->finish_time->setTimezone($settings['timezone'])->locale('en')->isoFormat('llll (UZZ)') }}</td>
 			<td>
 				@if ($assignment->score_board)
 					<a href="{{ url("scoreboard/full/$assignment->id")}}" title="Click to viewa assignment's scoreboard">View<i class="fas fa-external-link-alt"></i></a>

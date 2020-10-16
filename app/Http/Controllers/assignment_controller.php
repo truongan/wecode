@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Assignment;
 use App\Setting;
 use App\Problem;
@@ -109,8 +110,10 @@ class assignment_controller extends Controller
         }
         $request['extra_time'] = $extra_time;
 
-        $request['start_time'] = date('Y-m-d H:i:s', strtotime((string)$request['start_time_date'] . " " .(string)date('H:i:s', strtotime($request['start_time_time']))));
-        $request['finish_time'] = date('Y-m-d H:i:s', strtotime((string)$request['finish_time_date'] . " " .(string)date('H:i:s', strtotime($request['finish_time_time']))));
+        $zone = Carbon::now()->getTimezone();
+
+        $request['start_time'] = (new Carbon($request['start_time_date'] . ' ' . $request['start_time_time'] . ' ' . Setting::get('timezone')))->setTimezone($zone);
+        $request['finish_time'] = (new Carbon($request['finish_time_date'] . ' ' . $request['finish_time_time'] . ' ' . Setting::get('timezone')))->setTimezone($zone);
       
     }
 

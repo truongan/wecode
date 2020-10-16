@@ -18,13 +18,7 @@ function update_problem_count(){
 }
 
 $(document).ready(function(){
-	$("form").submit(function(event){	
-		$("#start_time").val($("#start_date").val() + " " + $("#start__time").val() + " " + /GMT([^ ]+)/.exec(Date())[1]);
-		console.log($("#start_time").val());
-		alert($("#start_time").val());
-		event.preventDefault();
-		$("#finish_time").val($("#finish_date").val() + " " + $("#finish__time").val());
-	});
+
 	var a = Sortable.create(problem_list, {
 		handle : '.list_handle',
 		ghostClass: 'list-group-item-secondary',
