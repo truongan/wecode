@@ -52,7 +52,7 @@ class problem_controller extends Controller
             abort(404);  
         
         return view('problems.create', ['problem'=>NULL,
-                                      'all_languages'=>Language::all(),
+                                      'all_languages'=>Language::orderBy('sorting')->get(),
                                       'tree_dump'=>"not found",
                                       'messages'=>[],
                                       'languages'=>[],
@@ -154,18 +154,13 @@ class problem_controller extends Controller
     {
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
             abort(404);
-        $lang_of_problems = $problem->languages;
-        $languages = [];
-        if ($lang_of_problems != [])
-            foreach($lang_of_problems as $lang)
-            {
-                $languages[$lang->id] = $lang;
-            }
+        $lang_of_problems = $problem->languages->keyBy('id');
+
         $tags = $problem->tags->keyBy('id');
         return view('problems.create', ['problem'=>$problem,
-                                      'all_languages'=>Language::all(),
+                                      'all_languages'=>Language::orderBy('sorting')->get(),
                                       'messages'=>[],  
-                                      'languages'=>$languages,
+                                      'languages'=>$lang_of_problems,
                                       'tree_dump'=>shell_exec("tree -h " . $this->get_directory_path($problem->id)),  
                                       'max_file_uploads'=> ini_get('max_file_uploads'),
                                       'all_tags' => Tag::all(),
