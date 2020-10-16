@@ -63,7 +63,7 @@
 			<td>
 				<span class="text-success">{{ $item->accepted_submit }}</span> 
 				/
-				<span class="text-info">{{ $item->total_submit }} ({{ $item->ratio }}) </span>
+				<span class="text-info">{{ $item->total_submit }} ({{ $item->ratio }}%) </span>
 			</td>
 			<td>{{ $item->diff_arg }}</td>
 			
