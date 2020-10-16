@@ -97,7 +97,7 @@
 									<input id="start_time_date" type="date" name="start_time_date" class="form-control" value="{{ $edit ? $assignment->start_time->setTimezone($settings['timezone'])->isoFormat('Y-M-D')  : old('start_time_date') }}" />
 								</div>
 								<div class="col-xl-5">
-									<input id="start_time_time" type="time" name="start_time_time" class="form-control" value="{{ $edit ? $assignment->start_time->setTimezone($settings['timezone'])->isoFormat('H:m')  : old('start_time_time',0) }}" />
+									<input id="start_time_time" type="time" name="start_time_time" class="form-control" value="{{ $edit ? $assignment->start_time->setTimezone($settings['timezone'])->isoFormat('HH:mm')  : old('start_time_time',0) }}" />
 								</div>
 							</div>
 							{{-- {{ form_error('start_time', '<div class="alert alert-danger">', '</div>') }} --}}
@@ -119,7 +119,7 @@
 									<input id="finish_time_date" type="date" name="finish_time_date" class="form-control" value="{{ $edit ? $assignment->finish_time->setTimezone($settings['timezone'])->isoFormat('Y-M-D') : old('finish_time_date') }}" />
 								</div>
 								<div class="col-xl-5">
-									<input id="finish_time_time" type="time" name="finish_time_time" class="form-control" value="{{ $edit ? $assignment->finish_time->setTimezone($settings['timezone'])->isoFormat('H:m') : old('finish_time_time') }}" />
+									<input id="finish_time_time" type="time" name="finish_time_time" class="form-control" value="{{ $edit ? $assignment->finish_time->setTimezone($settings['timezone'])->isoFormat('HH:mm') : old('finish_time_time') }}" />
 								</div>
 							</div>
 							{{-- {{ form_error('finish_time', '<div class="alert alert-danger">', '</div>') }} --}}

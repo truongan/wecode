@@ -30,7 +30,15 @@ class problem_controller extends Controller
     {
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
             abort(404);  
-        return view('problems.list',['problems'=>Problem::latest()->get()]); 
+        
+        $all_problem = Problem::latest()->with('assignments', 'submissions')->paginate(Setting::get('results_per_page_all'));
+
+        foreach ($all_problem as $p){
+            $p->total_submit = $p->submissions->count();
+            $p->accepted_submit = $p->submissions->filter(function($item,$key){return $item->pre_score == 10000;})->count();
+            $p->ratio = $p->accepted_submit / $p->total_submit;
+        }
+        return view('problems.list',['problems'=>$all_problem]); 
     }
 
     /**

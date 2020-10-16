@@ -35,7 +35,7 @@
 	<table class="wecode_table table table-striped table-bordered">
 		<thead class="thead-dark">
 			<tr>
-				{{-- <th>ID</th> --}}
+				<th>ID</th>
 				<th><small>Select</small></th>
 				<th>Class</th>
 				<th>Name</th>
@@ -57,7 +57,7 @@
 				@continue
 			@endif
 		<tr data-id="{{$assignment->id}}">
-			{{-- <td>{{$assignment->id}} </td> --}}
+			<td>{{$assignment->id}} </td>
 			<td>
 				<span title="View an assignment's problem or submission will set it as your default assignment">
 					<i  class=" far {{ (isset(Auth::user()->selected_assignment->id) && $assignment->id == Auth::user()->selected_assignment->id) ? 'fa-check-square color6' : 'fa-square' }} fa-2x" data-id="{{ $assignment->id }}"></i>
@@ -97,8 +97,8 @@
 					@endif
 				@endif
 			</td>
-			<td>{{$assignment->start_time->setTimezone($settings['timezone'])->locale('en')->isoFormat('llll (UZZ)') }}</td>
-			<td>{{$assignment->finish_time->setTimezone($settings['timezone'])->locale('en')->isoFormat('llll (UZZ)') }}</td>
+			<td><small>{{$assignment->start_time->setTimezone($settings['timezone'])->locale('en')->isoFormat('llll (UZZ)') }}</small></td>
+			<td><small>{{$assignment->finish_time->setTimezone($settings['timezone'])->locale('en')->isoFormat('llll (UZZ)') }}</small></td>
 			<td>
 				@if ($assignment->score_board)
 					<a href="{{ url("scoreboard/full/$assignment->id")}}" title="Click to viewa assignment's scoreboard">View<i class="fas fa-external-link-alt"></i></a>
@@ -205,7 +205,8 @@ $(document).ready(function () {
 	});
 
     $("table").DataTable({
-		"pageLength": 10,
+		"pageLength": 30,
+		"order":['0', 'desc'],
 		"lengthMenu": [ [10, 20, 30, 50, -1], [10, 20, 30, 50, "All"] ]
 	});
 });

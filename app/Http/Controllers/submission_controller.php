@@ -66,7 +66,7 @@ class submission_controller extends Controller
 			$submissions = $submissions->where('problem_id',intval($problem_id));
 		}
 		
-		$submissions = $submissions->with(['language','user'])->latest()->get();
+		$submissions = $submissions->with(['language','user'])->latest()->paginate(Setting::get('results_per_page_all'));
 		$all_problems = Assignment::find($assignment_id)->problems->keyBy('id');
 		foreach ($submissions as &$submission)
 			$this->_status($submission, $all_problems);

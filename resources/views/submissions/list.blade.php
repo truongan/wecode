@@ -179,7 +179,8 @@
 				</tr>
 				@endforeach
 			</table>
-
+		
+		<div class=" d-flex justify-content-center">{{$submissions->links(null, ['class'=>'justify-content-center'])}}</div>
 	</div>
 </div>
 @endsection
