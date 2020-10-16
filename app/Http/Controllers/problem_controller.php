@@ -36,7 +36,7 @@ class problem_controller extends Controller
         foreach ($all_problem as $p){
             $p->total_submit = $p->submissions->count();
             $p->accepted_submit = $p->submissions->filter(function($item,$key){return $item->pre_score == 10000;})->count();
-            $p->ratio = round($p->accepted_submit / $p->total_submit, 2)*100;
+            $p->ratio = round($p->accepted_submit / max($p->total_submit,1), 2)*100;
         }
         return view('problems.list',['problems'=>$all_problem]); 
     }
