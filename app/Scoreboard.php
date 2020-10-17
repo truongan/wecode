@@ -113,7 +113,7 @@ class Scoreboard extends Model
 			$scoreboard['accepted_score'], SORT_NUMERIC, SORT_DESC,
 			$scoreboard['score'], SORT_NUMERIC, SORT_DESC,
 			$scoreboard['username'],
-			,$scoreboard['tried_to_solve']
+			$scoreboard['tried_to_solve']
         );
     
         return array($scores, $scoreboard, $number_of_submissions);
