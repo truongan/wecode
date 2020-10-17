@@ -98,7 +98,7 @@ class Scoreboard extends Model
         $users = array_unique($users);
 		foreach($users as $username){
 			array_push($scoreboard['username'], $username);
-			array_push($scoreboard['user_id'], $submission->user_id);
+			array_push($scoreboard['user_id'],User::where('username', $username)->first()->id );
 			array_push($scoreboard['score'], $total_score[$username]);
 			array_push($scoreboard['accepted_score'], $total_accepted_score[$username]);
 			array_push($scoreboard['submit_penalty'], $penalty[$username]);
@@ -109,7 +109,7 @@ class Scoreboard extends Model
 		
         array_multisort(
 			$scoreboard['solved'], SORT_NUMERIC, SORT_DESC,
-			$scoreboard['submit_penalty'], SORT_NUMERIC, SORT_ASC,
+			$scoreboard['submit_penalty'], SORT_NATURAL, SORT_ASC,
 			$scoreboard['accepted_score'], SORT_NUMERIC, SORT_DESC,
 			$scoreboard['score'], SORT_NUMERIC, SORT_DESC,
 			$scoreboard['username'],
