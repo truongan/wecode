@@ -91,7 +91,7 @@ class assignment_controller extends Controller
 
         $problems[-1] = $this->dummy_problem();
 
-        return view('assignments.create',['all_problems' => Problem::all(), 'all_lops' => Lop::all(), 'lops' => [], 'messages' => [], 'problems' => $problems, 'selected' => 'assignments']);
+        return view('assignments.create',['all_problems' => Problem::latest()->get(), 'all_lops' => Lop::latest()->get(), 'lops' => [], 'messages' => [], 'problems' => $problems, 'selected' => 'assignments']);
     }
 
 
@@ -319,10 +319,10 @@ class assignment_controller extends Controller
         if ( !in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
             abort(403,'You do not have permission to edit assignment');
         $problems = [];
-        $a = $assignment->problems()->orderBy('ordering')->get()->push($this->dummy_problem());
-        foreach($a as $i){
-            $problems[$i->id] = $i;
-        }
+        $problems = $assignment->problems()->orderBy('ordering')->get()->push($this->dummy_problem())->keyBy('id');
+        // foreach($a as $i){
+        //     $problems[$i->id] = $i;
+        // }
 
         $lops = array();
         $b = $assignment->lops;
@@ -332,7 +332,7 @@ class assignment_controller extends Controller
                 $lops[$i->id] = $i;
             }
         }
-        return view('assignments.create',['assignment' => $assignment, 'all_problems' => Problem::all(), 'messages' => [], 'problems' => $problems, 'all_lops' => Lop::all(), 'lops' => $lops, 'selected' => 'assignments']);
+        return view('assignments.create',['assignment' => $assignment, 'all_problems' => Problem::latest()->get(), 'messages' => [], 'problems' => $problems, 'all_lops' => Lop::latest()->get(), 'lops' => $lops, 'selected' => 'assignments']);
     }
 
     /**

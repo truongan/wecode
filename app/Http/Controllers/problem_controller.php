@@ -31,7 +31,7 @@ class problem_controller extends Controller
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
             abort(404);  
         
-        $all_problem = Problem::latest()->with('assignments', 'submissions')->paginate(Setting::get('results_per_page_all'));
+        $all_problem = Problem::latest()->with('assignments', 'submissions','languages')->paginate(Setting::get('results_per_page_all'));
 
         foreach ($all_problem as $p){
             $p->total_submit = $p->submissions->count();
