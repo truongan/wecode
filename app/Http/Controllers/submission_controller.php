@@ -7,6 +7,7 @@ use App\Assignment;
 use App\Problem;
 use App\Queue_item;
 use App\Language;
+use App\Scoreboard;
 use App\Setting;
 use Redirect;
 use Illuminate\Http\Request;
@@ -351,6 +352,8 @@ class submission_controller extends Controller
 
 		$submission_curr->is_final = 1;
 		$submission_curr->save();
+
+		Scoreboard::update_scoreboard( $submission_curr->assignment_id	);
 		return response()->json(
 			['done' => 1]
 		);
