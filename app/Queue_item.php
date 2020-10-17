@@ -2,6 +2,7 @@
 
 namespace App;
 use App\Submission;
+use App\Scoreboard;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
@@ -83,6 +84,7 @@ class Queue_item extends Model
 
 		$this->delete();
 
+		Scoreboard::update_scoreboard($submission->assignment_id);
 		// update scoreboard:
 		// $this->load->model('scoreboard_model');
 		// $this->scoreboard_model->update_scoreboard($submission['assignment_id']);

@@ -392,6 +392,8 @@ class assignment_controller extends Controller
             }
         }
         $assignment->update_submissions_coefficient();
+        Scoreboard::update_scoreboard($assignment_id))
+
         return redirect('assignments');
     }
 
