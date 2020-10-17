@@ -26,7 +26,7 @@ class Scoreboard extends Model
 		$penalty = array();
 		$users = array();
 
-		$submit_penalty = Setting::find('submit_penalty');
+		$submit_penalty = Setting::get('submit_penalty');
         $scores = array();
         
         $problems = $assignment->problems->keyBy('id');
@@ -82,6 +82,7 @@ class Scoreboard extends Model
 			if($fullmark) $penalty[$username] += $time->seconds
 					+ $number_of_submissions[$submission->user->username][$submission['problem_id']]
 						*$submit_penalty;
+			dd($penalty);
 			$users[] = $username;
         }
 
