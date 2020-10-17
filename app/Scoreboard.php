@@ -26,7 +26,6 @@ class Scoreboard extends Model
 		$penalty = array();
 		$users = array();
 
-		$submit_penalty = Setting::get('submit_penalty');
         $scores = array();
         
         $problems = $assignment->problems->keyBy('id');
@@ -46,22 +45,22 @@ class Scoreboard extends Model
         {
 
 			$pre_score = ceil(
-						$submission['pre_score']*
-						($problems[$submission['problem_id']]->pivot->score ?? 0 )/10000
+						$submission->pre_score*
+						($problems[$submission->problem_id]->pivot->score ?? 0 )/10000
 			);
 			if ($submission['coefficient'] === 'error') $final_score = 0;
 			else $final_score = ceil($pre_score*$submission['coefficient']/100);
 
 			// dd($submission['created_at']);
-			$fullmark = ($submission['pre_score'] == 10000);
-			$time = $assignment->start_time->diffAsCarbonInterval($submission->created_at, false);
-			$late =  $assignment->finish_time->diffAsCarbonInterval($submission->created_at, false);
+			$fullmark = ($submission->pre_score == 10000);
+			$time = $assignment->start_time->diffAsCarbonInterval($submission->created_at, true); // time is absolute different
+			$late =  $assignment->finish_time->diffAsCarbonInterval($submission->created_at, false); //late can either be negative (submit in time) or positive (submit late)
 			// dd($late);
             $username = $submission->user->username;
-			$scores[$username][$submission['problem_id']]['score'] = $final_score;
-			$scores[$username][$submission['problem_id']]['time'] = $time;
-			$scores[$username][$submission['problem_id']]['late'] = $late;
-			$scores[$username][$submission['problem_id']]['fullmark'] = $fullmark;
+			$scores[$username][$submission->problem_id]['score'] = $final_score;
+			$scores[$username][$submission->problem_id]['time'] = $time;
+			$scores[$username][$submission->problem_id]['late'] = $late;
+			$scores[$username][$submission->problem_id]['fullmark'] = $fullmark;
 
 			if ( ! isset($total_score[$username])){
 				$total_score[$username] = 0;
@@ -72,17 +71,17 @@ class Scoreboard extends Model
 				$tried_to_solve[$username] = 0;
 			}
 			if ( ! isset($penalty[$username]))
-				$penalty[$username] = 0;
+				$penalty[$username] = CarbonInterval::seconds(0);
 
 			$solved[$username] += $fullmark;
 			$tried_to_solve[$username] += 1;
 			$total_score[$username] += $final_score;
 			if ($fullmark) $total_accepted_score[$username] += $final_score;
 			
-			if($fullmark) $penalty[$username] += $time->seconds
-					+ $number_of_submissions[$submission->user->username][$submission['problem_id']]
-						*$submit_penalty;
-			dd($penalty);
+			if($fullmark) $penalty[$username]->add($time->totalSeconds
+					+ ($number_of_submissions[$submission->user->username][$submission->problem_id]-1)
+						* Setting::get('submit_penalty'), 'seconds');
+			
 			$users[] = $username;
         }
 
@@ -110,9 +109,9 @@ class Scoreboard extends Model
 		
         array_multisort(
 			$scoreboard['solved'], SORT_NUMERIC, SORT_DESC,
+			$scoreboard['submit_penalty'], SORT_NUMERIC, SORT_ASC,
 			$scoreboard['accepted_score'], SORT_NUMERIC, SORT_DESC,
 			$scoreboard['score'], SORT_NUMERIC, SORT_DESC,
-			$scoreboard['submit_penalty'], SORT_NUMERIC, SORT_ASC,
 			$scoreboard['username']
 			,$scoreboard['tried_to_solve']
         );

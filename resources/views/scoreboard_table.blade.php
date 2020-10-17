@@ -56,7 +56,7 @@
 
                 <span>{{ $scoreboard['score'][$loop->index] }}</span>
                 <br>
-                <span class="small" title="Total Time + Submit Penalty"> Penalty time: {{($scoreboard['submit_penalty'][$loop->index]) }}</span>
+                <span class="small" title="Total Time + Submit Penalty"> Penalty time: {{($scoreboard['submit_penalty'][$loop->index]->cascade()->forHumans(['short' => true]) ) }}</span>
 
         </td>
         <td class="bg-success text-light" >

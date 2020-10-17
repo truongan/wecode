@@ -192,7 +192,6 @@ class assignment_controller extends Controller
             'sum_score' => 0
         );
         
-        $assignment = Assignment::find($assignment_id);
        
         $check = False;
         foreach($assignment->problems as $item)
