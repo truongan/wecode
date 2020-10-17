@@ -51,7 +51,7 @@
 			</td>
 			<td>
 			  @foreach ($item->languages as $language_name)
-			  <span class="btn btn-sm btn-secondary mb-1">{{$language_name->name}} <span class="badge badge-pill badge-info">{{$language_name->pivot->time_limit}}ms</span><span class="badge badge-pill badge-info">{{$language_name->pivot->memory_limit/1000}}MB</span></span>
+			  <span class="btn btn-sm btn-secondary mb-1">{{$language_name->name}} <span class="badge badge-pill badge-info">{{$language_name->pivot->time_limit/1000}}s</span><span class="badge badge-pill badge-info">{{$language_name->pivot->memory_limit/1000}}MB</span></span>
 			  @endforeach
 			</td>
 			<td>
