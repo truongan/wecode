@@ -112,7 +112,7 @@ class Scoreboard extends Model
 			$scoreboard['submit_penalty'], SORT_NUMERIC, SORT_ASC,
 			$scoreboard['accepted_score'], SORT_NUMERIC, SORT_DESC,
 			$scoreboard['score'], SORT_NUMERIC, SORT_DESC,
-			$scoreboard['username']
+			$scoreboard['username'],
 			,$scoreboard['tried_to_solve']
         );
     
