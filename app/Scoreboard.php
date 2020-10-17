@@ -30,7 +30,7 @@ class Scoreboard extends Model
         $scores = array();
         
         $problems = $assignment->problems->keyBy('id');
-        
+        $number_of_submissions= [];
         foreach($assignment->submissions as $item)
         {
             $number_of_submissions[$item->user->username][$item->problem_id]=0;
