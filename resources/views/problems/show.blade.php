@@ -131,7 +131,7 @@
 				<select id="languages" name="language" class="form-control custom-select">
 
 					@foreach($problem->languages as $l)
-                        <option value="{{ $l->id }}">{{ $l->name }} ({{$l->pivot->time_limit /100}}s, {{ $l->pivot->memory_limit / 1000 }}MB )</option>
+                        <option value="{{ $l->id }}">{{ $l->name }} ({{$l->pivot->time_limit /1000}}s, {{ $l->pivot->memory_limit / 1000 }}MB )</option>
 					@endforeach
 				</select>
 			</fieldset>
