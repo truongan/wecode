@@ -29,7 +29,7 @@
         @foreach ($problems as $problem)
         <td>
             @if (isset($scores[$sc_username][$problem->id]['score']))
-                <a href="{{ route('submissions.index', ['assignment_id' => $assignment_id, 'problem_id' => $problem->id, 'user_id' => $scoreboard['user_id'][$i] , 'choose' => 'all']) }}"
+                <a href="{{ route('submissions.index', ['assignment_id' => $assignment_id, 'problem_id' => $problem->id, 'user_id' => $scores[$sc_username]['id'] , 'choose' => 'all']) }}"
                 @if ($scores[$sc_username][$problem->id]['fullmark'] == true)
                     class="text-success" >
                         {{ $scores[$sc_username][$problem->id]['score'] }}
@@ -56,7 +56,7 @@
 
                 <span>{{ $scoreboard['score'][$loop->index] }}</span>
                 <br>
-                <span class="small" title="Total Time + Submit Penalty"> Penalty time: {{($scoreboard['submit_penalty'][$loop->index]->cascade()->forHumans(['short' => true]) ) }}</span>
+                <span class="small" title="Total Time + Submit Penalty">{{($scoreboard['submit_penalty'][$loop->index]->cascade()->forHumans(['short' => true]) ) }}</span>
 
         </td>
         <td class="bg-success text-light" >

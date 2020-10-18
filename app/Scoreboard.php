@@ -61,7 +61,7 @@ class Scoreboard extends Model
 			$scores[$username][$submission->problem_id]['time'] = $time;
 			$scores[$username][$submission->problem_id]['late'] = $late;
 			$scores[$username][$submission->problem_id]['fullmark'] = $fullmark;
-
+			$scores[$username]['id'] = $submission->user_id;
 			if ( ! isset($total_score[$username])){
 				$total_score[$username] = 0;
 				$total_accepted_score[$username] = 0;
@@ -98,7 +98,6 @@ class Scoreboard extends Model
         $users = array_unique($users);
 		foreach($users as $username){
 			array_push($scoreboard['username'], $username);
-			array_push($scoreboard['user_id'],User::where('username', $username)->first()->id );
 			array_push($scoreboard['score'], $total_score[$username]);
 			array_push($scoreboard['accepted_score'], $total_accepted_score[$username]);
 			array_push($scoreboard['submit_penalty'], $penalty[$username]);
