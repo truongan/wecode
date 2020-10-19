@@ -55,10 +55,11 @@
 	@else
 		<p>Scoreboard of <span> {{ $assignment->name }}</span></p>
 		{!! $scoreboard !!}
-
-		    <span class="text-danger">*: Not full mark</span>
-    <br/>
-    <span class="text-warning">**: Delay time</span>
+		<span class="text-danger">*: Not full mark</span>
+    	<br/>
+    	<span class="text-info">Number of tries - Submit time</span>
+    	<br/>
+    	<span class="text-warning">**: Delay time</span>
 	@endif
 </div>
 @endsection

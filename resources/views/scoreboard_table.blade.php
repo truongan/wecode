@@ -40,16 +40,16 @@
                     @endif
                 </a>
                 <br/>
-                <span class="small" title="Total tries and time to final submit">
+                <span class="small text-info" title="Total tries and time to final submit">
                 {{$number_of_submissions[$sc_username][$problem->id]}}
-                    - 
+                    - </span>
 
                 @if ($scores[$sc_username][$problem->id]['late']->totalSeconds > 0)
                     <span class="text-warning">{{ $scores[$sc_username][$problem->id]['late']->forHumans(['short' => true]) }}**</span>
                 @else
-                    <span class="small">{{ $scores[$sc_username][$problem->id]['time']->forHumans(['short' => true]) }}</span>
+                    <span class="small text-info">{{ $scores[$sc_username][$problem->id]['time']->forHumans(['short' => true]) }}</span>
                 @endif
-                </span>
+
             @else
                 -
             @endif
