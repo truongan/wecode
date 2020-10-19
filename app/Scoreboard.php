@@ -107,9 +107,9 @@ class Scoreboard extends Model
 		
 		
         array_multisort(
-			$scoreboard['solved'], SORT_NUMERIC, SORT_DESC,
-			$scoreboard['submit_penalty'], SORT_NATURAL, SORT_ASC,
 			$scoreboard['accepted_score'], SORT_NUMERIC, SORT_DESC,
+			$scoreboard['submit_penalty'], SORT_NATURAL, SORT_ASC,
+			$scoreboard['solved'], SORT_NUMERIC, SORT_DESC,
 			$scoreboard['score'], SORT_NUMERIC, SORT_DESC,
 			$scoreboard['username'],
 			$scoreboard['tried_to_solve']
