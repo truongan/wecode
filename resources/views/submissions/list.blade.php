@@ -141,14 +141,14 @@
 					<td><small>{{$submission->created_at->setTimezone($settings['timezone'])->locale('en')->isoFormat('llll (UZZ)') }}</small></td>
 
 					<td>
-						<span class="small" {{ $submission->delay > 0 ? 'style="color:red;"' :'' }}>
-							@if ($submission->delay <= 0)
+						<span class="small {{ $submission->delay->total('seconds') > 0 ? 'text-danger' :'text-secondary' }} ">
+							@if ($submission->delay->total('seconds') <= 0)
 								No Delay
 							@else
-								<span title="HH:MM">{{ time_hhmm($submission->delay) }}</span>
+								{{ $submission->delay->forHumans(['short'=>true]) }}
 							@endif
 							</span><br>
-						<small>{{ $submission->coefficient }}%</small>
+						{{ $submission->coefficient }}%
 					</td>
 					<td>{{$submission->language->name}}</td>
 					<td class="status">

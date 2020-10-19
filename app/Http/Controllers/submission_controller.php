@@ -69,8 +69,10 @@ class submission_controller extends Controller
 		
 		$submissions = $submissions->with(['language','user'])->latest()->paginate(Setting::get('results_per_page_all'));
 		$all_problems = Assignment::find($assignment_id)->problems->keyBy('id');
-		foreach ($submissions as &$submission)
+		foreach ($submissions as &$submission){
+			$submission->delay = $assignment->finish_time->diffAsCarbonInterval($submission->created_at, false);
 			$this->_status($submission, $all_problems);
+		}
 
 
 		return view('submissions.list',['submissions' => $submissions, 'assignment' => $assignment, 'user_id' => $user_id, 'problem_id' => $problem_id, 'choose' => $choose, 'all_problems' => $all_problems]); 
@@ -295,12 +297,16 @@ class submission_controller extends Controller
 		$language = Language::find($request->language);
 
 		$coefficient = 100;
-		if ($assignment->id == 0) //Practice 
+		if ($assignment->id == 0) {
+			//Practice 
 			if (!in_array( Auth::user()->role->name, ['admin', 'head_instructor']) && $problem->allow_practice!=1)
 				abort(403,'This problem is not open for practice');
+		}
 		else
 		{
+
 			$coefficient = $assignment->eval_coefficient();
+
 
 			$a = $assignment->can_submit(Auth::user());
 			if(!$a->can_submit) abort(403, $a->error_message);
@@ -308,7 +314,6 @@ class submission_controller extends Controller
 			if ($this->in_queue(Auth::user()->id, $assignment->id, $problem->id))
 				abort(403,'You have already submitted for this problem. Your last submission is still in queue.');
 
-			
 			if ($problem->languages->where('id',$language->id)->count() == 0)
 				abort(403,'This file type is not allowed for this problem.');
 		}
