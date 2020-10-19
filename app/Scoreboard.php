@@ -78,10 +78,13 @@ class Scoreboard extends Model
 			$total_score[$username] += $final_score;
 			if ($fullmark) $total_accepted_score[$username] += $final_score;
 			
-			if($fullmark) $penalty[$username]->add($time->totalSeconds
+			if($fullmark
+				&& $final_score > 0 //Only count problem with larger than 0 score
+			) {
+				$penalty[$username]->add($time->totalSeconds
 					+ ($number_of_submissions[$submission->user->username][$submission->problem_id]-1)
 						* Setting::get('submit_penalty'), 'seconds');
-			
+			}
 			$users[] = $username;
         }
 
