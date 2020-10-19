@@ -24,29 +24,32 @@
     @foreach ($scoreboard['username'] as $i => $sc_username)
         <tr>
         <td>{{ $loop->index + 1}}</td>
-        <td>{{ $sc_username }}</td>
-        <td><a class="text-muted small" href="#" >{{ $names[$sc_username] }}</a></td>
+        <td> <a href="{{ route('submissions.index', ['assignment_id' => $assignment_id, 'problem_id' => 'all', 'user_id' => $scores[$sc_username]['id'] , 'choose' => 'all']) }}" >{{ $sc_username }}</a></td>
+        <td>{{ $names[$sc_username] }}</td>
         @foreach ($problems as $problem)
         <td>
             @if (isset($scores[$sc_username][$problem->id]['score']))
                 <a href="{{ route('submissions.index', ['assignment_id' => $assignment_id, 'problem_id' => $problem->id, 'user_id' => $scores[$sc_username]['id'] , 'choose' => 'all']) }}"
-                @if ($scores[$sc_username][$problem->id]['fullmark'] == true)
-                    class="text-success" >
-                        {{ $scores[$sc_username][$problem->id]['score'] }}
-                @else
-                    class="text-danger">
-                        {{ $scores[$sc_username][$problem->id]['score'] }}*
-                @endif
+                    class = "lead 
+                    @if ($scores[$sc_username][$problem->id]['fullmark'] == true)
+                        text-success" >
+                            {{ $scores[$sc_username][$problem->id]['score'] }}
+                    @else
+                        text-danger">
+                            {{ $scores[$sc_username][$problem->id]['score'] }}*
+                    @endif
+                </a>
                 <br/>
-                Tried: {{$number_of_submissions[$sc_username][$problem->id]}}
-                    </a>
-                    <br/>
+                <span class="small" title="Total tries and time to final submit">
+                {{$number_of_submissions[$sc_username][$problem->id]}}
+                    - 
 
                 @if ($scores[$sc_username][$problem->id]['late']->totalSeconds > 0)
-                    <span class="small text-warning" title="Delay time" >{{ $scores[$sc_username][$problem->id]['late']->forHumans(['short' => true]) }}**</span>
+                    <span class="text-warning">{{ $scores[$sc_username][$problem->id]['late']->forHumans(['short' => true]) }}**</span>
                 @else
-                    <span class="small" title="Time">{{ $scores[$sc_username][$problem->id]['time']->forHumans(['short' => true]) }}</span>
+                    <span class="small">{{ $scores[$sc_username][$problem->id]['time']->forHumans(['short' => true]) }}</span>
                 @endif
+                </span>
             @else
                 -
             @endif
@@ -68,6 +71,3 @@
     @endforeach
     
     </table>
-    *: Not full mark
-    <br/>
-    **: Delay time
