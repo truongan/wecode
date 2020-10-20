@@ -19,12 +19,12 @@
 @endsection
 
 @section('content')
-<div class="card-group">
+<div class="card-group ">
 <div class="row">
 <div class="m-3">
-    <div class="card" >
+    <div class="card bg-dark text-light" >
       <i class="text-center card-img-top fas fa-cogs fa-2x p-3"></i>
-      <div class="card-body bg-light">
+      <div class="card-body bg-light text-dark">
         <small><strong class="card-title">SETTING</strong></small>
         <small><p  class="card-text">Chỉnh sửa và ...</p></small>
         <a href="{{ route('settings.index') }}" class="stretched-link"></a>
@@ -33,9 +33,9 @@
   </div>
     
   <div class="m-3">
-    <div class="card" >
+    <div class="card bg-dark text-light" >
       <i class="text-center card-img-top fas fa-users fa-2x p-3"></i>
-      <div class="card-body bg-light">
+      <div class="card-body bg-light text-dark">
         <small><strong class="card-title">USERS</strong></small>
         <small><p  class="card-text">Quản lý người dùng</p></small>
         <a href="{{ route('users.index') }}" class="stretched-link"></a>
@@ -44,9 +44,9 @@
   </div>
 
   {{-- <div class="m-3">
-    <div class="card" >
+    <div class="card bg-dark text-light" >
       <i class="text-center card-img-top fas fa-school fa-2x p-3"></i>
-      <div class="card-body bg-light">
+      <div class="card-body bg-light text-dark">
         <small><strong class="card-title">CLASSES</strong></small>
         <small><p  class="card-text">Quản lý lớp học</p></small>
         <a href="{{ route('lops.index') }}" class="stretched-link"></a>
@@ -55,9 +55,9 @@
   </div> --}}
 
   <div class="m-3">
-    <div class="card" >
+    <div class="card bg-dark text-light" >
       <i class="text-center card-img-top fas fa-laptop-code fa-2x p-3"></i>
-      <div class="card-body bg-light">
+      <div class="card-body bg-light text-dark">
         <small><strong class="card-title">LANGUAGES</strong></small>
         <small><p  class="card-text">Thiết lập ngôn ngữ lập trình</p></small>
         <a href="{{ route('languages.index') }}" class="stretched-link"></a>
@@ -66,9 +66,9 @@
   </div>
 
   <div class="m-3">
-    <div class="card" >
+    <div class="card bg-dark text-light" >
       <i class="text-center card-img-top fas fa-clipboard-list fa-2x p-3"></i>
-      <div class="card-body bg-light">
+      <div class="card-body bg-light text-dark">
         <small><strong class="card-title">PROBLEMS</strong></small>
         <small><p  class="card-text">Danh sách bài tập</p></small>
         <a href="{{ route('problems.index') }}" class="stretched-link"></a>
@@ -77,9 +77,9 @@
   </div>
 
   <div class="m-3">
-    <div class="card" >
+    <div class="card bg-dark text-light" >
       <i class="text-center card-img-top fas fa-tags fa-2x p-3"></i>
-      <div class="card-body bg-light">
+      <div class="card-body bg-light text-dark">
         <small><strong class="card-title">TAGS</strong></small>
         <small><p  class="card-text">Đánh đầu các dạng thuật toán</p></small>
         <a href="{{ route('tags.index') }}" class="stretched-link"></a>
@@ -88,9 +88,9 @@
   </div>
 
   <div class="m-3">
-    <div class="card" >
+    <div class="card bg-dark text-light" >
       <i class="text-center card-img-top fas fa-edit fa-2x p-3"></i>
-      <div class="card-body bg-light">
+      <div class="card-body bg-light text-dark">
         <small><strong class="card-title">EDIT BY HTML</strong></small>
         <small><p  class="card-text">Soạn văn bản trên web</p></small>
         <a href="{{ route('htmleditor') }}" class="stretched-link"></a>
@@ -99,9 +99,9 @@
   </div>
 
   <div class="m-3">
-    <div class="card" >
+    <div class="card bg-dark text-light" >
       <i class="text-center card-img-top fas fa-redo fa-2x p-3"></i>
-      <div class="card-body bg-light">
+      <div class="card-body bg-light text-dark">
         <small><strong class="card-title">Rejudge</strong></small>
         <small><p  class="card-text">Zậy đó</p></small>
         <a href="{{ route('submissions.rejudge_view') }}" class="stretched-link"></a>
@@ -110,9 +110,9 @@
   </div>
 
   <div class="m-3">
-    <div class="card" >
+    <div class="card bg-dark text-light" >
       <i class="text-center card-img-top fas fa-play fa-2x p-3"></i>
-      <div class="card-body bg-light">
+      <div class="card-body bg-light text-dark">
         <small><strong class="card-title">Submission Queue</strong></small>
         <small><p  class="card-text">Zậy đó</p></small>
         <a href="{{ route('queue.index') }}" class="stretched-link"></a>
@@ -121,9 +121,9 @@
   </div>
 
   <div class="m-3">
-    <div class="card" >
+    <div class="card bg-dark text-light" >
       <i class="text-center card-img-top fas fa-user-secret fa-2x p-3"></i>
-      <div class="card-body bg-light">
+      <div class="card-body bg-light text-dark">
         <small><strong class="card-title">Detect Similar Codes</strong></small>
         <small><p  class="card-text">Zậy đó</p></small>
         <a href="{{ route('moss.index' , Auth::user()->selected_assignment_id) }}" class="stretched-link"></a>
