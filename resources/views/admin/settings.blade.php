@@ -14,15 +14,8 @@
     @endforeach
 @endif
 
-@if ($form_status ?? '' == 'ok' )
-	<div class="alert alert-success">Settings updated successfully.</div>
-@endif
 
-@if(! ($defc ?? '') )
-	<div class="alert alert-danger">"Tester path" is not correct.</div>
-@endif 
-
-<div class="col-12">
+<div class="">
     <form action="{{ route('settings.update') }}" method="post">
 		@csrf
 		<h5>Display settings</h5><hr>

@@ -7,7 +7,7 @@
 
 @section('content')
 
-<div class="col">
+<div class="mx-n2">
   <p>
     Total submissions in queue: {{$queue->count()}}
   </p>

@@ -69,7 +69,7 @@ $(document).ready(function(){
 @endsection
 
 @section('content')
-<div class="col-12  d-flex flex-column">
+<div class="d-flex flex-column">
     {{-- {% for error in errors %}
         <p class="text-danger">{{ error|raw }}</p>
     {% endfor %} --}}

@@ -46,7 +46,7 @@
 </small>
 @endsection
 @section('content')
-<div class="row">
+<div class="mx-n2">
 	@if (isset($assignment->id) && $assignment->id == 0)
 	<p>No assignment is selected.</p>
 	@elseif (!isset($assignment->score_board) && in_array( Auth::user()->role->name, ['admin', 'head_instructor']))

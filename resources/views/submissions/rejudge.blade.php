@@ -6,7 +6,7 @@
 @section('title', 'Rejudge')
 
 @section('content')
-<div class="col-12">		
+<div class="row">		
 	<p>
 		Selected Assignment: <span>{{ $assignment->name }}</span>
 		<form action="{{ route('submissions.rejudge_all_problems_assignment') }}" method="POST">
