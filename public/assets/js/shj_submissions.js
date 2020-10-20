@@ -129,24 +129,23 @@ $(document).ready(function () {
 	$(".set_final").click(
 		function () {
 			var row = $(this).parents('tr');
-			var submit_id = row.data('s');
+			var submit_id = row.data('id');
 			var problem = row.data('p');
 			var username = row.data('u');
+
 			$.ajax({
 				type: 'POST',
 				url: site_url + '/submissions/select',
 				data: {
-					submit_id: submit_id,
-					problem: problem,
-					username: username,
-					assignment : row.data('a'),
-					wcj_csrf_name: shj.csrf_token
+					'submission': submit_id,
+
+					'_token': $('input[name=_token]').val(),
 				},
 				error: shj.loading_error,
 				success: function (response) {
 					if (response.done) {
 						$("tr[data-u='" + username + "'][data-p='" + problem + "'] i.set_final").removeClass('fa-check-circle color11').addClass('fa-circle');
-						$("tr[data-u='" + username + "'][data-p='" + problem + "'][data-s='" + submit_id + "'] i.set_final").removeClass('fa-circle').addClass('fa-check-circle color11');
+						row.find("i.set_final").removeClass('fa-circle').addClass('fa-check-circle color11');
 					}
 					else
 						shj.loading_failed(response.message);
@@ -175,7 +174,7 @@ function update_status(){
 				url: site_url + '/submissions/view_status',
 				data: {
 					submit_id: $(this).data('id'),
-				},
+				}, 
 				error: shj.loading_error,
 				success: function (response) {
 					response = JSON.parse(response);
@@ -190,7 +189,7 @@ function update_status(){
 						break;
 
 						case  'score' :
-							element = '<div class="btn ' + (response.fullmark ? 'btn-success' : 'btn-danger');
+							element = '<div class="btn ' + (response.pre_score == 10000 ? 'btn-success' : 'btn-danger');
 							element += '" data-type="result" >' + response.final_score + '</div>';
 							$.notify('Submission has been judged', {position: 'bottom right', className: 'success', autoHideDelay: 2000});
 

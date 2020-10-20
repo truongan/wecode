@@ -7,6 +7,8 @@
 
 @section('title_menu')
     {{-- Nếu là admin thì hiển thị --}}
+
+    <span class="title_menu_item"><a href="{{ route('users.index') }}" ><i class="fa fa-list-alt color6"></i> Users list</a></span>
     <span class="title_menu_item"><a href="https://github.com/truongan/wecode-judge/blob/docs/v1.4/users.md#add-users" target="_blank"><i class="fa fa-question-circle color6"></i> Help</a></span>
 @endsection
 
@@ -22,7 +24,7 @@
 		$("#add_users_button").click(function(){
 			$("#loading").css('display','inline');
 			$.post(
-					'/users/adds', 
+					"{{ route('users.add') }}",
 					// Chỗ ni bỏ cái đường link dẫn tới hàm add
 					{
 						'_token': $('meta[name=csrf-token]').attr('content'),
@@ -69,6 +71,6 @@
 <meta name="csrf-token" content="{!! Session::token() !!}">
 <div class="form-group col-12">
     <input type="submit" class="btn btn-primary" id="add_users_button" value="Add Users"/>
-    <span id="loading" style="display: none;"><img src="{{ asset('assets/images/loading.gif') }}" /> Adding users... Please wait</span>
+    <span id="loading" style="display: none;"><img src="{{ asset('images/loading.gif') }}" /> Adding users... Please wait</span>
 </div>
 @endsection

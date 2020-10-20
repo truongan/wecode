@@ -36,51 +36,52 @@ thead tr:after {
 @endsection
 
 @section('title_menu')
-    {{-- Nếu là admin thì hiển thị --}}
-  <span class="title_menu_item"><a href="https://github.com/truongan/wecode-judge/blob/docs/v1.4/users.md" target="_blank"><i class="fa fa-question-circle color6"></i> Help</a></span>
+  {{-- <span class="title_menu_item"><a href="https://github.com/truongan/wecode-judge/blob/docs/v1.4/users.md" target="_blank"><i class="fa fa-question-circle color6"></i> Help</a></span> --}}
   <span class="title_menu_item"><a href="{{ url('users/add_multiple') }}"><i class="fa fa-user-plus color11"></i> Add Users</a></span>
-	<span class="title_menu_item"><a href="{{ url('users/list_excel') }}"><i class="fa fa-download color9"></i> Excel</a></span>
+	{{-- <span class="title_menu_item"><a href="{{ url('users/list_excel') }}"><i class="fa fa-download color9"></i> Excel</a></span> --}}
 @endsection
 
 @section('content')
 <div class="row">
-  <div class="col">
-    <div class="table-responsive">
-      <table class="table table-striped table-bordered">
-        <thead class="thead-dark">
-          <tr>
-            <th>#</th>
-            <th>User ID</th>
-            <th>Username</th>
-            <th>Display Name</th>
-            <th>Email</th>
-            <th>Role</th>
-            <th>First Login</th>
-            <th>Last Login</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        @foreach ($users as $user)
-        <tr data-id="{{$user->id}}">
-          <td> {{$loop->iteration}} </td>
-          <td> {{$user->id}} </td>
-          <td id="un"> {{$user->username}} </td>
-          <td>{{$user->display_name}}</td>
-          <td>{{$user->email}}</td>
-          <td>{{$user->role->name}}</td>
-          <td>{{ $user->first_login_time ? $user->first_login_time->setTimezone($timezone)->format(DateTime::ISO8601) : 'Never'}}</td>
-          <td>{{ $user->last_login_time ? $user->last_login_time->setTimezone($timezone)->format(DateTime::ISO8601) : 'Never'}}</td>
-          <td>
-            <a title="Profile" href="{{ route('users.show', $user) }}" class = "fas fa-address-book fa-lg color0"></a>
-            <a title="Edit" href="{{ route('users.edit', $user) }}"><i class="fas fa-user-edit fa-lg color9"></i></a>
-            <a title="Submissions" href="{{ url('submissions/all/user/'.$user->username) }}"><i class="fa fa-bars fa-lg color12"></i></a>
-            <span title="Delete User" class="delete-btn delete_user pointer"><i title="Delete User" class="fa fa-user-times fa-lg color2"></i></span>
-            <span title="Delete Submissions" class="delete-btn delete_submissions pointer"><i class="far fa-trash-alt fa-lg color1"></i></span>
-          </td>
+  <div class="table-responsive">
+    <table class="table table-striped table-bordered">
+      <thead class="thead-dark">
+        <tr>
+          <th>#</th>
+          <th>User ID</th>
+          <th>Username</th>
+          <th>Display Name</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>First Login</th>
+          <th>Last Login</th>
+          <th>Actions</th>
         </tr>
-        @endforeach
-      </table>
-    </div>
+      </thead>
+      @foreach ($users as $user)
+      <tr data-id="{{$user->id}}">
+        <td> {{$loop->iteration}} </td>
+        <td> {{$user->id}} </td>
+        <td id="un"> {{$user->username}} </td>
+        <td>{{$user->display_name}}</td>
+        <td>{{$user->email}}</td>
+        <td>{{$user->role->name}}</td>
+        <td>
+          <small>{{ $user->first_login_time ? $user->first_login_time->setTimezone($settings['timezone'])->locale('en')->isoFormat('llll (UZZ)') : 'Never'}}</small>
+        </td>
+        <td>
+          <small>{{ $user->last_login_time ? $user->last_login_time->setTimezone($settings['timezone'])->locale('en')->isoFormat('llll (UZZ)') : 'Never'}} </small>
+        </td>
+        <td>
+          <a title="Profile" href="{{ route('users.show', $user) }}" class = "fas fa-address-book fa-lg color0"></a>
+          <a title="Edit" href="{{ route('users.edit', $user) }}"><i class="fas fa-user-edit fa-lg color9"></i></a>
+          <a title="Submissions" href="{{ url('submissions/all/user/'.$user->username) }}"><i class="fa fa-bars fa-lg color12"></i></a>
+          <span title="Delete User" class="delete-btn delete_user pointer"><i title="Delete User" class="fa fa-user-times fa-lg color2"></i></span>
+          <span title="Delete Submissions" class="delete-btn delete_submissions pointer"><i class="far fa-trash-alt fa-lg color1"></i></span>
+        </td>
+      </tr>
+      @endforeach
+    </table>
   </div>
 </div>
 

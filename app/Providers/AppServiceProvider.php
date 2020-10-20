@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-
+use Illuminate\Pagination;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -31,6 +31,12 @@ class AppServiceProvider extends ServiceProvider
             \URL::forceScheme('https');
             //use \URL:forceSchema('https') if you use laravel < 5.4
         }
-        
+
+        //I courtersy of https://github.com/laravel/framework/issues/15361#issuecomment-414023330
+        \Illuminate\Pagination\AbstractPaginator::currentPathResolver(function () {
+            /** @var \Illuminate\Routing\UrlGenerator $url */
+           $url = app('url');
+           return $url->current();
+        });
     }
 }

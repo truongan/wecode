@@ -1,6 +1,6 @@
 <nav id="mainNav" class="mainNav navbar navbar-expand-lg navbar-dark fixed-top color-{{ $selected }} bg-dark">
         <div  class="navbar-brand">
-            <a href="{{ url('/home') }}">
+            <a href="{{ route('home') }}">
                 <img src="{{ asset('images/logo.png') }}" height="30px" />
             </a>
             {{ $settings['site_name'] }}
@@ -102,7 +102,7 @@
             <div class="navbar-nav">
                 
                     @if(isset(Auth::user()->selected_assignment->name))
-                        <div class="pl-3 pr-3 pt-2 text-light" style="height: 40.8px;background-color:#6c757d;">
+                        <div class="pl-3 pr-3 pt-2 badge-secondary padge-pill" style="height: 40.8px;">
                             {{Auth::user()->selected_assignment->name}}  
                         </div>
                     @endif

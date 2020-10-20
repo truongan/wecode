@@ -30,7 +30,15 @@ class problem_controller extends Controller
     {
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
             abort(404);  
-        return view('problems.list',['problems'=>Problem::latest()->get()]); 
+        
+        $all_problem = Problem::latest()->with('assignments', 'submissions','languages')->paginate(Setting::get('results_per_page_all'));
+
+        foreach ($all_problem as $p){
+            $p->total_submit = $p->submissions->count();
+            $p->accepted_submit = $p->submissions->filter(function($item,$key){return $item->pre_score == 10000;})->count();
+            $p->ratio = round($p->accepted_submit / max($p->total_submit,1), 2)*100;
+        }
+        return view('problems.list',['problems'=>$all_problem]); 
     }
 
     /**
@@ -44,11 +52,11 @@ class problem_controller extends Controller
             abort(404);  
         
         return view('problems.create', ['problem'=>NULL,
-                                      'all_languages'=>Language::all(),
+                                      'all_languages'=>Language::orderBy('sorting')->get(),
                                       'tree_dump'=>"not found",
                                       'messages'=>[],
                                       'languages'=>[],
-                                      'max_file_uploads'=>1000,    
+                                      'max_file_uploads'=> ini_get('max_file_uploads'),    
                                       'all_tags' => Tag::all(),
                                       'tags' => [],
                                   ]);
@@ -146,20 +154,15 @@ class problem_controller extends Controller
     {
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
             abort(404);
-        $lang_of_problems = $problem->languages;
-        $languages = [];
-        if ($lang_of_problems != [])
-            foreach($lang_of_problems as $lang)
-            {
-                $languages[$lang->id] = $lang;
-            }
+        $lang_of_problems = $problem->languages->keyBy('id');
+
         $tags = $problem->tags->keyBy('id');
         return view('problems.create', ['problem'=>$problem,
-                                      'all_languages'=>Language::all(),
+                                      'all_languages'=>Language::orderBy('sorting')->get(),
                                       'messages'=>[],  
-                                      'languages'=>$languages,
+                                      'languages'=>$lang_of_problems,
                                       'tree_dump'=>shell_exec("tree -h " . $this->get_directory_path($problem->id)),  
-                                      'max_file_uploads'=>1000,
+                                      'max_file_uploads'=> ini_get('max_file_uploads'),
                                       'all_tags' => Tag::all(),
                                       'tags' => $tags,
                                   ]);
@@ -286,7 +289,6 @@ class problem_controller extends Controller
                 $this->delete_problem($id);
                 $json_result = array('done' => 1);
             }
-            // dd($id);
 
         }
         
@@ -396,9 +398,10 @@ class problem_controller extends Controller
 
     private function clean_up_old_problem_dir($problem_dir){
         $remove = 
-        " rm -rf $problem_dir/in $problem_dir/out $problem_dir/tester*"
-            ."  $problem_dir/template.* "
-            ."  $problem_dir/desc.*  $problem_dir/*.pdf; done";
+        " rm -rf $problem_dir/*";
+        // " rm -rf $problem_dir/in $problem_dir/out $problem_dir/tester*"
+        //     ."  $problem_dir/template.* "
+        //     ."  $problem_dir/desc.*  $problem_dir/*.pdf; done";
         //echo "cp -R $tmp_dir/* $problem_dir;";            
         //echo $remove; die();          
         shell_exec($remove); 
@@ -430,7 +433,6 @@ class problem_controller extends Controller
         $cmd = 'rm -rf '.$this->get_directory_path($id);
       
          // If you want to set transaction time, you can append the new argument in the transaction function
-        // dd($id);
         DB::beginTransaction();  
 
         Submission::where('problem_id', $id)->delete();
@@ -537,6 +539,7 @@ class problem_controller extends Controller
         $tmp_dir_name = "shj_tmp_directory";
         $tmp_dir = "$assignments_root/$tmp_dir_name";
         shell_exec("rm -rf $tmp_dir; mkdir $tmp_dir;");
+        // dd("rm -rf $tmp_dir; mkdir $tmp_dir;");
         
         
         foreach($request->tests_dir as $item)
@@ -552,7 +555,8 @@ class problem_controller extends Controller
         {
             $messages[] = "Your test folder doesn't have desc.html file for problem description";
         }
-
+        $in = $out = $files = array();
+        // dd($data);
         for($i = 0; $i<count($data);$i++)
         {
             // var_dump($data[$i]);
@@ -573,6 +577,7 @@ class problem_controller extends Controller
         if (!isset($files['desc.html'])){
             $messages[] = "Your test folder doesn't have desc.html file for problem description";
         }
+
     
         for($i = 1; $i < count($in); $i++){
             if (!isset($in["input$i.txt"])){

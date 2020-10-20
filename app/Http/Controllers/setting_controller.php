@@ -46,8 +46,8 @@ class setting_controller extends Controller
             $keys=[
                  'site_name',
                  'timezone',
-                 'tester_path',
-                 'assignments_root',
+                //  'tester_path',
+                //  'assignments_root',
                  'file_size_limit',
                  'output_size_limit',
                 //  'queue_is_working',
@@ -70,8 +70,8 @@ class setting_controller extends Controller
                  'results_per_page_final',
                  'week_start',
                  'theme',
-             'concurent_queue_process',
-             'default_language_number',
+                'concurent_queue_process',
+                'default_language_number',
             ];
             // var_dump($submitted);die();
             if (!isset($submitted['enable_registration']))  $submitted['enable_registration'] = 0;

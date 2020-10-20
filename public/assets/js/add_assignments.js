@@ -18,10 +18,7 @@ function update_problem_count(){
 }
 
 $(document).ready(function(){
-	$("form").submit(function(event){	
-		$("#start_time").val($("#start_date").val() + " " + $("#start__time").val());
-		$("#finish_time").val($("#finish_date").val() + " " + $("#finish__time").val());
-	});
+
 	var a = Sortable.create(problem_list, {
 		handle : '.list_handle',
 		ghostClass: 'list-group-item-secondary',

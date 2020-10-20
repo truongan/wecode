@@ -28,21 +28,19 @@
 	<table class="table table-striped table-bordered">
 		<thead class="thead-dark">
 			<tr>
-				<th>#</th>
 				<th>ID</th>
 				<th style="width: 20%">Name</th>
 				<th style="width: 20%">Note</th>
 				<th>Tags</th>
-				<th>Languages</th>
-				<th>Used in assignmnets</th>
-				<th>diff<br/>command</th>
-				<th>diff<br/>argument</th>
+				<th>Lang</th>
+				<th>Assignmnets</th>
+				<th>Submissions</th>
+				<th>diff<br/>arg</th>
 				<th>Tools</th>
 			</tr>
 		</thead>
 	  @foreach ($problems as $item)
 		<tr data-id="{{$item->id}}">
-			<td> {{$loop->index}}</td>
 			<td>{{ $item->id}}</td>
 			<td><a href="{{ url("problems/$item->id") }}">{{ $item->name }}</a></td>
 			<td>{{$item->admin_note}}</td>
@@ -53,15 +51,20 @@
 			</td>
 			<td>
 			  @foreach ($item->languages as $language_name)
-			  <span class="badge badge-pill badge-secondary">{{$language_name->name}}</span>
+			  <span class="btn btn-sm btn-secondary mb-1">{{$language_name->name}} <span class="badge badge-pill badge-info">{{$language_name->pivot->time_limit/1000}}s</span><span class="badge badge-pill badge-info">{{$language_name->pivot->memory_limit/1000}}MB</span></span>
 			  @endforeach
 			</td>
 			<td>
-				{{-- {% for ass_id in item.assignments %}
-					<a href="{{ site_url("assignments/edit/#{ass_id}") }}" class="badge badge-primary">asgmt {{ ass_id}}</a>
-				{% endfor %} --}}
+				@foreach ($item->assignments as $assignment)
+					<a href="{{ route('submissions.index', ['assignment_id' => $assignment->id, 'problem_id' => $item->id, 'user_id' => 'all' , 'choose' => 'all']) }}" class="btn btn-primary">{{$assignment->name}}</span></a>
+				@endforeach
+
 			</td>
-			<td>{{ $item->diff_cmd }}</td>
+			<td>
+				<span class="text-success">{{ $item->accepted_submit }}</span> 
+				/
+				<span class="text-info">{{ $item->total_submit }} ({{ $item->ratio }}%) </span>
+			</td>
 			<td>{{ $item->diff_arg }}</td>
 			
 			<td>
@@ -78,6 +81,7 @@
 		</tr>
 	  @endforeach
 	</table>
+		<div class=" d-flex justify-content-center">{{$problems->links(null, ['class'=>'justify-content-center'])}}</div>
 	</div>
 </div>
 
@@ -135,10 +139,11 @@
 	  $("#problem_delete").modal("show");
 	});
 
-	$("table").DataTable({
-		"pageLength": 10,
-		"lengthMenu": [ [10, 20, 30, 50, -1], [10, 20, 30, 50, "All"] ]
-	});
+	{{-- $("table").DataTable({
+		"pageLength": 30,
+		"order":['0', 'desc'],
+		"lengthMenu": [ [10, 30, 90, 200, -1], [10, 30, 90, 200, "All"] ]
+	}); --}}
   });
 </script>
 @endsection

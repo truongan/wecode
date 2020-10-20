@@ -26,7 +26,8 @@ db=''
 db_password=''
 base_url=''
 site_name=''
-while getopts "hi:o:u:p:d:n:" ops ; do
+default_admin_name=''
+while getopts "hi:o:u:p:d:n:a:" ops ; do
 	case "${ops}" in
 		h)	usage ;;
 		i)	install=${OPTARG};;
@@ -35,6 +36,7 @@ while getopts "hi:o:u:p:d:n:" ops ; do
 		p)	db_password=${OPTARG};;
 		d)	db=${OPTARG};;
 		n)  site_name=${OPTARG};;
+		a)  default_admin_name=${OPTARG};;
 		*)	usage; exit 1;;
 	esac
 done
@@ -50,7 +52,7 @@ if [ "$site_name" = "" ]; then
 	site_name="Wecode-Judge"
 else
 	if [ "$base_url" = "" ] ; then
-		base_url="https://khmt.uit.edu.vn/laptrinh/`echo $site_name | tr '[:upper:]' '[:lower:]'`/"
+		base_url="https://khmt.uit.edu.vn/wecode/`echo $site_name | tr '[:upper:]' '[:lower:]'`/"
 	fi
 fi
 
@@ -89,8 +91,8 @@ cat << EOF
 EOF
 
 cd $install
-git clone  'https://github.com/truongan/wecode-judge' .
-git checkout working-updateci
+git clone  'https://github.com/truongan/wecode' .
+#git checkout working-updateci
 
 
 cd $public
@@ -103,41 +105,13 @@ else
 	then
 	  	rm index.html index.php .htacess
 	  	rm -rf ./assets
-		ln -s $install/index.php $install/assets $install/.htaccess $install/.user.ini .
+		ln -s $install/public/* . 
+		ln -s $install/public/.* . 
 	else
 		echo "Abort"
 		exit 0
 	fi
 fi
-echo sed -i "s@system_path = 'system'@system_path = '$install/system'@g" index.php
-sed -i "s@system_path = 'system'@system_path = '$install/system'@g" index.php
-sed -i "s@application_folder = 'application'@application_folder = '$install/application'@g" index.php
 
-cd $install/application/config
-cp config.php.example config.php
-cp database.php.example database.php
-mkdir $install/application/session/
-
-echo sed -i "s@base_url'] = ''@base_url'] = '$base_url'@g" config.php
-sed -i "s@base_url'] = ''@base_url'] = '$base_url'@g" config.php
-sed -i "s@index_page'] = 'index.php'@index_page'] = ''@g" config.php
-sed -i "s@sess_save_path'] = NULL@sess_save_path'] = '$install/application/session/'@g" config.php
-
-#UIT Related settings
-#sed -i "s@cookie_path']		= '/'@cookie_path']		= '/laptrinh/$lw_site_name/'@g" config.php
-#cp /opt/Login.php $install/application/controllers/Login.php
-
-
-
-pwd
-sed -i "s/homestead/$db_user/g" database.php
-sed -i "s/secret/$db_password/g" database.php
-echo sed -i "s/sharif/$db/g" database.php
-sed -i "s/sharif/$db/g" database.php
-
-cd $install/application/controllers
-echo sed -i "s@_sitenametobereplace_@$site_name@g" Install.php
-sed -i "s@_sitenametobereplace_@$site_name@g" Install.php
-
-#Add default admin user, very dangerous and should not be enable by default
-#php $install/index.php  abc abc%40def.com random_string false
+cd $install
+$install/install.sh   -a $default_admin_name  -u $db_user -p $db_password -s "$base_url"

@@ -1,4 +1,6 @@
 @php($selected = 'settings')
+@php($edit = Route::currentRouteName() == 'problems.edit')
+
 @extends('layouts.app')
 @section('head_title','New Problem')
 @section('icon', 'fas fa-plus-square')
@@ -54,6 +56,13 @@
 	$(document).ready(function(){
 		tabOverride.set(document.getElementsByTagName('textarea'));
 		$('.js-example-basic-multiple').select2();
+		@if (!$edit)
+		$lang = document.querySelectorAll('.add_language');
+		for(var i = 0; i < {{$settings['default_language_number']}} ; i++){
+			if (i > $lang.length) break;
+			$lang[i].click();
+		}
+		@endif
 	});
 	$(".js-example-tokenizer").select2({
     tags: true,
@@ -74,7 +83,6 @@
 		</p>
 	@endforeach
 	
-	@php($edit = Route::currentRouteName() == 'problems.edit')
 	@if ($edit)
 	<p>
 		<i class="fa fa-info-circle fa-lg color8"></i> If you don't want to change tests or pdf file, just do not upload its file.

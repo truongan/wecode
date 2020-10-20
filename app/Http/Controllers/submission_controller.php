@@ -7,6 +7,7 @@ use App\Assignment;
 use App\Problem;
 use App\Queue_item;
 use App\Language;
+use App\Scoreboard;
 use App\Setting;
 use Redirect;
 use Illuminate\Http\Request;
@@ -66,10 +67,12 @@ class submission_controller extends Controller
 			$submissions = $submissions->where('problem_id',intval($problem_id));
 		}
 		
-		$submissions = $submissions->with(['language','user'])->latest()->get();
+		$submissions = $submissions->with(['language','user'])->latest()->paginate(Setting::get('results_per_page_all'));
 		$all_problems = Assignment::find($assignment_id)->problems->keyBy('id');
-		foreach ($submissions as $submission)
-			$this->status($submission);
+		foreach ($submissions as &$submission){
+			$submission->delay = $assignment->finish_time->diffAsCarbonInterval($submission->created_at, false);
+			$this->_status($submission, $all_problems);
+		}
 
 
 		return view('submissions.list',['submissions' => $submissions, 'assignment' => $assignment, 'user_id' => $user_id, 'problem_id' => $problem_id, 'choose' => $choose, 'all_problems' => $all_problems]); 
@@ -116,11 +119,11 @@ class submission_controller extends Controller
 
 		$file_name = "solution-upload-".($submission->assignment->total_submits+1);
 		
-		$path = Storage::disk('assignment_root')->path();
-		$user_dir = substr($user_dir, len($path));
+		$path = Storage::disk('assignment_root')->path('');
+		$user_dir = substr($user_dir, strlen($path));
 
 		$path = $request->userfile->storeAs($user_dir, $file_name.".".$submission->language->extension, 'assignment_root');
-
+		// dd($path);
 		if ($path)
 		{      
 			$this->add_to_queue($submission, $submission->assignment, $file_name);   
@@ -294,12 +297,16 @@ class submission_controller extends Controller
 		$language = Language::find($request->language);
 
 		$coefficient = 100;
-		if ($assignment->id == 0) //Practice 
+		if ($assignment->id == 0) {
+			//Practice 
 			if (!in_array( Auth::user()->role->name, ['admin', 'head_instructor']) && $problem->allow_practice!=1)
 				abort(403,'This problem is not open for practice');
+		}
 		else
 		{
-			$coefficient = $this->eval_coefficient($assignment);
+
+			$coefficient = $assignment->eval_coefficient();
+
 
 			$a = $assignment->can_submit(Auth::user());
 			if(!$a->can_submit) abort(403, $a->error_message);
@@ -307,7 +314,6 @@ class submission_controller extends Controller
 			if ($this->in_queue(Auth::user()->id, $assignment->id, $problem->id))
 				abort(403,'You have already submitted for this problem. Your last submission is still in queue.');
 
-			
 			if ($problem->languages->where('id',$language->id)->count() == 0)
 				abort(403,'This file type is not allowed for this problem.');
 		}
@@ -347,13 +353,15 @@ class submission_controller extends Controller
 		$submission_curr = Submission::find($request->submission);
 		if (!$submission_curr) abort(403,"Submission not found");
 
-		$submission_final = Submission::where(array('user_id' => Auth::user()->id, 'assignment_id' => $submission_curr->assignment_id, 'problem_id' => $submission_curr->problem_id, 'is_final' => 1))->get();
-
-		$submission_final->is_final = 0;
-		$submission_final->save();
+		$submission_final = Submission::where(array('user_id' => Auth::user()->id, 'assignment_id' => $submission_curr->assignment_id, 'problem_id' => $submission_curr->problem_id, 'is_final' => 1))->update(['is_final' => 0]);
 
 		$submission_curr->is_final = 1;
 		$submission_curr->save();
+
+		Scoreboard::update_scoreboard( $submission_curr->assignment_id	);
+		return response()->json(
+			['done' => 1]
+		);
 	}
 	public function view_code()
 	{
@@ -392,29 +400,16 @@ class submission_controller extends Controller
 		return $result;
 	}
 
-	private function eval_coefficient($assignment)
+
+	private function _status(&$submission, $all_problems = null)
 	{
-		ob_start();
-		try 
-		{
-			eval($assignment->late_rule);
-		}
-		catch (\Throwable $e) 
-		{
-			$coefficient = "error";
-		}
-		if (!isset($coefficient))
-			$coefficient = "error";
-		ob_end_clean();
-		return $coefficient;
-	}
-	private function status(&$submission)
-	{
+		if ($all_problems == null) $all_problems = $submission->assignment->problems->keyBy('id');
+//If we can't find the assignment's score for problem (in case of practice), default to 100
 		$score = ceil($submission->pre_score*
-							($submission->assignment->problems[$submission->problem_id]->pivot->score??0)
+							($all_problems[$submission->problem_id]->pivot->score??100)
 							/10000);
 		if ($submission->coefficient == 'error')
-			$submission->final_score = 0;
+			$submission->final_score = $score;
 		else
 			$submission->final_score = ceil($score*$submission->coefficient/100);
 	}
@@ -428,7 +423,7 @@ class submission_controller extends Controller
 		if (!$submission) abort(403,"Submission not found");
 		$this->_do_access_check($submission);
 
-		$this->status($submission);
+		$this->_status($submission);
 		
 		echo json_encode($submission);
 		

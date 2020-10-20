@@ -1,7 +1,6 @@
 @extends('layouts.app')
 @section('head_title','Assignments')
 @section('icon', 'fas fa-folder-open')
-
 @section('title', 'Assignments')
 
 @section('other_assets')
@@ -36,11 +35,11 @@
 	<table class="wecode_table table table-striped table-bordered">
 		<thead class="thead-dark">
 			<tr>
-				<th>#</th>
+				<th>ID</th>
 				<th><small>Select</small></th>
 				<th>Class</th>
 				<th>Name</th>
-				<th><small>Submissions</small></th>
+				<th><small>Submit</small></th>
 				<th>Coef</th>
 				<th>Start</th>
 				<th>Finish</th>
@@ -58,9 +57,9 @@
 				@continue
 			@endif
 		<tr data-id="{{$assignment->id}}">
-			<td>{{$loop->iteration}} </td>
+			<td>{{$assignment->id}} </td>
 			<td>
-				<span data-toggle="tooltip" title="View an assignment's problem or submission will set it as your default assignment">
+				<span title="View an assignment's problem or submission will set it as your default assignment">
 					<i  class=" far {{ (isset(Auth::user()->selected_assignment->id) && $assignment->id == Auth::user()->selected_assignment->id) ? 'fa-check-square color6' : 'fa-square' }} fa-2x" data-id="{{ $assignment->id }}"></i>
 				</span>
 			</td>
@@ -70,7 +69,7 @@
 				@endforeach
 			</td>
 			<td>
-				<a href="{{ route('assignments.show',['assignment'=>$assignment,'problem_id'=>$assignment->problems->first()->id??0]) }}" data-toggle="tooltip" title="Click to view problem(s)">
+				<a href="{{ route('assignments.show',['assignment'=>$assignment,'problem_id'=>$assignment->problems->first()->id??0]) }}" title="Click to view problem(s)">
 					<strong>{{ $assignment->name }}</strong>
 					<br/>
 					({{ $assignment->no_of_problems }} problems)
@@ -78,12 +77,12 @@
 			</td>
 			<td>
 				@if ( in_array( Auth::user()->role->name, ['student']) )
-					<a href="{{ route('submissions.index', [$assignment->id, Auth::user()->id, 'all', 'all'])}}" data-toggle="tooltip" title="View all submissions">
-						<small>{{$assignment->total_submits}} submission{{ $assignment->total_submits > 1 ? 's' : ''}}</small>
+					<a href="{{ route('submissions.index', [$assignment->id, Auth::user()->id, 'all', 'all'])}}" title="View all submissions">
+						<small>{{$assignment->total_submits}} </small>
 					</a>
 				@else
-					<a href="{{ route('submissions.index', [$assignment->id, 'all', 'all', 'all'])}}" data-toggle="tooltip" title="View all submissions">
-						<small>{{$assignment->total_submits}} submission{{ $assignment->total_submits > 1 ? 's' : ''}}</small>
+					<a href="{{ route('submissions.index', [$assignment->id, 'all', 'all', 'all'])}}" title="View all submissions">
+						<small>{{$assignment->total_submits}} </small>
 					</a>
 				@endif
 			</td>
@@ -91,20 +90,20 @@
 				@if ($assignment->finished)
 					<span style="color: red;">Finished</span>
 				@else
-					@if($assignment->coefficient != "error")
-						{{$assignment->coefficient}}%
-					@else
+					@if($assignment->eval_coefficient() === "error")
 						<span style="color: red;">! Error</span>
+					@else
+						{{$assignment->coefficient}}%
 					@endif
 				@endif
 			</td>
-			<td>{{$assignment->start_time}}</td>
-			<td>{{$assignment->finish_time}}</td>
+			<td><small>{{$assignment->start_time->setTimezone($settings['timezone'])->locale('en')->isoFormat('llll (UZZ)') }}</small></td>
+			<td><small>{{$assignment->finish_time->setTimezone($settings['timezone'])->locale('en')->isoFormat('llll (UZZ)') }}</small></td>
 			<td>
 				@if ($assignment->score_board)
-					<a href="{{ url("scoreboard/full/$assignment->id")}}" data-toggle="tooltip" title="Click to viewa assignment's scoreboard">View<i class="fas fa-external-link-alt"></i></a>
+					<a href="{{ url("scoreboard/full/$assignment->id")}}" title="Click to viewa assignment's scoreboard">View<i class="fas fa-external-link-alt"></i></a>
 				@else
-					<a href="{{ url("scoreboard/full/$assignment->id")}}"  data-toggle="tooltip" title="Scoreboard closed, admin view only" ><span class="text-secondary">View<i class="fas fa-external-link-alt "></i></span></a>
+					<a href="{{ url("scoreboard/full/$assignment->id")}}"  title="Scoreboard closed, admin view only" ><span class="text-secondary">View<i class="fas fa-external-link-alt "></i></span></a>
 				@endif
 			</td>
 			<td>
@@ -206,7 +205,8 @@ $(document).ready(function () {
 	});
 
     $("table").DataTable({
-		"pageLength": 10,
+		"pageLength": 30,
+		"order":['0', 'desc'],
 		"lengthMenu": [ [10, 20, 30, 50, -1], [10, 20, 30, 50, "All"] ]
 	});
 });

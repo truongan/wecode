@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Assignment;
 use App\Setting;
 use App\Problem;
@@ -57,20 +58,9 @@ class assignment_controller extends Controller
             $extra_time = $assignment->extra_time;
             $delay = strtotime(date("Y-m-d H:i:s")) - strtotime($assignment->finish_time);
             $submit_time = strtotime(date("Y-m-d H:i:s")) - strtotime($assignment->start_time);
-            ob_start();
-            try 
-            {
-                eval($assignment->late_rule);
-            }
-            catch (\Throwable $e) 
-            {
-                $coefficient = "error";
-            }
-            if (!isset($coefficient))
-                $coefficient = "error";
-            ob_end_clean();
-            $assignment->coefficient = $coefficient;
-            $assignment->finished = ($assignment->start_time < $assignment->finish_time &&  $delay > $extra_time);
+
+            $assignment->coefficient = $assignment->eval_coefficient();// $coefficient;
+            $assignment->finished = $assignment->is_finished();
             $assignment->no_of_problems = $assignment->problems->count();
         }
         return view('assignments.list',['assignments'=> $assignments, 'selected' => 'assignments']); 
@@ -90,7 +80,7 @@ class assignment_controller extends Controller
 
         $problems[-1] = $this->dummy_problem();
 
-        return view('assignments.create',['all_problems' => Problem::all(), 'all_lops' => Lop::all(), 'lops' => [], 'messages' => [], 'problems' => $problems, 'selected' => 'assignments']);
+        return view('assignments.create',['all_problems' => Problem::latest()->get(), 'all_lops' => Lop::latest()->get(), 'lops' => [], 'messages' => [], 'problems' => $problems, 'selected' => 'assignments']);
     }
 
 
@@ -109,8 +99,10 @@ class assignment_controller extends Controller
         }
         $request['extra_time'] = $extra_time;
 
-        $request['start_time'] = date('Y-m-d H:i:s', strtotime((string)$request['start_time_date'] . " " .(string)date('H:i:s', strtotime($request['start_time_time']))));
-        $request['finish_time'] = date('Y-m-d H:i:s', strtotime((string)$request['finish_time_date'] . " " .(string)date('H:i:s', strtotime($request['finish_time_time']))));
+        $zone = Carbon::now()->getTimezone();
+
+        $request['start_time'] = (new Carbon($request['start_time_date'] . ' ' . $request['start_time_time'] . ' ' . Setting::get('timezone')))->setTimezone($zone);
+        $request['finish_time'] = (new Carbon($request['finish_time_date'] . ' ' . $request['finish_time_time'] . ' ' . Setting::get('timezone')))->setTimezone($zone);
       
     }
 
@@ -189,7 +181,6 @@ class assignment_controller extends Controller
             'sum_score' => 0
         );
         
-        $assignment = Assignment::find($assignment_id);
        
         $check = False;
         foreach($assignment->problems as $item)
@@ -221,7 +212,7 @@ class assignment_controller extends Controller
                 break;
             }
            
-            if (! $assignment->started()){
+            if (! $assignment->started() && in_array( Auth::user()->role->name, ['student']) ){
 				$data['error'] = "selected assignment hasn't started yet";
 				break;
             }
@@ -316,10 +307,10 @@ class assignment_controller extends Controller
         if ( !in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
             abort(403,'You do not have permission to edit assignment');
         $problems = [];
-        $a = $assignment->problems()->orderBy('ordering')->get()->push($this->dummy_problem());
-        foreach($a as $i){
-            $problems[$i->id] = $i;
-        }
+        $problems = $assignment->problems()->orderBy('ordering')->get()->push($this->dummy_problem())->keyBy('id');
+        // foreach($a as $i){
+        //     $problems[$i->id] = $i;
+        // }
 
         $lops = array();
         $b = $assignment->lops;
@@ -329,7 +320,7 @@ class assignment_controller extends Controller
                 $lops[$i->id] = $i;
             }
         }
-        return view('assignments.create',['assignment' => $assignment, 'all_problems' => Problem::all(), 'messages' => [], 'problems' => $problems, 'all_lops' => Lop::all(), 'lops' => $lops, 'selected' => 'assignments']);
+        return view('assignments.create',['assignment' => $assignment, 'all_problems' => Problem::latest()->get(), 'messages' => [], 'problems' => $problems, 'all_lops' => Lop::latest()->get(), 'lops' => $lops, 'selected' => 'assignments']);
     }
 
     /**
@@ -388,6 +379,8 @@ class assignment_controller extends Controller
                 $assignment->lops()->attach($id);
             }
         }
+        $assignment->update_submissions_coefficient();
+        Scoreboard::update_scoreboard($assignment->id);
 
         return redirect('assignments');
     }

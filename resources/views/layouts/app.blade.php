@@ -73,7 +73,7 @@
         shj.time = new Date();
 
         
-        shj.finish_time = new Date("{!! (Auth::user()->selected_assignment->finish_time)?? now() !!}"); 
+        shj.finish_time = new Date("{!! (Auth::user()->selected_assignment->finish_time->format(DateTime::ISO8601))?? now() !!}"); 
         shj.extra_time = {!! (Auth::user()->selected_assignment->extra_time) ?? 0 !!}; 
         shj.color_scheme = 'github';
     </script>

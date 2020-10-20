@@ -19,6 +19,9 @@
 @section('title_menu')
 <span class="title_menu_item">
 	<a href="https://github.com/truongan/wecode-judge/blob/docs/v1.4/add_assignment.md" target="_blank"><i class="fa fa-question-circle color1"></i> Help</a>
+	@if (Route::currentRouteName() == 'assignments.edit')
+	<a href="{{ route('submissions.index', ['assignment_id' => $assignment->id, 'problem_id' => 'all', 'user_id' =>'all', 'choose' => 'all']) }}"> <i class="fa fa-list color2"></i> Submissions list</a>
+	@endif
 </span>
 @endsection
 
@@ -42,7 +45,7 @@
 @section('content')
 
 
-<div class="col">
+<div class="row">
 	{{-- {% set msgclasses = {'text-success': 'text-success', 'text-info': 'text-warning', 'text-danger': 'text-danger'} %} --}}
 	{{-- {% for message in messages %}
 		<p class="{{ msgclasses[message.type] }}">{{ message.text }}</p>
@@ -91,10 +94,10 @@
 							<input id="start_time" type="hidden" name="start_time" class="form-control" value="" />
 							<div class="form-row">
 								<div class="col-xl-7">
-									<input id="start_time_date" type="date" name="start_time_date" class="form-control" value="{{ $edit ? date('Y-m-d', strtotime($assignment->start_time)) : old('start_time_date') }}" />
+									<input id="start_time_date" type="date" name="start_time_date" class="form-control" value="{{ $edit ? $assignment->start_time->setTimezone($settings['timezone'])->isoFormat('Y-M-D')  : old('start_time_date') }}" />
 								</div>
 								<div class="col-xl-5">
-									<input id="start_time_time" type="time" name="start_time_time" class="form-control" value="{{ $edit ? date('H:i', strtotime($assignment->start_time)) : old('start_time_time',0) }}" />
+									<input id="start_time_time" type="time" name="start_time_time" class="form-control" value="{{ $edit ? $assignment->start_time->setTimezone($settings['timezone'])->isoFormat('HH:mm')  : old('start_time_time',0) }}" />
 								</div>
 							</div>
 							{{-- {{ form_error('start_time', '<div class="alert alert-danger">', '</div>') }} --}}
@@ -113,10 +116,10 @@
 							<input id="finish_time" type="hidden" name="finish_time" class="form-control" value="" />
 							<div class="form-row">
 								<div class="col-xl-7">
-									<input id="finish_time_date" type="date" name="finish_time_date" class="form-control" value="{{ $edit ? date('Y-m-d', strtotime($assignment->finish_time)) : old('finish_time_date') }}" />
+									<input id="finish_time_date" type="date" name="finish_time_date" class="form-control" value="{{ $edit ? $assignment->finish_time->setTimezone($settings['timezone'])->isoFormat('Y-M-D') : old('finish_time_date') }}" />
 								</div>
 								<div class="col-xl-5">
-									<input id="finish_time_time" type="time" name="finish_time_time" class="form-control" value="{{ $edit ? date('H:i', strtotime($assignment->finish_time)) : old('finish_time_time') }}" />
+									<input id="finish_time_time" type="time" name="finish_time_time" class="form-control" value="{{ $edit ? $assignment->finish_time->setTimezone($settings['timezone'])->isoFormat('HH:mm') : old('finish_time_time') }}" />
 								</div>
 							</div>
 							{{-- {{ form_error('finish_time', '<div class="alert alert-danger">', '</div>') }} --}}

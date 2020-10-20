@@ -28,7 +28,7 @@ class installation_seeding extends Seeder
                 array('key' => 'enable_py3_shield',      'value' => '0'),
                 array('key' => 'enable_java_policy',     'value' => '0'),
                 array('key' => 'enable_log',             'value' => '1'),
-                array('key' => 'submit_penalty',         'value' => '300'),
+                array('key' => 'submit_penalty',         'value' => '1200'),
                 array('key' => 'enable_registration',    'value' => '0'),
                 array('key' => 'registration_code',      'value' => '0'),
                 array('key' => 'mail_from',              'value' => 'wcj@example.com'),

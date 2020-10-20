@@ -6,9 +6,9 @@
             <th>Name</th>
             @foreach ($problems as $problem)
             <th>
-                <a class="small" href="#">{{ $problem->pivot->problem_name }}</a>
+                <a class="small" href="{{ route('submissions.index', ['assignment_id' => $assignment_id, 'problem_id' => $problem->id, 'user_id' => 'all' , 'choose' => 'final']) }}">{{ $problem->pivot->problem_name }}</a>
                 <br>
-                <a class="text-light" href="#">{{ $problem->pivot->score }}</a>
+                <a class="text-light" href="{{ route('submissions.index', ['assignment_id' => $assignment_id, 'problem_id' => $problem->id, 'user_id' =>'all' , 'choose' => 'all']) }}">{{ $problem->pivot->score }}</a>
             </th>
             @endforeach
             <th>
@@ -21,41 +21,48 @@
         </tr>
     </thead>
    
-    @foreach ($scoreboard['username'] as $sc_username)
+    @foreach ($scoreboard['username'] as $i => $sc_username)
         <tr>
-        <td>{{ $loop->index }}</td>
-        <td>{{ $sc_username }}</td>
-        <td><a class="text-muted small" href="#" >{{ $names[$sc_username] }}</a></td>
+        <td>{{ $loop->index + 1}}</td>
+        <td> <a href="{{ route('submissions.index', ['assignment_id' => $assignment_id, 'problem_id' => 'all', 'user_id' => $scores[$sc_username]['id'] , 'choose' => 'all']) }}" >{{ $sc_username }}</a></td>
+        <td>{{ $names[$sc_username] }}</td>
         @foreach ($problems as $problem)
         <td>
-            @if (isset($scores[$sc_username][$problem->id]->score))
-                <a href="#"
-                @if ($scores[$sc_username][$problem->id]->fullmark == true)
-                    class="text-success" >
-                        {{ $scores[$sc_username][$problem->id]->score }}
+            @if (isset($scores[$sc_username][$problem->id]['score']))
+                <a href="{{ route('submissions.index', ['assignment_id' => $assignment_id, 'problem_id' => $problem->id, 'user_id' => $scores[$sc_username]['id'] , 'choose' => 'all']) }}"
+                    class = "lead 
+                    @if ($scores[$sc_username][$problem->id]['fullmark'] == true)
+                        text-success" >
+                            {{ $scores[$sc_username][$problem->id]['score'] }}
+                    @else
+                        text-danger">
+                            {{ $scores[$sc_username][$problem->id]['score'] }}*
+                    @endif
+                </a>
+                <br/>
+                <span class="small text-info" title="Total tries and time to final submit">
+                {{$number_of_submissions[$sc_username][$problem->id]}}
+                    - </span>
+
+                @if ($scores[$sc_username][$problem->id]['late']->totalSeconds > 0)
+                    <span class="text-warning">{{ $scores[$sc_username][$problem->id]['late']->forHumans(['short' => true]) }}**</span>
                 @else
-                    class="text-danger">
-                        {{ $scores[$sc_username][$problem->id]->score }}*
+                    <span class="small text-info">{{ $scores[$sc_username][$problem->id]['time']->forHumans(['short' => true]) }}</span>
                 @endif
-                    </a><br/>
-                @if ($scores[$sc_username][$problem->id]->late > 0)
-                    <span class="small text-warning" title="Delay time" >{{ time_hhmm($scores[$sc_username][$problem->id]->late) }}**</span>
-                @else
-                    <span class="small" title="Time">{{ time_hhmm($scores[$sc_username][$problem->id]->time) }}</span>
-                @endif
+
             @else
                 -
             @endif
         </td>
         @endforeach
         <td>
-            <a class="text-muted" href="#" >
+
                 <span>{{ $scoreboard['score'][$loop->index] }}</span>
                 <br>
-                <span class="small" title="Total Time + Submit Penalty"> {{($scoreboard['submit_penalty'][$loop->index]) }}</span>
-            </a>
+                <span class="small" title="Total Time + Submit Penalty">{{($scoreboard['submit_penalty'][$loop->index]->cascade()->forHumans(['short' => true]) ) }}</span>
+
         </td>
-        <td class="bg-success text-light" >
+        <td class="bg-success text-white" >
         <span class="lead"><strong>{{ $scoreboard['accepted_score'][$loop->index] }}</strong></span>
         <br>
         <span class="small" title="Solved : Attack ratio">{{ $scoreboard['solved'][$loop->index]}}:{{ $scoreboard['tried_to_solve'][$loop->index]}}</span>
@@ -64,6 +71,3 @@
     @endforeach
     
     </table>
-    *: Not full mark
-    <br/>
-    **: Delay time

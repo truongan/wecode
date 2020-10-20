@@ -20,14 +20,14 @@
 	fas {{$choose =='all' ? 'fa-bars' : 'fa-map-marker'}}
 @endsection
 @section('title')
-	{{$choose =='all' ? 'All submissions' : 'Final submissions'}}
+	{{$choose =='all' ? 'All submissions' : 'Final submissions'}}  for <a href=" @if($assignment->id !=0) {{ route('assignments.edit', $assignment)  }} @else # @endif "> {{$assignment->name}} </a>
 @endsection
 @section('title_menu')
 @if ($user_id != 'all' and !in_array( Auth::user()->role->name, ['student'])) 
-	<a href="{{route('submissions.index', [$assignment->id, 'all', $problem_id, 'all'])}}">Remove filter user</a>
+		<span class="title_menu_item"><a href="{{route('submissions.index', [$assignment->id, 'all', $problem_id, 'all'])}}">Remove filter user</a></span>
 @endif
 @if ($problem_id != 'all')
-	<a href="{{route('submissions.index', [$assignment->id, $user_id, 'all', 'all'])}}">Remove filter problem</a>
+	<span class="title_menu_item"><a href="{{route('submissions.index', [$assignment->id, $user_id, 'all', 'all'])}}">Remove filter problem</a></span>
 @endif
 @endsection
 @section('body_end')
@@ -99,7 +99,6 @@
 							<th width="20%"><small> Name</small></th>
 							<th width="20%"><small> Problem</small></th>
 							<th width="10%"><small> Submit Time</small></th>
-							<th width="1%"><small> Score</small></th>
 							<th width="1%"><small> Delay %</small></th>
 							<th width="1%"><small> Lang</small></th>
 							<th width="6%"><small> Status</small></th>
@@ -139,24 +138,22 @@
 						</a><br>
 						<a href="{{route('submissions.index', [$assignment->id, $user_id, strval($submission->problem_id), 'all'])}}"><span class="btn btn-info btn-sm"><i class="fas fa-filter"></i></span></a>
 					</td>
-					<td>{{$submission->created_at}}</small></td>
-					@if (!in_array( Auth::user()->role->name, ['student']))
-						<td>{{$submission->score}}</td>
-					@endif
+					<td><small>{{$submission->created_at->setTimezone($settings['timezone'])->locale('en')->isoFormat('llll (UZZ)') }}</small></td>
+
 					<td>
-						<span class="small" {{ $submission->delay > 0 ? 'style="color:red;"' :'' }}>
-							@if ($submission->delay <= 0)
+						<span class="small {{ $submission->delay->total('seconds') > 0 ? 'text-danger' :'text-secondary' }} ">
+							@if ($submission->delay->total('seconds') <= 0)
 								No Delay
 							@else
-								<span title="HH:MM">{{ time_hhmm($submission->delay) }}</span>
+								{{ $submission->delay->forHumans(['short'=>true]) }}
 							@endif
 							</span><br>
-						<small>{{ $submission->coefficient }}%</small>
+						{{ $submission->coefficient }}%
 					</td>
 					<td>{{$submission->language->name}}</td>
 					<td class="status">
 						@if (strtolower($submission->status) == "pending")
-							<div class="btn btn-secondary" data-type="result">Pending</div>
+							<div class="btn btn-secondary pending" data-type="result">PENDING</div>
 						@elseif (strtolower($submission->status) == "score")
 							@if ($submission->pre_score == 10000)
 								<div class="btn btn-success" data-type="result">{{$submission->final_score}}</div>
@@ -182,7 +179,8 @@
 				</tr>
 				@endforeach
 			</table>
-
+		
+		<div class=" d-flex justify-content-center">{{$submissions->links(null, ['class'=>'justify-content-center'])}}</div>
 	</div>
 </div>
 @endsection

@@ -99,14 +99,14 @@
 
 		<br><h5>System settings</h5><hr>
 		<div class="form-row">
-			<fieldset class="form-group col-md">
+			{{-- <fieldset class="form-group col-md">
 				<label for="form_t_path">Full Path to <code>tester</code></label>
 				<input id="form_t_path" type="text" name="tester_path" class="form-control medium" value="{{ $tester_path }}"/>
 			</fieldset>
 			<fieldset class="form-group col-md">
 				<label for="form_a_path">Full Path to <code>assignments</code></label>
 				<input id="form_a_path" type="text" name="assignments_root" class="form-control medium" value="{{ $assignments_root }}"/>
-			</fieldset>
+			</fieldset> --}}
 			{{-- <fieldset class="form-group col-md-2">
 				<div class="custom-control custom-switch">
 					<input id="form_log" type="checkbox" class="custom-control-input" name="enable_log" value="1" {{ $enable_log ? 'checked' : '' }}/>
@@ -114,12 +114,17 @@
 				</div>
 				<small class="form-text text-muted">Enable tester Log. This options is highly recommended</small>
 			</fieldset> --}}
-			<fieldset class="form-group col-md-3">
+			<fieldset class="form-group col-md">
+					<label for="form_submit_penalty">Submit penalty</label>
+					<input id="form_submit_penalty" type="number" name="submit_penalty" class="form-control medium" value="{{ $submit_penalty }}"/>
+					<small class="form-text text-muted">Penalty time (in seconds) for each Not accpeted submissions, in according to ICPC ruling</small>
+			</fieldset>
+			<fieldset class="form-group col-md">
 				<label for="form_concurent_queue_process">Number of queue process</label>
 				<input id="form_concurent_queue_process" type="number" name="concurent_queue_process" class="form-control" value="{{ $concurent_queue_process ?? 2 }}" />
 				<small class="form-text text-muted">The number of queue process to run at the same time. This settings is sensitive to the server hardware capabilities. Set this to 0 will disable queue and stop judging all submissions</small>
 			</fieldset>
-			<fieldset class="form-group col-md-2">
+			<fieldset class="form-group col-md">
 				<label for="form_default_language_number">Number of default languages</label>
 				<input id="form_default_language_number" type="number" name="default_language_number" class="form-control" value="{{ $default_language_number ?? 2 }}" />
 				<small class="form-text text-muted">The number languages to be enabled by default while adding problem</small>
@@ -155,16 +160,12 @@
 				<input id="form_en_reg" type="checkbox" name="enable_registration" value="1" {{ $enable_registration ? 'checked' : '' }}/>
 				<small class="form-text text-muted">Open Public Registration.</small>
 			</fieldset>
-			<fieldset class="form-group col-md-2">
+			<fieldset class="form-group col-md-4">
 					<label for="form_reg_code">Registration Code</label>
 					<input id="form_reg_code" type="number" name="registration_code" class="form-control medium" value="{{ $registration_code }}"/>
 					<small class="form-text text-muted">If you want to enable registration (above option), It is better to give a registration code	to students in your class for validating registration. Enter 0 to disable.</small>
 			</fieldset>
-			<fieldset class="form-group col-md-2">
-					<label for="form_submit_penalty">Submit penalty</label>
-					<input id="form_submit_penalty" type="number" name="submit_penalty" class="form-control medium" value="{{ $submit_penalty }}"/>
-					<small class="form-text text-muted">Penalty time (in seconds) for each Not accpeted submissions, in according to ICPC ruling</small>
-			</fieldset>
+
 			<fieldset class="form-group col-md-6">
 				<div class="row">
 					<div class="col-sm-3">

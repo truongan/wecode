@@ -183,7 +183,6 @@ class UserController extends Controller
     public function add(Request $request)
     {
         if ($request->has(['new_users'])) {
-            
             $all = $this->add_users(
                 $request['new_users'],
                 $request['send_mail'],
@@ -276,7 +275,7 @@ class UserController extends Controller
 				$len = trim(substr($parts[2], 6), '[]');
 				if (is_numeric($len)){
 					
-					$parts[2] = str_random($len);
+					$parts[2] = substr(md5(rand()),0,$len);
 				}
 			}
             $parts[3] = $role_name_to_id[$parts[3]];
