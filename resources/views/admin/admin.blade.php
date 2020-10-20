@@ -104,7 +104,7 @@
       <i class="text-center card-img-top fas fa-redo fa-2x p-3"></i>
       <div class="card-body bg-light">
         <small><strong class="card-title">Rejudge</strong></small>
-        <small><p  class="card-text">Zậy đó</p></small>
+        <small><p  class="card-text">Chấm lại bài trong assignment đang chọn</p></small>
         <a href="{{ url('rejudge') }}" class="stretched-link"></a>
       </div>
     </div>
@@ -115,7 +115,7 @@
       <i class="text-center card-img-top fas fa-play fa-2x p-3"></i>
       <div class="card-body bg-light">
         <small><strong class="card-title">Submission Queue</strong></small>
-        <small><p  class="card-text">Zậy đó</p></small>
+        <small><p  class="card-text">Những thao tác xử lý trên hàng đợi các bài đang chấm</p></small>
         <a href="{{ route('queue.index') }}" class="stretched-link"></a>
       </div>
     </div>
@@ -126,7 +126,7 @@
       <i class="text-center card-img-top fas fa-user-secret fa-2x p-3"></i>
       <div class="card-body bg-light">
         <small><strong class="card-title">Detect Similar Codes</strong></small>
-        <small><p  class="card-text">Zậy đó</p></small>
+        <small><p  class="card-text">Kiểm tra code trùng nhau</p></small>
         <a href="{{ route('moss.index' , Auth::user()->selected_assignment_id) }}" class="stretched-link"></a>
       </div>
     </div>
