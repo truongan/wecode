@@ -141,6 +141,8 @@
 	
 	$(document).ready(function(){
 		///Select the problem from referring page
+
+		$("select#problems").val({{ $problem->id }});
 		$("select#problems").change();
 	});
 </script>
