@@ -85,7 +85,7 @@ class LoginController extends Controller
 		}
         return $userinfo;
     }
-	protected function ldap_authentication($username, $password){
+	protected function ldap_authentication($username, $password, $remember = false){
         $ldap_user = $this->uit_ldap($username, $password);
         $user_id = null;
 		if ($ldap_user){
@@ -94,7 +94,7 @@ class LoginController extends Controller
             $user = User::where(['username'=>$ldap_user['masv']])->first();
 			if ( $user ){
                 $user_id = $user->id;
-                Auth::login($user);
+                Auth::login($user, $remember);
                 
                 ///Super optional: reset display name after each login
                 $user->display_name = $ldap_user['hoten'];
@@ -120,7 +120,7 @@ class LoginController extends Controller
         $credentials = $request->only('username', 'password');
         $success = false;
         if ( Auth::viaRemember() 
-            || $this->ldap_authentication($credentials['username'], $credentials['password']) 
+            || $this->ldap_authentication($credentials['username'], $credentials['password'],  $request->input('remember') !== NULL) 
             || Auth::attempt($credentials, $request->input('remember') !== NULL) 
         )
         {

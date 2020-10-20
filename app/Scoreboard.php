@@ -42,7 +42,7 @@ class Scoreboard extends Model
         {
             $number_of_submissions[$item->user->username][$item->problem_id]+=1;
 		}
-		// dd($item);
+		
         foreach($submissions as $submission)
         {
 

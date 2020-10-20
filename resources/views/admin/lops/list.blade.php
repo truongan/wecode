@@ -12,41 +12,37 @@
 @endsection
 
 @section('content')
-
-
 <div class="row">
-  <div class="col">
-    <table class="wecode_table table table-striped table-bordered">
-      <thead class="thead-dark">
-        <tr>
-          <th>#</th>
-          <th>ID</th>
-          <th>Name</th>
-          <th>Open</th>
-          <th><small>Users count</small></th>
-          <th><small>Assignments count</small></th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      @foreach ($lops as $lop)
-        <tr data-id="{{$lop->id}}">
-          <td>{{$loop->iteration}} </td>
-          <td>{{$lop->id}} </td>
-          <td>{{$lop->name}}</td>
-          <td><i  class=" far {{ $lop->open ? 'fa-check-square color6' : 'fa-square' }} fa-2x"></i></td>
-          <td>{{$lop->users()->count() }}</td>
-          <td>{{$lop->assignments()->count() }}</td>
-          <td>
-            <a title="Profile" href="{{ route('lops.show', $lop->id) }}" class = "fas fa-clipboard-list fa-lg color8"></a>
-            @if ( in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
-            <a title="Edit" href="{{ route('lops.edit', $lop->id) }}"><i class="fas fa-edit fa-lg color9"></i></a>
-            <span title="Delete lop" class="delete-btn del_n delete_lop pointer" href="{{ route('lops.destroy', $lop->id) }}"><i class="fa fa-times-circle fa-lg color1"></i></span>
-            @endif
-          </td>
-        </tr>
-        @endforeach
-    </table>
-  </div>
+  <table class="wecode_table table table-striped table-bordered">
+    <thead class="thead-dark">
+      <tr>
+        <th>#</th>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Open</th>
+        <th><small>Users count</small></th>
+        <th><small>Assignments count</small></th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    @foreach ($lops as $lop)
+      <tr data-id="{{$lop->id}}">
+        <td>{{$loop->iteration}} </td>
+        <td>{{$lop->id}} </td>
+        <td>{{$lop->name}}</td>
+        <td><i  class=" far {{ $lop->open ? 'fa-check-square color6' : 'fa-square' }} fa-2x"></i></td>
+        <td>{{$lop->users()->count() }}</td>
+        <td>{{$lop->assignments()->count() }}</td>
+        <td>
+          <a title="Profile" href="{{ route('lops.show', $lop->id) }}" class = "fas fa-clipboard-list fa-lg color8"></a>
+          @if ( in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
+          <a title="Edit" href="{{ route('lops.edit', $lop->id) }}"><i class="fas fa-edit fa-lg color9"></i></a>
+          <span title="Delete lop" class="delete-btn del_n delete_lop pointer" href="{{ route('lops.destroy', $lop->id) }}"><i class="fa fa-times-circle fa-lg color1"></i></span>
+          @endif
+        </td>
+      </tr>
+      @endforeach
+  </table>
 </div>
 <div class="modal fade" id="lop_delete" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
   <div class="modal-dialog" role="document">
