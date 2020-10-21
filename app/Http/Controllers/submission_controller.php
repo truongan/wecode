@@ -116,8 +116,7 @@ class submission_controller extends Controller
 		$ext = substr(strrchr($request->userfile->getClientOriginalName(),'.'),1);
 		// $file_name = basename($request->userfile->getClientOriginalName(), ".{$ext}"); // uploaded file name without extension    
 		// $file_name = preg_replace('/[^a-zA-Z0-9_\-()]+/', '', $file_name);
-
-		$file_name = "solution-upload-".($submission->id);
+		$file_name = "solution-upload-".($submission->assignment->total_submits);
 		
 		$path = Storage::disk('assignment_root')->path('');
 		$user_dir = substr($user_dir, strlen($path));
@@ -140,7 +139,7 @@ class submission_controller extends Controller
 			abort(403, "Your submission is larger than system limited size");
 
 		$ext = $submission->language->extension;
-		$file_name = "solution-" .($submission->id);
+		$file_name = "solution-" .($submission->assignment->total_submits);
 		file_put_contents("{$user_dir}/${file_name}"
 							. "." . $ext, $code);
 

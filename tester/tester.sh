@@ -158,7 +158,7 @@ if ! mkdir $JAIL; then
 	shj_finish "Judge Error"
 fi
 cd $JAIL
-
+shj_log "PID: $$" #log pid
 shj_log "$(date)"
 shj_log "Language: $EXT"
 shj_log "Time Limit: $TIMELIMIT s"
