@@ -49,7 +49,7 @@ php -r "if (hash_file('sha384', 'composer-setup.php') === 'c31c1e292ad7be5f49291
 php composer-setup.php
 php -r "unlink('composer-setup.php');"
 
-php composer install
+php composer.phar install
 cp .env.example .env
 site_url=`printf "%q" "$site_url"`
 password=`printf "%q" "$password"`
