@@ -58,6 +58,8 @@
 						<option value="argon" {{ $theme == "argon" ? 'selected="selected"' : '' }} >argon</option>
 						<option value="paper2" {{ $theme == "paper2" ? 'selected="selected"' : '' }} >paper2</option>
 						<option value="material-kit" {{ $theme == "material-kit" ? 'selected="selected"' : '' }} >material-kit</option> #}
+						<option value="now-ui-kit" {{ $theme == "now-ui-kit" ? 'selected="selected"' : '' }} >now-ui-kit</option> #}
+						{{-- <option value="blk" {{ $theme == "blk" ? 'selected="selected"' : '' }} >blk</option> #} --}}
 					<optgroup label="Light">
 						<option value="lumen" {{ $theme == "lumen" ? 'selected="selected"' : '' }} >lumen</option>
 						<option value="litera" {{ $theme == "litera" ? 'selected="selected"' : '' }} >litera</option>
