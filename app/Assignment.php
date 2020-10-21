@@ -47,7 +47,7 @@ class Assignment extends Model
             $result->error_message = 'Selected assignment has not started.';
         }
         elseif (strtotime($this->start_time) < strtotime($this->finish_time)
-                && strtotime(date("Y-m-d H:i:s")) > strtotime($this->finish_time) + $this->extra_time)
+                && strtotime(date("Y-m-d H:i:s")) > strtotime($this->finish_time) + $this->extra_time * 60)
         {
             // deadline = finish_time + extra_time
             // but if start time is before finish time, the deadline is NEVER
