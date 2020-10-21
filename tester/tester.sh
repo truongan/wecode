@@ -152,7 +152,7 @@ hash perl 2>/dev/null || PERL_EXISTS=false
 if ! $PERL_EXISTS; then
 	shj_log "Warning: perl not found. We continue without perl..."
 fi
-JAIL=jail-$RANDOM
+JAIL=jail-$RANDOM-$LOGFILE
 if ! mkdir $JAIL; then
 	shj_log "Error: Folder 'tester' is not writable! Exiting..."
 	shj_finish "Judge Error"
