@@ -53,6 +53,7 @@ php composer.phar install
 cp .env.example .env
 site_url=`printf "%q" "$site_url"`
 password=`printf "%q" "$password"`
+echo sed -i "s/APP_URL.*/APP_URL=$site_url/g" .env
 sed -i "s/APP_URL.*/APP_URL=$site_url/g" .env
 sed -i "s/DB_USERNAME.*/DB_USERNAME=$db_user/g" .env
 sed -i "s/DB_DATABASE.*/DB_DATABASE=$db/g" .env
@@ -61,5 +62,5 @@ sed -i "s/DB_PASSWORD.*/DB_PASSWORD=$password/g" .env
 php artisan key:generate
 php artisan migrate:refresh 
 php artisan db:seed --class=installation_seeding
-
+ 
 php artisan add_admin $username $email $password
