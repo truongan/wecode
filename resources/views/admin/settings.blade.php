@@ -54,10 +54,13 @@
 			<fieldset class="form-group col-md-2">
 				<label for="theme">Theme</label>
 				<select id="theme" name="theme" class="form-control custom-select">
+					<optgroup label="Tim creative">
+						<option value="argon" {{ $theme == "argon" ? 'selected="selected"' : '' }} >argon</option>
+						<option value="paper2" {{ $theme == "paper2" ? 'selected="selected"' : '' }} >paper2</option>
+						<option value="material-kit" {{ $theme == "material-kit" ? 'selected="selected"' : '' }} >material-kit</option> #}
 					<optgroup label="Light">
 						<option value="lumen" {{ $theme == "lumen" ? 'selected="selected"' : '' }} >lumen</option>
 						<option value="litera" {{ $theme == "litera" ? 'selected="selected"' : '' }} >litera</option>
-						{{-- <option value="material-design" {{ $theme == "material-design" ? 'selected="selected"' : '' }} >material-design</option> #} --}}
 						<option value="pulse" {{ $theme == "pulse" ? 'selected="selected"' : '' }} >pulse</option>
 						<option value="cosmo" {{ $theme == "cosmo" ? 'selected="selected"' : '' }} >cosmo</option>
 						<option value="journal" {{ $theme == "journal" ? 'selected="selected"' : '' }} >journal</option>
