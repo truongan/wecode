@@ -35,7 +35,7 @@ class Queue_item extends Model
 		$item = NULL;
 		// dd(Queue_item::whereNotNull('processid')->count());
 		if(Queue_item::whereNotNull('processid')->count() < $limit){
-			$item = Queue_item::whereNull('processid')->with('submission.problem', 'submission.user', 'submission.language')->oldest()->->assignment->total_submit()->first();
+			$item = Queue_item::whereNull('processid')->with('submission.problem', 'submission.user', 'submission.language')->oldest()->lockForUpdate()->first();
 			// dd($item);
 			if ($item != NULL){
 				$item->processid = getmypid();
