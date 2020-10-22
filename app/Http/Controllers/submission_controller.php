@@ -178,14 +178,12 @@ class submission_controller extends Controller
 	}
 
 
-	public function rejudge_view()
+	public function rejudge_view(Assignment $assignment)
 	{
-		if (in_array( Auth::user()->role->name, ['student']))
+		if (!in_array( Auth::user()->role->name, ['admin', 'head_instructor']))
 			abort(403,"You don't have permission to do that");
-		if (Auth::user()->selected_assignment_id != null && Assignment::find(Auth::user()->selected_assignment_id) != null)
-			$assignment = Assignment::with('problems')->find(Auth::user()->selected_assignment_id);
-		else
-			$assignment = Assignment::with('problems')->find(0);
+		if (!$assignment->is_participant(Auth::user())) abort(403, "You are not a participant to that assignment");
+
 		return view('submissions.rejudge', ['assignment' => $assignment, 'problems' => $assignment->problems]);
 	}
 

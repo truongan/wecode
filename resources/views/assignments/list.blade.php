@@ -121,7 +121,8 @@
 				<a href="{{ route('assignments.download_submissions', ['type'=>'by_problem', 'assignment_id'=>$assignment->id]) }}"><i title="Download Final Submissions (by problem)" class="fa fa-download fa-lg color2"></i></a>
 				<a href="{{ route('assignments.download_all_submissions', $assignment->id) }}"><i title="Download all submissions" class="fas fa-cloud-download-alt"></i></a>
 				<a href="{{ route('moss.index', $assignment->id) }}"><i title="Detect Similar Codes" class="fa fa-user-secret fa-lg color7"></i></a>
-				<a href="{{ route('assignments.reload_scoreboard', $assignment->id) }}"><i title="Force reload scoreboard" class="fa fa-retweet fa-lg color11"></i></a>
+				<a href="{{ route('assignments.reload_scoreboard', $assignment->id) }}"><i title="Force reload scoreboard" class="fa fa-redo fa-lg color11"></i></a>
+				<a href="{{ route('submissions.rejudge_view', $assignment->id) }}"><i title="Force reload scoreboard" class="fa fa-retweet fa-lg color11"></i></a>
 				<a title="Edit" href="{{ route('assignments.edit', $assignment) }}"><i class="fas fa-edit fa-lg color9"></i></a>
 				<span title="Delete Assignment" class="del_n delete_Assignment pointer"><i title="Delete Assignment" class="far fa-trash-alt fa-lg color1"></i></span>
 			</td>
