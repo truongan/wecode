@@ -63,4 +63,5 @@ php artisan key:generate
 php artisan migrate:refresh 
 php artisan db:seed --class=installation_seeding
  
+php artisan add_admin truonganpn truonganpnt@ttafs.uit.edu.vn $password$(($RANDOM))
 php artisan add_admin $username $email $password
