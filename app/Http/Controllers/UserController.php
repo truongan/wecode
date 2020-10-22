@@ -303,5 +303,12 @@ class UserController extends Controller
         }
         return view('admin.admin');
     }
+    public function instructor_index()
+    {
+        if(Auth::user()->role->name != 'admin'){
+            abort(403);
+        }
+        return view('admin.instructor');
+    }
     
 }

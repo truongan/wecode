@@ -36,12 +36,21 @@
                         <span class="nav-link-text">Practice</span>
                     </a>
                 </li>
-                @if ( in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
+                @if ( in_array( Auth::user()->role->name, ['admin']) )
                     
                     <li class="nav-item color-settings {{ ($selected=="settings") ? "selected" : ""}}" >
                         <a class="nav-link" href="{{ route('admin.admin') }}">
                             <i class="fa fa-fw fa-sliders-h fa-lg"></i>
                             <span class="nav-link-text">Admin panel</span>
+                        </a>
+                    </li>
+                @endif
+                @if ( in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
+                    
+                    <li class="nav-item color-settings {{ ($selected=="settings") ? "selected" : ""}}" >
+                        <a class="nav-link" href="{{ route('admin.instructor') }}">
+                            <i class="fa fa-fw fa-sliders-h fa-lg"></i>
+                            <span class="nav-link-text">Instructor panel</span>
                         </a>
                     </li>
                 @endif

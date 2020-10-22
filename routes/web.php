@@ -30,6 +30,8 @@ Route::get('/settings', 'setting_controller@index')->name('settings.index');
 Route::post('/settings', 'setting_controller@update')->name('settings.update');
 
 Route::get('/admin','UserController@admin_index')->name('admin.admin');
+Route::get('/instructor','UserController@instructor_index')->name('admin.instructor');
+
 Route::get('/users/add_multiple', 'UserController@add_multiple');
 Route::post('/users/adds', 'UserController@add')->name('users.add');
 Route::delete('users/{id}', 'UserController@destroy')->name('users.destroy');
