@@ -55,7 +55,6 @@ class assignment_controller extends Controller
         else $assignments = Assignment::latest()->get();
         foreach ($assignments as $assignment)
         {
-            $extra_time = $assignment->extra_time;
             $delay = strtotime(date("Y-m-d H:i:s")) - strtotime($assignment->finish_time);
             $submit_time = strtotime(date("Y-m-d H:i:s")) - strtotime($assignment->start_time);
 
@@ -63,7 +62,7 @@ class assignment_controller extends Controller
             $assignment->finished = $assignment->is_finished();
             $assignment->no_of_problems = $assignment->problems->count();
         }
-        return view('assignments.list',['assignments'=> $assignments, 'selected' => 'assignments']); 
+        return view('assignments.list',['assignments'=> $assignments]); 
     }
 
     /**
@@ -80,7 +79,7 @@ class assignment_controller extends Controller
 
         $problems[-1] = $this->dummy_problem();
 
-        return view('assignments.create',['all_problems' => Problem::latest()->get(), 'all_lops' => Lop::latest()->get(), 'lops' => [], 'messages' => [], 'problems' => $problems, 'selected' => 'assignments']);
+        return view('assignments.create',['all_problems' => Problem::latest()->get(), 'all_lops' => Lop::latest()->get(), 'extra_time'=>'0*60*60', 'lops' => [], 'messages' => [], 'problems' => $problems, 'selected' => 'assignments']);
     }
 
 
@@ -134,8 +133,7 @@ class assignment_controller extends Controller
         $assignment->save();
         if ($request->hasFile('pdf')) {
             $path_pdf = Setting::get("assignments_root");
-            // $path_pdf = $path_pdf . "/assignment_" .  strval($assignment->id);
-            // mkdir($path_pdf);
+
             $path = $request->pdf->storeAs("/assignment_" .  strval($assignment->id),$request->pdf->getClientOriginalName(),'assignment_root');
         }
         foreach ($request->problem_id as $i => $id)
@@ -308,18 +306,14 @@ class assignment_controller extends Controller
             abort(403,'You do not have permission to edit assignment');
         $problems = [];
         $problems = $assignment->problems()->orderBy('ordering')->get()->push($this->dummy_problem())->keyBy('id');
-        // foreach($a as $i){
-        //     $problems[$i->id] = $i;
-        // }
+
+        $e = $assignment->extra_time;
+        if ($e % 3600 == 0) $assignment->extra_time = intval($e/3600) . "*60*60";
+        else if ($e % 60 == 0) $assignment->extra_time = intval($e/36) . "*60";
 
         $lops = array();
-        $b = $assignment->lops;
-        if ($b != NULL)
-        {
-            foreach ($b as $i){
-                $lops[$i->id] = $i;
-            }
-        }
+        $b = $assignment->lops->keyBy('id');
+
         return view('assignments.create',['assignment' => $assignment, 'all_problems' => Problem::latest()->get(), 'messages' => [], 'problems' => $problems, 'all_lops' => Lop::latest()->get(), 'lops' => $lops, 'selected' => 'assignments']);
     }
 

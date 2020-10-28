@@ -43,8 +43,8 @@ shj.update_clock = function(){
 	if (isNaN(countdown)){
 		countdown = 0;
 	}
-	if (countdown<=0 && countdown + shj.extra_time * 60000 >0){
-		countdown = countdown + shj.extra_time * 60000;
+	if (countdown<=0 && countdown + shj.extra_time * 1000 >0){
+		countdown = countdown + shj.extra_time * 1000;
 		$("div#extra_time").css("display","block");
 	}
 	else

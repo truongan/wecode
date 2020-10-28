@@ -131,12 +131,12 @@
 					<div class="form-row">
 						<div class="col-sm-4">
 							<label for="form_extra_time">
-							Extra Time (minutes)
-							<small class="form-text text-muted">Extra time for late submissions.</small>
+							Extra Time (seconds)
+							<small class="form-text text-muted">Extra time for late submissions, multiply operator allowed</small>
 							</label>
 						</div>
 						<div class="col-sm-8">
-							<input id="form_extra_time" type="text" name="extra_time" id="extra_time" class="form-control" value="{{ $edit ? $assignment->extra_time : old('extra_time', 0) }}" />
+							<input id="form_extra_time" type="text" name="extra_time" id="extra_time" class="form-control" value="{{ $edit ? $assignment->extra_time : old('extra_time', '0*60*60') }}" />
 							{{-- {{ form_error('extra_time', '<div class="alert alert-danger">', '</div>') }} --}}
 						</div>
 					</div>
