@@ -72,14 +72,16 @@ class assignment_controller extends Controller
      */
     public function create()
     {
-        //
-        if ( !in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
-            abort(403,'You do not have permission to add assignment');
-        
+        if (Auth::user()->role->name == 'admin'){
+            $all_lops = Lop::latest()->get();
+        } else if (Auth::user()->role->name == 'head_instructor'){
+            $all_lops = Auth::user()->lops->keyBy('id');
+        }
+        else abort(403,'You do not have permission to edit assignment');
 
         $problems[-1] = $this->dummy_problem();
 
-        return view('assignments.create',['all_problems' => Problem::latest()->get(), 'all_lops' => Lop::latest()->get(), 'extra_time'=>'0*60*60', 'lops' => [], 'messages' => [], 'problems' => $problems, 'selected' => 'assignments']);
+        return view('assignments.create',['all_problems' => Problem::latest()->get(), 'all_lops' =>$all_lops, 'extra_time'=>'0*60*60', 'lops' => [], 'messages' => [], 'problems' => $problems, 'selected' => 'assignments']);
     }
 
 
@@ -301,9 +303,15 @@ class assignment_controller extends Controller
      */
     public function edit(Assignment $assignment)
     {
-       //
-        if ( !in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
-            abort(403,'You do not have permission to edit assignment');
+        
+        if (Auth::user()->role->name == 'admin'){
+            $all_lops = Lop::latest()->get();
+        } else if (Auth::user()->role->name == 'head_instructor'){
+            $all_lops = Auth::user()->lops->keyBy('id');
+        }
+        else abort(403,'You do not have permission to edit assignment');
+
+
         $problems = [];
         $problems = $assignment->problems()->orderBy('ordering')->get()->push($this->dummy_problem())->keyBy('id');
 
@@ -311,10 +319,9 @@ class assignment_controller extends Controller
         if ($e % 3600 == 0) $assignment->extra_time = intval($e/3600) . "*60*60";
         else if ($e % 60 == 0) $assignment->extra_time = intval($e/36) . "*60";
 
-        $lops = array();
-        $b = $assignment->lops->keyBy('id');
+        $lops = $assignment->lops->keyBy('id');
 
-        return view('assignments.create',['assignment' => $assignment, 'all_problems' => Problem::latest()->get(), 'messages' => [], 'problems' => $problems, 'all_lops' => Lop::latest()->get(), 'lops' => $lops, 'selected' => 'assignments']);
+        return view('assignments.create',['assignment' => $assignment, 'all_problems' => Problem::latest()->get(), 'messages' => [], 'problems' => $problems, 'all_lops' => $all_lops, 'lops' => $lops, 'selected' => 'assignments']);
     }
 
     /**
