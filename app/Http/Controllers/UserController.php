@@ -305,7 +305,7 @@ class UserController extends Controller
     }
     public function instructor_index()
     {
-        if(Auth::user()->role->name != 'admin'){
+        if(!in_array( Auth::user()->role->name, ['admin', 'head_instructor'])){
             abort(403);
         }
         return view('admin.instructor');

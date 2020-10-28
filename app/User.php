@@ -62,18 +62,6 @@ class User extends Authenticatable
     function selected_assignment(){
         return $this->belongsTo('App\Assignment', 'selected_assignment_id');
     }
-
-    function available_assignments(){
-        $a = collect();
-        foreach ($this->lops()->with('assignments')->get() as $key => $lop) {
-            foreach($lop->assignments as $ass){
-                $a->put($ass->id, $ass);
-            }
-        }
-        $a->sortByDesc('id');
-        
-        return $a;
-    }
 }
 
 //---------------------------------------------------------------------------------------------------------

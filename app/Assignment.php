@@ -99,7 +99,7 @@ class Assignment extends Model
 
     public function is_finished(){
         $delay = $this->finish_time->diffInSeconds(Carbon::now(), false);
-        return ($this->start_time < $this->finish_time &&  $delay > $this->extra_time);
+        return ($this->start_time < $this->finish_time &&  $delay > $this->extra_time * 60);
     }
     public function eval_coefficient(){
         ob_start();

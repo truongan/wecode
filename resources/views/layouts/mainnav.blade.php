@@ -45,8 +45,7 @@
                         </a>
                     </li>
                 @endif
-                @if ( in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
-                    
+                @if ( in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
                     <li class="nav-item color-settings {{ ($selected=="settings") ? "selected" : ""}}" >
                         <a class="nav-link" href="{{ route('admin.instructor') }}">
                             <i class="fa fa-fw fa-sliders-h fa-lg"></i>

@@ -48,9 +48,9 @@ class assignment_controller extends Controller
     public function index()
     {
         //
-        if (Auth::user()->role->name == 'student')
+        if (!in_array( Auth::user()->role->name, ['admin']) )
         {
-            $assignments = Auth::user()->available_assignments()->sortByDesc('created_at');
+            $assignments = Auth::user()->lops()->with('assignments')->get()->pluck('assignments')->collapse()->keyBy('id')->sortByDesc('created_at');
         }
         else $assignments = Assignment::latest()->get();
         foreach ($assignments as $assignment)
