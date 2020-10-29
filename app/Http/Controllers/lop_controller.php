@@ -90,7 +90,7 @@ class lop_controller extends Controller
             // abort(403);
         return view('admin.lops.edit', ['lop' => $lop]);
     }
-    
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -99,8 +99,12 @@ class lop_controller extends Controller
      */
     public function edit(Lop $lop)
     {
-        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
+        if ( in_array( Auth::user()->role->name, ['student']) )
             abort(403);
+        if (!in_array( Auth::user()->role->name, ['admin']) 
+            && !Auth::user()->lops->contains($lop)
+        ) abort(403, 'You can only edit the classes you are in');
+        
         return view('admin.lops.edit', ['lop' => $lop]);
         //
     }
@@ -114,9 +118,12 @@ class lop_controller extends Controller
      */
     public function update(Request $request, Lop $lop)
     {
-        //
-        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
+        if ( in_array( Auth::user()->role->name, ['student']) )
             abort(403);
+        if (!in_array( Auth::user()->role->name, ['admin']) 
+            && !Auth::user()->lops->contains($lop)
+        ) abort(403, 'You can only edit the classes you are in');
+        
         $data = $request->only('name');
         $data['open'] = $request->input('open') == 'on';
 
@@ -154,6 +161,9 @@ class lop_controller extends Controller
         // 
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
             abort(403);
+        else if (!in_array( Auth::user()->role->name, ['admin']) 
+                && !Auth::user()->lops->pluck('id')->contains($id)
+        ) abort(403, 'You can only delete the classes you are in');
         elseif ($id === NULL)
 			$json_result = array('done' => 0, 'message' => 'Input Error');
         else
