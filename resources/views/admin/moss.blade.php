@@ -1,9 +1,9 @@
-@php($selected = 'settings')
+@php($selected = 'instructor_panel')
 @extends('layouts.app')
-@section('head_title','Admin panel')
-@section('icon', 'fas fa-sliders-h')
+@section('head_title','Detect similar codes')
+@section('icon', 'fas fa-user-secret')
 
-@section('title', 'Admin panel')
+@section('title', 'Detect similar codes')
 
 @section('other_assets')
 <style>

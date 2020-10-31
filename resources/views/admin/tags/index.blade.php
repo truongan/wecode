@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@php($selected="settings")
+@php($selected="instructor_panel")
 @section('head_title','Tags')
 @section('icon', 'fas fa-tags')
 

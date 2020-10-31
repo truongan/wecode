@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@php($selected="settings")
+@php($selected="instructor_panel")
 @section('head_title','Problems')
 @section('icon', 'fas fa-clipboard-list')
 @section('other_assets')

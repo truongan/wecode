@@ -1,4 +1,4 @@
-@php($selected = 'settings')
+@php($selected = 'instructor_panel')
 @extends('layouts.app')
 @section('head_title','Edit Problem')
 @section('icon', 'fas fa-tags')

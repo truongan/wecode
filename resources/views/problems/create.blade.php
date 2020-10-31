@@ -1,4 +1,4 @@
-@php($selected = 'settings')
+@php($selected = 'instructor_panel')
 @php($edit = Route::currentRouteName() == 'problems.edit')
 
 @extends('layouts.app')

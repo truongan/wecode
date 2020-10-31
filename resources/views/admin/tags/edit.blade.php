@@ -1,4 +1,4 @@
-@php($selected = 'settings')
+@php($selected = 'instructor_panel')
 @extends('layouts.app')
 @section('head_title','Edit Tags')
 @section('icon', 'fas fa-tags')
@@ -6,7 +6,7 @@
 @section('title', 'Edit Tags')
 
 @section('title_menu')
-	<span class="title_menu_item"><a href="{{ route('tags.index') }}"><i class="fa fa-list color11"></i>Back to list of class</a></span>
+	<span class="title_menu_item"><a href="{{ route('tags.index') }}"><i class="fa fa-list color11"></i>Back to list of tag</a></span>
 @endsection
 
 @section('content')
