@@ -30,7 +30,13 @@ class lop_controller extends Controller
         //
         // if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
         //     abort(403);
-        return view('admin.lops.list', ['lops' => Lop::all()]);
+        if (Auth::user()->role->name == 'admin'){
+
+            return view('admin.lops.list', ['lops' => Lop::all()]);
+        } else {
+            
+            return view('admin.lops.list', ['lops' => Lop::available(Auth::user()->id)->get()]);
+        }
     }
 
     /**
