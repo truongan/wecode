@@ -507,14 +507,19 @@ class problem_controller extends Controller
 
     public function downloadtestsdesc($problem_id)
     {
-        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
-            abort(403);
-        if (Problem::find($problem_id) == null)
-            abort(404);
+        $a =Problem::find($problem_id); 
+        
+        if ($a == null) abort(404);
+        if ( ! in_array( Auth::user()->role->name, ['admin']) )
+        {   
+            if (! $a->sharable && $a->user != Auth::user()) abort(403);
+        }
+        
         $assignments_root = Setting::get("assignments_root");
         $zipFile = $assignments_root . "/problem" . (string)$problem_id . "_tests_and_descriptions_" . (string)date('Y-m-d_H-i') . ".zip";
         $pathdir = $assignments_root . '/problems/' . (string)$problem_id . '/';
-        shell_exec("zip -r $zipFile $pathdir");
+        
+        exec("cd $pathdir && zip -r $zipFile *");
         return response()->download($zipFile)->deleteFileAfterSend();
     }
     
