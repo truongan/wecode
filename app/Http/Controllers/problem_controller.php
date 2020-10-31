@@ -28,10 +28,13 @@ class problem_controller extends Controller
     
     public function index()
     {
-        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
-            abort(404);  
-        
-        $all_problem = Problem::latest()->with('assignments', 'submissions','languages')->paginate(Setting::get('results_per_page_all'));
+        // if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
+        //     abort(404);  
+        if (Auth::user()->role->name == 'admin') $all_problem = Problem::latest();
+        else $all_problem = Problem::available(Auth::user()->id)->latest();
+
+        $all_problem = $all_problem->with('assignments', 'submissions','languages')->paginate(Setting::get('results_per_page_all'));
+
 
         foreach ($all_problem as $p){
             $p->total_submit = $p->submissions->count();
@@ -106,10 +109,12 @@ class problem_controller extends Controller
 
         //$default_language = Language::find(1);
 
-        $the_id = Problem::max('id') + 1;
+        // $the_id = Problem::max('id') + 1;
         $problem = $request->input();
-        $problem['id'] = $the_id;
+        // $problem['id'] = $the_id;
+        $problem['user_id'] = Auth::user()->id;
         $problem["allow_practice"] = isset($request["allow_practice"]) ? 1 : 0;
+        $problem["sharable"] = isset($request["sharable"]) ? 1 : 0;
         $p = Problem::create($problem);
         if ($tags != null)
         {
@@ -119,7 +124,7 @@ class problem_controller extends Controller
         $p->languages()->sync($langs);
 
         // Processing file 
-        $this->_take_test_file_upload($request, $the_id, $messages);  
+        $this->_take_test_file_upload($request, $p->id, $messages);  
 
         return redirect()->route('problems.index')->withInput()->withErrors(["messages"=>$messages]);
     }
@@ -186,6 +191,7 @@ class problem_controller extends Controller
         
         $req = $request->input();
         $req["allow_practice"] = isset($request["allow_practice"]) ? 1 : 0;
+        $req["sharable"] = isset($request["sharable"]) ? 1 : 0;
 
         $problem->update($req); 
 

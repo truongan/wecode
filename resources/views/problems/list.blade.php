@@ -31,6 +31,7 @@
 				<th>ID</th>
 				<th style="width: 20%">Name</th>
 				<th style="width: 20%">Note</th>
+				<th>owner</th>
 				<th>Tags</th>
 				<th>Lang</th>
 				<th>Assignmnets</th>
@@ -44,6 +45,7 @@
 			<td>{{ $item->id}}</td>
 			<td><a href="{{ url("problems/$item->id") }}">{{ $item->name }}</a></td>
 			<td>{{$item->admin_note}}</td>
+			<td>{{$item->user->username ?? 'no-owner'}}</td>
 			<td>
 				@foreach ($item->tags as $tag)
 			  		<span class="badge badge-pill badge-info">{{$tag->text}}</span>

@@ -80,8 +80,11 @@ class assignment_controller extends Controller
         else abort(403,'You do not have permission to edit assignment');
 
         $problems[-1] = $this->dummy_problem();
+        
+        if(Auth::user()->role->name == 'admin') $allprob = Problem::latest()->get();
+        else $allprob = Problem::available(Auth::user()->id)->latest()->get();
 
-        return view('assignments.create',['all_problems' => Problem::latest()->get(), 'all_lops' =>$all_lops, 'extra_time'=>'0*60*60', 'lops' => [], 'messages' => [], 'problems' => $problems, 'selected' => 'assignments']);
+        return view('assignments.create',['all_problems' => $allprob, 'all_lops' =>$all_lops, 'extra_time'=>'0*60*60', 'lops' => [], 'messages' => [], 'problems' => $problems, 'selected' => 'assignments']);
     }
 
 
@@ -321,7 +324,11 @@ class assignment_controller extends Controller
 
         $lops = $assignment->lops->keyBy('id');
 
-        return view('assignments.create',['assignment' => $assignment, 'all_problems' => Problem::latest()->get(), 'messages' => [], 'problems' => $problems, 'all_lops' => $all_lops, 'lops' => $lops, 'selected' => 'assignments']);
+
+        if(Auth::user()->role->name == 'admin') $allprob = Problem::latest()->get();
+        else $allprob = Problem::available(Auth::user()->id)->latest()->get();
+
+        return view('assignments.create',['assignment' => $assignment, 'all_problems' => $allprob, 'messages' => [], 'problems' => $problems, 'all_lops' => $all_lops, 'lops' => $lops, 'selected' => 'assignments']);
     }
 
     /**

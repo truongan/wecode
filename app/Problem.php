@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class Problem extends Model
 {
-    protected $fillable = ['id','name','diff_cmd','diff_arg','allow_practice','admin_note','difficult'];
+    protected $fillable = ['id','name','diff_cmd','diff_arg','allow_practice','admin_note','difficult','user_id', 'sharable'];
 
     public function get_directory_path(){
 		$assignments_root = Setting::get("assignments_root");
@@ -40,6 +40,14 @@ class Problem extends Model
         else return NULL;
     }
 
+    function user(){
+        return $this->belongsTo('App\User');
+    }
+
+    public static function available($user_id){
+        return Problem::where(['sharable'=>1])->orWhere('user_id', $user_id);
+    }
+    
     public function languages()
     {
         return $this->belongsToMany('App\Language')->withTimestamps()->withPivot('time_limit','memory_limit');

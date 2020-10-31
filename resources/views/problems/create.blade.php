@@ -25,6 +25,9 @@
 
 @section('title_menu')
 <span class="title_menu_item">
+	<a href="{{ route('problems.index') }} " target="_blank"><i class="fa fa-list color1"></i> List of problems</a>
+</span>
+<span class="title_menu_item">
 	<a href="https://github.com/truongan/wecode-judge/blob/docs/v1.4/add_assignment.md" target="_blank"><i class="fa fa-question-circle color1"></i> Help</a>
 </span>
 @endsection
@@ -214,9 +217,18 @@
 			</fieldset>
 			<fieldset class="form-group" data-toggle="tooltip" data-html="true" title="Add this problem into practice">
 				<div class="custom-control custom-switch">
-					<input type="checkbox" class="custom-control-input" id="customSwitch2" name = "allow_practice">
+					{{-- {{  dd(old('allow_practice')) }} --}}
+					<input type="checkbox" class="custom-control-input" id="customSwitch2" name = "allow_practice" {{ ($edit ? $problem->allow_practice : old('allow_practice', 1)) ? 'checked' : '' }} >
 					<label class="custom-control-label" for="customSwitch2">
-						Allow practice
+						Allow practice 
+					</label>
+				</div>
+			</fieldset>
+			<fieldset class="form-group" data-toggle="tooltip" data-html="true" title="Add this problem into practice">
+				<div class="custom-control custom-switch">
+					<input type="checkbox" class="custom-control-input" id="sharable_switch" name = "sharable"  {{ ($edit ? $problem->sharable : old('sharable', 1)) ? 'checked' : '' }} >
+					<label class="custom-control-label" for="sharable_switch">
+						Sharable<br/><small>Allow other head_instruct or to view this problem and use it in theirs assignments</small>
 					</label>
 				</div>
 			</fieldset>

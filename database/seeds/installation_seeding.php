@@ -41,6 +41,7 @@ class installation_seeding extends Seeder
                 array('key' => 'week_start',             'value' => '1'),
                 array('key' => 'theme',             'value' => 'default'),
                 ['key'=> 'concurent_queue_process', 'value'=> '2'],
+                ['key'=> 'default_language_number', 'value'=> '1'],
             )
         );
 
