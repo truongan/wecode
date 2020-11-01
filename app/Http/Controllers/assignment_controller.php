@@ -406,7 +406,7 @@ class assignment_controller extends Controller
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
             abort(403);
         elseif ($id == 0){
-            
+            //Do nothing, we just don't touch the practice assignment
         }
         elseif ($id === NULL)
         {
