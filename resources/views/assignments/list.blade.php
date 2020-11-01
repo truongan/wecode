@@ -60,7 +60,7 @@
 			@endif
 		<tr data-id="{{$assignment->id}}">
 			<td>{{$assignment->id}} </td>
-			<td>{{$assignment->user->username}} </td>
+			<td>{{$assignment->user->username ?? "none"}} </td>
 			<td>
 				<span title="View an assignment's problem or submission will set it as your default assignment">
 					<i  class=" far {{ (isset(Auth::user()->selected_assignment->id) && $assignment->id == Auth::user()->selected_assignment->id) ? 'fa-check-square color6' : 'fa-square' }} fa-2x" data-id="{{ $assignment->id }}"></i>
