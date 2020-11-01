@@ -79,7 +79,7 @@ $(document).ready(function () {
               </div>
             <div class="widget_contents_container">
                 @if (count($notifications) == 0)
-                    <p style="text-align: center;">Nothing yet...</p>
+                    <p style="text-align: center;"></p>
                 @endif
                 @foreach ($notifications as $notification)
                     <div class="notif" id="number{{ $notification->id }}" data-id="{{ $notification->id }}">

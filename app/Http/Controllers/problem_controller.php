@@ -51,7 +51,7 @@ class problem_controller extends Controller
      */
     public function create()
     {
-        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
+        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
             abort(404);  
         
         return view('problems.create', ['problem'=>NULL,
@@ -157,8 +157,14 @@ class problem_controller extends Controller
      */
     public function edit(Problem $problem)
     {
-        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
-            abort(404);
+        if ( ! in_array( Auth::user()->role->name, ['admin']) )
+        {
+            //Admin can always edit
+            if ($problem->user != Auth::user()){
+                //Others can only edit problems they own
+                abort(404); 
+            } 
+        }
         $lang_of_problems = $problem->languages->keyBy('id');
 
         $tags = $problem->tags->keyBy('id');
@@ -182,8 +188,14 @@ class problem_controller extends Controller
      */
     public function update(Request $request, Problem $problem)
     {
-        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
-            abort(404);
+        if ( ! in_array( Auth::user()->role->name, ['admin']) )
+        {
+            //Admin can always edit
+            if ($problem->user != Auth::user()){
+                //Others can only edit problems they own
+                abort(404); 
+            } 
+        }
 
         $validatedData = $request->validate([
             'name' => ['required','max:255'],
@@ -227,7 +239,7 @@ class problem_controller extends Controller
         return redirect()->route('problems.index');
     }
 
-    public function _take_test_file_upload(Request $request, $the_id,  &$messages){
+    private function _take_test_file_upload(Request $request, $the_id,  &$messages){
         $up_dir = $request->tests_dir;
         $up_zip = $request->tests_zip;
         if (!$up_dir && !$up_zip){
@@ -302,7 +314,7 @@ class problem_controller extends Controller
         return ($json_result);
     }
 
-    public function save_problem_description($problem_id, $text, $type = 'html')
+    private function save_problem_description($problem_id, $text, $type = 'html')
     {
         $problem_dir = $this->get_directory_path($problem_id);
         if (file_put_contents("$problem_dir/desc.html", $text) ) 
@@ -313,10 +325,6 @@ class problem_controller extends Controller
     public function edit_description(Request $request, $id){
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
             abort(404);
-
-        // $request->validate([
-        //     'content'=>['required','text']
-        // ]); 
 
         if ($this->save_problem_description($id, $request->content)){
             echo "success";
@@ -494,7 +502,6 @@ class problem_controller extends Controller
             abort(404);
         if ($assignment_id == NULL && Problem::find($problem_id) == null)
             abort(404); 
-        
 
         $template_file = $this->get_template_path($problem_id);
         if(!$template_file)
