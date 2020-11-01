@@ -24,7 +24,7 @@ class AssignmentOwnership extends Migration
         }
         foreach(Assignment::with('lops.users')->get() as $ass){
             if ($ass->lops->count() < 1) continue;
-            $ass->user_id = $ass->lops->first()->users->filter(function($v,$k){return $v->role->name=='head_instructor';})->first()->id ?? None;
+            $ass->user_id = $ass->lops->first()->users->filter(function($v,$k){return $v->role->name=='head_instructor';})->first()->id ?? none;
             $ass->save();
         }
     }
