@@ -14,13 +14,17 @@ class AssignmentOwnership extends Migration
      */
     public function up()
     {
-        Schema::table('assignments', function (Blueprint $table) {
-            //
-            $table->bigInteger('user_id')->nullable();
-        });
+        try{
+
+            Schema::table('assignments', function (Blueprint $table) {
+                $table->bigInteger('user_id')->nullable();
+            });
+        } catch(Exception $e){
+            //do nothing; just ignore it.
+        }
         foreach(Assignment::with('lops.users')->get() as $ass){
             if ($ass->lops->count() < 1) continue;
-            $ass->user_id = $ass->lops->first()->users->filter(function($v,$k){return $v->role->name=='head_instructor';})->first()->id;
+            $ass->user_id = $ass->lops->first()->users->filter(function($v,$k){return $v->role->name=='head_instructor';})->first()->id ?? None;
             $ass->save();
         }
     }
