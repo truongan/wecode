@@ -310,6 +310,11 @@ class assignment_controller extends Controller
         if (Auth::user()->role->name == 'admin'){
             $all_lops = Lop::latest()->get();
         } else if (Auth::user()->role->name == 'head_instructor'){
+            if ($assignment->user != Auth::user() 
+                || !Auth::user()->lops()->with('assignments')->get()->pluck('assignments')->collapse()->contains($assignment)
+            ){
+                abort(403, 'You can only edit assignment you created or assignment belongs to one of your classes');
+            }
             $all_lops = Auth::user()->lops->keyBy('id');
         }
         else abort(403,'You do not have permission to edit assignment');
@@ -341,8 +346,15 @@ class assignment_controller extends Controller
     public function update(Request $request, Assignment $assignment)
     {
         //
-        if ( !in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
-            abort(403,'You do not have permission to edit assignment');
+        if (Auth::user()->role->name == 'admin'){
+            //Admin is always allowed
+        } else if (Auth::user()->role->name == 'head_instructor'){
+            if ($assignment->user != Auth::user() 
+                || !Auth::user()->lops()->with('assignments')->get()->pluck('assignments')->collapse()->contains($assignment)
+            ){
+                abort(403, 'You can only edit assignment you created or assignment belongs to one of your classes');
+            }
+        }else abort(403,'You do not have permission to edit assignment');
 
         $validated = $request->validate([
             'name' => ['required','max:150'],
