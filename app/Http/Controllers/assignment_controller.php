@@ -133,8 +133,8 @@ class assignment_controller extends Controller
         
         $assignment = new Assignment;
         $assignment->fill($input);
+        $assignment->user_id = Auth::user()->id;
 
-  
         $assignment->save();
         if ($request->hasFile('pdf')) {
             $path_pdf = Setting::get("assignments_root");
