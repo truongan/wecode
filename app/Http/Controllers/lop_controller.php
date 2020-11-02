@@ -47,7 +47,7 @@ class lop_controller extends Controller
     public function create()
     {
         //
-        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
+        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
             abort(403);
         return view('admin.lops.create');
     }
@@ -60,7 +60,7 @@ class lop_controller extends Controller
      */
     public function store(Request $request)
     {
-        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
+        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
             abort(403);
         //
         // var_dump($request->input());die();
@@ -174,6 +174,7 @@ class lop_controller extends Controller
 			$json_result = array('done' => 0, 'message' => 'Input Error');
         else
         {
+            Lop::find($id)->assignments()->sync([]);
             Lop::destroy($id);
             $json_result = array('done' => 1);
         }
