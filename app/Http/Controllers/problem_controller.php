@@ -160,7 +160,7 @@ class problem_controller extends Controller
         if ( ! in_array( Auth::user()->role->name, ['admin']) )
         {
             //Admin can always edit
-            if ($problem->user != Auth::user()){
+            if ($problem->user->id != Auth::user()->id){
                 //Others can only edit problems they own
                 abort(404); 
             } 
@@ -191,7 +191,7 @@ class problem_controller extends Controller
         if ( ! in_array( Auth::user()->role->name, ['admin']) )
         {
             //Admin can always edit
-            if ($problem->user != Auth::user()){
+            if ($problem->user->id != Auth::user()->id){
                 //Others can only edit problems they own
                 abort(404); 
             } 
