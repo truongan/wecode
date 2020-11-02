@@ -105,7 +105,7 @@ class lop_controller extends Controller
      */
     public function edit(Lop $lop)
     {
-        if ( in_array( Auth::user()->role->name, ['student']) )
+        if ( in_array( Auth::user()->role->name, ['student', 'instructor']) )
             abort(403);
         if (!in_array( Auth::user()->role->name, ['admin']) 
             && !Auth::user()->lops->contains($lop)
@@ -124,7 +124,7 @@ class lop_controller extends Controller
      */
     public function update(Request $request, Lop $lop)
     {
-        if ( in_array( Auth::user()->role->name, ['student']) )
+        if ( in_array( Auth::user()->role->name, ['student', 'instructor']) )
             abort(403);
         if (!in_array( Auth::user()->role->name, ['admin']) 
             && !Auth::user()->lops->contains($lop)
