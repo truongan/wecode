@@ -102,7 +102,7 @@ class submission_controller extends Controller
 			'assignment' => ['integer', 'gt:-1'],
 			'problem' => ['integer', 'gt:0'],
 		]);
-		
+	
 		if ($this->upload($request))
 			return redirect()->route('submissions.index', [$request->assignment, 'all', 'all', 'all']);
 		else
@@ -151,14 +151,15 @@ class submission_controller extends Controller
 
 	private function in_queue ($user_id, $assignment_id, $problem_id)
 	{
-		$queries = Queue_item::all();
-		foreach ($queries as $query)
-		{
-			$tmp = $query->submission->where(array('user_id' => $user_id, 'assignment_id' => $assignment_id, 'problem_id' => $problem_id))->get();
-			if ($tmp->count() > 0) 
-					return TRUE;
-		}
-		return FALSE;
+		return App\Queue_item::whereHas('submission', function($q){$q->where(['user_id' => $user_id, 'assignment_id' => $assignment_id, 'problem_id' => $problem_id]);})->count() > 0;
+		// $queries = Queue_item::all();
+		// foreach ($queries as $query)
+		// {
+		// 	$tmp = $query->submission->where(array('user_id' => $user_id, 'assignment_id' => $assignment_id, 'problem_id' => $problem_id));
+		// 	if ($tmp->count() > 0) 
+		// 		return TRUE;
+		// }
+		// return FALSE;
 	}
 
 	private function add_to_queue($submission, $assignment, $file_name)
