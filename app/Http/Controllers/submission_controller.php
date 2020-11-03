@@ -151,7 +151,7 @@ class submission_controller extends Controller
 
 	private function in_queue ($user_id, $assignment_id, $problem_id)
 	{
-		return Queue_item::whereHas('submission', function($q){$q->where(['user_id' => $user_id, 'assignment_id' => $assignment_id, 'problem_id' => $problem_id]);})->count() > 0;
+		return Queue_item::whereHas('submission', function($q) use($user_id, $assignment_id, $problem_id){$q->where(['user_id' => $user_id, 'assignment_id' => $assignment_id, 'problem_id' => $problem_id]);})->count() > 0;
 		// $queries = Queue_item::all();
 		// foreach ($queries as $query)
 		// {
