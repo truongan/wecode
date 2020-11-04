@@ -60,7 +60,7 @@ $(document).ready(function () {
 
 	//$(".btn").click(function () {
 	$("td").on('click', '.btn', function () {
-		$('modal-body').html('<div class="text-center">		<div class="spinner-border" ole="status">			<span class="sr-only">Loading...</span>		</div>	</div>'); //First, clean up the modal body probably left over from previous view
+		$('.modal-body').html('<div class="text-center">		<div class="spinner-border" ole="status">			<span class="sr-only">Loading...</span>		</div>	</div>'); //First, clean up the modal body probably left over from previous view
 		var button = $(this);
 		var row = button.parents('tr');
 		var type = button.data('type');
@@ -198,7 +198,7 @@ function update_status(){
 						break;
 
 						default:
-							element = ('<div class="btn btn-primary" data-type="code" data-type="result">' + response.status + '</div>');
+							element = ('<div class="btn btn-primary"  data-type="result">' + response.status + '</div>');
 					}
 					status.html(element);
 
