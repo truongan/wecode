@@ -19,7 +19,7 @@
 	<span class="title_menu_item"><a href="{{ route('problems.pdf'), $problem->id }}"><i class="fas fa-file-pdf color1"></i> PDF</a></span>
 @endif
 @if ($problem->has_template)
-	<span class="title_menu_item"><a href="{{ route('problems.template', ['problem_id' => $problem->id, 'assignment_id' => 'null'] ) }}"><i class="fa fa-download color1"></i> Download the code template</a></span>
+	<span class="title_menu_item"><a href="{{ route('problems.template', ['problem_id' => $problem->id, 'assignment_id' => ($all_problems != NULL ? $assignment->id : 'null')] ) }}"><i class="fa fa-download color1"></i> Download the code template</a></span>
 @endif
 @if (in_array( Auth::user()->role->name, ['admin', 'head_instructor']))
 	<span class="title_menu_item ml-auto"><a href="#" class="btn btn-info save-button"><i class="fa fa-floppy-o "></i> Save</a></span>
