@@ -37,6 +37,13 @@ class Scoreboard extends Model
             $number_of_submissions[$item->user->username][$item->problem_id]=0;
         }
 
+		$lopsnames = array();
+		foreach ($assignment->lops()->with('users')->get() as $key =>$lop) {
+			foreach ($lop->users as $key => $user) {
+				$lopsnames[$user->username] = $lop->name;
+			}
+		}
+
 		
         foreach($assignment->submissions as $item)
         {
@@ -87,13 +94,14 @@ class Scoreboard extends Model
 					+ ($number_of_submissions[$submission->user->username][$submission->problem_id]-1)
 						* Setting::get('submit_penalty'), 'seconds');
 			}
-			$users[] = $username;
+			$users[] = $submission->user;
         }
 
         $scoreboard = array(
 			'username' => array(),
 			'user_id' => array(),
 			'score' => array(),
+			'lops' => $lopsnames,
 			'accepted_score' => array(),
 			'submit_penalty' => array()
 			,'solved' => array()
@@ -101,13 +109,13 @@ class Scoreboard extends Model
         );
 		
         $users = array_unique($users);
-		foreach($users as $username){
-			array_push($scoreboard['username'], $username);
-			array_push($scoreboard['score'], $total_score[$username]);
-			array_push($scoreboard['accepted_score'], $total_accepted_score[$username]);
-			array_push($scoreboard['submit_penalty'], $penalty[$username]);
-			array_push($scoreboard['solved'], $solved[$username]);
-			array_push($scoreboard['tried_to_solve'], $tried_to_solve[$username]);
+		foreach($users as $user){
+			array_push($scoreboard['username'], $user->username);
+			array_push($scoreboard['score'], $total_score[$user->username]);
+			array_push($scoreboard['accepted_score'], $total_accepted_score[$user->username]);
+			array_push($scoreboard['submit_penalty'], $penalty[$user->username]);
+			array_push($scoreboard['solved'], $solved[$user->username]);
+			array_push($scoreboard['tried_to_solve'], $tried_to_solve[$user->username]);
 		}
 		
 		
