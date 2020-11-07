@@ -226,7 +226,7 @@
 			</fieldset>
 			<fieldset class="form-group" data-toggle="tooltip" data-html="true" title="Add this problem into practice">
 				<div class="custom-control custom-switch">
-					<input type="checkbox" class="custom-control-input" id="sharable_switch" name = "sharable"  {{ ($edit ? $problem->sharable : old('sharable', 1)) ? 'checked' : '' }} >
+					<input type="checkbox" class="custom-control-input" id="sharable_switch" name = "sharable"  {{ ($edit ? $problem->sharable : old('sharable', 0)) ? 'checked' : '' }} >
 					<label class="custom-control-label" for="sharable_switch">
 						Sharable<br/><small>Allow other head_instruct or to view this problem and use it in theirs assignments</small>
 					</label>

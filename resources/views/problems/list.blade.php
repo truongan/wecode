@@ -45,7 +45,16 @@
 			<td>{{ $item->id}}</td>
 			<td><a href="{{ url("problems/$item->id") }}">{{ $item->name }}</a></td>
 			<td>{{$item->admin_note}}</td>
-			<td>{{$item->user->username ?? 'no-owner'}}</td>
+			<td>
+				<span data-toggle="tooltip"  
+					@if($item->sharable) class="text-success"  title="publicly shared problem"
+					@else class="text-secondary" title="Private problem"
+					@endif
+				>
+					{{$item->user->username ?? 'no-owner'}}
+				</span>
+
+			</td>
 			<td>
 				@foreach ($item->tags as $tag)
 			  		<span class="badge badge-pill badge-info">{{$tag->text}}</span>
