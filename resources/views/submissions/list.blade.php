@@ -129,12 +129,13 @@
 					<td>{{$submission->user->display_name}}</td>
 					@endif
 					<td>
-						<a href="{{route('assignments.show', ['assignment'=>$assignment,'problem_id'=>$submission->problem_id])}}">
-							@if ($assignment->id == 0)
-								{{$submission->problem->name}}
-							@else
-								{{ $all_problems[$submission->problem_id]->pivot->problem_name}}
-							@endif
+						@if ($assignment->id == 0)
+							<a href="{{ route('practices.show', $submission->problem_id) }}">
+							{{$submission->problem->name}}
+						@else
+							<a href="{{route('assignments.show', ['assignment'=>$assignment,'problem_id'=>$submission->problem_id])}}">
+							{{ $all_problems[$submission->problem_id]->pivot->problem_name}}
+						@endif
 						</a><br>
 						<a href="{{route('submissions.index', [$assignment->id, $user_id, strval($submission->problem_id), 'all'])}}"><span class="btn btn-info btn-sm"><i class="fas fa-filter"></i></span></a>
 					</td>
