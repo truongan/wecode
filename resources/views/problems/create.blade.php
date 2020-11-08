@@ -218,7 +218,7 @@
 			<fieldset class="form-group" data-toggle="tooltip" data-html="true" title="Add this problem into practice">
 				<div class="custom-control custom-switch">
 					{{-- {{  dd(old('allow_practice')) }} --}}
-					<input type="checkbox" class="custom-control-input" id="customSwitch2" name = "allow_practice" {{ ($edit ? $problem->allow_practice : old('allow_practice', 1)) ? 'checked' : '' }} >
+					<input type="checkbox" class="custom-control-input" id="customSwitch2" name = "allow_practice" {{ ($edit ? $problem->allow_practice : old('allow_practice', 0)) ? 'checked' : '' }} >
 					<label class="custom-control-label" for="customSwitch2">
 						Allow practice 
 					</label>

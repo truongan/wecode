@@ -43,6 +43,9 @@ class Problem extends Model
     function user(){
         return $this->belongsTo('App\User');
     }
+    function owner(){
+        return $this->belongsTo('App\User');
+    }
 
     public static function available($user_id){
         return Problem::where(['sharable'=>1])->orWhere('user_id', $user_id);

@@ -9,9 +9,7 @@
 @endsection
 @section('icon', 'fas fa-code')
 @section('title')</i> Assignment: {{ $assignment->name }}@endsection
-
-
-
+	
 @section('content')
 <div class="row">
 	@if (isset($error) && $error != 'none')
@@ -28,12 +26,14 @@
 		
 			<div class="form-group mr-3">
 				<label for="problems" class="">Problem:</label>
+
 				<select id="problems" name ="problem" class="form-control custom-select">
 					@if($assignment->id == 0)
 						<option value="{{ $problem->id }}" data-statement="{{ route('problems.show', $problem->id) }}">#{{$problem->id}}--{{ $problem->name }}</option>
 					@endif
-					@foreach ($assignment->problems as $problem)
-						<option value="{{ $problem->id }}" data-statement="{{ route('assignments.show', [ 'assignment' =>$assignment->id , 'problem_id' => $problem->id])}}">#{{$problem->id}}--{{ $problem->pivot->problem_name }}</option>
+
+					@foreach ($assignment->problems as $prob)
+						<option value="{{ $prob->id }}" data-statement="{{ route('assignments.show', [ 'assignment' =>$assignment->id , 'problem_id' => $prob->id])}}">#{{$prob->id}}--{{ $prob->pivot->problem_name }}</option>
 					@endforeach
 				</select>
 
@@ -120,6 +120,7 @@
 	{{-- </div> --}}
 	@endif
 </div>
+
 @endsection
 
 @section('body_end')
@@ -132,13 +133,13 @@
 		problem_languages[{{$problem->id}}] = {!!$problem->languages !!};
 	@endif
 	
-	@foreach($assignment->problems as $problem)
-		problem_languages[{{$problem->id}}] = {!!$problem->languages !!};
+	@foreach($assignment->problems as $prob)
+		problem_languages[{{$prob->id}}] = {!!$prob->languages !!};
 
 	@endforeach
 	
 	get_template_route = '{{ route('submissions.get_template') }}';
-	
+
 	$(document).ready(function(){
 		///Select the problem from referring page
 

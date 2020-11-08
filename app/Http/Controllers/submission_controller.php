@@ -87,10 +87,8 @@ class submission_controller extends Controller
 				abort(404);
 			}
 		}
-		else if ($problem_id != 0)
-			$problem = $assignment->problems->find($problem_id);
-		else
-			$problem = $assignment->problems->first();
+		else if ($problem_id != 0) $problem = $assignment->problems->find($problem_id);
+		else $problem = $assignment->problems->first();
 		
 		if ($problem == NULL) abort(404);
 		return view('submissions.create', ['assignment' => $assignment, 'problem' => $problem]);
