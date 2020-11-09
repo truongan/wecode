@@ -8,8 +8,9 @@ function format_problem(prob){
 	if (!prob.id) return prob.text; // THis is necessary because one dummy options with "searching" text will be created by select2
 
 	var $prob = $('<span class="badge badge-primary">'+ prob.element.dataset.id +'</span>'
+		+ '<span class="badge badge-pill badge-secondary">'+ prob.element.dataset.owner +'</span>'
 		+ prob.element.dataset.name
-		+ '<span class="text-small text-secondary">('+ prob.element.dataset.note +')</span>'
+		+ '<span class="text-small text-secondary">(' +  prob.element.dataset.note +')</span>'
 	);
 	return $prob
 }
@@ -61,6 +62,9 @@ $(document).ready(function(){
 		new_row.find('.lead').html(
 				'<span class="badge badge-light">'
 				+ selected_data.id
+				+'</span>'
+				+ '<span class="badge badge-secondary">'
+				+ selected_data.owner
 				+'</span>'
 				+selected_data.name 
 			);

@@ -152,7 +152,7 @@
 						<div class="col-sm-8">
 							<select class="js-example-basic-multiple form-control" multiple="multiple" name="lop_id[]">
 								@foreach( $all_lops as $p)
-								<option value="{{ $p->id }}" data-name="{{$p->name}}" data-id="{{$p->id}}" data-no_of_assignment="{{ $p->no_of_assignment }}" 
+								<option value="{{ $p->id }}" data-name="{{$p->name}}" data-id="{{$p->id}}" data-no_of_assignment="{{ $p->no_of_assignment }}"
 									{{ isset($lops[$p->id]) ? 'selected="selected"' : ''  }}
 									> {{$p->name}}</option>
 								@endforeach
@@ -225,10 +225,10 @@
 				</label>
 				<select class="all_problems form-control" multiple="multiple">
 					@foreach( $all_problems as $p)
-					<option value="{{ $p->id }}" data-name="{{$p->name}}" data-id="{{$p->id}}" data-note="{{ $p->admin_note }}" data-no_of_assignment="{{ $p->no_of_assignment }}" 
+					<option value="{{ $p->id }}" data-name="{{$p->name}}" data-id="{{$p->id}}" data-note="{{ $p->admin_note }}" data-no_of_assignment="{{ $p->no_of_assignment }}"  data-owner="{{ $p->user->username }}" 
 						{{ isset($problems[$p->id]) ? 'selected="selected"' : ''  }}
 						>
-					 {{$p->id}} - {{$p->name}} ({{ $p->admin_note }}) </option>
+					 {{$p->id}} - {{$p->name}} ({{ $p->user->username }}| {{   $p->admin_note }}) </option>
 					@endforeach
 				</select>
 			</fieldset>
@@ -271,7 +271,9 @@
 					<div class="form-inline">
 						<input type="hidden" name="problem_id[]" value="{{$problem->id}}"/>
 						<span class="lead mr-2">
+							{{-- @php(dd($problem->user->username)); --}}
 							<span class="badge badge-light">{{ $problem->id }}</span>
+							<span class="badge badge-secondary badge-pill">{{ $problem->user->username }}</span>
 							{{ $problem->name }}
 						</span>
 						<div class="input-group input-group-sm mr-2">

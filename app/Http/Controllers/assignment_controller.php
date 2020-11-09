@@ -27,6 +27,7 @@ class assignment_controller extends Controller
         $problem->pivot->problem_name = 'dummy'; 
         $problem->pivot->score=0;
         $problem->admin_note = 'dummy';
+        $problem->user = (object)['username'=>'dummy'];
 
         return $problem;
     }
