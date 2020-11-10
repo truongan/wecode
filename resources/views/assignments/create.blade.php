@@ -258,10 +258,10 @@
 		<small class="form-text text-muted">Problem's alias will be displayed when student view this assignment instead of the problem's original name<br/>
 		You can drag the handle to re-order the problems.<br/>
 		Remove one problem from assignment won't remove the submissions of that problem but will reset its alias and score to default if you re-add it later.
-		<br/>Currently: <span class="badge badge-info count_problems">0</span> problems with a total score of <span class="badge badge-info sum_score">0</span>
 		<br/><input class="ml-auto" type="number" id="score_amount" value="100">
-			<button type="button" class="m-2 btn btn-info btn-sm" id="distribute_score" >Distribute</button>
-			<button  class="btn btn-info btn-sm" id="set_score" type="button">Set score all</button>
+			<button  class="m-2 btn btn-info btn-sm" id="distribute_score" type="button" >Distribute score</button>
+			<button class="btn btn-info btn-sm" id="set_score" type="button">Set score all</button>
+		<br/>Currently: <span class="badge badge-info count_problems">0</span> problems with a total score of <span class="badge badge-info sum_score">0</span>
 		</small>
 	</label>
 

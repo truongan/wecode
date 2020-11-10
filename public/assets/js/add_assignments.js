@@ -107,10 +107,14 @@ $(document).ready(function(){
 		if(count > 0){
 			scores.val($('#score_amount').val()/count);
 		}
+		scores.last().val(0);
+		scores.last().change();
 	});
 	$('#set_score').click(function(){
-		$('.problem-score').val($('#score_amount').val()); 
-		
+		var scores = $('.problem-score'); 
+		scores.val($('#score_amount').val()); 
+		scores.last().val(0);
+		scores.last().change();
 	});
 	$('ul').on("change", '.problem-score', function(){
 		$('.sum_score').html('0');
