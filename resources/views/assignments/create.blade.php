@@ -225,10 +225,10 @@
 				</label>
 				<select class="all_problems form-control" multiple="multiple">
 					@foreach( $all_problems as $p)
-					<option value="{{ $p->id }}" data-name="{{$p->name}}" data-id="{{$p->id}}" data-note="{{ $p->admin_note }}" data-no_of_assignment="{{ $p->no_of_assignment }}"  data-owner="{{ $p->user->username }}" 
+					<option value="{{ $p->id }}" data-name="{{$p->name}}" data-id="{{$p->id}}" data-note="{{ $p->admin_note }}" data-no_of_assignment="{{ $p->no_of_assignment }}"  data-owner="{{ $p->user->username ?? 'none'}}" 
 						{{ isset($problems[$p->id]) ? 'selected="selected"' : ''  }}
 						>
-					 {{$p->id}} - {{$p->name}} ({{ $p->user->username }}| {{   $p->admin_note }}) </option>
+					 {{$p->id}} - {{$p->name}} ({{ $p->user->username ?? 'none'}}| {{   $p->admin_note }}) </option>
 					@endforeach
 				</select>
 			</fieldset>
@@ -254,11 +254,17 @@
 	</div>
 	
 	<fieldset class="form-group">
-	<label> Set alias, score and order for problems in this assignment  <small class="form-text text-muted">Problem's alias will be displayed when student view this assignment instead of the problem's original name<br/>
-	You can drag the handle to re-order the problems.<br/>
-	Remove one problem from assignment won't remove the submissions of that problem but will reset its alias and score to default if you re-add it later.
-	<br/>Currently: <span class="badge badge-info count_problems">0</span> problems with a total score of <span class="badge badge-info sum_score">0</span>
-	</small></label>
+	<label> Set alias, score and order for problems in this assignment  
+		<small class="form-text text-muted">Problem's alias will be displayed when student view this assignment instead of the problem's original name<br/>
+		You can drag the handle to re-order the problems.<br/>
+		Remove one problem from assignment won't remove the submissions of that problem but will reset its alias and score to default if you re-add it later.
+		<br/>Currently: <span class="badge badge-info count_problems">0</span> problems with a total score of <span class="badge badge-info sum_score">0</span>
+		<br/><input class="ml-auto" type="number" id="score_amount" value="100">
+			<button type="button" class="m-2 btn btn-info btn-sm" id="distribute_score" >Distribute</button>
+			<button  class="btn btn-info btn-sm" id="set_score" type="button">Set score all</button>
+		</small>
+	</label>
+
 	<ul id="problem_list" class="list-group">
 		@php($i = 0)
 		@foreach($problems as $problem)
@@ -273,7 +279,7 @@
 						<span class="lead mr-2">
 							{{-- @php(dd($problem->user->username)); --}}
 							<span class="badge badge-light">{{ $problem->id }}</span>
-							<span class="badge badge-secondary badge-pill">{{ $problem->user->username }}</span>
+							<span class="badge badge-secondary badge-pill">{{ $problem->user->username ??'none' }}</span>
 							{{ $problem->name }}
 						</span>
 						<div class="input-group input-group-sm mr-2">

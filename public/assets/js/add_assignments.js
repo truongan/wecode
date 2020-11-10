@@ -100,7 +100,18 @@ $(document).ready(function(){
 		})
 
 	});
-	
+
+	$('#distribute_score').click(function(){
+		var scores = $('.problem-score'); 
+		var count = scores.length - 1 
+		if(count > 0){
+			scores.val($('#score_amount').val()/count);
+		}
+	});
+	$('#set_score').click(function(){
+		$('.problem-score').val($('#score_amount').val()); 
+		
+	});
 	$('ul').on("change", '.problem-score', function(){
 		$('.sum_score').html('0');
 		var i = 0;
