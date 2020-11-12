@@ -43,7 +43,7 @@ class submission_controller extends Controller
 			if ($problem_id != 0) $problem = $assignment->problems->find($problem_id);
 			else $problem = $assignment->problems->first();	
 
-			$check = $assignment->can_submit(Auth::user())
+			$check = $assignment->can_submit(Auth::user());
 			if (!$check->can_submit){
 				abort(403, $check->error_message);
 			}
@@ -110,7 +110,7 @@ class submission_controller extends Controller
 			if ($problem_id != 0) $problem = $assignment->problems->find($problem_id);
 			else $problem = $assignment->problems->first();	
 
-			$check = $assignment->can_submit(Auth::user())
+			$check = $assignment->can_submit(Auth::user());
 			if (!$check->can_submit){
 				abort(403, $check->error_message);
 			}
