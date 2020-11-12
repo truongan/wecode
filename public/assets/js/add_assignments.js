@@ -71,7 +71,7 @@ $(document).ready(function(){
 		new_row.find('.admin_note').html(selected_data.note);
 
 
-		new_row.insertAfter(dummy_row).slideDown();
+		new_row.insertBefore(dummy_row).slideDown();
 
 		update_problem_count();
 	})
