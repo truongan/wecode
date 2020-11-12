@@ -379,12 +379,14 @@ class problem_controller extends Controller
                         $out = glob("$problem_dir/out_old/*");
                         // dd($out);
                         for($i = 1; $i <= count($in); $i++){
-                            var_dump([$in[$i-1],"$problem_dir/in/input$i.txt"] ); 
-                            rename($in[$i-1], "$problem_dir/in/input$i.txt");
-                            rename($out[$i-1], "$problem_dir/out/output$i.txt");
+                            // var_dump([$in[$i-1],"$problem_dir/in/input$i.txt"] ); 
+                            copy($in[$i-1], "$problem_dir/in/input$i.txt");
+                            copy($out[$i-1], "$problem_dir/out/output$i.txt");
                         }
-                        shell_exec("cd $problem_dir; rm -f in_old out_old");            
-                        dd($in);
+                        shell_exec("cd $problem_dir; rm -f in_old out_old");
+                        shell_exec("rm -rf $problem_dir/in_old");            
+                        shell_exec("rm -rf $problem_dir/out_old");            
+                        // dd($in);
                     }
                 } else {
                     //Check input and output file but won't rename
