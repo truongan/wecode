@@ -371,10 +371,22 @@ class problem_controller extends Controller
                     if (count($in) != count($out)){
                         $messages[] = 'The zip contain mismatch number of input and output files: ' . count($in) . ' input files vs ' . count($out) . ' output files';                  }
                     else {
+                        shell_exec("cd $problem_dir; rm -f in_old out_old");
+                        rename("$problem_dir/in", "$problem_dir/in_old");
+                        rename("$problem_dir/out", "$problem_dir/out_old");
+                        shell_exec("cd $problem_dir; mkdir in out");
+                        $in = glob("$problem_dir/in_old/*");
+                        $out = glob("$problem_dir/out_old/*");
+                        // dd($out);
                         for($i = 1; $i <= count($in); $i++){
-                            rename($in[$i-1], "$problem_dir/in/input$i.txt");
-                            rename($out[$i-1], "$problem_dir/out/output$i.txt");
+                            // var_dump([$in[$i-1],"$problem_dir/in/input$i.txt"] ); 
+                            copy($in[$i-1], "$problem_dir/in/input$i.txt");
+                            copy($out[$i-1], "$problem_dir/out/output$i.txt");
                         }
+                        shell_exec("cd $problem_dir; rm -f in_old out_old");
+                        shell_exec("rm -rf $problem_dir/in_old");            
+                        shell_exec("rm -rf $problem_dir/out_old");            
+                        // dd($in);
                     }
                 } else {
                     //Check input and output file but won't rename
@@ -519,7 +531,7 @@ class problem_controller extends Controller
         if ($a == null) abort(404);
         if ( ! in_array( Auth::user()->role->name, ['admin']) )
         {   
-            if (! $a->sharable && $a->user != Auth::user()) abort(403);
+            if (! $a->sharable && $a->user->id != Auth::user()->id) abort(403, 'you can only download sharable problems and problems that you upload');
         }
         
         $assignments_root = Setting::get("assignments_root");
