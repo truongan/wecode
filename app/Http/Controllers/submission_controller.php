@@ -31,6 +31,25 @@ class submission_controller extends Controller
 		}  
 	}
 
+	//abort on invalid creation
+	private function _valid_creation_guard($assignment_id, $problem_id){
+		if ($assignment_id == 0){
+			$problem = Problem::find($problem_id);
+			if ($problem->allow_practice == 0 && in_array( Auth::user()->role->name, ['student']) ){
+				abort(404);
+			}
+		}
+		else {
+			if ($problem_id != 0) $problem = $assignment->problems->find($problem_id);
+			else $problem = $assignment->problems->first();	
+
+			$check = $assignment->can_submit(Auth::user())
+			if (!$check->can_submit){
+				abort(403, $check->error_message);
+			}
+
+		} 
+	}
 	/**
 	 * Display a listing of the resource.
 	 *
@@ -87,9 +106,17 @@ class submission_controller extends Controller
 				abort(404);
 			}
 		}
-		else if ($problem_id != 0) $problem = $assignment->problems->find($problem_id);
-		else $problem = $assignment->problems->first();
-		
+		else {
+			if ($problem_id != 0) $problem = $assignment->problems->find($problem_id);
+			else $problem = $assignment->problems->first();	
+
+			$check = $assignment->can_submit(Auth::user())
+			if (!$check->can_submit){
+				abort(403, $check->error_message);
+			}
+
+		} 
+
 		if ($problem == NULL) abort(404);
 		return view('submissions.create', ['assignment' => $assignment, 'problem' => $problem]);
 	}
@@ -100,7 +127,15 @@ class submission_controller extends Controller
 			'assignment' => ['integer', 'gt:-1'],
 			'problem' => ['integer', 'gt:0'],
 		]);
-	
+
+		if ($request->assignment == 0){
+			$problem = Problem::find($request->problem);
+			if ($problem->allow_practice == 0 && in_array( Auth::user()->role->name, ['student']) ){
+				abort(404);
+			}
+		} else {
+
+		}
 		if ($this->upload($request))
 			return redirect()->route('submissions.index', [$request->assignment, 'all', 'all', 'all']);
 		else
