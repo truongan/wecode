@@ -37,16 +37,15 @@
 		<thead class="thead-dark">
 			<tr>
 				<th>ID</th>
-				<th>Owner</th>
+				{{-- <th>Owner</th> --}}
 				<th><small>Select</small></th>
 				<th>Class</th>
 				<th>Name</th>
 				<th><small>Submit</small></th>
-				<th>Coef</th>
+				{{-- <th>Coef</th> --}}
 				<th>Start</th>
 				<th>Finish</th>
 				<th><small>Score-board</small></th>
-				<th>PDF</th>
 				@if (!in_array( Auth::user()->role->name, ['student']))
 					<th><small>Open</small></th>
 					<th>Action</th>
@@ -59,8 +58,8 @@
 				@continue
 			@endif
 		<tr data-id="{{$assignment->id}}">
-			<td>{{$assignment->id}} </td>
-			<td>{{$assignment->user->username ?? "none"}} </td>
+			<td>{{$assignment->id}} {{$assignment->user->username ?? "no owner"}} </td>
+			{{-- <td></td> --}}
 			<td>
 				<span title="View an assignment's problem or submission will set it as your default assignment">
 					<i  class=" far {{ (isset(Auth::user()->selected_assignment->id) && $assignment->id == Auth::user()->selected_assignment->id) ? 'fa-check-square color6' : 'fa-square' }} fa-2x" data-id="{{ $assignment->id }}"></i>
@@ -79,38 +78,39 @@
 				</a>
 			</td>
 			<td>
-				@if ( in_array( Auth::user()->role->name, ['student']) )
-					<a href="{{ route('submissions.index', [$assignment->id, Auth::user()->id, 'all', 'all'])}}" title="View all submissions">
-						<small>{{$assignment->total_submits}} </small>
-					</a>
-				@else
-					<a href="{{ route('submissions.index', [$assignment->id, 'all', 'all', 'all'])}}" title="View all submissions">
-						<small>{{$assignment->total_submits}} </small>
-					</a>
-				@endif
-			</td>
-			<td>
+				<a href="
+					@if ( in_array( Auth::user()->role->name, ['student']) )
+						 {{ route('submissions.index', [$assignment->id, Auth::user()->id, 'all', 'all'])}}
+					@else
+						{{ route('submissions.index', [$assignment->id, 'all', 'all', 'all'])}}
+					@endif
+				" title="View all submissions">
+					<small>{{$assignment->total_submits}} sub</small>
+				</a>
+				<br/>
 				@if ($assignment->finished)
-					<span style="color: red;">Finished</span>
+					<span class="text-danger">Finished</span>
 				@else
 					@if($assignment->eval_coefficient() === "error")
-						<span style="color: red;">! Error</span>
+						<span class="text-danger">!Error late rule</span>
 					@else
-						{{$assignment->coefficient}}%
+						<span class="text-info">{{$assignment->coefficient}}% for late submit</span>
 					@endif
 				@endif
+
 			</td>
 			<td><small>{{$assignment->start_time->setTimezone($settings['timezone'])->locale('en')->isoFormat('llll (UZZ)') }}</small></td>
 			<td><small>{{$assignment->finish_time->setTimezone($settings['timezone'])->locale('en')->isoFormat('llll (UZZ)') }}</small></td>
 			<td>
-				@if ($assignment->score_board)
-					<a href="{{ url("scoreboard/full/$assignment->id")}}" title="Click to viewa assignment's scoreboard">View<i class="fas fa-external-link-alt"></i></a>
-				@else
-					<a href="{{ url("scoreboard/full/$assignment->id")}}"  title="Scoreboard closed, admin view only" ><span class="text-secondary">View<i class="fas fa-external-link-alt "></i></span></a>
-				@endif
-			</td>
-			<td>
-				<a href="{{ url("assignments/pdf/$assignment->id") }}"><i class="far fa-lg fa-file-pdf"></i></a>
+				<a href="{{ url("scoreboard/full/$assignment->id")}}" title="Click to viewa assignment's scoreboard">
+					@if ($assignment->score_board)
+						View<i class="fas fa-external-link-alt"></i>
+					@else
+						<span class="text-secondary">View<i class="fas fa-external-link-alt "></i></span>
+					@endif
+				</a>
+				<br/>
+				{{-- <a href="{{ url("assignments/pdf/$assignment->id") }}"><i class="far fa-lg fa-file-pdf"></i></a> --}}
 			</td>
 			@if (!in_array( Auth::user()->role->name, ['student']))
 			<td>
@@ -125,7 +125,7 @@
 				<a href="{{ route('assignments.download_all_submissions', $assignment->id) }}"><i title="Download all submissions" class="fas fa-cloud-download-alt"></i></a>
 				<a href="{{ route('moss.index', $assignment->id) }}"><i title="Detect Similar Codes" class="fa fa-user-secret fa-lg color7"></i></a>
 				<a href="{{ route('assignments.reload_scoreboard', $assignment->id) }}"><i title="Force reload scoreboard" class="fa fa-redo fa-lg color11"></i></a>
-				<a href="{{ route('submissions.rejudge_view', $assignment->id) }}"><i title="Force reload scoreboard" class="fa fa-retweet fa-lg color11"></i></a>
+				<a href="{{ route('submissions.rejudge_view', $assignment->id) }}"><i title="Rejudge submissions" class="fa fa-retweet fa-lg color11"></i></a>
 				<a title="Edit" href="{{ route('assignments.edit', $assignment) }}"><i class="fas fa-edit fa-lg color9"></i></a>
 				<span title="Delete Assignment" class="del_n delete_Assignment pointer"><i title="Delete Assignment" class="far fa-trash-alt fa-lg color1"></i></span>
 			</td>
@@ -209,9 +209,9 @@ $(document).ready(function () {
 	});
 
     $("table").DataTable({
-		"pageLength": 30,
+		"pageLength": 60,
 		"order":['0', 'desc'],
-		"lengthMenu": [ [10, 20, 30, 50, -1], [10, 20, 30, 50, "All"] ]
+		"lengthMenu": [ [20, 60, 150, 500, -1], [20, 60, 150, 500, "All"] ]
 	});
 });
 </script>
