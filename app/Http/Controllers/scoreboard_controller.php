@@ -8,6 +8,8 @@ use App\Assignment;
 use App\User;
 use App\Setting;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+
 // use Illuminate\Database\Eloquent\Collection;
 
 class scoreboard_controller extends Controller
