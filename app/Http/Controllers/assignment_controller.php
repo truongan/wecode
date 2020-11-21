@@ -316,7 +316,7 @@ class assignment_controller extends Controller
         $new->save();
 
         foreach ($assignemnt->problems as $p) {
-            $new->problems()->attach($p->id, ['score' => $p->score] )
+            //$new->problems()->attach($p->id, ['score' => $p->score] )
         }
     }
 
