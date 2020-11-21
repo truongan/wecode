@@ -299,6 +299,27 @@ class assignment_controller extends Controller
     }
     
 
+    public function duplicate(Assignment $assignment){
+        if (Auth::user()->role->name == 'admin'){
+            // Admin can duplicate anything
+        } else if (Auth::user()->role->name == 'head_instructor'){
+            if ($assignment->user != Auth::user() 
+                && !Auth::user()->lops()->with('assignments')->get()->pluck('assignments')->collapse()->pluck('id')->contains($assignment->id)
+            ){
+                abort(403, 'You can only edit assignment you created or assignment belongs to one of your classes');
+            }
+        }
+        else abort(403,'You do not have permission to edit assignment');
+
+        $new = $assignment->replicate();
+        $new->user_id = Auth::user()->id;
+        $new->save();
+
+        foreach ($assignemnt->problems as $p) {
+            $new->problems()->attach($p->id, ['score' => $p->score] )
+        }
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -502,7 +523,7 @@ class assignment_controller extends Controller
         elseif ($type === 'by_problem') 
             $zip_name = $assignments_root . "/assignment" . (string)$assignment_id . "_submissions_by_problem_" . (string)date('Y-m-d_H-i') . ".zip";
         $zip->open($zip_name, ZipArchive::CREATE | ZipArchive::OVERWRITE);
-
+        dd("$zip");
         foreach ($final_subs as $final_sub)
         {
             $file_path = Submission::get_path($final_sub->username, $assignment_id, $final_sub->problem_id) 

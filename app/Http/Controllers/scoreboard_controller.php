@@ -35,7 +35,7 @@ class scoreboard_controller extends Controller
 		if (in_array( Auth::user()->role->name, ['student']) && $assignment->scoreboard == false)
 		{
 			//Student can only view scoreboard if allowed
-			abort(404, "This assignment does not have scoreboard")
+			abort(404, "This assignment does not have scoreboard");
 		}
 		$scoreboard = NULL;
 		if ($assignment)

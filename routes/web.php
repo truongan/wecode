@@ -74,6 +74,7 @@ Route::get('/assignment/scores/accepted/', 'assignment_controller@score_accepted
 Route::get('/assignment/scores/sum/', 'assignment_controller@score_sum')->name('assignments.score_sum');
 
 Route::post('/assignment/check_open/', 'assignment_controller@check_open')->name('assignments.check_open');
+Route::get('/assignment/duplicate/{assignment}', 'assignment_controller@duplicate')->name('assignments.duplicate');
 
 Route::get('/scoreboard/simplify/{id}', 'scoreboard_controller@simplify')->name('scoreboards.simplify');
 Route::get('/scoreboard/plain/{id}', 'scoreboard_controller@plain')->name('scoreboards.plain');

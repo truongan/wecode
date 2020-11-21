@@ -212,6 +212,18 @@ $(document).ready(function () {
     $("table").DataTable({
 		"pageLength": 60,
 		"order":['0', 'desc'],
+		"columns": [
+		    null,
+		    { "orderable": false }, //select
+		    null,
+		    null,
+		    null,
+		    null,//start
+		    null,//finish
+		    { "orderable": false }, //scoreboard
+		    { "orderable": false }, //open
+		    { "orderable": false }, //action
+		  ],
 		"lengthMenu": [ [20, 60, 150, 500, -1], [20, 60, 150, 500, "All"] ]
 	});
 });
