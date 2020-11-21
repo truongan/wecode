@@ -96,15 +96,15 @@
 							<th width="15%"><small> Code</small></th>
 						@else
 							<th width="5%"><small> Username</small></th>
-							<th width="20%"><small> Name</small></th>
+							{{-- <th width="20%"><small> Name</small></th> --}}
 							<th width="20%"><small> Problem</small></th>
 							<th width="10%"><small> Submit Time</small></th>
 							<th width="1%"><small> Delay %</small></th>
 							<th width="1%"><small> Lang</small></th>
 							<th width="6%"><small> Status</small></th>
 							<th width="6%"><small> Code</small></th>
-							<th width="6%"><small> Log</small></th>
-							<th width="1%"><small> Rejudge</small></th>
+							<th width="6%"><small> Log / rejudge</small></th>
+							{{-- <th width="1%"><small> Rejudge</small></th> --}}
 						@endif
 					</tr>
 				</thead>
@@ -123,10 +123,12 @@
 					@if (!in_array( Auth::user()->role->name, ['student']))
 					<td>
 						<a href="{{route('submissions.index', [$assignment->id, strval($submission->user_id), $problem_id, 'all'])}}">
-							{{$submission->user->username}}<br><i class="fas fa-filter"></i>
-						</a>
+							{{$submission->user->username}}
+						({{$submission->user->display_name}})
+						<br/><i class="fas fa-filter"></i>
+						</a><br/>
 					</td>
-					<td>{{$submission->user->display_name}}</td>
+					{{-- <td></td> --}}
 					@endif
 					<td>
 						@if ($assignment->id == 0)
@@ -137,7 +139,7 @@
 							{{ $all_problems[$submission->problem_id]->pivot->problem_name ?? "--- removed ---"}}
 						@endif
 						</a><br>
-						<a href="{{route('submissions.create', [$assignment->id,$submission->problem_id])}}"><span class="btn btn-dark btn-sm"><i class="fas fa-edit"></i></span></a><br>
+						<a href="{{route('submissions.create', [$assignment->id,$submission->problem_id])}}"><span class="btn btn-dark btn-sm"><i class="fas fa-edit"></i></span></a>
 						<a href="{{route('submissions.index', [$assignment->id, $user_id, strval($submission->problem_id), 'all'])}}"><span class="btn btn-info btn-sm m-1"><i class="fas fa-filter"></i></span></a>
 					</td>
 					<td><small>{{$submission->created_at->setTimezone($settings['timezone'])->locale('en')->isoFormat('llll (UZZ)') }}</small></td>
@@ -173,10 +175,9 @@
 					@if (!in_array( Auth::user()->role->name, ['student']))
 					<td>
 						<div class="btn btn-secondary" data-type="log">Log</div>
+						<div class="shj_rejudge pointer m-2"><i class="fa fa-redo fa-lg color10"></i></div>
 					</td>
-					<td>
-					<div class="shj_rejudge pointer"><i class="fa fa-redo fa-lg color10"></i></div>
-					</td>
+
 					@endif
 				</tr>
 				@endforeach

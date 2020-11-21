@@ -211,7 +211,8 @@ $(document).ready(function () {
 
     $("table").DataTable({
 		"pageLength": 60,
-		"order":['0', 'desc'],
+		"ordering":false,
+		// "order":['0', 'desc'],
 		"columns": [
 		    null,
 		    { "orderable": false }, //select
