@@ -58,7 +58,7 @@
 				@continue
 			@endif
 		<tr data-id="{{$assignment->id}}">
-			<td>{{$assignment->id}} {{$assignment->user->username ?? "no owner"}} </td>
+			<td><span title="Owner's username and assignment id"> {{$assignment->id}} <br/> {{$assignment->user->username ?? "no owner"}} </span> </td>
 			{{-- <td></td> --}}
 			<td>
 				<span title="View an assignment's problem or submission will set it as your default assignment">
@@ -88,21 +88,22 @@
 					<small>{{$assignment->total_submits}} sub</small>
 				</a>
 				<br/>
+				<small>
 				@if ($assignment->finished)
 					<span class="text-danger">Finished</span>
 				@else
 					@if($assignment->eval_coefficient() === "error")
 						<span class="text-danger">!Error late rule</span>
 					@else
-						<span class="text-info">{{$assignment->coefficient}}% for late submit</span>
+						<span class="text-info">{{$assignment->coefficient}}% if submit now</span>
 					@endif
 				@endif
-
+				</small>
 			</td>
 			<td><small>{{$assignment->start_time->setTimezone($settings['timezone'])->locale('en')->isoFormat('llll (UZZ)') }}</small></td>
 			<td><small>{{$assignment->finish_time->setTimezone($settings['timezone'])->locale('en')->isoFormat('llll (UZZ)') }}</small></td>
 			<td>
-				<a href="{{ url("scoreboard/full/$assignment->id")}}" title="Click to viewa assignment's scoreboard">
+				<a href="{{ route('scoreboards.index', $assignment->id)}}" title="Click to viewa assignment's scoreboard">
 					@if ($assignment->score_board)
 						View<i class="fas fa-external-link-alt"></i>
 					@else
