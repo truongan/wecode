@@ -313,11 +313,13 @@ class assignment_controller extends Controller
 
         $new = $assignment->replicate();
         $new->user_id = Auth::user()->id;
+        $new->total_submits = 0;
         $new->save();
 
-        foreach ($assignemnt->problems as $p) {
-            //$new->problems()->attach($p->id, ['score' => $p->score] )
+        foreach ($assignment->problems as $p) {
+            $new->problems()->attach($p->id, ['score' => $p->pivot->score, 'problem_name' => $p->pivot->problem_name, 'ordering' =>$p->pivot->ordering] );
         }
+        return redirect()->route('assignments.index');
     }
 
     /**

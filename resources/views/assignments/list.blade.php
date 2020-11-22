@@ -39,9 +39,9 @@
 				<th>ID</th>
 				{{-- <th>Owner</th> --}}
 				<th><small>Select</small></th>
-				<th>Class</th>
-				<th>Name</th>
-				<th><small>Submit</small></th>
+				<th width="15%">Class</th>
+				<th width="15%">Name</th>
+				<th width="15%"><small>Submit</small></th>
 				{{-- <th>Coef</th> --}}
 				<th>Start</th>
 				<th>Finish</th>
@@ -58,7 +58,7 @@
 				@continue
 			@endif
 		<tr data-id="{{$assignment->id}}">
-			<td><span title="Owner's username and assignment id"> {{$assignment->id}} <br/> {{$assignment->user->username ?? "no owner"}} </span> </td>
+			<td><span title="Owner's username and assignment id"> {{$assignment->id}}  </span> </td>
 			{{-- <td></td> --}}
 			<td>
 				<span title="View an assignment's problem or submission will set it as your default assignment">
@@ -73,8 +73,7 @@
 			<td>
 				<a href="{{ route('assignments.show',['assignment'=>$assignment,'problem_id'=>$assignment->problems->first()->id??0]) }}" title="Click to view problem(s)">
 					<strong>{{ $assignment->name }}</strong>
-					<br/>
-					({{ $assignment->no_of_problems }} problems)
+					<br/> (by:{{$assignment->user->username ?? "no owner"}})
 				</a>
 			</td>
 			<td>
@@ -86,6 +85,8 @@
 					@endif
 				" title="View all submissions">
 					<small>{{$assignment->total_submits}} sub</small>
+				-
+				{{ $assignment->no_of_problems }} prob
 				</a>
 				<br/>
 				<small>
@@ -121,14 +122,19 @@
 				</div>
 			</td>
 			<td>
-				<a href="{{ route('assignments.download_submissions', ['type'=>'by_user', 'assignment_id'=>$assignment->id]) }}"><i title="Download Final Submissions (by user)" class="fa fa-download fa-lg color12"></i></a>
-				<a href="{{ route('assignments.download_submissions', ['type'=>'by_problem', 'assignment_id'=>$assignment->id]) }}"><i title="Download Final Submissions (by problem)" class="fa fa-download fa-lg color2"></i></a>
-				<a href="{{ route('assignments.download_all_submissions', $assignment->id) }}"><i title="Download all submissions" class="fas fa-cloud-download-alt"></i></a>
-				<a href="{{ route('moss.index', $assignment->id) }}"><i title="Detect Similar Codes" class="fa fa-user-secret fa-lg color7"></i></a>
-				<a href="{{ route('assignments.reload_scoreboard', $assignment->id) }}"><i title="Force reload scoreboard" class="fa fa-redo fa-lg color11"></i></a>
+				<a href="{{ route('assignments.duplicate', $assignment->id) }}" title="Duplicate assignment" ><i title="Duplicate assignment" class="far fa-copy fa-lg color1"></i></a>
 				<a href="{{ route('submissions.rejudge_view', $assignment->id) }}"><i title="Rejudge submissions" class="fa fa-retweet fa-lg color11"></i></a>
 				<a title="Edit" href="{{ route('assignments.edit', $assignment) }}"><i class="fas fa-edit fa-lg color9"></i></a>
 				<span title="Delete Assignment" class="del_n delete_Assignment pointer"><i title="Delete Assignment" class="far fa-trash-alt fa-lg color1"></i></span>
+				
+				<a href="#extra_action_{{$assignment->id}}" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="#extra_action_{{$assignment->id}}" ><i class="fas fa-ellipsis-v text-info m-2"></i></i></a>
+				<div class="collapse" id="extra_action_{{$assignment->id}}">
+					<a href="{{ route('assignments.download_submissions', ['type'=>'by_user', 'assignment_id'=>$assignment->id]) }}"><i title="Download Final Submissions (by user)" class="fa fa-download fa-lg color12"></i></a>
+					<a href="{{ route('assignments.download_submissions', ['type'=>'by_problem', 'assignment_id'=>$assignment->id]) }}"><i title="Download Final Submissions (by problem)" class="fa fa-download fa-lg color2"></i></a>
+					<a href="{{ route('assignments.download_all_submissions', $assignment->id) }}"><i title="Download all submissions" class="fas fa-cloud-download-alt"></i></a>
+					<a href="{{ route('moss.index', $assignment->id) }}"><i title="Detect Similar Codes" class="fa fa-user-secret fa-lg color7"></i></a>
+					<a href="{{ route('assignments.reload_scoreboard', $assignment->id) }}"><i title="Force reload scoreboard" class="fa fa-redo fa-lg color11"></i></a>
+				</div>
 			</td>
 			@endif
 		</tr>
