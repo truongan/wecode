@@ -8,6 +8,8 @@ use App\Assignment;
 use App\User;
 use App\Setting;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+
 // use Illuminate\Database\Eloquent\Collection;
 
 class scoreboard_controller extends Controller
@@ -31,6 +33,12 @@ class scoreboard_controller extends Controller
     {
 		$assignment = Assignment::find($assignment_id);
 		// dd($assignment);
+
+		if (in_array( Auth::user()->role->name, ['student']) && $assignment->scoreboard == false)
+		{
+			//Student can only view scoreboard if allowed
+			abort(404, "This assignment does not have scoreboard");
+		}
 		$scoreboard = NULL;
 		if ($assignment)
 		{
