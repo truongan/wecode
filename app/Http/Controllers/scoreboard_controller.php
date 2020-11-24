@@ -9,6 +9,7 @@ use App\User;
 use App\Setting;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use DOMDocument;
 
 // use Illuminate\Database\Eloquent\Collection;
 
@@ -70,22 +71,29 @@ class scoreboard_controller extends Controller
 	
 		$a = $this->get_scoreboard($assignment_id);
 
+		$dom = new DOMDocument;
+		$dom->loadHTML($a);
+		$ps = $dom->getElementsByTagName('p');
+		while($ps->length > 0){
+			$ps[0]->parentNode->removeChild($ps[0]);
+		}
 		//Remove excess info
-		$a = preg_replace('/[0-9]+:[0-9]+(\*\*)?/', '', $a);
-		$a = preg_replace('/\B-\B/', '', $a);
-		$a = preg_replace('/[0-9]+\*/', '0', $a);
-		$a = preg_replace('/\n+/', "\n", $a);
+		// $a = preg_replace('/[0-9]+:[0-9]+(\*\*)?/', '', $a);
+		// $a = preg_replace('/\B-\B/', '', $a);
+		// $a = preg_replace('/[0-9]+\*/', '0', $a);
+		// $a = preg_replace('/\n+/', "\n", $a);
+		// $a = preg_replace('/<p class="excess">.*<\/p>/', "", $a);
 
 		//Remove the legend
-		$c = 0;
-		$i = strlen($a) - 1;
-		for(; $i > 0; $i--){
-		    if($a[$i] == "\n") $c++;
-		    if($c == 3) break;
-		}
-		$a = substr($a, 0, $i);
+		// $c = 0;
+		// $i = strlen($a) - 1;
+		// for(; $i > 0; $i--){
+		//     if($a[$i] == "\n") $c++;
+		//     if($c == 3) break;
+		// }
+		// $a = substr($a, 0, $i);
 
-		return $a;
+		return $dom->saveHTML();
 	}
 	
 	public function plain($assignment_id){

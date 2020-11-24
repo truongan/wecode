@@ -34,8 +34,8 @@
 				<th>owner</th>
 				<th>Tags</th>
 				<th>Lang</th>
-				<th>Assignmnets</th>
-				<th>Submissions</th>
+				<th><small>Assignmnet</small></th>
+				<th><small>Submission</small></th>
 				{{-- <th>diff<br/>arg</th> --}}
 				<th>Tools</th>
 			</tr>
@@ -73,13 +73,13 @@
 			</td>
 			<td>
 					<a class="btn btn-sm btn-primary" data-toggle="collapse" href="#assignment_list_{{$item->id}}" aria-expanded="false" aria-controls="assignment_list_{{$item->id}}">
-						show {{ $item->assignments->count()}} assignments
+						{{ $item->assignments->count()}}<small> assignments</small>
 					</a>
 				<div class="collapse" id="assignment_list_{{$item->id}}">
 					
 					@foreach ($item->assignments as $assignment)
 						<a href="{{ route('submissions.index', ['assignment_id' => $assignment->id, 'problem_id' => $item->id, 'user_id' => 'all' , 'choose' => 'all']) }}" >
-						<span class="btn  btn-primary btn-sm my-1">{{$assignment->name}} <span class="badge badge-secondary">{{$assignment->user->username ?? "no-owner"}}</span> </span></a>
+						<span class="btn  btn-secondary btn-sm my-1">{{$assignment->name}} <span class="badge badge-info">{{$assignment->user->username ?? "no-owner"}}</span> </span></a>
 					@endforeach
 				</div>
 
@@ -164,10 +164,8 @@
 	});
 
 	$("table").DataTable({
-		{{-- "pageLength": 30, --}}
-		"order":['0', 'desc'],
 		"paging": false,
-		{{-- "lengthMenu": [ [10, 30, 90, 200, -1], [10, 30, 90, 200, "All"] ] --}}
+		"ordering": false,
 	});
   });
 </script>

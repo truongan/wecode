@@ -497,9 +497,12 @@ class assignment_controller extends Controller
     {
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
             abort(403);
-        if (Assignment::find($assignment_id) == null)
+        $ass = Assignment::find($assignment_id) ;
+        if ($ass == null)
             abort(404);
 
+        if ($ass->submissions->count() == 0) abort(404);
+        
         $assignments_root = Setting::get("assignments_root");
         $zipFile = $assignments_root . "/assignment" . (string)$assignment_id . "." . (string)date('Y-m-d_H-i') . ".zip";
         $pathdir = $assignments_root . '/assignment_' . $assignment_id . "/";
@@ -509,8 +512,8 @@ class assignment_controller extends Controller
 
     public function download_submissions($type, $assignment_id)
     {
-        // if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
-        //     abort(403);
+        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
+            abort(403);
         if (Assignment::find($assignment_id) == null)
             abort(404);
         if ($type !== 'by_user' && $type !== 'by_problem')
@@ -519,13 +522,15 @@ class assignment_controller extends Controller
         $assignments_root = Setting::get("assignments_root");
         $final_subs = Submission::get_final_submissions($assignment_id);
 
+        if($final_subs->count() <= 0) abort (404);
+
         $zip = new ZipArchive;
         if ($type === 'by_user')
             $zip_name = $assignments_root . "/assignment" . (string)$assignment_id . "_submissions_by_user_" . (string)date('Y-m-d_H-i') . ".zip";
         elseif ($type === 'by_problem') 
             $zip_name = $assignments_root . "/assignment" . (string)$assignment_id . "_submissions_by_problem_" . (string)date('Y-m-d_H-i') . ".zip";
         $zip->open($zip_name, ZipArchive::CREATE | ZipArchive::OVERWRITE);
-        dd("$zip");
+        // dd($zip);
         foreach ($final_subs as $final_sub)
         {
             $file_path = Submission::get_path($final_sub->username, $assignment_id, $final_sub->problem_id) 
@@ -537,10 +542,13 @@ class assignment_controller extends Controller
                 $zip->addFromString("{$final_sub->username}/problem_{$final_sub->problem_id}." . (string)Language::find($final_sub->language_id)->extension, $file);
             elseif ($type === 'by_problem')
                 $zip->addFromString("problem_{$final_sub->problem_id}/{$final_sub->username}." . (string)Language::find($final_sub->language_id)->extension, $file);
-
         }
 
+        if ($zip->count() == 0){
+            abort(404, "No submissions to download");
+        }
         $zip->close();
+        
 
         return response()->download($zip_name)->deleteFileAfterSend();
     }

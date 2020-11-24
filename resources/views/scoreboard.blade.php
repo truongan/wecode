@@ -6,6 +6,16 @@
 
 @section('title_menu')
 {{-- thêm assignment.id vào --}}
+
+@section('other_assets')
+<link rel='stylesheet' type='text/css' href='https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css'/>
+<script>
+	if(!!window.performance && window.performance.navigation.type === 2)
+	{
+		window.location.reload();
+	}
+</script>
+@endsection
 @php($sl = 0)
 @if (isset(Auth::user()->selected_assignment_id))
 	@php($sl = 1)
@@ -62,4 +72,17 @@
 		<span class="text-warning">**: Delay time</span>
 	@endif
 </div>
+@endsection
+
+@section('body_end')
+<script type='text/javascript' src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script type='text/javascript' src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
+<script>
+$(document).ready(function () {
+	$("table").DataTable({
+		"paging": false,
+		"ordering": true,
+	});
+});
+</script>
 @endsection
