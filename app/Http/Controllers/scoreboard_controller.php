@@ -91,7 +91,7 @@ class scoreboard_controller extends Controller
 		// }
 		// $a = substr($a, 0, $i);
 
-		return $dom->saveHTML();
+		return $dom->saveXML($dom->getElementsByTagName('table')[0]);
 	}
 	
 	public function plain($assignment_id){

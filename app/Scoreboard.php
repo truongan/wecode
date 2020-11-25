@@ -185,7 +185,10 @@ class Scoreboard extends Model
 	public static function update_scoreboard($assignment_id)
 	{
 		// dd(['assignment_id' => $assignment_id]);
-		return Scoreboard::firstOrCreate(['assignment_id' => $assignment_id], ['scoreboard' => ""])->_update_scoreboard();     
+		if ($assignment_id != 0) {
+			//We don't create scoreboard for practice assignment
+			return Scoreboard::firstOrCreate(['assignment_id' => $assignment_id], ['scoreboard' => ""])->_update_scoreboard();     
+		}
 	}
 
 }
