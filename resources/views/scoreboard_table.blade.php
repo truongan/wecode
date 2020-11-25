@@ -41,7 +41,7 @@
                             {{ $scores[$sc_username][$problem->id]['score'] }}*
                     @endif
                 </a>
-                <p class="excess"><br/>
+                <p class="excess">
                     <span class="small text-info" title="Total tries and time to final submit">
                     {{$number_of_submissions[$sc_username][$problem->id]}}
                         - </span>
@@ -60,8 +60,9 @@
         <td>
 
                 <span>{{ $scoreboard['score'][$loop->index] }}</span>
-                <br>
-                <span class="small" title="Total Time + Submit Penalty">{{($scoreboard['submit_penalty'][$loop->index]->cascade()->forHumans(['short' => true]) ) }}</span>
+                <p class="excess">
+                    <span class="small" title="Total Time + Submit Penalty">{{($scoreboard['submit_penalty'][$loop->index]->cascade()->forHumans(['short' => true]) ) }}</span>
+                </p>
 
         </td>
         <td class="bg-success text-white" >

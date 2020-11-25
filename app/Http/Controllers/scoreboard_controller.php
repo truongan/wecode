@@ -33,9 +33,7 @@ class scoreboard_controller extends Controller
     public function index($assignment_id)
     {
 		$assignment = Assignment::find($assignment_id);
-		// dd($assignment);
-
-		if (in_array( Auth::user()->role->name, ['student']) && $assignment->scoreboard == false)
+		if (in_array( Auth::user()->role->name, ['student']) && $assignment->score_board == false)
 		{
 			//Student can only view scoreboard if allowed
 			abort(404, "This assignment does not have scoreboard");

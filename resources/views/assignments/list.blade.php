@@ -107,7 +107,7 @@
 				<a href="{{ route('scoreboards.index', $assignment->id)}}" title="Click to viewa assignment's scoreboard">
 					@if ($assignment->score_board)
 						View<i class="fas fa-external-link-alt"></i>
-					@else
+					@elseif (!in_array( Auth::user()->role->name, ['student']))
 						<span class="text-secondary">View<i class="fas fa-external-link-alt "></i></span>
 					@endif
 				</a>
