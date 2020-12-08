@@ -64,11 +64,25 @@ class submission_controller extends Controller
 		{
 			return redirect()->route('submissions.index', [0, 'all', 'all', 'all']);
 		}
+
+		$assignment = Assignment::with('submissions.user', 'submissions.problem')->find($assignment_id);
+
+        if (Auth::user()->role->name == 'admin'){
+            // Admin can duplicate anything
+        } else if (  in_array( Auth::user()->role->name, ['head_instructor', 'instructor']) ){
+            if ($assignment->user != Auth::user() 
+                && !Auth::user()->lops()->with('assignments')->get()->pluck('assignments')->collapse()->pluck('id')->contains($assignment->id)
+            ){
+                abort(403, 'You can only view submissions for assignment you created or assignment belongs to one of your classes');
+            }
+        }
+
 		Auth::user()->selected_assignment_id = $assignment_id;
 		Auth::user()->save(); 
-		$assignment = Assignment::with('submissions.user', 'submissions.problem')->find($assignment_id);
+
 		if ( in_array( Auth::user()->role->name, ['student']) )
 		{
+			//Student can only view their own submissions, regardless of assignment, so we don't check assignment permissions for student
 			$submissions =$assignment->submissions()->where('user_id',Auth::user()->id);
 		}
 		else 
