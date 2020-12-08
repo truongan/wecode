@@ -34,9 +34,9 @@
 				<th>owner</th>
 				<th>Tags</th>
 				<th>Lang</th>
-				<th>Assignmnets</th>
-				<th>Submissions</th>
-				<th>diff<br/>arg</th>
+				<th><small>Assignmnet</small></th>
+				<th><small>Submission</small></th>
+				{{-- <th>diff<br/>arg</th> --}}
 				<th>Tools</th>
 			</tr>
 		</thead>
@@ -61,14 +61,27 @@
 			  	@endforeach
 			</td>
 			<td>
+				<a class="btn btn-sm btn-primary" data-toggle="collapse" href="#language_list_{{$item->id}}" aria-expanded="false" aria-controls="language_list_{{$item->id}}">
+					{{  $item->languages->pluck('name')->join(", ")  }}
+				</a>
+			<div class="collapse" id="language_list_{{$item->id}}">
+				
 			  @foreach ($item->languages as $language_name)
-			  <span class="btn btn-sm btn-secondary mb-1">{{$language_name->name}} <span class="badge badge-pill badge-info">{{$language_name->pivot->time_limit/1000}}s</span><span class="badge badge-pill badge-info">{{$language_name->pivot->memory_limit/1000}}MB</span></span>
+			  	<span class="btn btn-sm btn-secondary mb-1">{{$language_name->name}} <span class="badge badge-pill badge-info">{{$language_name->pivot->time_limit/1000}}s</span><span class="badge badge-pill badge-info">{{$language_name->pivot->memory_limit/1000}}MB</span></span>
 			  @endforeach
+			</div>
 			</td>
 			<td>
-				@foreach ($item->assignments as $assignment)
-					<a href="{{ route('submissions.index', ['assignment_id' => $assignment->id, 'problem_id' => $item->id, 'user_id' => 'all' , 'choose' => 'all']) }}" class="btn btn-primary">{{$assignment->name}}</span></a>
-				@endforeach
+					<a class="btn btn-sm btn-primary" data-toggle="collapse" href="#assignment_list_{{$item->id}}" aria-expanded="false" aria-controls="assignment_list_{{$item->id}}">
+						{{ $item->assignments->count()}}<small> assignments</small>
+					</a>
+				<div class="collapse" id="assignment_list_{{$item->id}}">
+					
+					@foreach ($item->assignments as $assignment)
+						<a href="{{ route('submissions.index', ['assignment_id' => $assignment->id, 'problem_id' => $item->id, 'user_id' => 'all' , 'choose' => 'all']) }}" >
+						<span class="btn  btn-secondary btn-sm my-1">{{$assignment->name}} <span class="badge badge-info">{{$assignment->user->username ?? "no-owner"}}</span> </span></a>
+					@endforeach
+				</div>
 
 			</td>
 			<td>
@@ -76,7 +89,7 @@
 				/
 				<span class="text-info">{{ $item->total_submit }} ({{ $item->ratio }}%) </span>
 			</td>
-			<td>{{ $item->diff_arg }}</td>
+			{{-- <td>{{ $item->diff_arg }}</td> --}}
 			
 			<td>
 				<a href="{{ route('problems.downloadtestsdesc',$item->id) }}">
@@ -150,11 +163,10 @@
 	  $("#problem_delete").modal("show");
 	});
 
-	{{-- $("table").DataTable({
-		"pageLength": 30,
-		"order":['0', 'desc'],
-		"lengthMenu": [ [10, 30, 90, 200, -1], [10, 30, 90, 200, "All"] ]
-	}); --}}
+	$("table").DataTable({
+		"paging": false,
+		"ordering": false,
+	});
   });
 </script>
 @endsection
