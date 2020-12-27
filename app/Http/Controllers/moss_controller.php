@@ -35,14 +35,15 @@ class moss_controller extends Controller
 		$moss_problems = array();
 
 		foreach ($assignment->problems as $key => $problem){
-			$moss_problems[$problem->id] = NULL;
-			
+			$moss_problems[$problem->id]['problem'] = $problem;
 			$path = Submission::get_path('', $assignment_id, $problem->id) .'/' ;
 			if (file_exists($path . "moss_link.txt") && file_get_contents($path . "moss_link.txt") != ''){
-				$moss_problems[$problem->id] = shell_exec("tail -n1 $path/moss_link.txt");
+				$moss_problems[$problem->id]['moss'] = shell_exec("tail -n1 $path/moss_link.txt");
 				shell_exec("rm $path/moss_running");
 			} else if (file_exists($path . "moss_running")){
-				$moss_problems[$problem->id] = "submission submitted to moss, awaiting respone, please be patience";
+				$moss_problems[$problem->id]['moss'] = "submission submitted to moss, awaiting respone, please be patience";
+			} else {
+				$moss_problems[$problem->id]['moss'] = NULL;
 			}
 		}
 		return view('admin.moss', ['all_assignments' => $all_assignments, 'moss_userid' => $moss_userid, 'moss_assignment' => $moss_assignment, 'update_time' => $update_time, 'moss_problems' => $moss_problems]); 

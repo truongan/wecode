@@ -77,13 +77,14 @@
 		Links will expire after some time. (last update: {{ $update_time }}) <br>
 		<ul>
 		@foreach ($moss_problems as $moss_problem)
-			<li>Problem {{$loop->iteration}} - {{ $moss_problem->id }} - {{ $moss_problem ?? '-'}} :
+		
+			<li>Problem {{$loop->iteration}} ({{ $moss_problem['problem']->id }}){{ $moss_problem['problem']->pivot->problem_name ?? '-'}} :
 				@if ($moss_problem == null)
 					Link Not Found.
 				{{-- @elseif (not $moss_problem|trim)
 					Link Not Found. There were error running moss --}}
 				@else
-					<a href="{{ $moss_problem }}" target="_black">{{ $moss_problem }}</a>
+					<a href="{{ $moss_problem['moss'] }}" target="_black">{{ $moss_problem['moss'] }}</a>
 				@endif
 			</li>
 		@endforeach
