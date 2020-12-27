@@ -34,7 +34,7 @@ class moss_controller extends Controller
 
 		$moss_problems = array();
 
-		foreach ($assignment->problems as $problem->id => $problem){
+		foreach ($assignment->problems as $key => $problem){
 			$moss_problems[$problem->id] = NULL;
 			
 			$path = Submission::get_path('', $assignment_id, $problem->id) .'/' ;
@@ -96,7 +96,7 @@ class moss_controller extends Controller
 			foreach ($group as $item){
 				$list .= "problem_{$problem_id}/{$item->username}/{$item->file_name}." .(string)Language::find($item->language_id)->extension . " ";
 			}
-			echo "list='$list'; cd $assignment_path; $tester_path/moss \$list > problem_{$problem_id}/moss_link.txt  2>&1 &"; 			die();
+			// echo "list='$list'; cd $assignment_path; $tester_path/moss \$list > problem_{$problem_id}/moss_link.txt  2>&1 &"; 			die();
 
 			exec("list='$list'; cd $assignment_path; $tester_path/moss \$list > problem_{$problem_id}/moss_link.txt  2>&1 &");
 			exec("cd $assignment_path/problem_{$problem_id}; touch moss_running");
