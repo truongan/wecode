@@ -78,7 +78,7 @@
 		<ul>
 		@foreach ($moss_problems as $moss_problem)
 		
-			<li>Problem {{$loop->iteration}} ({{ $moss_problem['problem']->id }}){{ $moss_problem['problem']->pivot->problem_name ?? '-'}} :
+			<li>Problem {{$loop->iteration}}  {{ $moss_problem['problem']->pivot->problem_name ?? '-'}}<span class="badge badge badge-secondary">{{ $moss_problem['problem']->id }}</span> :
 				@if ($moss_problem == null)
 					Link Not Found.
 				{{-- @elseif (not $moss_problem|trim)
