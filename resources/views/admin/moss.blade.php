@@ -77,7 +77,7 @@
 		Links will expire after some time. (last update: {{ $update_time }}) <br>
 		<ul>
 		@foreach ($moss_problems as $moss_problem)
-			<li>Problem {{$loop->iteration}}:
+			<li>Problem {{$loop->iteration}} - {{ $moss_problem->id }} - {{ $moss_problem ?? '-'}} :
 				@if ($moss_problem == null)
 					Link Not Found.
 				{{-- @elseif (not $moss_problem|trim)
