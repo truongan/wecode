@@ -68,8 +68,11 @@ class submission_controller extends Controller
 		$assignment = Assignment::with('submissions.user', 'submissions.problem')->find($assignment_id);
 
         if (Auth::user()->role->name == 'admin'){
-            // Admin can duplicate anything
-        } else if (  in_array( Auth::user()->role->name, ['head_instructor', 'instructor']) ){
+            // Admin can view anything
+		} 
+		else if (  in_array( Auth::user()->role->name, ['head_instructor', 'instructor']) 
+					&& $assignment->id != 0 //Allow instructors to view any practice submissions
+		){
             if ($assignment->user != Auth::user() 
                 && !Auth::user()->lops()->with('assignments')->get()->pluck('assignments')->collapse()->pluck('id')->contains($assignment->id)
             ){
@@ -83,14 +86,12 @@ class submission_controller extends Controller
 		if ( in_array( Auth::user()->role->name, ['student']) )
 		{
 			//Student can only view their own submissions, regardless of assignment, so we don't check assignment permissions for student
-			$submissions =$assignment->submissions()->where('user_id',Auth::user()->id);
+			$user_id = Auth::user()->id;
 		}
-		else 
-		{
-			$submissions =$assignment->submissions();
-			if ($user_id != 'all'){
-				$submissions = $submissions->where('user_id',intval($user_id));
-			}
+
+		$submissions =$assignment->submissions();
+		if ($user_id != 'all'){
+			$submissions = $submissions->where('user_id',intval($user_id));
 		}
 
 		if ($choose == 'final'){
