@@ -138,8 +138,12 @@ class lop_controller extends Controller
         // var_dump($request->input());die();
 
         $remove = $request->input('remove');
+        // dd(array_search(Auth::user()->id,$remove));
         if($remove != NULL){
-            unset($remove[array_search(Auth::user()->id,$remove)]); //Don't remove yourself from classes 
+            $find = array_keys($remove, Auth::user()->id);
+            foreach ($find as $key) {
+                unset($remove[$key]);
+            }
             $lop->users()->detach($remove);
         }
 

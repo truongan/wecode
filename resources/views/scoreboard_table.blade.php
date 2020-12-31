@@ -67,8 +67,9 @@
         </td>
         <td class="bg-success text-white" >
         <span class="lead"><strong>{{ $scoreboard['accepted_score'][$loop->index] }}</strong></span>
-        <br>
-        <span class="small" title="Solved : Attack ratio">{{ $scoreboard['solved'][$loop->index]}}:{{ $scoreboard['tried_to_solve'][$loop->index]}}</span>
+        <p class="excess">
+            <span class="small" title="Solved : Attack ratio">{{ $scoreboard['solved'][$loop->index]}}:{{ $scoreboard['tried_to_solve'][$loop->index]}}</span>
+        </p>
         </td>
         </tr>
     @endforeach

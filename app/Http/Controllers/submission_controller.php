@@ -65,7 +65,8 @@ class submission_controller extends Controller
 			return redirect()->route('submissions.index', [0, 'all', 'all', 'all']);
 		}
 
-		$assignment = Assignment::with('submissions.user', 'submissions.problem')->find($assignment_id);
+		$assignment = Assignment::with('lops.users')//This is to display lop info for each submissions
+						->find($assignment_id);
 
         if (Auth::user()->role->name == 'admin'){
             // Admin can duplicate anything
@@ -80,18 +81,16 @@ class submission_controller extends Controller
 		Auth::user()->selected_assignment_id = $assignment_id;
 		Auth::user()->save(); 
 
+		$submissions =$assignment->submissions();;
 		if ( in_array( Auth::user()->role->name, ['student']) )
 		{
 			//Student can only view their own submissions, regardless of assignment, so we don't check assignment permissions for student
-			$submissions =$assignment->submissions()->where('user_id',Auth::user()->id);
+			$submissions = $submissions->submissions()->where('user_id',Auth::user()->id);
 		}
-		else 
-		{
-			$submissions =$assignment->submissions();
-			if ($user_id != 'all'){
-				$submissions = $submissions->where('user_id',intval($user_id));
-			}
+		else if ($user_id != 'all'){
+			$submissions = $submissions->where('user_id',intval($user_id));
 		}
+		
 
 		if ($choose == 'final'){
 			$submissions = $submissions->where('is_final',1);

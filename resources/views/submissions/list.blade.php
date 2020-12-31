@@ -88,16 +88,16 @@
 						@endif
 							<th width="2%" rowspan="1"><small> Submit ID</small></th>
 						@if (in_array( Auth::user()->role->name, ['student']))
-							<th width="20%"><small> Problem</small></th>
+							<th width="15%"><small> Problem</small></th>
 							<th width="10%"><small> Submit Time</small></th>
 							<th width="10%"><small> Delay (%)</small></th>
 							<th width="1%"><small> Language</small></th>
 							<th width="5%"><small> Status</small></th>
 							<th width="5%"><small> Code</small></th>
 						@else
-							<th width="5%"><small> Username</small></th>
+							<th width="10%"><small> Username</small></th>
 							{{-- <th width="20%"><small> Name</small></th> --}}
-							<th width="20%"><small> Problem</small></th>
+							<th width="15%"><small> Problem</small></th>
 							<th width="10%"><small> Submit Time</small></th>
 							<th width="6%"><small> Delay %</small></th>
 							<th width="1%"><small> Lang</small></th>
