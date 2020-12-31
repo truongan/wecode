@@ -69,8 +69,11 @@ class submission_controller extends Controller
 						->find($assignment_id);
 
         if (Auth::user()->role->name == 'admin'){
-            // Admin can duplicate anything
-        } else if (  in_array( Auth::user()->role->name, ['head_instructor', 'instructor']) ){
+            // Admin can view anything
+		} 
+		else if (  in_array( Auth::user()->role->name, ['head_instructor', 'instructor']) 
+					&& $assignment->id != 0 //Allow instructors to view any practice submissions
+		){
             if ($assignment->user != Auth::user() 
                 && !Auth::user()->lops()->with('assignments')->get()->pluck('assignments')->collapse()->pluck('id')->contains($assignment->id)
             ){

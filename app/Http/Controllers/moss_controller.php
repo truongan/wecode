@@ -34,15 +34,16 @@ class moss_controller extends Controller
 
 		$moss_problems = array();
 
-		foreach ($assignment->problems as $pid => $problemas){
-			$moss_problems[$pid] = NULL;
-			
-			$path = Submission::get_path('', $assignment_id, $pid) .'/' ;
+		foreach ($assignment->problems as $key => $problem){
+			$moss_problems[$problem->id]['problem'] = $problem;
+			$path = Submission::get_path('', $assignment_id, $problem->id) .'/' ;
 			if (file_exists($path . "moss_link.txt") && file_get_contents($path . "moss_link.txt") != ''){
-				$moss_problems[$pid] = shell_exec("tail -n1 $path/moss_link.txt");
+				$moss_problems[$problem->id]['moss'] = shell_exec("tail -n1 $path/moss_link.txt");
 				shell_exec("rm $path/moss_running");
 			} else if (file_exists($path . "moss_running")){
-				$moss_problems[$pid] = "submission submitted to moss, awaiting respone, please be patience";
+				$moss_problems[$problem->id]['moss'] = "submission submitted to moss, awaiting respone, please be patience";
+			} else {
+				$moss_problems[$problem->id]['moss'] = NULL;
 			}
 		}
 		return view('admin.moss', ['all_assignments' => $all_assignments, 'moss_userid' => $moss_userid, 'moss_assignment' => $moss_assignment, 'update_time' => $update_time, 'moss_problems' => $moss_problems]); 
@@ -96,7 +97,7 @@ class moss_controller extends Controller
 			foreach ($group as $item){
 				$list .= "problem_{$problem_id}/{$item->username}/{$item->file_name}." .(string)Language::find($item->language_id)->extension . " ";
 			}
-			// echo "list='$list'; cd $assignment_path; $tester_path/moss \$list 2>&1 >p{$problem_id}/moss_link.txt &"; 			die();
+			// echo "list='$list'; cd $assignment_path; $tester_path/moss \$list > problem_{$problem_id}/moss_link.txt  2>&1 &"; 			die();
 
 			exec("list='$list'; cd $assignment_path; $tester_path/moss \$list > problem_{$problem_id}/moss_link.txt  2>&1 &");
 			exec("cd $assignment_path/problem_{$problem_id}; touch moss_running");
