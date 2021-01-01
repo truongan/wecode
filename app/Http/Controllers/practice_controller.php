@@ -7,6 +7,8 @@ use App\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+use Illuminate\Support\Facades\DB;
+
 class practice_controller extends Controller
 {
 	//
@@ -17,15 +19,25 @@ class practice_controller extends Controller
 	
     public function index()
     {
+		// DB::enableQueryLog();
     	Auth::user()->selected_assignment_id = 0;
     	Auth::user()->save(); 
-    	$problems = Problem::where('allow_practice',1)->get();
+		$problems = Problem
+		// ::with('submissions.assignment','languages')
+		::with('languages')
+		->where('allow_practice',1)
+		->latest()
+		->paginate(Setting::get('results_per_page_all'));
     	foreach ($problems as &$problem)
     	{
-    		$problem->total_submission = $problem->submissions()->where(['assignment_id'=>0])->count();
-    		$problem->accepted_submission = $problem->submissions()->where(['pre_score'=>10000, 'assignment_id'=>0])->count();
-    		$problem->lang = $problem->languages;
-    	}
+			// $all_submissions = $problem->submissions->filter(function($item,$key){return $item->assignment_id == 0;});
+    		// $problem->total_submission = $all_submissions->count();
+    		// $problem->accepted_submission = $all_submissions->filter(function($item,$key){return  $item->pre_score = 10000;})->count();
+			
+			$problem->total_submission = $problem->submissions()->where(['assignment_id'=>0])->count();
+			$problem->accepted_submission = $problem->submissions()->where(['pre_score'=>10000, 'assignment_id'=>0])->count();
+		}
+		// dd(DB::getQueryLog());
     	return view('practice',['problems' => $problems, 'selected' => 'practice']);
 	}
 	
