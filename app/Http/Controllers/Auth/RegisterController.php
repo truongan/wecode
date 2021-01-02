@@ -40,8 +40,9 @@ class RegisterController extends Controller
     public function __construct()
     {
         $this->middleware('guest');
-        if (Setting::get('enable_registration') == false) abort(403, 'admin has disable new user registration');
+        // if (Setting::get('enable_registration') == false) abort(403, 'admin has disable new user registration');
     }
+
 
     /**
      * Get a validator for an incoming registration request.
@@ -51,6 +52,7 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
+        if (Setting::get('enable_registration') == false) abort(403, 'admin has disable new user registration');
         $a = 'regex:/'.  Setting::get('registration_code') . "/";
 
         return Validator::make($data, [
