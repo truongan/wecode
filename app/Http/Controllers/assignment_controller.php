@@ -48,13 +48,14 @@ class assignment_controller extends Controller
      */
     public function index()
     {
+        // DB::enableQueryLog();
         //
         if (!in_array( Auth::user()->role->name, ['admin']) )
         {
             $assignments = Auth::user()->lops()->with('assignments')->get()->pluck('assignments')->collapse()->keyBy('id')->sortByDesc('created_at');
         }
-        else $assignments = Assignment::latest()->get();
-        foreach ($assignments as $assignment)
+        else $assignments = Assignment::with('problems','lops')->latest()->get();
+        foreach ($assignments as &$assignment)
         {
             $delay = strtotime(date("Y-m-d H:i:s")) - strtotime($assignment->finish_time);
             $submit_time = strtotime(date("Y-m-d H:i:s")) - strtotime($assignment->start_time);
@@ -63,7 +64,9 @@ class assignment_controller extends Controller
             $assignment->finished = $assignment->is_finished();
             $assignment->no_of_problems = $assignment->problems->count();
         }
-        return view('assignments.list',['assignments'=> $assignments]); 
+        $a =  view('assignments.list',['assignments'=> $assignments]); 
+        
+        return $a;
     }
 
     /**
