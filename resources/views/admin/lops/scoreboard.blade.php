@@ -26,32 +26,33 @@
 @endsection
 
 @section('content')
+<div class="row">
     <div class="table-responsive">
 		<table class="table table-striped table-bordered">
 			<thead class="thead-dark">
 			<tr>
-				<th>#</th>
-				<th>User ID</th>
-				<th>Username</th>
-				<th>Display Name</th>
+				{{-- <th>#</th> --}}
+				{{-- <th>User ID</th> --}}
+				<th>User</th>
+				<th><small>Name</small></th>
 				@foreach ($lop->assignments as $ass)
-					<th>
+					<th><small>
 						{{$ass->name}}
-					</th>
+					</th></small>
 				@endforeach
 				@foreach ($lop->assignments as $ass)
-					<th>
+					<th><small>
 						{{$ass->name}}
-					</th>
+					</th></small>
 				@endforeach
 			</tr>
 			</thead>
 			@foreach ($lop->users as $user)
 			<tr data-id="{{$user->id}}">
-				<td> {{$loop->iteration}} </td>
-				<td> {{$user->id}} </td>
-				<td id="un"> {{$user->username}} </td>
-				<td>{{$user->display_name}}</td>
+				{{-- <td> {{$loop->iteration}} </td> --}}
+				{{-- <td> {{$user->id}} </td> --}}
+				<td id="un">{{$user->username}}</td>
+				<td> <small>{{$user->display_name}} </small></td>
 				@foreach ($lop->assignments as $ass)
 					<td class="bg-success">
 						<span>{{$user_table[$user->id][$ass->id]['accept_score'] ?? "" }}</span>
@@ -67,6 +68,7 @@
 			@endforeach
 		</table>
     </div>
+</div>
 @endsection
 
 
