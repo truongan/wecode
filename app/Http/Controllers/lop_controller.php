@@ -97,6 +97,10 @@ class lop_controller extends Controller
         return view('admin.lops.edit', ['lop' => $lop]);
     }
 
+    public function scoreboard(Lop $lop){
+        return view('admin.lops.scoreboard',['lop'=>$lop]);
+    }
+
     /**
      * Show the form for editing the specified resource.
      *

@@ -80,6 +80,7 @@ Route::get('/scoreboard/simplify/{id}', 'scoreboard_controller@simplify')->name(
 Route::get('/scoreboard/plain/{id}', 'scoreboard_controller@plain')->name('scoreboards.plain');
 
 Route::get('/server_time', function(){echo  date(DATE_ISO8601);});
+Route::get('/lop/scoreboard/{lop}', 'lop_controller@scoreboard')->name('lop.scoreboard');
 
 //Resource route phải được  ghi cuối cùng, nếu không các route sau dính tới /usres sẽ ăn shit 
 Route::resource('users','UserController');
