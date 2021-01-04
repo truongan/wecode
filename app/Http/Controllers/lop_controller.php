@@ -101,7 +101,12 @@ class lop_controller extends Controller
 
     public function scoreboard(Lop $lop){
 		// DB::enableQueryLog();
-
+        if ( in_array( Auth::user()->role->name, ['student', 'instructor']) )
+            abort(403);
+        if (!in_array( Auth::user()->role->name, ['admin']) 
+            && !Auth::user()->lops->contains($lop)
+        ) abort(403, 'You can only view scoreboard the classes you are in');
+        
         $user_table = [];
         foreach ($lop->assignments as $assignment) {
             $submissions = $assignment->submissions()->where('is_final',1)->get();

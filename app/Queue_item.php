@@ -57,15 +57,15 @@ class Queue_item extends Model
 		return $a;
 	}
 	public function save_and_remove(){
-
 		$submission = $this->submission;
+		DB::beginTransaction();
 
 		$final_sub = Submission::where([
 			'user_id' => $submission->user_id,
 			'assignment_id' => $submission->assignment_id,
 			'problem_id' => $submission->problem_id,
 			'is_final' => 1
-		])->first();
+		])->lockForUpdate()->first();
 		if (
 			$final_sub == NULL 
 			|| 
@@ -81,7 +81,7 @@ class Queue_item extends Model
 		}
 
 		$submission->save();
-
+		DB::commit();
 		$this->delete();
 
 		Scoreboard::update_scoreboard($submission->assignment_id);
