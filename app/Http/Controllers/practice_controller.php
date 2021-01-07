@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Problem;
 use App\Setting;
+use App\Submission;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,7 +21,7 @@ class practice_controller extends Controller
 	
     public function index()
     {
-		// DB::enableQueryLog();
+		DB::enableQueryLog();
     	Auth::user()->selected_assignment_id = 0;
     	Auth::user()->save(); 
 		$problems = Problem
@@ -28,14 +30,25 @@ class practice_controller extends Controller
 		->where('allow_practice',1)
 		->latest()
 		->paginate(Setting::get('results_per_page_all'));
-    	foreach ($problems as &$problem)
+
+
+		$a  =  $problems->pluck('id');
+
+        $total_subs = Submission::groupBy('problem_id')->where('assignment_id', 0)->whereIn('problem_id', $a)->select('problem_id', DB::raw('count(*) as total_sub'))->get()->keyBy('problem_id');
+        $ac_subs = Submission::groupBy('problem_id')->where('assignment_id', 0)->whereIn('problem_id', $a)->where('pre_score', 10000)->select('problem_id', DB::raw('count(*) as total_sub'))->get()->keyBy('problem_id');
+		// dd($a);
+		foreach ($problems as $problem)
     	{
 			// $all_submissions = $problem->submissions->filter(function($item,$key){return $item->assignment_id == 0;});
     		// $problem->total_submission = $all_submissions->count();
     		// $problem->accepted_submission = $all_submissions->filter(function($item,$key){return  $item->pre_score = 10000;})->count();
 			
-			$problem->total_submission = $problem->submissions()->where(['assignment_id'=>0])->count();
-			$problem->accepted_submission = $problem->submissions()->where(['pre_score'=>10000, 'assignment_id'=>0])->count();
+			// $problem->total_submission = $problem->submissions()->where(['assignment_id'=>0])->count();
+			// $problem->accepted_submission = $problem->submissions()->where(['pre_score'=>10000, 'assignment_id'=>0])->count();
+			// dd($total_subs[299]->total_sub?? 0);
+            $problem->total_submission = $total_subs[$problem->id]->total_sub ?? 0;
+            $problem->accepted_submission = $ac_subs[$problem->id]->total_sub ?? 0;
+            $problem->ratio = round($problem->accepted_submit / max($problem->total_submit,1), 2)*100;
 		}
 		// dd(DB::getQueryLog());
     	return view('practice',['problems' => $problems, 'selected' => 'practice']);
