@@ -1,30 +1,17 @@
 ## Wecode online jduge
 
-Là một hệ hống chấm bài tự động của các môn học lập trình được phát triển và sử dụng tại [trường Đại học Công nghệ Thông tin - Đại học Quốc gia  thành phố Hồ Chí Minh](uit.edu.vn). Hệ thống wecode được triển hai phù hợp với môi trường dạy và học lập trình 
+Là một hệ hống chấm bài tự động của các môn học lập trình được phát triển và sử dụng tại [trường Đại học Công nghệ Thông tin - Đại học Quốc gia  thành phố Hồ Chí Minh](uit.edu.vn). Cũng như các hệ thống online judge nói chung, wecode judge có thể tiến hành nhận các bài làm của sinh viên ở dạng mã nguồn, sau đó tiến hành biên dịch, thực thi và kiểm tra tính đúng đắn của bài làm với các bộ test do người ra đề quy định trước.
 
-### Markdown
+Hệ thống wecode được định hướng để đáp ứng các nhu cầu giảng dạy và học tập lập trình trong môi trường đại học như: giúp giảng viên giao bài tập và thu bài làm định kỳ, cho phép sinh viên tự luyện tập thêm, báo kết quả và tổng hợp bảng điểm ngay tức thời, v.v... Ngoài ra wecode judge cũng phù hợp tổ chức các cuộc thi lập trình theo format của IOI hoặc ICPC. 
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+### Các chức năng chính
 
-```markdown
-Syntax highlighted code block
+Các chức năng chính có thể kể đến của wecode judge goomf:
+- Sử dụng công nghệ container tiên tiến (docker) để xử lý bài làm của sinh viên. Cho phép bảo mật ở mức vừa cũng như cho phép giảng viên linh hoạt trong triển khai, thay đổi, cập nhật các môi trường lập trình chuẩn được quy ước với sinh viên.
 
-# Header 1
-## Header 2
-### Header 3
+- Cơ chế phân quyền đa dạng giữa sinh viên, trợ giảng, giảng viên đứng lớp, quản trị viên của hệ thống.
 
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+- Gửi bài làm của sinh viên lên hệ thống kiểm tra bài gian lận của Staanford (MOSS)
 
 ### Jekyll Themes
 
