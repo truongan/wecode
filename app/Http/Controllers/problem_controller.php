@@ -28,7 +28,7 @@ class problem_controller extends Controller
     
     public function index()
     {
-        DB::enableQueryLog();
+        // DB::enableQueryLog();
         // if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
         //     abort(404);  
         if (Auth::user()->role->name == 'admin') $all_problem = Problem::latest();

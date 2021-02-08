@@ -21,7 +21,7 @@ class practice_controller extends Controller
 	
     public function index()
     {
-		DB::enableQueryLog();
+		// DB::enableQueryLog();
     	Auth::user()->selected_assignment_id = 0;
     	Auth::user()->save(); 
 		$problems = Problem
