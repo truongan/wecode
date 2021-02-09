@@ -1,4 +1,4 @@
-# Wecode online jduge
+# Wecode online judge
 
 Là một hệ hống chấm bài tự động của các môn học lập trình được phát triển và sử dụng tại [trường Đại học Công nghệ Thông tin - Đại học Quốc gia  thành phố Hồ Chí Minh](uit.edu.vn). Cũng như các hệ thống online judge nói chung, wecode judge có thể tiến hành nhận các bài làm của sinh viên ở dạng mã nguồn, sau đó tiến hành biên dịch, thực thi và kiểm tra tính đúng đắn của bài làm với các bộ test do người ra đề quy định trước.
 
