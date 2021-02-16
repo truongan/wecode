@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Assignment;
+use Illuminate\Support\Facades\DB;
 class installation_seeding extends Seeder
 {
     /**
