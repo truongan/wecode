@@ -105,6 +105,15 @@ class LoginController extends Controller
 			}
 			else {
 				///Optional: create user if not present.
+                // User::insert([
+                //     'username' => $ldap_user['masv'],
+                //     'email' => $ldap_user['email'],
+                //     'display_name' => $ldap_user['hoten'],
+                //     // 'email' => Str::random(10).'@gmail.com',
+                //     'password' => Hash::make(Str::random(80)),
+                //     'role_id' => $ldap_user['GV']?'3' : '4' // Trợ giảng hoặc sinh viên thôi.
+                // ]);
+
 				// $this->user_model->add_user(
 				// 	$ldap_user['masv'], $ldap_user['email'], shj_random_password(20)
 				// 	, $ldap_user['GV']?'head_instructor' : 'student'
