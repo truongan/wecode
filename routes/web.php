@@ -35,6 +35,7 @@ Route::get('/instructor','UserController@instructor_index')->name('admin.instruc
 Route::get('/users/add_multiple', 'UserController@add_multiple');
 Route::post('/users/adds', 'UserController@add')->name('users.add');
 Route::delete('users/{id}', 'UserController@destroy')->name('users.destroy');
+Route::get('users/ranking', 'UserController@rank')->name('users.rank');
 
 Route::get('/problems/downloadtestsdesc/{id}', 'problem_controller@downloadtestsdesc')->name('problems.downloadtestsdesc');
 Route::get('/problems/downloadpdf/{id}', 'problem_controller@pdf')->name('problems.pdf');

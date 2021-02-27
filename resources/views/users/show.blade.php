@@ -30,7 +30,7 @@ Users - {{$user->username}}
   <div class="form-group">
     <label for="form_role" class="col-4">Role:</label>
     <div class="col-8">
-      <input id="form_name" type="text" name="display_name" class="form-control" value="{{Auth::user()->role->name}}" disabled/>
+      <input id="form_name" type="text" name="display_name" class="form-control" value="{{$user()->role->name}}" disabled/>
     </div>
   </div>
 </div>

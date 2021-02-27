@@ -53,6 +53,10 @@ class UserController extends Controller
         return view('users.show', ['user' => User::findOrFail($id)]);
     }
 
+    public function rank(){
+        return null;
+    }
+
     /**
      * Show the form for creating a new resource.
      *
