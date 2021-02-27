@@ -77,7 +77,7 @@
 
 @section('content')
 
-<div class="col">
+<div class="ml-n3 mr-n1 ">
 	@php( $msgclasses = array('text-success'=> 'text-success', 'text-info'=> 'text-warning', 'text-danger'=> 'text-danger') )
 	
 	@foreach ($messages as $message)

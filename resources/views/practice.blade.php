@@ -33,7 +33,7 @@
 				<a href="{{ route('practices.show', $problem->id)}}">{{$problem->name}}</a>
 				</td>
 				<td>
-					@foreach ($problem->lang as $lang_name)
+					@foreach ($problem->languages as $lang_name)
 					<span class="badge badge-pill badge-secondary">{{$lang_name->name}}</span>
 					@endforeach
 				</td>
@@ -46,6 +46,7 @@
 			</tr>
 			@endforeach
 		</table>
+		<div class=" d-flex justify-content-center">{{$problems->links(null, ['class'=>'justify-content-center'])}}</div>
 	</div>
 </div>
 @endsection
@@ -56,9 +57,10 @@
 <script>
 $(document).ready(function () {
     $("table").DataTable({
-		"pageLength": 10,
-		"lengthMenu": [ [10, 20, 30, 50, -1], [10, 20, 30, 50, "All"] ]
+		"paging": false,
+		"ordering": false,
 	});
+	document.querySelector('.dataTables_filter > label').childNodes[0].data = "Filter in this page";
 });
 </script>
 @endsection

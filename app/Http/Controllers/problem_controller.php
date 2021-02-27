@@ -28,19 +28,25 @@ class problem_controller extends Controller
     
     public function index()
     {
+        // DB::enableQueryLog();
         // if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
         //     abort(404);  
         if (Auth::user()->role->name == 'admin') $all_problem = Problem::latest();
         else $all_problem = Problem::available(Auth::user()->id)->latest();
 
-        $all_problem = $all_problem->with('assignments', 'submissions','languages')->paginate(Setting::get('results_per_page_all'));
+        $all_problem = $all_problem->with('assignments', 'languages')->paginate(Setting::get('results_per_page_all'));
+        
+        $a  =  $all_problem->pluck('id');
 
+        $total_subs = Submission::groupBy('problem_id')->whereIn('problem_id', $a)->select('problem_id', DB::raw('count(*) as total_sub'))->get()->keyBy('problem_id');
+        $ac_subs = Submission::groupBy('problem_id')->whereIn('problem_id', $a)->where('pre_score', 10000)->select('problem_id', DB::raw('count(*) as total_sub'))->get()->keyBy('problem_id');
 
         foreach ($all_problem as $p){
-            $p->total_submit = $p->submissions->count();
-            $p->accepted_submit = $p->submissions->filter(function($item,$key){return $item->pre_score == 10000;})->count();
+            $p->total_submit = $total_subs[$p->id]->total_sub ?? 0;
+            $p->accepted_submit = $ac_subs[$p->id]->total_sub ?? 0;
             $p->ratio = round($p->accepted_submit / max($p->total_submit,1), 2)*100;
         }
+        // dd(DB::getQueryLog());
         return view('problems.list',['problems'=>$all_problem]); 
     }
 

@@ -7,6 +7,8 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+use Illuminate\Support\Facades\DB;
+
 class lop_controller extends Controller
 {
     /**
@@ -95,6 +97,42 @@ class lop_controller extends Controller
         // if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
             // abort(403);
         return view('admin.lops.edit', ['lop' => $lop]);
+    }
+
+    public function scoreboard(Lop $lop){
+		// DB::enableQueryLog();
+        if ( in_array( Auth::user()->role->name, ['student', 'instructor']) )
+            abort(403);
+        if (!in_array( Auth::user()->role->name, ['admin']) 
+            && !Auth::user()->lops->contains($lop)
+        ) abort(403, 'You can only view scoreboard the classes you are in');
+        
+        $user_table = [];
+        foreach ($lop->assignments as $assignment) {
+            $submissions = $assignment->submissions()->where('is_final',1)->get();
+
+            $problems = $assignment->problems->keyBy('id');
+            foreach ($submissions as $key => $submission) {
+                $pre_score = ceil(
+                    $submission->pre_score*
+                    ($problems[$submission->problem_id]->pivot->score ?? 0 )/10000
+                );
+                if ($submission['coefficient'] === 'error') $final_score = 0;
+                else $final_score = ceil($pre_score*$submission['coefficient']/100);
+
+                // dd($submission['created_at']);
+                $fullmark = ($submission->pre_score == 10000);
+
+                $user_table[$submission->user_id][$assignment->id]['score']  ??= 0;
+                $user_table[$submission->user_id][$assignment->id]['accept_score'] ??= 0;
+
+                $user_table[$submission->user_id][$assignment->id]['score']  += $final_score;
+                $user_table[$submission->user_id][$assignment->id]['accept_score'] += $fullmark ? $final_score : 0;
+            }
+
+        }
+        // dd(DB::getQueryLog());
+        return view('admin.lops.scoreboard',['lop'=>$lop, 'user_table' => $user_table]);
     }
 
     /**

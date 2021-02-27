@@ -105,7 +105,7 @@
 		</tr>
 	  @endforeach
 	</table>
-		<div class=" d-flex justify-content-center">{{$problems->links(null, ['class'=>'justify-content-center'])}}</div>
+	<div class=" d-flex justify-content-center">{{$problems->links(null, ['class'=>'justify-content-center'])}}</div>
 	</div>
 </div>
 
@@ -167,6 +167,7 @@
 		"paging": false,
 		"ordering": false,
 	});
+	document.querySelector('.dataTables_filter > label').childNodes[0].data = "Filter in this page"
   });
 </script>
 @endsection

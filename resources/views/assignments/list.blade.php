@@ -140,6 +140,7 @@
 		</tr>
 		@endforeach
 	</table>
+	{{-- @php(dd(DB::getQueryLog())) --}}
 </div>
 
 <div class="modal fade" id="assignment_delete" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">

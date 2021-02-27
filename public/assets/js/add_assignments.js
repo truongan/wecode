@@ -9,7 +9,7 @@ function format_problem(prob){
 
 	var $prob = $('<span class="badge badge-primary">'+ prob.element.dataset.id +'</span>'
 		+ '<span class="badge badge-pill badge-secondary">'+ prob.element.dataset.owner +'</span>'
-		+ prob.element.dataset.name
+		+ '<span class="text-dark">' + prob.element.dataset.name + '</span>'
 		+ '<span class="text-small text-secondary">(' +  prob.element.dataset.note +')</span>'
 	);
 	return $prob

@@ -30,9 +30,9 @@
 
 	@if ($ed == 0)
 		@if ($lop->users()->find(Auth::user()->id) )
-			<form  action="{{route('lops.enrol',['lop' => $lop->id, 'in' => 0])}}" method="POST">
+			<form  action="{{route('lops.enrol',['lop' => $lop->id, 'in' => 0])}}" method="POST" onsubmit="return confirm('You are going to LEAVE THE CLASS. Some classes may not allow you to re-enrol, are you certain?');">
 				@csrf
-				<button type="submit" name="unenroll" id="unenroll" class="btn btn-danger" btn-lg btn-block">Un enrol</button>
+				<button type="submit" name="unenroll" id="unenroll" class="btn btn-danger" btn-lg btn-block" >Un enrol</button>
 			</form>
 		@elseif ($lop->open == 1)
 			<form  action="{{route('lops.enrol', ['lop' => $lop->id, 'in' => 1])}}" method="POST">

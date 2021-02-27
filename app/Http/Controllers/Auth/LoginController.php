@@ -9,6 +9,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class LoginController extends Controller
 {
@@ -104,12 +106,16 @@ class LoginController extends Controller
 				return true;
 			}
 			else {
-				///Optional: create user if not present.
-				// $this->user_model->add_user(
-				// 	$ldap_user['masv'], $ldap_user['email'], shj_random_password(20)
-				// 	, $ldap_user['GV']?'head_instructor' : 'student'
-				// 	, $ldap_user['hoten']
-				// );
+				///Optional: create ldap user if not present.
+                // $user = User::create([
+                //     'username' => $ldap_user['masv'],
+                //     'email' => $ldap_user['email'],
+                //     'display_name' => $ldap_user['hoten'],
+                //     'password' => Hash::make(Str::random(80)),
+                //     'role_id' => $ldap_user['GV']?'3' : '4' // Trợ giảng hoặc sinh viên thôi.
+                // ]);
+                // Auth::login($user, $remember);
+                // return true;
 			}
 		}
 		return ($ldap_user && $user_id);
