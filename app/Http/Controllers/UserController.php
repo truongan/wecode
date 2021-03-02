@@ -50,7 +50,36 @@ class UserController extends Controller
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']))
             if (Auth::user()->id != $id)
                 abort(403);
-        return view('users.show', ['user' => User::findOrFail($id)]);
+        $user = User::with('lops')->findOrFail($id);
+        $subs = $user->submissions()->with('assignment', 'assignment.lops', 'assignment.problems')->get();
+
+        $total = $subs->count();
+        $ass = array();
+        foreach ($subs as $sub){
+            $t = $ass[$sub->assignment->id] ??= (object)null;
+            $t->total ??= 0;
+            $t->accept ??= 0;
+            $t->score ??= 0;
+            $t->ac_score ??= 0;
+            $t->solved ??= 0;
+
+            $t->total++;
+            if ($sub->pre_score == '10000') $t->accept ++;
+            if ($sub->is_final){
+                $probs = $sub->assignment->problems->keyBy('id');
+                if (isset($probs[$sub->problem_id])){
+                    $t->score += $probs[$sub->problem_id]->pivot->score*$sub->pre_score*$sub->coefficient/1000;
+                    if ($sub->pre_score == '10000') {
+                        $t->solved ++;
+                        $t->ac_score += $probs[$sub->problem_id]->pivot->score*$sub->pre_score*$sub->coefficient/1000;
+                    }
+                }
+            }
+        }
+
+        dd($ass);
+
+        return view('users.show', ['user' => $user]);
     }
 
     public function rank(){
