@@ -30,9 +30,30 @@ Users - {{$user->username}}
   <div class="form-group">
     <label for="form_role" class="col-4">Role:</label>
     <div class="col-8">
-      <input id="form_name" type="text" name="display_name" class="form-control" value="{{$user()->role->name}}" disabled/>
+      <input id="form_name" type="text" name="display_name" class="form-control" value="{{$user->role->name}}" disabled/>
     </div>
   </div>
 </div>
 
+<table class="wecode_table table table-striped table-bordered table-sm">
+	<thead class="thead-dark">
+		<tr>
+			<th>#</th>
+			<th><small>Assignments</small></th>
+			<th>Classes</th>
+			<th>AC / tries </th>
+			<th>Solved  / AC scores / Scores</th>
+		</tr>
+	</thead>
+	@foreach ($ass as $as)
+		<tr>
+			<td>{{$loop->iteration}}
+			<td>{{$as->ass->name}}</td>
+			<td>{{$as->ass->lops->pluck('name')->join(', ') }}</td>
+			<td>{{$as->accept}} / {{ $as->total }}</td>
+			<td>{{$as->solved}} / {{ $as->ac_score}} / {{ $as->score }}</td>
+			
+		</tr>
+	@endforeach
+</table>
 @endsection

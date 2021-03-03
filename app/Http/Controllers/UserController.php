@@ -57,6 +57,7 @@ class UserController extends Controller
         $ass = array();
         foreach ($subs as $sub){
             $t = $ass[$sub->assignment->id] ??= (object)null;
+            $t->ass ??= $sub->assignment;
             $t->total ??= 0;
             $t->accept ??= 0;
             $t->score ??= 0;
@@ -77,9 +78,9 @@ class UserController extends Controller
             }
         }
 
-        dd($ass);
+        // dd($ass);
 
-        return view('users.show', ['user' => $user]);
+        return view('users.show', ['user' => $user, 'ass' => $ass]);
     }
 
     public function rank(){
