@@ -113,7 +113,7 @@ class submission_controller extends Controller
 		return view('submissions.list',['submissions' => $submissions, 'assignment' => $assignment, 'user_id' => $user_id, 'problem_id' => $problem_id, 'choose' => $choose, 'all_problems' => $all_problems]); 
 	}
 
-	public function create($assignment_id, $problem_id){
+	public function create($assignment_id, $problem_id, $old_sub = -1){
 		$assignment = Assignment::find($assignment_id);
 		
 		if ($assignment_id == 0){
@@ -134,7 +134,23 @@ class submission_controller extends Controller
 		} 
 
 		if ($problem == NULL) abort(404);
-		return view('submissions.create', ['assignment' => $assignment, 'problem' => $problem]);
+
+		$last = Submission::where(['assignment_id' => 0, 'problem_id' => $problem_id, 'user_id' => Auth::user()->id]);
+		if ($old_sub != -1) $last = $last->where(['id'=> $old_sub]);
+
+		$last = $last->get()->last();
+		
+
+		$last_code = null;
+		if ($last != null){
+			$submit_path = Submission::get_path($last->user->username, $last->assignment_id, $last->problem_id);
+			$file_extension = $last->language->extension;
+	
+			$file_path = $submit_path . "/{$last->file_name}.". $file_extension;
+			$last_code = file_exists($file_path)? file_get_contents($file_path): null;
+		}
+
+		return view('submissions.create', ['assignment' => $assignment, 'problem' => $problem, 'last_code' => $last_code]);
 	}
 
 	public function store(Request $request)
@@ -375,10 +391,11 @@ class submission_controller extends Controller
 			'language_id' => $language->id,
 		]);
 
-		$user_dir = $this->get_path(Auth::user()->username, $assignment->id, $problem->id);
+		$user_dir = Submission::get_path(Auth::user()->username, $assignment->id, $problem->id);
 
-		if (!file_exists($user_dir))
+		if (!file_exists($user_dir)){
 			mkdir($user_dir, 0700, TRUE);
+		}
 
 		$code = $request->code;
 		if ($code != NULL)
@@ -418,7 +435,7 @@ class submission_controller extends Controller
 		if (!$submission) abort(403,"Submission not found");
 		$this->_do_access_check($submission);
 
-		$submit_path = $this->get_path($submission->user->username, $submission->assignment_id, $submission->problem_id);
+		$submit_path = Submission::get_path($submission->user->username, $submission->assignment_id, $submission->problem_id);
 		$file_extension = $submission->language->extension;
 
 		if ($type == "code")
