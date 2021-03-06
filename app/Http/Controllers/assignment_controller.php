@@ -188,17 +188,12 @@ class assignment_controller extends Controller
             'sum_score' => 0
         );
         
-       
-        $check = False;
-        foreach($assignment->problems as $item)
-        {
-            if ($problem_id == $item->pivot->problem_id)
-            {
-                $check = True;
-                break;
-            }
+        $data['all_problems'] = $assignment->problems;
+        
+        if ( $data['all_problems']->pluck('id')->contains($problem_id) == false){
+            //If we can't found problem_id, view the first problem
+            $problem_id = $data['all_problems']->first()->id;
         }
-        if (!$check) abort(404);
         
         $result = $this->get_description($problem_id);
         $problem = Problem::find($problem_id);

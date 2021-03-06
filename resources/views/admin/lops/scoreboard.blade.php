@@ -37,25 +37,30 @@
 				<th><small>Name</small></th>
 				@foreach ($lop->assignments as $ass)
 					<th><small>
+						<a href="{{ route('assignments.show', ['assignment'=> $ass->id, 'problem_id' => '0'] ) }}" >
 						{{$ass->name}}
-					</th></small>
+						</a>
+					</small></th>
 				@endforeach
 				@foreach ($lop->assignments as $ass)
 					<th><small>
 						{{$ass->name}}
-					</th></small>
+					</small></th>
 				@endforeach
 			</tr>
 			</thead>
 			@foreach ($lop->users as $user)
 			<tr data-id="{{$user->id}}">
-				{{-- <td> {{$loop->iteration}} </td> --}}
-				{{-- <td> {{$user->id}} </td> --}}
 				<td id="un">{{$user->username}}</td>
 				<td> <small>{{$user->display_name}} </small></td>
 				@foreach ($lop->assignments as $ass)
-					<td class="bg-success">
-						<span>{{$user_table[$user->id][$ass->id]['accept_score'] ?? "" }}</span>
+					<td class="">
+						@if (isset($user_table[$user->id][$ass->id]['accept_score']))
+							
+						<a class="btn  btn-outline-success" href="{{ route('submissions.index', ['assignment_id' => $ass->id, 'problem_id' => 'all', 'user_id' => $user->id, 'choose' => 'final']) }}">
+						{{$user_table[$user->id][$ass->id]['accept_score'] }}
+						</a>
+						@endif
 					</td>
 				@endforeach
 				@foreach ($lop->assignments as $ass)

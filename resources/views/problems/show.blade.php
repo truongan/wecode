@@ -81,8 +81,15 @@
 	<div class="col-md-5 col-lg-4 ">
 		@if ($all_problems != NULL)
 		@php($i = 0)
-		<div class="problems_widget row">
-			<p><i class="fa fa-file-text fa-lg color9"></i> {{ $assignment->name }}</p>
+		<div class="problems_widget">
+			@if ( in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
+			<a href="{{ route('assignments.edit', $assignment->id) }}" >
+			@endif
+				{{ $assignment->name }} <i class="fa fa-edit  color9"></i> <br/>
+			@if ( in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
+			</a>
+			@endif
+			
 			<p class="text-muted"><span class="badge badge-secondary count_problems">{{ count($all_problems) }}</span> problems with a total score of <span class="badge badge-secondary sum_score">{{ $sum_score }}</span></p>
 			<table class="wecode_table table  table-bordered">
 				<thead>
