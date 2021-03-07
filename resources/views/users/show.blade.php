@@ -8,27 +8,27 @@ Users - {{$user->username}}
 @endsection
 
 @section('content')
-<div class="col-5">
+<div class=" form-inline">
   <div class="form-group">
-    <label for="col-2 form_username" class="col-4">Username:	</label>
+    <label for="form_username">Username:	</label>
     <div class="col-8">
       <input id="form_username" type="text" name="username" class="form-control" value="{{$user->username}}"  disabled/>
     </div>
   </div>
   <div class="form-group">
-    <label for="form_name" class="col-4">Name:</label>
+    <label for="form_name">Name:</label>
     <div class="col-8">
       <input id="form_name" type="text" name="display_name" class="form-control" value="{{$user->display_name}}" disabled/>
     </div>
   </div>
   <div class="form-group">
-    <label for="form_email" class="col-4">Email:</label>
+    <label for="form_email">Email:</label>
       <div class="col-8">
       <input id="form_email" type="text" name="email" class="form-control" value="{{$user->email}}" disabled/>
     </div>
   </div>  
   <div class="form-group">
-    <label for="form_role" class="col-4">Role:</label>
+    <label for="form_role">Role:</label>
     <div class="col-8">
       <input id="form_name" type="text" name="display_name" class="form-control" value="{{$user->role->name}}" disabled/>
     </div>
@@ -41,17 +41,39 @@ Users - {{$user->username}}
 			<th>#</th>
 			<th><small>Assignments</small></th>
 			<th>Classes</th>
-			<th>AC / tries </th>
-			<th>Solved  / AC scores / Scores</th>
+			<th>No. of submission</th>
+			<th>No. accepted (Percentage)</th>
+			<th>Problem solved (scored)</th>
+			<th>Testcase score</th>
 		</tr>
 	</thead>
 	@foreach ($ass as $as)
 		<tr>
 			<td>{{$loop->iteration}}
-			<td>{{$as->ass->name}}</td>
-			<td>{{$as->ass->lops->pluck('name')->join(', ') }}</td>
-			<td>{{$as->accept}} / {{ $as->total }}</td>
-			<td>{{$as->solved}} / {{ $as->ac_score}} / {{ $as->score }}</td>
+			<td>
+        <a href="{{ route('assignments.show', ['assignment'=> $as->ass->id, 'problem_id'=>0]) }}"> {{$as->ass->name}}</a>
+      </td>
+			<td>
+        @foreach ($as->ass->lops as $lop)
+            <a href="{{ route('lops.show', $lop->id) }}">{{$lop->name}}</a></br>
+        @endforeach
+			<td>
+          <button class="btn btn-info " disabled> {{ $as->total }} </button>
+        @if ($as->ass->scoreboard)
+          <a href="{{ route('scoreboards.index', $as->ass->id) }} "><i class="fas fa-external-link-alt"></i></a>
+        @endif
+      </td>
+			<td>{{$as->accept}} ({{ round($as->accept / $as->total * 100, 2) }}%)</td>
+			<td> 
+        <a class="btn btn-outline-success" href="{{ route('submissions.index', ['assignment_id'=>$as->ass->id, 'problem_id'=>'all', 'user_id' => $user->id, 'choose'=>'final']) }}"> 
+          {{$as->solved}} ({{ $as->ac_score}})
+        </a>
+      </td>
+			<td>
+        <a class="btn btn-outline-danger" href="{{ route('submissions.index', ['assignment_id'=>$as->ass->id, 'problem_id'=>'all', 'user_id' =>   $user->id, 'choose'=>'all']) }}"> 
+        {{ $as->score }}
+        </a>
+      </td>
 			
 		</tr>
 	@endforeach

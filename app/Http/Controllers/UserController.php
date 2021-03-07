@@ -69,10 +69,15 @@ class UserController extends Controller
             if ($sub->is_final){
                 $probs = $sub->assignment->problems->keyBy('id');
                 if (isset($probs[$sub->problem_id])){
-                    $t->score += $probs[$sub->problem_id]->pivot->score*$sub->pre_score*$sub->coefficient/1000;
+                    $pre_score = ceil(
+						$sub->pre_score*
+						($probs[$sub->problem_id]->pivot->score ?? 0 )/10000
+			        );
+                    $score =  ceil($pre_score*$sub->coefficient/100);
+                    $t->score += $score;
                     if ($sub->pre_score == '10000') {
                         $t->solved ++;
-                        $t->ac_score += $probs[$sub->problem_id]->pivot->score*$sub->pre_score*$sub->coefficient/1000;
+                        $t->ac_score += $score;
                     }
                 }
             }
