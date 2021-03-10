@@ -48,11 +48,10 @@ thead tr:after {
       <thead class="thead-dark">
         <tr>
           <th>#</th>
-          <th>User ID</th>
+          {{-- <th>User ID</th> --}}
           <th>Username</th>
           <th>Display Name</th>
           <th>Email</th>
-          <th>Role</th>
           <th>First Login</th>
           <th>Last Login</th>
           <th>Actions</th>
@@ -61,11 +60,10 @@ thead tr:after {
       @foreach ($users as $user)
       <tr data-id="{{$user->id}}">
         <td> {{$loop->iteration}} </td>
-        <td> {{$user->id}} </td>
+        {{-- <td> {{$user->id}} </td> --}}
         <td id="un"> {{$user->username}} </td>
         <td>{{$user->display_name}}</td>
-        <td>{{$user->email}}</td>
-        <td>{{$user->role->name}}</td>
+        <td>{{$user->email}}<br/>{{$user->role->name}}</td>
         <td>
           <small>{{ $user->first_login_time ? $user->first_login_time->setTimezone($settings['timezone'])->locale('en')->isoFormat('llll (UZZ)') : 'Never'}}</small>
         </td>
