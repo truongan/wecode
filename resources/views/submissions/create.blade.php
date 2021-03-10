@@ -102,7 +102,7 @@
 
 		<div class="editor-grp" id="editor_grp" style="display: none;">
 			<label for="">Your code</label>
-			<div id="editor"></div>
+			<div id="editor">{{ $last_code ?? "Write your code here"}}</div>
 		</div>
 
 		<div class="template-grp" id="after-grp" style="display: none;">
