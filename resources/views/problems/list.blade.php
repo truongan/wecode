@@ -21,7 +21,7 @@
 			<label for="search">Search by name</label>
 			<input type="text" name="search" id="search" class="form-control" placeholder="Search by name" aria-describedby="Search by name" value="{{ Request::get('search') }} " >
 		</div>
-		<button type="reset" class="btn btn-danger"><i class="fas fa-times    "></i></button>
+		<button type="button" class="btn btn-danger" onClick="document.getElementById('search').value = '' ;"><i class="fas fa-times    "></i></button>
 		<button type="submit" class="btn btn-primary">Search</button>
 	</form>
 	<div class="table-responsive">
@@ -173,7 +173,7 @@
 
 	$("table").DataTable({
 		"paging": false,
-		"ordering": false,
+		{{-- "ordering": false, --}}
 	});
 	document.querySelector('.dataTables_filter > label').childNodes[0].data = "Filter in this page"
   });

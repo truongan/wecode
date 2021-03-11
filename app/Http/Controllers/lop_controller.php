@@ -129,8 +129,18 @@ class lop_controller extends Controller
                 $user_table[$submission->user_id][$assignment->id]['score']  += $final_score;
                 $user_table[$submission->user_id][$assignment->id]['accept_score'] += $fullmark ? $final_score : 0;
             }
-
         }
+        foreach ($user_table as $uid => $user) {
+            foreach ($user as $aid => $ass) {
+                $user_table[$uid]['sum_ac'] ??= 0;
+                $user_table[$uid]['sum'] ??= 0;
+
+                $user_table[$uid]['sum_ac'] += $ass['accept_score'];
+                $user_table[$uid]['sum'] += $ass['score'];
+            }
+        }
+
+        // dd($user_table);
         // dd(DB::getQueryLog());
         return view('admin.lops.scoreboard',['lop'=>$lop, 'user_table' => $user_table]);
     }

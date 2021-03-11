@@ -25,6 +25,10 @@
 	@endif
 @endsection
 
+@section('other_assets')
+  <link rel='stylesheet' type='text/css' href='https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css'/>
+@endsection
+
 @section('content')
 <div class="row">
     <div class="table-responsive">
@@ -35,6 +39,7 @@
 				{{-- <th>User ID</th> --}}
 				<th>User</th>
 				<th><small>Name</small></th>
+				<th><small>Sum ac</small></th>
 				@foreach ($lop->assignments as $ass)
 					<th><small>
 						<a href="{{ route('assignments.show', ['assignment'=> $ass->id, 'problem_id' => '0'] ) }}" >
@@ -42,6 +47,7 @@
 						</a>
 					</small></th>
 				@endforeach
+				<th><small>Sum</small></th>
 				@foreach ($lop->assignments as $ass)
 					<th><small>
 						{{$ass->name}}
@@ -53,6 +59,7 @@
 			<tr data-id="{{$user->id}}">
 				<td id="un">{{$user->username}}</td>
 				<td> <small>{{$user->display_name}} </small></td>
+				<td> <p class="lead text-success">{{$user_table[$user->id]['sum_ac'] ?? 0}} </p></td>
 				@foreach ($lop->assignments as $ass)
 					<td class="">
 						@if (isset($user_table[$user->id][$ass->id]['accept_score']))
@@ -63,6 +70,7 @@
 						@endif
 					</td>
 				@endforeach
+				<td> <p class="lead text-danger">{{$user_table[$user->id]['sum'] ?? 0}} </p></td>
 				@foreach ($lop->assignments as $ass)
 					<td class="bg-danger">
 						<span>{{$user_table[$user->id][$ass->id]['score'] ?? ""}}</span>
@@ -78,16 +86,18 @@
 
 
 @section('body_end')
+<script type='text/javascript' src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 
-{{-- <script type='text/javascript' src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script type='text/javascript' src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
+
 <script>
 
 $(document).ready(function(){
   $("table").DataTable({
-		"pageLength": 50,
-		"lengthMenu": [ [20, 50, 100, 200, -1], [20, 50, 100, 200, "All"] ]
+	  	"paging" : false,
+		'ordering': true
 	});
 });
 
-</script> --}}
+</script>
 @endsection
