@@ -26,7 +26,7 @@ class problem_controller extends Controller
         $this->middleware('auth'); // phải login
     }
     
-    public function index()
+    public function index(Request $request)
     {
         // DB::enableQueryLog();
         // if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
@@ -34,7 +34,12 @@ class problem_controller extends Controller
         if (Auth::user()->role->name == 'admin') $all_problem = Problem::latest();
         else $all_problem = Problem::available(Auth::user()->id)->latest();
 
+        if ($request->get('search') != ""){
+            $all_problem->where('name', 'like', "%".trim($request->get('search'))."%");
+        }
+
         $all_problem = $all_problem->with('assignments', 'languages')->paginate(Setting::get('results_per_page_all'));
+        $all_problem->appends(['search' => $request->get('search')]);
         
         $a  =  $all_problem->pluck('id');
 

@@ -192,7 +192,8 @@ class assignment_controller extends Controller
         
         if ( $data['all_problems']->pluck('id')->contains($problem_id) == false){
             //If we can't found problem_id, view the first problem
-            $problem_id = $data['all_problems']->first()->id;
+            $problem_id = $data['all_problems']->first()->id ?? null;
+            if ($problem_id == null) abort(403, 'No problem to show');
         }
         
         $result = $this->get_description($problem_id);
