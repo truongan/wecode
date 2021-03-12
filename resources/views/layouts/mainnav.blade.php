@@ -36,7 +36,7 @@
                         <span class="nav-link-text">Practice</span>
                     </a>
                 </li>
-                @if ( in_array( Auth::user()->role->name, ['admin']) )
+                {{-- @if ( in_array( Auth::user()->role->name, ['admin']) )
                     
                     <li class="nav-item color-settings {{ ($selected=="settings") ? "selected" : ""}}" >
                         <a class="nav-link" href="{{ route('admin.admin') }}">
@@ -44,12 +44,12 @@
                             <span class="nav-link-text">Admin panel</span>
                         </a>
                     </li>
-                @endif
+                @endif --}}
                 @if ( in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
                     <li class="nav-item color-instructor_panel {{ ($selected=="instructor_panel") ? "selected" : ""}}" >
-                        <a class="nav-link" href="{{ route('admin.instructor') }}">
+                        <a class="nav-link" href="{{ route('problems.index') }}">
                             <i class="fa fa-fw fa-sliders-h fa-lg"></i>
-                            <span class="nav-link-text">Instructor panel</span>
+                            <span class="nav-link-text">Problems</span>
                         </a>
                     </li>
                 @endif

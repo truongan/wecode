@@ -21,18 +21,6 @@
 @section('content')
 <div class="card-group ">
 <div class="row">
-
-  {{-- <div class="m-3">
-    <div class="card bg-dark text-light" >
-      <i class="text-center card-img-top fas fa-school fa-2x p-3"></i>
-      <div class="card-body bg-light text-dark">
-        <small><strong class="card-title">CLASSES</strong></small>
-        <small><p  class="card-text">Quản lý lớp học</p></small>
-        <a href="{{ route('lops.index') }}" class="stretched-link"></a>
-      </div>
-    </div>
-  </div> --}}
-
   <div class="m-3">
     <div class="card bg-dark text-light" >
       <i class="text-center card-img-top fas fa-clipboard-list fa-2x p-3"></i>

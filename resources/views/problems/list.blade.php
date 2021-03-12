@@ -174,6 +174,7 @@
 	$("table").DataTable({
 		"paging": false,
 		{{-- "ordering": false, --}}
+		'order':[[0, 'desc']]
 	});
 	document.querySelector('.dataTables_filter > label').childNodes[0].data = "Filter in this page"
   });

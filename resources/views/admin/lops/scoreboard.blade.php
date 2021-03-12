@@ -35,7 +35,7 @@
 		<table class="table table-striped table-bordered">
 			<thead class="thead-dark">
 			<tr>
-				{{-- <th>#</th> --}}
+				<th>#</th>
 				{{-- <th>User ID</th> --}}
 				<th>User</th>
 				<th><small>Name</small></th>
@@ -57,6 +57,7 @@
 			</thead>
 			@foreach ($lop->users as $user)
 			<tr data-id="{{$user->id}}">
+				<td id="un">{{$loop->iteration}}</td>
 				<td id="un">{{$user->username}}</td>
 				<td> <small>{{$user->display_name}} </small></td>
 				<td> <p class="lead text-success">{{$user_table[$user->id]['sum_ac'] ?? 0}} </p></td>
@@ -93,10 +94,21 @@
 <script>
 
 $(document).ready(function(){
-  $("table").DataTable({
+   	var t =  $("table").DataTable({
 	  	"paging" : false,
-		'ordering': true
+		'ordering': true,
+		'order' : [[4, 'desc']],
+		"columnDefs": [ {
+            "searchable": false,
+            "orderable": false,
+            "targets": 0
+        } ]
 	});
+	t.on( 'order.dt search.dt', function () {
+        t.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+            cell.innerHTML = i+1;
+        } );
+    } ).draw();
 });
 
 </script>
