@@ -8,10 +8,9 @@
 <link rel="stylesheet" type='text/css' href="{{ asset('assets/fullcalendar/main.min.css') }}">
 <style>
     .card {
-        width: 9rem;
+        width: 12rem;
         height: 100%;
     }
-
 </style>
 @endsection
 
@@ -58,7 +57,7 @@ js') }}"></script>
 
 <div class="row">
     <div class="card-group ">
-        <div class="m-3">
+        <div class="m-2">
             <div class="card bg-dark text-light">
                 <i class="text-center card-img-top fas fa-cogs fa-2x p-3"></i>
                 <div class="card-body bg-light text-dark">
@@ -71,7 +70,7 @@ js') }}"></script>
             </div>
         </div>
 
-        <div class="m-3">
+        <div class="m-2">
             <div class="card bg-dark text-light">
                 <i class="text-center card-img-top fas fa-users fa-2x p-3"></i>
                 <div class="card-body bg-light text-dark">
@@ -84,7 +83,7 @@ js') }}"></script>
             </div>
         </div>
 
-        <div class="m-3">
+        <div class="m-2">
             <div class="card bg-dark text-light">
                 <i class="text-center card-img-top fas fa-laptop-code fa-2x p-3"></i>
                 <div class="card-body bg-light text-dark">
@@ -97,7 +96,7 @@ js') }}"></script>
             </div>
         </div>
 
-        <div class="m-3">
+        <div class="m-2">
             <div class="card bg-dark text-light">
                 <i class="text-center card-img-top fas fa-play fa-2x p-3"></i>
                 <div class="card-body bg-light text-dark">
@@ -116,7 +115,7 @@ js') }}"></script>
 @if ( in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
 <div class="row">
     <div class="card-group ">
-        <div class="m-3">
+        <div class="m-2">
             <div class="card bg-dark text-light">
                 <i class="text-center card-img-top fas fa-tags fa-2x p-3"></i>
                 <div class="card-body bg-light text-dark">
@@ -129,7 +128,7 @@ js') }}"></script>
             </div>
         </div>
 
-        <div class="m-3">
+        <div class="m-2">
             <div class="card bg-dark text-light">
                 <i class="text-center card-img-top fas fa-edit fa-2x p-3"></i>
                 <div class="card-body bg-light text-dark">
@@ -141,7 +140,7 @@ js') }}"></script>
                 </div>
             </div>
         </div>
-        <div class="m-3">
+        <div class="m-2">
             <div class="card bg-dark text-light">
                 <i class="text-center card-img-top fas fa-user-secret fa-2x p-3"></i>
                 <div class="card-body bg-light text-dark">

@@ -29,8 +29,6 @@ Route::post('lops/{lop}/enrol/{in}', 'lop_controller@enrol')->name('lops.enrol')
 Route::get('/settings', 'setting_controller@index')->name('settings.index');
 Route::post('/settings', 'setting_controller@update')->name('settings.update');
 
-Route::get('/admin','UserController@admin_index')->name('admin.admin');
-Route::get('/instructor','UserController@instructor_index')->name('admin.instructor');
 
 Route::get('/users/add_multiple', 'UserController@add_multiple');
 Route::post('/users/adds', 'UserController@add')->name('users.add');
@@ -41,7 +39,6 @@ Route::get('/problems/downloadtestsdesc/{id}', 'problem_controller@downloadtests
 Route::get('/problems/downloadpdf/{id}', 'problem_controller@pdf')->name('problems.pdf');
 Route::get('/problems/downloadtemplate/{problem_id}/{assignment_id}', 'problem_controller@template')->name('problems.template');
 Route::post('/problems/edit_description/{problem_id}', 'problem_controller@edit_description')->name('problems.edit_description');
-// Route::get('/view_problem/{problem_id}', 'view_problem_controller@index');
 
 Route::get('/submissions/assignment/{assignment_id}/user/{user_id}/problem/{problem_id}/view/{choose}', 'submission_controller@index')->name('submissions.index');
 Route::get('/submissions/create/assignment/{assignment}/problem/{problem}/{oldsub?}', 'submission_controller@create')->name('submissions.create');

@@ -335,19 +335,19 @@ class UserController extends Controller
 		return ['users_ok'=>$users_ok,'users_error'=>$users_error];
     }
     
-    public function admin_index()
-    {
-        if(Auth::user()->role->name != 'admin'){
-            abort(403);
-        }
-        return view('admin.admin');
-    }
-    public function instructor_index()
-    {
-        if(!in_array( Auth::user()->role->name, ['admin', 'head_instructor'])){
-            abort(403);
-        }
-        return view('admin.instructor');
-    }
+    // public function admin_index()
+    // {
+    //     if(Auth::user()->role->name != 'admin'){
+    //         abort(403);
+    //     }
+    //     return view('admin.admin');
+    // }
+    // public function instructor_index()
+    // {
+    //     if(!in_array( Auth::user()->role->name, ['admin', 'head_instructor'])){
+    //         abort(403);
+    //     }
+    //     return view('admin.instructor');
+    // }
     
 }
