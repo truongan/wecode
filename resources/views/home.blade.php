@@ -117,6 +117,18 @@ js') }}"></script>
     <div class="card-group ">
         <div class="m-2">
             <div class="card bg-dark text-light">
+                <i class="text-center card-img-top fas fa-clipboard-list fa-2x p-3"></i>
+                <div class="card-body bg-light text-dark">
+                    <small><strong class="card-title">User statistics</strong></small>
+                    <small>
+                        <p class="card-text">Thống kê tình hình submit của user</p>
+                    </small>
+                    <a href="{{ route('users.rank') }}" class="stretched-link"></a>
+                </div>
+            </div>
+        </div>
+        <div class="m-2">
+            <div class="card bg-dark text-light">
                 <i class="text-center card-img-top fas fa-tags fa-2x p-3"></i>
                 <div class="card-body bg-light text-dark">
                     <small><strong class="card-title">TAGS</strong></small>

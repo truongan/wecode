@@ -88,9 +88,49 @@ class UserController extends Controller
         return view('users.show', ['user' => $user, 'ass' => $ass]);
     }
 
-    public function rank(){
-        return null;
-    }
+    public function rank(Request $request){
+        $name_list = preg_split("/[\s,]+/",$request->get('names'));
+
+        $users = User::with('lops')->whereIn('username', $name_list);
+
+        $ass = array();
+
+        foreach ($users as $k => $user) {
+            
+            $subs = $user->submissions()->with('assignment', 'assignment.lops', 'assignment.problems')->get();
+
+            $total = $subs->count();
+            foreach ($subs as $sub){
+                $t = $ass[$sub->assignment->id] ??= (object)null;
+                $t->ass ??= $sub->assignment;
+                $t->total ??= 0;
+                $t->accept ??= 0;
+                $t->score ??= 0;
+                $t->ac_score ??= 0;
+                $t->solved ??= 0;
+
+                $t->total++;
+                if ($sub->pre_score == '10000') $t->accept ++;
+                if ($sub->is_final){
+                    $probs = $sub->assignment->problems->keyBy('id');
+                    if (isset($probs[$sub->problem_id])){
+                        $pre_score = ceil(
+                            $sub->pre_score*
+                            ($probs[$sub->problem_id]->pivot->score ?? 0 )/10000
+                        );
+                        $score =  ceil($pre_score*$sub->coefficient/100);
+                        $t->score += $score;
+                        if ($sub->pre_score == '10000') {
+                            $t->solved ++;
+                            $t->ac_score += $score;
+                        }
+                    }
+                }
+            }
+        }
+        // dd($ass);
+
+        return view('users.rank', [ 'ass' => $ass]);    }
 
     /**
      * Show the form for creating a new resource.
@@ -334,20 +374,5 @@ class UserController extends Controller
 		
 		return ['users_ok'=>$users_ok,'users_error'=>$users_error];
     }
-    
-    // public function admin_index()
-    // {
-    //     if(Auth::user()->role->name != 'admin'){
-    //         abort(403);
-    //     }
-    //     return view('admin.admin');
-    // }
-    // public function instructor_index()
-    // {
-    //     if(!in_array( Auth::user()->role->name, ['admin', 'head_instructor'])){
-    //         abort(403);
-    //     }
-    //     return view('admin.instructor');
-    // }
     
 }
