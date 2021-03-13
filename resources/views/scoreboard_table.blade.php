@@ -93,7 +93,8 @@
         <td colspan="6">Solved/tries</td>
         @foreach ($problems as $p)
         <td>
-            {{$statistics[$p->id]->solved}}/{{$statistics[$p->id]->tries}}  ({{ round($statistics[$p->id]->solved*100/ $statistics[$p->id]->tries, 1) }}%)
+            {{$statistics[$p->id]->solved}}/{{$statistics[$p->id]->tries}}  
+            ({{ round($statistics[$p->id]->solved*100/ ($statistics[$p->id]->tries ?: 1), 1) }}%)
         </td>
         @endforeach
     </tr>
@@ -101,7 +102,7 @@
         <td colspan="6">Solved users/tries users/Total users</td>
         @foreach ($problems as $p)
         <td>
-            {{$statistics[$p->id]->solved_user}}/{{$statistics[$p->id]->tries_user}} ({{ round($statistics[$p->id]->solved_user*100/$statistics[$p->id]->tries_user, 1) }}%) ({{ round($statistics[$p->id]->solved_user*100/count($scoreboard['username']), 1) }}% total)
+            {{$statistics[$p->id]->solved_user}}/{{$statistics[$p->id]->tries_user}} ({{ round($statistics[$p->id]->solved_user*100/($statistics[$p->id]->tries_user ?:1), 1) }}%) ({{ round($statistics[$p->id]->solved_user*100/(count($scoreboard['username']) ?: 1), 1) }}% total)
         </td>
         @endforeach
     </tr>
@@ -109,7 +110,7 @@
         <td colspan="6">Average tries per users</td>
         @foreach ($problems as $p)
         <td>
-            {{ round($statistics[$p->id]->tries / $statistics[$p->id]->tries_user, 2) }}
+            {{ round($statistics[$p->id]->tries /($statistics[$p->id]->tries_user?:1), 2) }}
         </td>
         @endforeach
     </tr>
@@ -117,7 +118,7 @@
         <td colspan="6">Average tries to solve</td>
         @foreach ($problems as $p)
         <td>
-            {{ round($statistics[$p->id]->tries/ $statistics[$p->id]->solved, 2) }}
+            {{ round($statistics[$p->id]->tries/ ($statistics[$p->id]->solved ?: 1), 2) }}
         </td>
         @endforeach
     </tr>

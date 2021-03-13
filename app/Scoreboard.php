@@ -137,6 +137,15 @@ class Scoreboard extends Model
 		// dd(DB::getQueryLog());
 		// DB::disableQueryLog();
 
+		foreach($problems as $id=>$p){
+			$statistics[$id] ??= new class{};
+			$a = & $statistics[$id];
+			$a->tries = 0;
+			$a->tries_user = 0;
+			$a->solved = 0;
+			$a->solved_user = 0;
+		}
+
 		foreach ($aggr as $ag ) {
 			$statistics[$ag->problem_id] ??= new class{};
 			$a = & $statistics[$ag->problem_id];
