@@ -50,6 +50,7 @@ class Scoreboard extends Model
             $number_of_submissions[$item->user->username][$item->problem_id]+=1;
 		}
 		
+		$statistics = array();
         foreach($submissions as $submission)
         {
 
@@ -95,6 +96,7 @@ class Scoreboard extends Model
 						* Setting::get('submit_penalty'), 'seconds');
 			}
 			$users[] = $submission->user;
+
         }
 
         $scoreboard = array(
@@ -129,8 +131,25 @@ class Scoreboard extends Model
 			$scoreboard['tried_to_solve'],
 			$scoreboard['submit_penalty'], SORT_NATURAL
         );
-    
-        return array($scores, $scoreboard, $number_of_submissions);
+		// DB::enableQueryLog();
+		$aggr = $assignment->submissions()->groupBy('user_id', 'problem_id')->select(DB::raw('user_id, problem_id, count(*) as submit'))->get();
+		$aggr_ac = $assignment->submissions()->groupBy('user_id', 'problem_id')->where('pre_score', 10000)->select(DB::raw('user_id, problem_id, count(*) as submit'))->get();
+		// dd(DB::getQueryLog());
+		// DB::disableQueryLog();
+
+		foreach ($aggr as $ag ) {
+			$statistics[$ag->problem_id] ??= new class{};
+			$a = & $statistics[$ag->problem_id];
+			$a->tries = ($a->tries ?? 0) + $ag->submit;
+			$a->tries_user = ($a->tries_user ?? 0) + 1;
+		}
+		foreach ($aggr_ac as $ag ) {
+			$a = & $statistics[$ag->problem_id];
+			$a->solved = ($a->solved ?? 0) + $ag->submit;
+			$a->solved_user = ($a->solved_user ?? 0) + 1;
+		}
+		// dd($statistics);
+        return array($scores, $scoreboard, $number_of_submissions, $statistics);
     }
 
 	public function _update_scoreboard()
@@ -146,7 +165,7 @@ class Scoreboard extends Model
 			return false;
 		}
 
-		list ($scores, $scoreboard, $number_of_submissions) = $this->_generate_scoreboard();
+		list ($scores, $scoreboard, $number_of_submissions,$statistics) = $this->_generate_scoreboard();
 		$all_problems = $assignment->problems;
 		
 		$total_score = 0;
@@ -166,6 +185,7 @@ class Scoreboard extends Model
 			'scores' => $scores,
 			'scoreboard' => $scoreboard,
 			'names' => $result,
+			'statistics' => $statistics,
 			'no_of_problems'=> $assignment->problems->count(),
 			'number_of_submissions' => $number_of_submissions,
 			'assignment_id' => $assignment->id

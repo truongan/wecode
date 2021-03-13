@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>@yield('head_title') - {{ $settings['site_name'] }}</title>
+    <title>@yield('head_title') - {{ $settings['site_name'] }} - wecode judge</title>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
