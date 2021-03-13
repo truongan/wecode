@@ -93,15 +93,15 @@
         <td colspan="6">Solved/tries</td>
         @foreach ($problems as $p)
         <td>
-            {{$statistics[$p->id]->solved}} / {{$statistics[$p->id]->tries}}  ( {{ round($statistics[$p->id]->solved*100/ $statistics[$p->id]->tries, 1) }}% )
+            {{$statistics[$p->id]->solved}}/{{$statistics[$p->id]->tries}}  ({{ round($statistics[$p->id]->solved*100/ $statistics[$p->id]->tries, 1) }}%)
         </td>
         @endforeach
     </tr>
     <tr class="bg-dark text-light">
-        <td colspan="6">Solved users/tries users</td>
+        <td colspan="6">Solved users/tries users/Total users</td>
         @foreach ($problems as $p)
         <td>
-            {{$statistics[$p->id]->solved_user}} / {{$statistics[$p->id]->tries_user}}  ( {{ round($statistics[$p->id]->solved_user*100/ $statistics[$p->id]->tries_user, 1) }}% )
+            {{$statistics[$p->id]->solved_user}}/{{$statistics[$p->id]->tries_user}} ({{ round($statistics[$p->id]->solved_user*100/$statistics[$p->id]->tries_user, 1) }}%) ({{ round($statistics[$p->id]->solved_user*100/count($scoreboard['username']), 1) }}% total)
         </td>
         @endforeach
     </tr>
