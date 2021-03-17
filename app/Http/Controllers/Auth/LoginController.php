@@ -136,7 +136,7 @@ class LoginController extends Controller
         
             Auth::user()->save();
             
-            return redirect()->route('assignments.index');
+            return redirect()->intended(route('home'));
         } else {
             return back()->withInput()->withErrors([
                 'username' => 'Either your username or password are incorrect.',
