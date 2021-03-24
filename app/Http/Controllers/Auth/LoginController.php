@@ -135,8 +135,9 @@ class LoginController extends Controller
             else Auth::user()->last_login_time=now();
         
             Auth::user()->save();
-            
-            return redirect()->intended(route('home'));
+            $path = parse_url(redirect()->intended(route('home'))->getTargetUrl())['path'];
+
+            return redirect(url($path));
         } else {
             return back()->withInput()->withErrors([
                 'username' => 'Either your username or password are incorrect.',
