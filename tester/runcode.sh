@@ -39,7 +39,7 @@ fi
 # if [ "$EXT" != "java" ]; then
 	ulimit -v $((MEMLIMIT+34500))
 	ulimit -m $((MEMLIMIT+34500))
-	ulimit -s $((MEMLIMIT+34500))
+	#ulimit -s $((MEMLIMIT+34500))
 # fi
 
 # Imposing time limit with ulimit
