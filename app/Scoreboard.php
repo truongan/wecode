@@ -157,8 +157,23 @@ class Scoreboard extends Model
 			$a->solved = ($a->solved ?? 0) + $ag->submit;
 			$a->solved_user = ($a->solved_user ?? 0) + 1;
 		}
+
+		$stat_print = array();
+		foreach($problems as $id=>$p){
+			$a = &$statistics[$id] ;
+			$stat_print[$id] = new class{};
+			$stat_print[$id]->solved_tries = "$a->solved / $a->tries " . ($a->tries == 0 ? "" : "(" . round($a->solved * 100/$a->tries, 2) . "%)" );
+			$stat_print[$id]->solved_tries_users = "$a->solved_user / $a->tries_user " 
+				. ($a->tries_user == 0 ? "" : "(" . round($a->solved_user * 100/$a->tries_user, 2) . "%)" )
+				. (count($users) == 0 ? "" : "(" . round($a->solved_user * 100/count($users), 2) . "%)" );
+			$stat_print[$id]->average_tries =  ($a->tries == 0 ? "" : round($a->tries /$a->tries_user, 1) );
+			$stat_print[$id]->average_tries_2_solve =  ($a->solved == 0 ? "" : round($a->tries /$a->solved, 1) );
+			
+		}
+
 		// dd($statistics);
-        return array($scores, $scoreboard, $number_of_submissions, $statistics);
+		// dd($stat_print);
+        return array($scores, $scoreboard, $number_of_submissions, $stat_print);
     }
 
 	public function _update_scoreboard()
@@ -174,7 +189,7 @@ class Scoreboard extends Model
 			return false;
 		}
 
-		list ($scores, $scoreboard, $number_of_submissions,$statistics) = $this->_generate_scoreboard();
+		list ($scores, $scoreboard, $number_of_submissions,$stat_print) = $this->_generate_scoreboard();
 		$all_problems = $assignment->problems;
 		
 		$total_score = 0;
@@ -194,7 +209,7 @@ class Scoreboard extends Model
 			'scores' => $scores,
 			'scoreboard' => $scoreboard,
 			'names' => $result,
-			'statistics' => $statistics,
+			'stat_print' => $stat_print,
 			'no_of_problems'=> $assignment->problems->count(),
 			'number_of_submissions' => $number_of_submissions,
 			'assignment_id' => $assignment->id
