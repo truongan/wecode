@@ -103,13 +103,14 @@ DISPLAY_JAVA_EXCEPTION_ON=true
 
 #$runcode
 declare -A languages_to_docker
-languages_to_docker["c"]="gcc:6"
-languages_to_docker["cpp"]="gcc:6"
+languages_to_docker["c"]="gcc:9"
+languages_to_docker["cpp"]="gcc:9"
 languages_to_docker["py2"]="python:2"
 languages_to_docker["py3"]="python:3"
 languages_to_docker["numpy"]="truongan/wecodejudge:numpy"
 languages_to_docker["java"]="openjdk:8"
 languages_to_docker["pas"]="nacyot/pascal-fp_compiler:apt"
+languages_to_docker["js"]="node:15"
 
 # DIFFOPTION can also be "ignore" or "exact".
 # ignore: In this case, before diff command, all newlines and whitespaces will be removed from both files
@@ -242,6 +243,7 @@ languages_to_comm["py2"]="python2 -O $FILENAME.py2"
 languages_to_comm["py3"]="python3 -O $FILENAME.py3"
 languages_to_comm["numpy"]="python3 -O $FILENAME.numpy"
 languages_to_comm["java"]="java -mx${MEMLIMIT}k solution"
+languages_to_comm["js"]="java -mx${MEMLIMIT}k solution"
 declare -A errors
 errors["SHJ_TIME"]="Time Limit Exceeded"
 errors["SHJ_MEM"]="Memory Limit Exceeded"

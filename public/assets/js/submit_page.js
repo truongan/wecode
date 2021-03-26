@@ -75,7 +75,7 @@ $(document).ready(function(){
                 else $("#after-grp").hide();
     
                 all_ace_s.map(function(editor){
-                    console.log(editor)
+                    // console.log(editor)
                     editor.resize();
                 });
             }
@@ -88,12 +88,15 @@ $(document).ready(function(){
         //$('<option value="0" selected="selected">-- Select Language --</option>').appendTo('select#languages');
         if (v==0)
             return;
+        first_lang = problem_languages[v][0].id;
+
         for (var i=0;i<problem_languages[v].length;i++)
             $('<option value="'+problem_languages[v][i].id+'">'+problem_languages[v][i].name+'</option>').appendTo('select#languages');
-        console.log($(this).children('option:selected').first().data('statement'));
+        // console.log($(this).children('option:selected').first().data('statement'));
         $("#problem_link").attr('href', $(this).children('option:selected').first().data('statement'));
         
-        // asfas
+        $("select[name=language]").val(first_lang);
+        $("select[name=language]").change();
 
         get_template($(this).val(), $('#assignment_id_input').val());
     });
@@ -109,26 +112,33 @@ $(document).ready(function(){
     });
     $("#theme").val(theme);
 
-    all_ace_s.map(function (editor){editor.session.setMode("ace/mode/c_cpp");});
+    // all_ace_s.map(function (editor){editor.session.setMode("ace/mode/c_cpp");});
 
     $("form").submit(function(){
     	$("textarea").val(editor.getValue());
     });
 
     $("select[name=language]").change(function(){
+    
         var lang_to_mode = {"C++":"c_cpp"
             , "Java":"java"
             , "C":"c_pp"
             , "Python 2":"python"
             , "Python 3":"python"
+            , "numpy-mp":"python"
             , "Free Pascal":"pascal"
+            , "Javascript":"javascript"
         };
-
-        mode = "ace/mode/" + lang_to_mode[$(this).val()];
+        var select = $(this)[0];
+        select = select.options[select.selectedIndex].text;
+        mode = "ace/mode/" + lang_to_mode[select];
     	all_ace_s.map(function(editor){
             editor.session.setMode(mode);
         });
     });
+
+
+    
 
     $("#theme").change(function(){
         t = $(this).val();

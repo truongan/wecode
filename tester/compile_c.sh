@@ -4,7 +4,7 @@
 ####################### Options #######################
 #
 # Compile options for C/C++
-C_OPTIONS="-fno-asm -Dasm=error -lm -O2"
+C_OPTIONS=" -g -O2 -static "
 #
 # Warning Options for C/C++
 # -w: Inhibit all warning messages
@@ -13,9 +13,9 @@ C_OPTIONS="-fno-asm -Dasm=error -lm -O2"
 # Read more: http://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html
 C_WARNING_OPTION="-w"
 
-COMPILER="gcc -std=c11"
+COMPILER="gcc -std=c17"
 if [ "$EXT" = "cpp" ]; then
-    COMPILER="g++ -std=c++11"
+    COMPILER="g++ -std=c++17"
 fi
 EXEFILE="s_$(echo $FILENAME | sed 's/[^a-zA-Z0-9]//g')" # Name of executable file
 
