@@ -188,6 +188,8 @@ elif [ "$EXT" = "c" ] || [ "$EXT" = "cpp" ]; then
 	source $tester_dir/compile_c.sh
 elif [ "$EXT" = "pas" ]; then
 	source $tester_dir/compile_pascal.sh
+elif [ "$EXT" = "js" ]; then
+	source $tester_dir/compile_javascript.sh
 fi
 
 ########################################################################################################
