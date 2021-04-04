@@ -54,12 +54,29 @@
 			<fieldset class="form-group col-md-2">
 				<label for="theme">Theme</label>
 				<select id="theme" name="theme" class="form-control custom-select">
+					{{-- <optgroup label="ThemesGuide">
+						<option value="blue_voltage" {{ $theme = 'blue_voltage' ? 'selected="selected"' : ''}} > blue_voltage </option>
+						<option value="darkster" {{ $theme = 'darkster' ? 'selected="selected"' : ''}} > darkster </option>
+						<option value="hello_kiddie" {{ $theme = 'hello_kiddie' ? 'selected="selected"' : ''}} > hello_kiddie </option>
+						<option value="lovey" {{ $theme = 'lovey' ? 'selected="selected"' : ''}} > lovey </option>
+						<option value="signal" {{ $theme = 'signal' ? 'selected="selected"' : ''}} > signal </option>
+						<option value="boldstrap" {{ $theme = 'boldstrap' ? 'selected="selected"' : ''}} > boldstrap </option>
+						<option value="fresca" {{ $theme = 'fresca' ? 'selected="selected"' : ''}} > fresca </option>
+						<option value="herbie" {{ $theme = 'herbie' ? 'selected="selected"' : ''}} > herbie </option>
+						<option value="monotony" {{ $theme = 'monotony' ? 'selected="selected"' : ''}} > monotony </option>
+						<option value="tequila" {{ $theme = 'tequila' ? 'selected="selected"' : ''}} > tequila </option>
+						<option value="bootstrap_purple" {{ $theme = 'bootstrap_purple' ? 'selected="selected"' : ''}} > bootstrap_purple </option>
+						<option value="greyson" {{ $theme = 'greyson' ? 'selected="selected"' : ''}} > greyson </option>
+						<option value="hootstrap" {{ $theme = 'hootstrap' ? 'selected="selected"' : ''}} > hootstrap </option>
+						<option value="poypull" {{ $theme = 'poypull' ? 'selected="selected"' : ''}} > poypull </option>
+					</optgroup>
 					<optgroup label="Tim creative">
 						<option value="argon" {{ $theme == "argon" ? 'selected="selected"' : '' }} >argon</option>
 						<option value="paper2" {{ $theme == "paper2" ? 'selected="selected"' : '' }} >paper2</option>
 						<option value="material-kit" {{ $theme == "material-kit" ? 'selected="selected"' : '' }} >material-kit</option> #}
 						<option value="now-ui-kit" {{ $theme == "now-ui-kit" ? 'selected="selected"' : '' }} >now-ui-kit</option> #}
 						{{-- <option value="blk" {{ $theme == "blk" ? 'selected="selected"' : '' }} >blk</option> #} --}}
+					</optgroup> --}}
 					<optgroup label="Light">
 						<option value="lumen" {{ $theme == "lumen" ? 'selected="selected"' : '' }} >lumen</option>
 						<option value="litera" {{ $theme == "litera" ? 'selected="selected"' : '' }} >litera</option>

@@ -54,6 +54,10 @@ class UserController extends Controller
         $subs = $user->submissions()->with('assignment', 'assignment.lops', 'assignment.problems')->get();
 
         $total = $subs->count();
+        $problem_wise_stat = array();
+
+
+
         $ass = array();
         foreach ($subs as $sub){
             $t = $ass[$sub->assignment->id] ??= (object)null;
@@ -63,6 +67,8 @@ class UserController extends Controller
             $t->score ??= 0;
             $t->ac_score ??= 0;
             $t->solved ??= 0;
+
+            $problem_wise_stat[$sub->problem_id] ??++ ;
 
             $t->total++;
             if ($sub->pre_score == '10000') $t->accept ++;
