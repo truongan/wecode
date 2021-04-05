@@ -35,6 +35,21 @@ Users - {{$user->username}}
   </div>
 </div>
 
+<table>
+  <thead class="thead-dark">
+    <th>Total submit</th>
+    <th>Accepted submit</th>
+    <th>Problem tried</th>
+    <th>Problem solved</th>
+  </thead>
+  <tr>
+    <th>Total submit</th>
+    <th>Accepted submit</th>
+    <th>Problem tried</th>
+    <th>Problem solved</th>
+  </tr>
+</table>
+
 <table class="wecode_table table table-striped table-bordered table-sm">
 	<thead class="thead-dark">
 		<tr>

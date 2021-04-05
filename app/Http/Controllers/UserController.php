@@ -68,7 +68,8 @@ class UserController extends Controller
             $t->ac_score ??= 0;
             $t->solved ??= 0;
 
-            $problem_wise_stat[$sub->problem_id] ??++ ;
+            $problem_wise_stat[$sub->problem_id] ??= 0 ;
+            $problem_wise_stat[$sub->problem_id]++ ;
 
             $t->total++;
             if ($sub->pre_score == '10000') $t->accept ++;
