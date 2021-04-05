@@ -41,30 +41,30 @@ Users - {{$user->username}}
   </div>
 </div>
 
-<table>
-  <thead class="thead-dark">
+<table class=" table table-striped table-bordered table-sm">
+  <thead class="thead">
     <th>Total submit</th>
     <th>Accepted submit</th>
     <th>Problem tried</th>
     <th>Problem solved</th>
   </thead>
   <tr>
-    <th>Total submit</th>
-    <th>Accepted submit</th>
-    <th>Problem tried</th>
-    <th>Problem solved</th>
+    <td>{{$stat['total_sub']}}</td>
+    <td>{{ $stat['total_accept']}}</td>
+    <td>{{ count($stat['prob_wise']) }}</td>
+    <td>{{ count($stat['solved_problems']) }}</td>
   </tr>
-  <thead class="thead-dark">
+  <thead class="thead">
     <th>Accept percentage</th>
-    <th>Avg tries to solve</th>
     <th>Solved percentage</th>
+    <th>Avg tries to solve</th>
     <th>Ranking</th>
   </thead>
   <tr >
-    <th>Total submit</th>
-    <th>Accepted submit</th>
-    <th>Problem tried</th>
-    <th>Problem solved</th>
+    <td>{{ round($stat['total_accept'] *100/ $stat['total_sub'],2) . "%" }}</td>
+    <td>{{ round( count($stat['solved_problems'])*100/ count($stat['prob_wise'])) . "%"}}</td>
+    <td>{{ round( array_sum($stat['solved_problems']) / count($stat['prob_wise']),2) }}</td>
+    <td>Problem solved</td>
   </tr>
 </table>
 

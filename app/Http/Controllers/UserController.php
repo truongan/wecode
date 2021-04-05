@@ -55,9 +55,8 @@ class UserController extends Controller
 
         $total = $subs->count();
         $problem_wise_stat = array();
-
-
-
+        $total_accept = 0;
+        $solved_problems = array();
         $ass = array();
         foreach ($subs as $sub){
             $t = $ass[$sub->assignment->id] ??= (object)null;
@@ -70,9 +69,12 @@ class UserController extends Controller
 
             $problem_wise_stat[$sub->problem_id] ??= 0 ;
             $problem_wise_stat[$sub->problem_id]++ ;
-
             $t->total++;
-            if ($sub->pre_score == '10000') $t->accept ++;
+            if ($sub->pre_score == '10000') {
+                $total_accept++;
+                $t->accept ++;
+                $solved_problems[$sub->problem_id] = $problem_wise_stat[$sub->problem_id];
+            }
             if ($sub->is_final){
                 $probs = $sub->assignment->problems->keyBy('id');
                 if (isset($probs[$sub->problem_id])){
@@ -92,7 +94,9 @@ class UserController extends Controller
 
         // dd($ass);
 
-        return view('users.show', ['user' => $user, 'ass' => $ass]);
+        return view('users.show'
+            , ['user' => $user, 'ass' => $ass, 'stat' => array('total_sub' => $total, 'total_accept' => $total_accept, 'prob_wise' => $problem_wise_stat, 'solved_problems' => $solved_problems)  ]
+        );
     }
 
     public function rank(Request $request){
