@@ -1,5 +1,11 @@
 @extends('layouts.app')
 @php($selected="settings")
+
+@section('other_assets')
+<link rel="stylesheet" type='text/css' href="{{ asset('assets/frappe/frappe-charts.min.css') }}"/>
+<script src="{{ asset('assets/frappe/frappe-charts.min.cjs.js') }}"></script>
+@endsection
+
 @section('head_title','View User')
 @section('icon', 'fas fa-users')
 
@@ -48,7 +54,21 @@ Users - {{$user->username}}
     <th>Problem tried</th>
     <th>Problem solved</th>
   </tr>
+  <thead class="thead-dark">
+    <th>Accept percentage</th>
+    <th>Avg tries to solve</th>
+    <th>Solved percentage</th>
+    <th>Ranking</th>
+  </thead>
+  <tr >
+    <th>Total submit</th>
+    <th>Accepted submit</th>
+    <th>Problem tried</th>
+    <th>Problem solved</th>
+  </tr>
 </table>
+
+{{-- Show contribution map bằng cái này : https://github.com/frappe/charts --}}
 
 <table class="wecode_table table table-striped table-bordered table-sm">
 	<thead class="thead-dark">
