@@ -61,10 +61,10 @@ Users - {{$user->username}}
     <th>Ranking</th>
   </thead>
   <tr >
-    <td>{{ round($stat['total_accept'] *100/ $stat['total_sub'],2) . "%" }}</td>
-    <td>{{ round( count($stat['solved_problems'])*100/ count($stat['prob_wise'])) . "%"}}</td>
-    <td>{{ round( array_sum($stat['solved_problems']) / count($stat['prob_wise']),2) }}</td>
-    <td>Problem solved</td>
+    <td>{{ @round($stat['total_accept'] *100/ $stat['total_sub'],2) . "%" }}</td>
+    <td>{{ @round( count($stat['solved_problems'])*100/ count($stat['prob_wise'])) . "%"}}</td>
+    <td>{{ @round( array_sum($stat['solved_problems']) / count($stat['prob_wise']),2) }}</td>
+    <td></td>
   </tr>
 </table>
 
