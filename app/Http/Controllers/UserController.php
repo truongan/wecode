@@ -99,6 +99,10 @@ class UserController extends Controller
         foreach ($hourly as $key => $value) {
             $value->hour = ($value->hour+$offset)%24;
         }
+        // $offset = (int)($offset);
+        // $s = $hourly->splice(24-$offset) ;
+        // $hourly = $s->concat($hourly);
+
         return view('users.show'
             , ['user' => $user, 'ass' => $ass, 'stat' => array('total_sub' => $total, 'total_accept' => $total_accept, 'prob_wise' => $problem_wise_stat, 'solved_problems' => $solved_problems) 
                 ,'heat_map_data' => $user->submissions()->selectRaw('date(created_at) as date, count(*) as count')->groupByRaw('date(created_at)')->get()
