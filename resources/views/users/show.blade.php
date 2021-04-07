@@ -2,8 +2,49 @@
 @php($selected="settings")
 
 @section('other_assets')
+
 <link rel="stylesheet" type='text/css' href="{{ asset('assets/frappe/frappe-charts.min.css') }}"/>
-<script src="{{ asset('assets/frappe/frappe-charts.min.cjs.js') }}"></script>
+<script src="{{ asset('assets/frappe/frappe-charts.min.iife.js') }}"></script>
+  {{-- <script src="https://cdn.jsdelivr.net/npm/frappe-charts@1.2.4/dist/frappe-charts.min.iife.js"></script> --}}
+  {{-- <!-- or -->
+  <script src="https://unpkg.com/frappe-charts@1.2.4/dist/frappe-charts.min.i.js"></script> --}}
+
+
+@endsection
+
+@section('body_end')
+
+<script>
+let data = {
+    dataPoints: {!! $heat_map_data->pluck('count', 'date')->toJson()  !!},
+    {{-- start: {!! $heat_map_data->first()->date !!}, // a JS date object
+    end: {!! $heat_map_data->last()->date !!} --}}
+};
+
+let chart = new frappe.Chart("#heat_map", {
+    title: 'Submit heat map since last year',
+    type: 'heatmap',
+    data: data,
+    radius:4,
+    {{-- colors: ['violet'] --}}
+});
+
+data2 = {
+   
+    labels: {!! $hourly_data->pluck('hour')->toJson() !!},
+    datasets: [
+        { values:{!!$hourly_data->pluck('count')->toJson() !!} }
+    ]
+}
+new frappe.Chart( "#hourly", {
+    data: data2,
+    type: 'bar',
+    title: 'Submit count for each hours of the day ',
+    height: 250,
+    colors: ['orange']
+});
+
+</script>
 @endsection
 
 @section('head_title','View User')
@@ -69,6 +110,10 @@ Users - {{$user->username}}
 </table>
 
 {{-- Show contribution map bằng cái này : https://github.com/frappe/charts --}}
+
+<div id="heat_map"></div>
+<div id="hourly"></div>
+
 
 <table class="wecode_table table table-striped table-bordered table-sm">
 	<thead class="thead-dark">

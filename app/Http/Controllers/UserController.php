@@ -92,12 +92,23 @@ class UserController extends Controller
             }
         }
 
-        // dd($ass);
-
+        $hourly = $user->submissions()->selectRaw('hour(created_at) as hour, count(*) as count')->groupByRaw('hour(created_at)')->get();
         return view('users.show'
-            , ['user' => $user, 'ass' => $ass, 'stat' => array('total_sub' => $total, 'total_accept' => $total_accept, 'prob_wise' => $problem_wise_stat, 'solved_problems' => $solved_problems)  ]
+            , ['user' => $user, 'ass' => $ass, 'stat' => array('total_sub' => $total, 'total_accept' => $total_accept, 'prob_wise' => $problem_wise_stat, 'solved_problems' => $solved_problems) 
+                ,'heat_map_data' => $user->submissions()->selectRaw('date(created_at) as date, count(*) as count')->groupByRaw('date(created_at)')->get()
+                // ,'heat_map_data' => $sub->selectRaw('date(created_at) as date, count(*) as count')->groupByRaw('date(created_at)')->get()
+                ,'hourly_data' => $hourly
+            ]
         );
     }
+
+
+
+
+
+
+
+
 
     public function rank(Request $request){
         $name_list = preg_split("/[\s,]+/",$request->get('names'));
