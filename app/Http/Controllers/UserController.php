@@ -11,6 +11,7 @@ use Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
+use DateTimeZone;
 
 class UserController extends Controller
 {
@@ -93,6 +94,11 @@ class UserController extends Controller
         }
 
         $hourly = $user->submissions()->selectRaw('hour(created_at) as hour, count(*) as count')->groupByRaw('hour(created_at)')->get();
+        $offset = (timezone_open(Setting::get('timezone')))->getOffset(now())/3600;
+        
+        foreach ($hourly as $key => $value) {
+            $value->hour = ($value->hour+$offset)%24;
+        }
         return view('users.show'
             , ['user' => $user, 'ass' => $ass, 'stat' => array('total_sub' => $total, 'total_accept' => $total_accept, 'prob_wise' => $problem_wise_stat, 'solved_problems' => $solved_problems) 
                 ,'heat_map_data' => $user->submissions()->selectRaw('date(created_at) as date, count(*) as count')->groupByRaw('date(created_at)')->get()
