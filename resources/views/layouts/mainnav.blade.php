@@ -1,4 +1,4 @@
-<nav id="mainNav" class="mainNav navbar navbar-expand-lg navbar-dark fixed-top color-{{ $selected }} bg-dark">
+<nav id="mainNav" class="mainNav navbar navbar-expand-lg navbar-dark fixed-top color-{{ $selected }} bg-dark ">
         <div  class="navbar-brand">
             <a href="{{ route('home') }}">
                 <img src="{{ asset('images/logo.png') }}" height="30px" />
@@ -11,7 +11,7 @@
         </button>
     
         <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav bg-dark navbar-sidenav color-{{ $selected }}" id="exampleAccordion">
+            <ul class="navbar-nav navbar p-0 border-bottom-0 border-left-0 border-right-0 bg-dark navbar-dark navbar-sidenav color-{{ $selected }}" id="exampleAccordion">
                 <li class="nav-item color-dashboard {{ ($selected=="dashboard") ? "selected" : ""}}">
                 <a class="nav-link" href="{{ url('home') }}">
                     <i class="fa fa-fw fa-tachometer-alt fa-lg"></i>

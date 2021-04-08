@@ -21,7 +21,8 @@ Users - ranking
 	<thead class="thead-dark">
 		<tr>
 			<th>#</th>
-			<th><small>Assignments</small></th>
+			<th>Username</th>
+			<th><small>Name</small></th>
 			<th>Classes</th>
 			<th>No. of submission</th>
 			<th>No. accepted (Percentage)</th>
@@ -29,12 +30,13 @@ Users - ranking
 			<th>Testcase score</th>
 		</tr>
 	</thead>
-	@foreach ($ass as $as)
+	@foreach ($users as $user)
 		<tr>
 			<td>{{$loop->iteration}}
 			<td>
-        <a href="{{ route('assignments.show', ['assignment'=> $as->ass->id, 'problem_id'=>0]) }}"> {{$as->ass->name}}</a>
-      </td>
+				<a href="{{ route('users.show', ['user_id' => $user->id]) }}"> {{$as->ass->name}}
+				</a>
+      		</td>
 			<td>
         @foreach ($as->ass->lops as $lop)
             <a href="{{ route('lops.show', $lop->id) }}">{{$lop->name}}</a></br>

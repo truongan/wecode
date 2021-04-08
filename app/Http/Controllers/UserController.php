@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\Role;
+use App\Submission;
 use App\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -113,57 +114,38 @@ class UserController extends Controller
         );
     }
 
-
-
-
-
-
-
-
-
     public function rank(Request $request){
         $name_list = preg_split("/[\s,]+/",$request->get('names'));
 
-        $users = User::with('lops')->whereIn('username', $name_list);
+        $users = User::with('lops')->whereIn('username', $name_list)->get();
+        $subs = Submission::with('assignment', 'assignment.lops', 'assignment.user')->whereIn('user_id', $users->pluck('id'))->get();
+        $stats = array();
+        // dd($users);
+        // dd($subs);
 
-        $ass = array();
 
-        foreach ($users as $k => $user) {
-            
-            $subs = $user->submissions()->with('assignment', 'assignment.lops', 'assignment.problems')->get();
 
-            $total = $subs->count();
-            foreach ($subs as $sub){
-                $t = $ass[$sub->assignment->id] ??= (object)null;
-                $t->ass ??= $sub->assignment;
-                $t->total ??= 0;
-                $t->accept ??= 0;
-                $t->score ??= 0;
-                $t->ac_score ??= 0;
-                $t->solved ??= 0;
+        foreach ($subs as $sub){
+            $t = $stats[$sub->user_id] ??= (object)null;
 
-                $t->total++;
-                if ($sub->pre_score == '10000') $t->accept ++;
-                if ($sub->is_final){
-                    $probs = $sub->assignment->problems->keyBy('id');
-                    if (isset($probs[$sub->problem_id])){
-                        $pre_score = ceil(
-                            $sub->pre_score*
-                            ($probs[$sub->problem_id]->pivot->score ?? 0 )/10000
-                        );
-                        $score =  ceil($pre_score*$sub->coefficient/100);
-                        $t->score += $score;
-                        if ($sub->pre_score == '10000') {
-                            $t->solved ++;
-                            $t->ac_score += $score;
-                        }
-                    }
-                }
+            $t->total ??= 0;
+            $t->problem_wise_stat ??= array();
+            $t->total_accept ??= 0;
+            $t->solved_problems ??= array();
+
+            $t->total++;
+
+            $t->problem_wise_stat[$sub->problem_id] ??= 0 ;
+            $t->problem_wise_stat[$sub->problem_id]++ ;
+
+            if ($sub->pre_score == '10000') {
+                $t->total_accept++;
+                $t->solved_problems[$sub->problem_id] = $t->problem_wise_stat[$sub->problem_id];
             }
         }
-        // dd($ass);
 
-        return view('users.rank', [ 'ass' => $ass]);    }
+        return view('users.rank', ['users' => $users, 'stats' => $stats]);    
+    }
 
     /**
      * Show the form for creating a new resource.
