@@ -106,6 +106,7 @@ class UserController extends Controller
         return view('users.show'
             , ['user' => $user, 'ass' => $ass, 'stat' => array('total_sub' => $total, 'total_accept' => $total_accept, 'prob_wise' => $problem_wise_stat, 'solved_problems' => $solved_problems) 
                 ,'heat_map_data' => $user->submissions()->selectRaw('date(created_at) as date, count(*) as count')->groupByRaw('date(created_at)')->get()
+                ,'pre_score_data' => $user->submissions()->selectRaw('floor(pre_score/1000) as pre_score, count(*) as count')->groupByRaw('floor(pre_score/1000)')->get()
                 // ,'heat_map_data' => $sub->selectRaw('date(created_at) as date, count(*) as count')->groupByRaw('date(created_at)')->get()
                 ,'hourly_data' => $hourly
             ]

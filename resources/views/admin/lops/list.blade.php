@@ -20,6 +20,7 @@
         <th>ID</th>
         <th>Name</th>
         <th>Open</th>
+        <th>Instructors</th>
         <th><small>Users count</small></th>
         <th><small>Assignments count</small></th>
         <th>Actions</th>
@@ -31,6 +32,7 @@
         <td>{{$lop->id}} </td>
         <td>{{$lop->name}}</td>
         <td><i  class=" far {{ $lop->open ? 'fa-check-square color6' : 'fa-square' }} fa-2x"></i></td>
+        <td>{{$lop->users->filter(function($item){return $item->role->name != 'student';})->pluck('username')->join(', ') }}</td>
         <td>{{$lop->users()->count() }}</td>
         <td>{{$lop->assignments()->count() }}</td>
         <td>

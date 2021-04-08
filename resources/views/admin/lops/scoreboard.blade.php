@@ -58,7 +58,7 @@
 			@foreach ($lop->users as $user)
 			<tr data-id="{{$user->id}}">
 				<td id="un">{{$loop->iteration}}</td>
-				<td id="un">{{$user->username}}</td>
+				<td id="un"><a href="{{ route('users.show', $user->id) }}"> {{$user->username}} </a></td>
 				<td> <small>{{$user->display_name}} </small></td>
 				<td> <p class="lead text-success">{{$user_table[$user->id]['sum_ac'] ?? 0}} </p></td>
 				@foreach ($lop->assignments as $ass)

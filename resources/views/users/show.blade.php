@@ -12,6 +12,16 @@
 
 @endsection
 
+
+@section('title_menu')
+<span class="title_menu_item">
+
+  
+  <a href="{{ route('users.index') }}"> <i class="fa fa-list color2"></i>List all users</a>
+
+</span>
+@endsection
+
 @section('body_end')
 
 <script>
@@ -30,7 +40,6 @@ let chart = new frappe.Chart("#heat_map", {
 });
 
 data2 = {
-   
     labels: {!! $hourly_data->pluck('hour')->toJson() !!},
     datasets: [
         { values:{!!$hourly_data->pluck('count')->toJson() !!} }
@@ -38,6 +47,18 @@ data2 = {
 }
 new frappe.Chart( "#hourly", {
     data: data2,
+    type: 'bar',
+    title: 'Submit count for each hours of the day ',
+    height: 250,
+    colors: ['orange']
+});
+new frappe.Chart( "#pre_score", {
+    data: {
+      labels : {!! $pre_score_data->pluck('pre_score')->toJson() !!},
+      datasets: [
+        {values: {!! $pre_score_data->pluck('count')->toJson() !!}}
+      ]
+    },
     type: 'bar',
     title: 'Submit count for each hours of the day ',
     height: 250,
@@ -51,7 +72,7 @@ new frappe.Chart( "#hourly", {
 @section('icon', 'fas fa-users')
 
 @section('title')
-Users - {{$user->username}}
+Users - {{$user->username}} 
 @endsection
 
 @section('content')
@@ -112,7 +133,12 @@ Users - {{$user->username}}
 {{-- Show contribution map bằng cái này : https://github.com/frappe/charts --}}
 
 <div id="heat_map"></div>
-<div id="hourly"></div>
+<div class='row'>
+  
+<div class='col-8' id="hourly"></div>
+<div class='col-4' id="pre_score"></div>
+
+</div>
 
 
 <table class="wecode_table table table-striped table-bordered table-sm">

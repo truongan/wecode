@@ -139,7 +139,7 @@
                                     @csrf
                                     <button type="submit" class="btn btn-danger mr-2 text-nowrap"><i class="fas fa-fw fa-sign-out-alt"></i>Sign out</button>
                                     </form>
-                                    <a href="{{ route("users.edit", Auth::user()->id) }}" class="btn btn-info text-nowrap"><i class="fas fa-fw fa-wrench"></i>Profile</a>
+                                    <a href="{{ route("users.show", Auth::user()->id) }}" class="btn btn-info text-nowrap"><i class="fas fa-fw fa-wrench"></i>Profile</a>
                                 </div>
                             </div>
                         </div>
