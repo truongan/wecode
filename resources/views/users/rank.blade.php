@@ -22,42 +22,36 @@ Users - ranking
 		<tr>
 			<th>#</th>
 			<th>Username</th>
-			<th><small>Name</small></th>
-			<th>Classes</th>
-			<th>No. of submission</th>
+			<th><small>clases</small></th>
+			<th>Total submission</th>
 			<th>No. accepted (Percentage)</th>
-			<th>Problem solved (scored)</th>
-			<th>Testcase score</th>
+			<th>Problem tried</th>
+			<th>Problem solved</th>
 		</tr>
 	</thead>
 	@foreach ($users as $user)
 		<tr>
 			<td>{{$loop->iteration}}
 			<td>
-				<a href="{{ route('users.show', ['user_id' => $user->id]) }}"> {{$as->ass->name}}
+				<a href="{{ route('users.show', ['user' => $user->id]) }}"> {{$user->username}}
 				</a>
       		</td>
 			<td>
-        @foreach ($as->ass->lops as $lop)
+        @foreach ($user->lops as $lop)
             <a href="{{ route('lops.show', $lop->id) }}">{{$lop->name}}</a></br>
         @endforeach
 			<td>
-          <button class="btn btn-info " disabled> {{ $as->total }} </button>
-        @if ($as->ass->scoreboard)
-          <a href="{{ route('scoreboards.index', $as->ass->id) }} "><i class="fas fa-external-link-alt"></i></a>
-        @endif
-      </td>
-			<td>{{$as->accept}} ({{ round($as->accept / $as->total * 100, 2) }}%)</td>
-			<td> 
-        <a class="btn btn-outline-success" href="{{ route('submissions.index', ['assignment_id'=>$as->ass->id, 'problem_id'=>'all', 'user_id' => $user->id, 'choose'=>'final']) }}"> 
-          {{$as->solved}} ({{ $as->ac_score}})
-        </a>
-      </td>
+				<button class="btn btn-info " disabled> {{ $stats[$user->id]->total }} </button>
+			</td>
 			<td>
-        <a class="btn btn-outline-danger" href="{{ route('submissions.index', ['assignment_id'=>$as->ass->id, 'problem_id'=>'all', 'user_id' =>   $user->id, 'choose'=>'all']) }}"> 
-        {{ $as->score }}
-        </a>
-      </td>
+				{{ $stats[$user->id]->total_accept }} ({{@round(fdiv($stats[$user->id]->total_accept, $stats[$user->id]->total) * 100, 2) }} )%
+			</td>
+			<td> 
+				{{ count($stats[$user->id]->problem_wise_stat)}}
+			</td>
+			<td>
+				{{ count($stats[$user->id]->solved_problems)}}
+			</td>
 			
 		</tr>
 	@endforeach

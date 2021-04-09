@@ -123,15 +123,16 @@ class UserController extends Controller
         // dd($users);
         // dd($subs);
 
-
-
-        foreach ($subs as $sub){
-            $t = $stats[$sub->user_id] ??= (object)null;
-
+        foreach ($users as $user ) {
+            $t = $stats[$user->id] = (object)null;
             $t->total ??= 0;
             $t->problem_wise_stat ??= array();
             $t->total_accept ??= 0;
             $t->solved_problems ??= array();
+        }
+
+        foreach ($subs as $sub){
+            $t=$stats[$sub->user_id];
 
             $t->total++;
 
@@ -143,7 +144,8 @@ class UserController extends Controller
                 $t->solved_problems[$sub->problem_id] = $t->problem_wise_stat[$sub->problem_id];
             }
         }
-
+        // dd($users);
+        // dd($stats);
         return view('users.rank', ['users' => $users, 'stats' => $stats]);    
     }
 
