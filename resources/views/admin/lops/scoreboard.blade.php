@@ -97,7 +97,7 @@ $(document).ready(function(){
    	var t =  $("table").DataTable({
 	  	"paging" : false,
 		'ordering': true,
-		'order' : [[4, 'desc']],
+		'order' : [[3, 'desc']],
 		"columnDefs": [ {
             "searchable": false,
             "orderable": false,
