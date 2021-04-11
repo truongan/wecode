@@ -103,8 +103,8 @@ DISPLAY_JAVA_EXCEPTION_ON=true
 
 #$runcode
 declare -A languages_to_docker
-languages_to_docker["c"]="gcc:9"
-languages_to_docker["cpp"]="gcc:9"
+languages_to_docker["c"]="gcc:10"
+languages_to_docker["cpp"]="gcc:10"
 languages_to_docker["py2"]="python:2"
 languages_to_docker["py3"]="python:3"
 languages_to_docker["numpy"]="truongan/wecodejudge:numpy"

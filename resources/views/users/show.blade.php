@@ -126,7 +126,7 @@ Users - {{$user->username}}
     <td>{{ @round( fdiv($stat['total_accept'] *100 , $stat['total_sub']),2) . "%" }}</td>
     <td>{{ @round( fdiv(count($stat['solved_problems'])*100 , count($stat['prob_wise'])) ,2 ) . "%"}}</td>
     <td>{{ @round( fdiv(array_sum($stat['solved_problems']) , count($stat['prob_wise']) ),2) }}</td>
-    <td></td>
+    <td>{{ $user->elo ?? ""}}</td>
   </tr>
 </table>
 
