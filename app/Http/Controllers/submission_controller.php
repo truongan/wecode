@@ -268,9 +268,12 @@ class submission_controller extends Controller
 			$submissions = Submission::where('assignment_id',$assignment->id)->where('problem_id', $request->problem_id)->get();
 		foreach ($submissions as $submission)
 		{
-			$a = Queue_item::add_and_process($submission->id, 'rejudge');
+			$a = Queue_item::add_not_process($submission->id, 'rejudge');
 			$submission->status = 'PENDING';
 			$submission->save();
+		}
+		for ($i=0; $i < Setting::get('concurent_queue_process', 2); $i++) { 
+			Queue_item::work();
 		}
 		return redirect()->back()->with('success', 'Rejudge in progress');   
 	}

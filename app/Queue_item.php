@@ -56,6 +56,14 @@ class Queue_item extends Model
 
 		return $a;
 	}
+	public static function add_not_process($submit_id, $type){
+		$a = Queue_item::create([
+			'submission_id' => $submit_id,
+			'type' => $type
+		]);
+
+		return $a;
+	}
 	public function save_and_remove(){
 		$submission = $this->submission;
 		DB::beginTransaction();
