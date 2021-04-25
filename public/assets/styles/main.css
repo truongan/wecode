@@ -278,3 +278,8 @@ div.problems_widget {
 	margin: 15px 0 15px 0px;
 	padding: 10px;
 }
+
+/* Since select2 auto use light background color, it make sense to force it foreground */
+.select2-container{
+	color:black;
+}

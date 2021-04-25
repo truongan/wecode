@@ -15,7 +15,7 @@ class AddJsToLanguages extends Migration
     {
         DB::table('languages')->insert(
             [
-                ['id' => 8,  'extension' => 'js', 'default_time_limit' =>  	500, 'default_memory_limit' => 	50000 , 'sorting' => 80, 'name' => 	'Javascript' ],
+                ['id' => 8,  'extension' => 'js', 'default_time_limit' =>  	500, 'default_memory_limit' => 	500000 , 'sorting' => 80, 'name' => 	'Javascript' ],
             ]
         );
     }
