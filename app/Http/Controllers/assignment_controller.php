@@ -53,13 +53,19 @@ class assignment_controller extends Controller
         if (!in_array( Auth::user()->role->name, ['admin']) )
         {
             $lops_id =  Auth::user()->lops->pluck('id');
+            // dd($lops_id->join(','));
             // $assignments = Auth::user()->lops()->with('assignments')->get()->pluck('assignments')->collapse()->keyBy('id')->sortByDesc('created_at');
             $assignments = 
                 Assignment::whereHas('lops' , function( $q) use ($lops_id){
                     // global $lops_id;
-                    $q->whereRaw('lops.id in (?) ', [$lops_id]);
+                    $q->whereIn('lops.id', $lops_id);
+                    // $q->whereRaw('lops.id in (?) ', $lops_id->join(','));
                 })
-                ->orWhere('user_id', Auth::user()->id)-> with('problems','lops')->latest()->get();
+                ->orWhere('user_id', Auth::user()->id)
+                // -> with('problems','lops')
+                ->latest()->get();
+            // dd(DB::getQueryLog());
+            // dd($assignments->count());
         }
         else $assignments = Assignment::with('problems','lops')->latest()->get();
         foreach ($assignments as &$assignment)
