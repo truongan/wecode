@@ -210,6 +210,7 @@ class problem_controller extends Controller
 
         $validatedData = $request->validate([
             'name' => ['required','max:255'],
+            'editorial' => 'nullable|url'
             ]);
         
         $req = $request->input();
