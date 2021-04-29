@@ -22,6 +22,7 @@
 					<th>Name</th>
 					<th>Lang</th>
 					<th><small>Accepted/Tried</small></th>
+					<th>editorial</th>
 					<th>Tag</th>
 				</tr>
 			</thead>
@@ -38,6 +39,11 @@
 					@endforeach
 				</td>
 				<td> <a href="{{ route('submissions.index', ['assignment_id' => 0, 'problem_id' => $problem->id, 'user_id' =>'all', 'choose' => 'all']) }}"> {{$problem->accepted_submission}}/{{$problem->total_submission}}</a></td>
+				<td>
+					@if ($problem->editorial != null)
+						<a href="{{ $problem->editorial }} "><i class="fas fa-lightbulb    "></i> Editorial </a>
+					@endif
+				</td>
 				<td>
 					@foreach ($problem->tags as $tag_name)
 					<span class="badge badge-pill badge-info">{{$tag_name->text}}</span>
