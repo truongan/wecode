@@ -84,7 +84,8 @@ class UserController extends Controller
 						$sub->pre_score*
 						($probs[$sub->problem_id]->pivot->score ?? 0 )/10000
 			        );
-                    $score =  ceil($pre_score*$sub->coefficient/100);
+
+                    $score =  ceil($pre_score*($sub->coefficient == 'error' ?  0 : $sub->coefficient)/100);
                     $t->score += $score;
                     if ($sub->pre_score == '10000') {
                         $t->solved ++;
@@ -269,6 +270,22 @@ class UserController extends Controller
 
 		header('Content-Type: application/json; charset=utf-8');
 		return ($json_result);
+    }
+
+    public function delete_submissions(User $user){
+        $subs = $user->submissions;
+        $i = 0;
+        $json_result = array('done'=>0 , 'count' => 0);
+        foreach ($subs as $sub) {
+            var_dump($sub->directory());
+            shell_exec("rm -rf " . $sub->directory());
+            $sub->delete();
+            $i++;
+        }
+        $json_result['done'] = 1;
+        $json_result['count'] = $i;
+        header('Content-Type: application/json; charset=utf-8');
+        return $json_result;
     }
 
     public function add_multiple()

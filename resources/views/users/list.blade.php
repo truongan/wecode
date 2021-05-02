@@ -148,12 +148,13 @@ $(document).ready(function(){
                 row.animate({backgroundColor: '#FF7676'},100, function(){row.remove();});
                 $.notify('User '+username+' deleted.', {position: 'bottom right', className: 'success', autoHideDelay: 5000});
               } else {
-                $.notify('All of User '+username+'\'s submissions deleted.', {position: 'bottom right', className: 'success', autoHideDelay: 5000});
+                $.notify('All ' + parseInt( response.count) +' submission(s) ' + 'of User '+username +' has been deleted.', {position: 'bottom right', className: 'success', autoHideDelay: 5000});
               }
-              $("#user_delete").modal("hide");
             }
-            else
+            else{
               shj.loading_failed(response.message);
+            }
+            $("#user_delete").modal("hide");
         }
 			});
 		});

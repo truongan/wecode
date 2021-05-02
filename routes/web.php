@@ -32,6 +32,7 @@ Route::post('/settings', 'setting_controller@update')->name('settings.update');
 
 Route::get('/users/add_multiple', 'UserController@add_multiple');
 Route::post('/users/adds', 'UserController@add')->name('users.add');
+Route::post('/users/delete_submissions/{user}', 'UserController@delete_submissions')->name('users.delete_submissions');
 Route::delete('users/{id}', 'UserController@destroy')->name('users.destroy');
 Route::get('users/ranking', 'UserController@rank')->name('users.rank');
 
