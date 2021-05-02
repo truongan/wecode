@@ -61,6 +61,7 @@ class notification_controller extends Controller
             $notification = $request->input();
             $notification['author'] = Auth::user()->id;
             $notification['last_author'] = $notification['author'];
+            $notification['description'] ??= '';
             Notification::create($notification);
 		    return redirect('notifications');
 		// }        

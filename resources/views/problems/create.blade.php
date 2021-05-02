@@ -77,7 +77,7 @@
 
 @section('content')
 
-<div class="ml-n3 mr-n1 ">
+<div class=" ">
 	@php( $msgclasses = array('text-success'=> 'text-success', 'text-info'=> 'text-warning', 'text-danger'=> 'text-danger') )
 	
 	@foreach ($messages as $message)
@@ -125,22 +125,53 @@
 			<fieldset class="form-group">
 				<div class="form-row">
 					<div class="col-sm-5">
-						<label for="diff_cmd">Diff command</label>
+						<label for="author">Original author 							<small class="text-secondary">Honor original author by writing his/her name and affiliation here.
+							</small>
+						</label>
 					</div>
 					<div class="col-sm-7">
-						<input  type="text" name="diff_cmd" class="form-control col-xs-7" value="{{ old('diff_cmd', $edit ? $problem->diff_cmd : 'diff') }}"/>
-						{{-- {{ form_error('diff_cmd', '<div class="alert alert-danger">', '</div>') }} --}}
+						<input id="author" type="text" name="author" class="form-control col-xs-7" value="{{ old('author',  $edit ? $problem->author : '') }}"/>
+						@error('author')
+							<div class="alert alert-danger" role="alert">
+								<strong>{{ $message }}</strong>
+							</div>
+						@enderror
 					</div>
 				</div>
 			</fieldset>
 			<fieldset class="form-group">
 				<div class="form-row">
 					<div class="col-sm-5">
+						<label for="editorial">Link to editorial <small class="text-secondary">Provide a link to editorial here
+							</small></label>
+					</div>
+					<div class="col-sm-7">
+						<input id="editorial" type="text" name="editorial" class="form-control col-xs-7" value="{{ old('editorial',  $edit ? $problem->editorial : '') }}"/>
+						@error('editorial')
+							<div class="alert alert-danger" role="alert">
+								<strong>{{ $message }}</strong>
+							</div>
+						@enderror
+					</div>
+				</div>
+			</fieldset>
+			<fieldset class="form-group d-none">
+				<div class="form-row">
+					<div class="col-sm-5">
+						<label for="diff_cmd">Diff command</label>
+					</div>
+					<div class="col-sm-7">
+						<input  type="text" name="diff_cmd" class="form-control col-xs-7" value="{{ old('diff_cmd', $edit ? $problem->diff_cmd : 'diff') }}"/>
+					</div>
+				</div>
+			</fieldset>
+			<fieldset class="form-group d-none" >
+				<div class="form-row">
+					<div class="col-sm-5">
 						<label for="diff_arg">Diff arguments</label>
 					</div>
 					<div class="col-sm-7">
 						<input  type="text" name="diff_arg" class="form-control col-xs-7" value="{{ $edit ? $problem->diff_arg : old('diff_arg', '-bB') }}"/>
-						{{-- {{ form_error('diff_arg', '<div class="alert alert-danger">', '</div>') }} --}}
 					</div>
 				</div>
 			</fieldset>			
@@ -148,7 +179,7 @@
 				<div class="form-row">
 					<div class="col-sm-6">
 						<label for="form_tests_dir"><i class="far fa-lg fa-folder-open"></i>Tests and Descriptions (folder)
-							<br/>
+	
 							<small class="text-secondary">You can upload an entire folder of <strong> {{ $max_file_uploads }} </strong> file(s).
 								If your test folder have more files you will have to upload a zip file of that folder instead. Also, this features is not web standard, some browser may not support it 
 							</small>
@@ -208,27 +239,34 @@
 						{{-- {{ form_error('admin_note', '<div class="alert alert-danger">', '</div>') }} --}}
 				</div>
 			</fieldset>
+			
+			<div class="row">
+				<div class="col-sm-6">
+					<fieldset class="form-group" data-toggle="tooltip" data-html="true" title="Add this problem into practice">
+						<div class="custom-control custom-switch">
+							<input type="checkbox" class="custom-control-input" id="customSwitch2" name = "allow_practice" {{ ($edit ? $problem->allow_practice : old('allow_practice', 0)) ? 'checked' : '' }} >
+							<label class="custom-control-label" for="customSwitch2">
+								Allow practice <small class="text-secondary">Allow other users to see this problem in practice view</small>
+							</label>
+						</div>
+					</fieldset>
+				</div>
+				<div class="col-sm-6">
+					
+					<fieldset class="form-group" data-toggle="tooltip" data-html="true" title="Add this problem into practice">
+						<div class="custom-control custom-switch">
+							<input type="checkbox" class="custom-control-input" id="sharable_switch" name = "sharable"  {{ ($edit ? $problem->sharable : old('sharable', 0)) ? 'checked' : '' }} >
+							<label class="custom-control-label" for="sharable_switch">
+								Sharable <small class="text-secondary">Allow other head_instructor to view this problem and use it in theirs assignments</small>
+							</label>
+						</div>
+					</fieldset>
+				</div>
+			</div>
 			<fieldset class="form-group" data-toggle="tooltip" data-html="true" title="Rename all files in <strong>in</strong> and <strong>out</strong> folder after unziping. This is assuming that all files in these two folder are perfectly corresponding to each when sorted by file name. This could useful when importing dataset from another format but should be use with care ">
 				<div class="custom-control custom-switch">
 					<input type="checkbox" class="custom-control-input" id="customSwitch1" name="rename_zip">
 					<label class="custom-control-label" for="customSwitch1">Re-order files in <strong>in</strong> and <strong>out</strong> folder after upload<br/><small>This could useful when importing dataset from another format but should be use with care </small>
-					</label>
-				</div>
-			</fieldset>
-			<fieldset class="form-group" data-toggle="tooltip" data-html="true" title="Add this problem into practice">
-				<div class="custom-control custom-switch">
-					{{-- {{  dd(old('allow_practice')) }} --}}
-					<input type="checkbox" class="custom-control-input" id="customSwitch2" name = "allow_practice" {{ ($edit ? $problem->allow_practice : old('allow_practice', 0)) ? 'checked' : '' }} >
-					<label class="custom-control-label" for="customSwitch2">
-						Allow practice 
-					</label>
-				</div>
-			</fieldset>
-			<fieldset class="form-group" data-toggle="tooltip" data-html="true" title="Add this problem into practice">
-				<div class="custom-control custom-switch">
-					<input type="checkbox" class="custom-control-input" id="sharable_switch" name = "sharable"  {{ ($edit ? $problem->sharable : old('sharable', 0)) ? 'checked' : '' }} >
-					<label class="custom-control-label" for="sharable_switch">
-						Sharable<br/><small>Allow other head_instruct or to view this problem and use it in theirs assignments</small>
 					</label>
 				</div>
 			</fieldset>

@@ -44,7 +44,7 @@
 				<th>Lang</th>
 				<th><small>Assignmnet</small></th>
 				<th><small>Submission</small></th>
-				{{-- <th>diff<br/>arg</th> --}}
+				<th>Misc</th>
 				<th>Tools</th>
 			</tr>
 		</thead>
@@ -97,7 +97,20 @@
 				/
 				<span class="text-info">{{ $item->total_submit }} ({{ $item->ratio }}%) </span>
 			</td>
-			{{-- <td>{{ $item->diff_arg }}</td> --}}
+			<td>  
+				@if( $item->sharable)
+					<i class="fas fa-share-alt"  data-toggle="tooltip" title='This problem is available for practice'></i>
+				@endif
+				@if( $item->allow_practice)
+					<i class="fas fa-dumbbell" data-toggle="tooltip" title='This problem is shared among instructors'></i>
+				@endif
+				@if($item->author != '')
+					<br/><i class="fas fa-person-booth    "></i>$item->author
+				@endif
+				@if($item->editorial != '')
+					<a href="{{ $item->editorial }}" data-toggle="tooltip" title='This problem has some linked editorial'><i class="fas fa-lightbulb fa-2x   "></i></a>
+				@endif
+			</td>
 			
 			<td>
 				<a href="{{ route('problems.downloadtestsdesc',$item->id) }}">
