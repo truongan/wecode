@@ -263,10 +263,17 @@ class UserController extends Controller
         $user_id = $request['user_id'];
 		if ( ! is_numeric($user_id) )
 			$json_result = array('done' => 0, 'message' => 'Input Error');
-		elseif (User::destroy($user_id))
-			$json_result = array('done' => 1);
-		else
-			$json_result = array('done' => 0, 'message' => 'Deleting User Failed');
+        else {
+            $user = User::find($user_id);
+            if ($user->submissions()->count() > 0){
+                $json_result = array('done' => 0, 'message' => "You must delete users' submission before you can delete user.");
+            }
+            elseif (User::destroy($user_id))
+                $json_result = array('done' => 1);
+            else
+                $json_result = array('done' => 0, 'message' => 'Deleting User Failed');
+
+        }
 
 		header('Content-Type: application/json; charset=utf-8');
 		return ($json_result);
