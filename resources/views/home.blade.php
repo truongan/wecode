@@ -194,7 +194,7 @@ js') }}"></script>
                             {{ $notification->created_at }}
                         </span>
                     </div>
-                    <div class="notif_text latest">{!! $notification->description !!}</div>
+                    <div class="notif_text latest">{!! $notification->text !!}</div>
                 </div>
                 @endforeach
             </div>
