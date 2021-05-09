@@ -37,7 +37,9 @@ thead tr:after {
 
 @section('title_menu')
   {{-- <span class="title_menu_item"><a href="https://github.com/truongan/wecode-judge/blob/docs/v1.4/users.md" target="_blank"><i class="fa fa-question-circle color6"></i> Help</a></span> --}}
+  
   <span class="title_menu_item"><a href="{{ url('users/add_multiple') }}"><i class="fa fa-user-plus color11"></i> Add Users</a></span>
+  <span class="title_menu_item"><a href="{{ 'mailto:' .  App\User::pluck('email')->join(',') }}"><i class="fas fa-mail-bulk    "></i> Email all users</a></span>
 	{{-- <span class="title_menu_item"><a href="{{ url('users/list_excel') }}"><i class="fa fa-download color9"></i> Excel</a></span> --}}
 @endsection
 
