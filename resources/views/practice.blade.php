@@ -22,6 +22,7 @@
 					<th>Name</th>
 					<th>Lang</th>
 					<th><small>Accepted/Tried</small></th>
+					<th>Assignments</th>
 					<th>editorial</th>
 					<th>original author</th>
 					<th>Tag</th>
@@ -40,6 +41,19 @@
 					@endforeach
 				</td>
 				<td> <a href="{{ route('submissions.index', ['assignment_id' => 0, 'problem_id' => $problem->id, 'user_id' =>'all', 'choose' => 'all']) }}"> {{$problem->accepted_submission}}/{{$problem->total_submission}}</a></td>
+				<td>
+					<a class="btn btn-sm btn-primary" data-toggle="collapse" href="#assignment_list_{{$problem->id}}" aria-expanded="false" aria-controls="assignment_list_{{$problem->id}}">
+						{{ $problem->assignments->count()}}<small> assignments</small>
+					</a>
+					<div class="collapse" id="assignment_list_{{$problem->id}}">
+						
+						@foreach ($problem->assignments as $assignment)
+							<a href="{{ route('submissions.index', ['assignment_id' => $assignment->id, 'problem_id' => $problem->id, 'user_id' => 'all' , 'choose' => 'all']) }}" >
+							<span class="btn  btn-secondary btn-sm my-1">{{$assignment->name}} <span class="badge badge-info">{{$assignment->user->username ?? "no-owner"}}</span> </span></a>
+						@endforeach
+					</div>
+
+				</td>
 				<td>
 					@if ($problem->editorial != null)
 						<a href="{{ $problem->editorial }} "><i class="fas fa-lightbulb  fa-2x  "></i> Editorial </a>
