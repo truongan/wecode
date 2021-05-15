@@ -86,6 +86,7 @@ class language_controller extends Controller
         $language->name = $request->name;
         $language->extension=$request->extension;
         $language->default_time_limit=$request->default_time_limit;
+        $language->default_memory_limit=$request->default_memory_limit;
         $language->sorting=$request->sorting;
         $language->save();
         return view('languages.list',['Language'=>Language::order_languages()]); 
