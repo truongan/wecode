@@ -105,7 +105,7 @@
 					<i class="fas fa-dumbbell" data-toggle="tooltip" title='This problem is shared among instructors'></i>
 				@endif
 				@if($item->author != '')
-					<br/><i class="fas fa-person-booth    "></i>$item->author
+					<br/><i class="fas fa-person-booth    "></i>{{$item->author}}
 				@endif
 				@if($item->editorial != '')
 					<a href="{{ $item->editorial }}" data-toggle="tooltip" title='This problem has some linked editorial'><i class="fas fa-lightbulb fa-2x   "></i></a>
