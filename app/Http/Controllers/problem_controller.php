@@ -245,10 +245,7 @@ class problem_controller extends Controller
         $this->replace_problem($request,$problem->id,$problem);
         $this->_take_test_file_upload($request, $problem->id, $messages);  
         
-        if ($messages)
-            return back()->withInput()->withErrors(["messages"=>$messages]);
-        
-        return redirect()->route('problems.index');
+        return redirect()->route('problems.index')->withInput()->withErrors(["messages"=>$messages]);
     }
 
     private function _take_test_file_upload(Request $request, $the_id,  &$messages){
@@ -512,7 +509,10 @@ class problem_controller extends Controller
             abort(404,"File not found");
 
         // Download the file to browser
-        return response()->download($pdf_files);
+        
+        return response()->file($pdf_files);
+
+        
     
     }
 

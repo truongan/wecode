@@ -10,6 +10,10 @@
     .wecode_table td{
         text-align: left;
     }
+	#problem_pdf_embed{
+		height: 50rem;
+		border: 1rem solid rgba(0,0,0,.1);
+	}
 </style>
 @endsection
 @if (!isset($error))
@@ -62,6 +66,10 @@
         }); 
     });
 </script>
+
+{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.2.5/pdfobject.min.js" integrity="sha512-K4UtqDEi6MR5oZo0YJieEqqsPMsrWa9rGDWMK2ygySdRQ+DtwmuBXAllehaopjKpbxrmXmeBo77vjA2ylTYhRA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>PDFObject.embed("{{ route('problems.pdf',$problem->id) }}", "#problem_pdf_embed");</script> --}}
+
 @endsection
 @endif
 @section('content')
@@ -70,7 +78,15 @@
 @else
 <div class="row">
 	<div class="col-md-7 col-lg-8 col-sm-12">
-
+		@if($problem->has_pdf)
+			<div class="problem_description" id="problem_pdf_embed">
+				<object data="{{ route('problems.pdf',$problem->id) }}" type="application/pdf" width="100%" height="100%">
+					
+					<p>If this browser does not support PDFs. Please download the PDF to view it: 
+					<a href="{{ route('problems.pdf',$problem->id) }}">Download PDF</a>.</p>
+				</object>
+			</div>
+		@endif
         <div class="problem_description" id="problem_description" 
         {{ in_array( Auth::user()->role->name, ['admin', 'head_instructor']) ? 'contenteditable=true' : ''}}
 		>
