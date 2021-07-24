@@ -37,11 +37,10 @@
         </div>
     
     </div>
-    <script type="text/javascript" src="{{ asset('assets/jquery-3.6.0.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/jquery-3.6.0.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
 
-    {{-- <script type="text/javascript" src="{{ asset('assets/js/moment.min.js') }}"></script> --}}
-    <script type='text/javascript' src="{{ asset('assets/sbadmin/js/sb-admin.min.js') }}"></script>
+    {{-- <script type='text/javascript' src="{{ asset('assets/sbadmin/js/sb-admin.min.js') }}"></script> --}}
 
     <script	src="{{ asset('assets/js/notify.min.js') }}"></script>
 

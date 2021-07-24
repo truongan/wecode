@@ -93,13 +93,13 @@
                     <small><span class="timer text-light"></span></small>
                 </div>
             </ul>
-            <ul class="navbar-nav sidenav-toggler bg-primary">
+            {{-- <ul class="navbar-nav sidenav-toggler bg-primary">
                 <li class="nav-item">
                     <a class="nav-link text-center" id="sidenavToggler">
                     <i class="fa fa-fw fa-fw fa-angle-left"></i>
                     </a>
                 </li>
-            </ul>
+            </ul> --}}
 
             <div class="navbar-nav ml-auto p-3">
                 <div class="top_object shj-spinner d-none">
