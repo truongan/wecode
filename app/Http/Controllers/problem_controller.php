@@ -26,6 +26,18 @@ class problem_controller extends Controller
         $this->middleware('auth'); // phải login
     }
     
+    private function can_edit_or_404($problem){
+        if ( ! in_array( Auth::user()->role->name, ['admin']) )
+        {
+            //Admin can always edit
+            if ($problem->user->id != Auth::user()->id){
+                //Others can only edit problems they own
+                abort(404); 
+            } 
+        }
+        return true;
+    }
+
     public function index(Request $request)
     {
         // DB::enableQueryLog();
@@ -168,14 +180,7 @@ class problem_controller extends Controller
      */
     public function edit(Problem $problem)
     {
-        if ( ! in_array( Auth::user()->role->name, ['admin']) )
-        {
-            //Admin can always edit
-            if ($problem->user->id != Auth::user()->id){
-                //Others can only edit problems they own
-                abort(404); 
-            } 
-        }
+        $this->can_edit_or_404($problem);
         $lang_of_problems = $problem->languages->keyBy('id');
 
         $tags = $problem->tags->keyBy('id');
@@ -199,14 +204,7 @@ class problem_controller extends Controller
      */
     public function update(Request $request, Problem $problem)
     {
-        if ( ! in_array( Auth::user()->role->name, ['admin']) )
-        {
-            //Admin can always edit
-            if ($problem->user->id != Auth::user()->id){
-                //Others can only edit problems they own
-                abort(404); 
-            } 
-        }
+        $this->can_edit_or_404($problem);
 
         $validatedData = $request->validate([
             'name' => ['required','max:255'],
@@ -646,7 +644,7 @@ class problem_controller extends Controller
         }
     } 
     
-    public function replace_problem(Request $request, $id , Problem $problem)
+    private function replace_problem(Request $request, $id , Problem $problem)
     {
         DB::beginTransaction(); 
 
@@ -670,4 +668,11 @@ class problem_controller extends Controller
         DB::commit();
     }
 
+
+    public function toggle_practice(Request $request, Problem $problem){
+        $this->can_edit_or_404($problem);
+        $problem->allow_practice = ! $problem->allow_practice;
+        $problem->save();
+        return $problem->allow_practice;
+    }
 }

@@ -98,17 +98,24 @@
 				<span class="text-info">{{ $item->total_submit }} ({{ $item->ratio }}%) </span>
 			</td>
 			<td>  
+				
+				<i  style="cursor:pointer" class="toggle_practice fas fa-dumbbell fa-2x clickable .stretched-link
+					@if( $item->allow_practice)
+						text-success
+					@else
+						text-secondary
+					@endif
+				"  data-toggle="tooltip" data-id='{{$item->id}}'  title='This problem is available for practice'>
+				</i>
 				@if( $item->sharable)
-					<i class="fas fa-share-alt"  data-toggle="tooltip" title='This problem is available for practice'></i>
-				@endif
-				@if( $item->allow_practice)
-					<i class="fas fa-dumbbell" data-toggle="tooltip" title='This problem is shared among instructors'></i>
-				@endif
-				@if($item->author != '')
-					<br/><i class="fas fa-person-booth    "></i>{{$item->author}}
+					<i class="fas fa-share-alt" data-toggle="tooltip" title='This problem is shared among instructors'></i>
 				@endif
 				@if($item->editorial != '')
 					<a href="{{ $item->editorial }}" data-toggle="tooltip" title='This problem has some linked editorial'><i class="fas fa-lightbulb fa-2x   "></i></a>
+				@endif
+				
+				@if($item->author != '')
+					<br/><i class="fas fa-user   "></i> {{$item->author}}
 				@endif
 			</td>
 			
@@ -191,6 +198,39 @@
 	});
 	document.querySelector('.dataTables_filter > label').childNodes[0].data = "Filter in this page"
   });
+
+	document.querySelectorAll('.toggle_practice').forEach( item => {
+		item.addEventListener('click', (ev) => {
+			var icon = ev.target;
+			console.log(icon);
+			$.ajax({
+				type: 'POST',
+				url: '{{ route('problems.toggle_practice') }}/'+ icon.dataset.id,
+				data: {
+							'_token': "{{ csrf_token() }}",
+				},
+				error: shj.loading_error,
+				success: function (response) {
+					console.log(response);
+					console.log(icon);
+					icon.classList.remove('text-success');
+					icon.classList.remove('text-secondary');
+					if (response == '1') {
+						icon.classList.add('text-success');
+					}
+					else if (response == ''){
+						icon.classList.add('text-secondary');
+					}
+					else
+						shj.loading_failed(response.message);
+				}
+			});
+		}, false)
+	} )
+</script>
+
+<script>
+
 </script>
 @endsection
 

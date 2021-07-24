@@ -40,6 +40,7 @@ Route::get('/problems/downloadtestsdesc/{id}', 'problem_controller@downloadtests
 Route::get('/problems/downloadpdf/{id}', 'problem_controller@pdf')->name('problems.pdf');
 Route::get('/problems/downloadtemplate/{problem_id}/{assignment_id}', 'problem_controller@template')->name('problems.template');
 Route::post('/problems/edit_description/{problem_id}', 'problem_controller@edit_description')->name('problems.edit_description');
+Route::post('/problems/toggle_practice/{problem?}', 'problem_controller@toggle_practice')->name('problems.toggle_practice');
 
 Route::get('/submissions/assignment/{assignment_id}/user/{user_id}/problem/{problem_id}/view/{choose}', 'submission_controller@index')->name('submissions.index');
 Route::get('/submissions/create/assignment/{assignment}/problem/{problem}/{oldsub?}', 'submission_controller@create')->name('submissions.create');
