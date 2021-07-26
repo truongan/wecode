@@ -567,11 +567,55 @@ class assignment_controller extends Controller
     
     public function reload_scoreboard($assignment_id)
     {
+		// DB::enableQueryLog();
+
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
             abort(403);
         $assignment = Assignment::find($assignment_id);
-        if ($assignment == null)
+        if ($assignment == null){
             abort(404);
+        }
+
+        // Reset all final submission choice to the best score
+        $problem_score = $assignment->problems->pluck('pivot.score','id');
+        $subs = $assignment->submissions()->oldest()->get()->keyBy('id');
+
+
+        $final_subs = [];
+        foreach ($subs as $sub){
+            $key = $sub->user_id . "," . $sub->problem_id;
+            $sub->is_final = 0;
+            $change = true;
+            if (isset($final_subs[$key])){
+                $final = $subs[ $final_subs[$key] ];
+
+                $final_score = ceil($final->pre_score * ($problem_score[$final->problem_id] ?? 0)/10000);
+                $final_score = ceil($final_score * ($final->coefficient === 'error' ? 0 : $final->coefficient/100) );
+                
+                $sub_score = ceil($sub->pre_score * ($problem_score[$sub->problem_id] ?? 0)/10000);
+                $sub_score = ceil($sub_score * ($sub->coefficient === 'error' ? 0 : $sub->coefficient/100) );
+                
+                if ($sub->pre_score == 10000){
+                    if ($final->pre_score == 10000 && $sub_score <= $final_score) $change = false;
+                } else {
+                    if ($final->pre_score == 10000) $change = false;
+                    else if ($sub_score <= $final_score) $change = false;
+                }
+                if ($change){
+                    $final->is_final = 0;
+                    $final->save();
+                }
+            }
+            if ($change){
+                $final_subs[$key] = $sub->id;
+                $sub->is_final = 1;
+            }
+            $sub->save();
+        }
+
+        // dd(DB::getQueryLog());
+
+        // DB::disableQueryLo();
         if (Scoreboard::update_scoreboard($assignment_id)){     
             return redirect()->back()->with('success', 'Reload Scoreboard sucecss');   
         }

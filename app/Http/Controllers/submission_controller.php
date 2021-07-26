@@ -262,6 +262,7 @@ class submission_controller extends Controller
 			$assignment = Assignment::with('problems')->find(Auth::user()->selected_assignment_id);
 		else
 			$assignment = Assignment::with('problems')->find(0);
+
 		if ($request->problem_id == 'all')
 			$submissions = Submission::where('assignment_id',$assignment->id)->get();
 		else
@@ -269,6 +270,7 @@ class submission_controller extends Controller
 		foreach ($submissions as $submission)
 		{
 			$a = Queue_item::add_not_process($submission->id, 'rejudge');
+			// $submission->is_final = 0;
 			$submission->status = 'PENDING';
 			$submission->save();
 		}
