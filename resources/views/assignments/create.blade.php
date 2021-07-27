@@ -225,22 +225,22 @@
 				<span><i class="fa fa-grip-vertical fa-lg fa-fw"></i></span>
 			</div>
 			<div class="col">
-				<div class="row  row-cols-lg-auto align-items-center" >			
+				<div class="row  row-cols-auto align-items-center" >			
 					{{-- <div class="input-group"> --}}
 						<input type="hidden" name="problem_id[]" value="{{$problem->id}}"/>
-						<div class="col-auto lead me-2">
+						<div class="col lead me-2">
 							{{-- @php(dd($problem->user->username)); --}}
 							<span class="badge text-dark bg-light">{{ $problem->id }}</span>
 							<span class="badge bg-secondary rounded-pill">{{ $problem->user->username ??'none' }}</span>
 							{{ $problem->name }}
 						</div>
-						<div class="col-auto">
+						<div class="col">
 							<div class="input-group input-group-sm me-2">
 								<label class="input-group-text">Alias</label>
 								<input type="text" name="problem_name[]" class="form-control " value="{{ $problem->pivot->problem_name }}"/>
 							</div>
 						</div>
-						<div class="col-auto">
+						<div class="col">
 							<div class="input-group input-group-sm me-2">
 								<label class="input-group-text">Score</label>
 								<input type="number" name="problem_score[]" class="form-control problem-score" value="{{ $problem->pivot->score }}"/>
