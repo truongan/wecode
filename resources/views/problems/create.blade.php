@@ -108,7 +108,7 @@
 	<div class="row">
 		<div class="col-sm-6">
 			<fieldset class="form-group">
-				<div class="form-row">
+				<div class="form-old-row row">
 					<div class="col-sm-5">
 						<label for="name">Problem Name</label>
 					</div>
@@ -123,7 +123,7 @@
 				</div>
 			</fieldset>
 			<fieldset class="form-group">
-				<div class="form-row">
+				<div class="form-old-row row">
 					<div class="col-sm-5">
 						<label for="author">Original author 							<small class="text-secondary">Honor original author by writing his/her name and affiliation here.
 							</small>
@@ -140,7 +140,7 @@
 				</div>
 			</fieldset>
 			<fieldset class="form-group">
-				<div class="form-row">
+				<div class="form-old-row row">
 					<div class="col-sm-5">
 						<label for="editorial">Link to editorial <small class="text-secondary">Provide a link to editorial here
 							</small></label>
@@ -156,7 +156,7 @@
 				</div>
 			</fieldset>
 			<fieldset class="form-group d-none">
-				<div class="form-row">
+				<div class="form-old-row row">
 					<div class="col-sm-5">
 						<label for="diff_cmd">Diff command</label>
 					</div>
@@ -166,7 +166,7 @@
 				</div>
 			</fieldset>
 			<fieldset class="form-group d-none" >
-				<div class="form-row">
+				<div class="form-old-row row">
 					<div class="col-sm-5">
 						<label for="diff_arg">Diff arguments</label>
 					</div>
@@ -176,7 +176,7 @@
 				</div>
 			</fieldset>			
 			<fieldset class="form-group">
-				<div class="form-row">
+				<div class="form-old-row row">
 					<div class="col-sm-6">
 						<label for="form_tests_dir"><i class="far fa-lg fa-folder-open"></i>Tests and Descriptions (folder)
 	
@@ -195,7 +195,7 @@
 			</fieldset>
 			
 			<fieldset class="form-group">
-				<div class="form-row">
+				<div class="form-old-row row">
 					<div class="col-sm-4">
 						<label>Select difficult</label>
 					</div>
@@ -215,7 +215,7 @@
 			</fieldset>
 
 			<fieldset class="form-group">
-				<div class="form-row">
+				<div class="form-old-row row">
 					<div class="col-sm-4">
 						<label>Select tag(s)</label>
 					</div>
@@ -233,7 +233,7 @@
 		</div>
 		<div class="col-sm-6">
 			<fieldset class="form-group">
-				<div class="form-row">
+				<div class="form-old-row row">
 					<label for="admin_note">Admin's note</label>
 					<textarea id="admin_note" name="admin_note" rows="3" class="form-control add_text">{{ $edit ? $problem->admin_note : old('admin_note', "", false) }}</textarea>
 						{{-- {{ form_error('admin_note', '<div class="alert alert-danger">', '</div>') }} --}}
@@ -271,7 +271,7 @@
 				</div>
 			</fieldset>
 			<fieldset class="form-group">
-				<div class="form-row">
+				<div class="form-old-row row">
 					<div class="col-sm-6">
 						<label for="form_tests_zip"><i class="far fa-lg fa-file-archive"></i>Tests and Descriptions (zip file) </br>
 							<small class="text-secondary">Folder upload will always take precedent, if you want to upload zip file, leave upload folder field blank. </small>
@@ -302,7 +302,7 @@
 	
 
 	<label>Click on the button to add more language for this problems</label></br>
-	<div class ="form-row">
+	<div class ="form-old-row row">
 		@foreach($all_languages as $lang)
 			<a data-lang="{{ $lang->id }}" class="btn btn-success me-2 add_language add_language_{{ $lang->id }} 
 				{{ isset($languages[$lang->id]) ? "d-none" : "" }}" href="#" role="button">
@@ -311,7 +311,7 @@
 		@endforeach
 	</div>
 	
-	<div class="form-row"> 
+	<div class="form-old-row row"> 
 		<div class="table-responsive">
 			<table id="problems_table" class="mt-2 table">
 				<thead class="thead-light">

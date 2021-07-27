@@ -146,7 +146,7 @@
 				<input type="hidden" name="assignment" value="0"/>
 			@endif
 			<input type="hidden" name="problem" value="{{ $problem->id }}"/>
-			<fieldset class="form-group form-row">
+			<fieldset class="form-group form-old-row row">
 				<label>
 					Select language
 				</label>
@@ -159,14 +159,14 @@
 				</select>
 			</fieldset>
 
-			<fieldset class="form-group form-row">
+			<fieldset class="form-group form-old-row row">
 				<div class="col-12 custom-file">
 					<input type="file" id="file" class=" custom-file-input" name="userfile"/>
 					<label class="custom-file-label text-muted"><small>upload source code</small></label>
 				</div>
 			</fieldset>
 
-			<fieldset class="form-group form-row">
+			<fieldset class="form-group form-old-row row">
 				<input type="submit" value="Submit" class="form-control"/>
 			</fieldset>
 			</form>

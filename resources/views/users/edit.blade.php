@@ -27,7 +27,7 @@ Users - {{$user->username}}
 		{% elseif form_status == 'error' %}
 		  <div class="alert alert-danger">Error updating profile.</div>
 		{% endif %} --}}
-		<div class="form-group form-row form-row">
+		<div class="form-group form-old-row row form-old-row row">
 		  <label for="col-2 form_username" class="col-4">Username:	</label>
 		  <div class="col-8">
 			<input id="form_username" type="text" name="username" class="form-control" value="{{$user->username}}"  disabled/>
@@ -35,7 +35,7 @@ Users - {{$user->username}}
 		  </div>
 		</div>
 
-		<div class="form-group form-row form-row">
+		<div class="form-group form-old-row row form-old-row row">
 			<label for="col-2 form_username" class="col-4">Class:	</label>
 			<div class="col-8" disabled>
 				@foreach ($user->lops as $item)
@@ -44,7 +44,7 @@ Users - {{$user->username}}
 			</div>
 		</div>
 
-		<div class="form-group form-row">
+		<div class="form-group form-old-row row">
 		  <label for="form_name" class="col-4">Name:</label>
 		  
 		  <div class="col-8">
@@ -52,14 +52,14 @@ Users - {{$user->username}}
 			{{-- {{ form_error('display_name', '<div class="alert alert-danger">', '</div>') }} --}}
 		  </div>
 		</div>
-		<div class="form-group form-row">
+		<div class="form-group form-old-row row">
 		  <label for="form_email" class="col-4">Email:</label>
 			<div class="col-8">
 			<input id="form_email" type="text" name="email" class="form-control" value="{{$user->email}}"/>
 			{{-- {{ form_error('email', '<div class="form-text text-danger">', '</div>') }} --}}
 		  </div>
 		</div>
-		<div class="form-group form-row">
+		<div class="form-group form-old-row row">
 			<label for="form_password_2" class="col-4">Old Password:</label>
 			<div class="col-8">
 			  <input id="form_password_2" type="password" name="old_password" class="form-control"/>
@@ -69,7 +69,7 @@ Users - {{$user->username}}
 			  {{-- {{ form_error('password_again', '<div class="form-text text-danger">', '</div>') }} --}}
 			</div>
 		  </div>
-		<div class="form-group form-row">
+		<div class="form-group form-old-row row">
 		  <label for="form_password" class="col-4">New Password:<br>
 		  </label>
 		  <div class="col-8">
@@ -78,7 +78,7 @@ Users - {{$user->username}}
 			{{-- {{ form_error('password', '<span class="form-text text-danger">', '</span>') }} --}}
 		  </div>
 		</div>
-		<div class="form-group form-row">
+		<div class="form-group form-old-row row">
 		  <label for="form_password_2" class="col-4">New Password, Again:</label>
 		  <div class="col-8">
 			<input id="form_password_2" type="password" name="password_confirmation" class="form-control"/>
@@ -87,7 +87,7 @@ Users - {{$user->username}}
 		</div>
 		
 		@if ( in_array( Auth::user()->role->name, ['admin']) )
-		<div class="form-group form-row">
+		<div class="form-group form-old-row row">
 		  <label for="form_role" class="col-4">User Role:</label>
 		  <div class="col-8">
 			<select id="form_role" name="role_id" class="form-control custom-select">
@@ -100,7 +100,7 @@ Users - {{$user->username}}
 		  </div>
 		</div>
 		@endif
-		<div class="form-group form-row">
+		<div class="form-group form-old-row row">
 		  <input type="submit" value="Save" class="form-control btn btn-primary"/>
 		</div>
 	</div>

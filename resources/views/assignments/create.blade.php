@@ -57,7 +57,7 @@
 	</p>
 	{% endif %} --}}
 	@php($edit = Route::currentRouteName() == 'assignments.edit')
-	<form method="POST"
+	<form method="POST" class = "gy-5"
 		@if (Route::currentRouteName() == 'assignments.edit')
 			action="{{ route('assignments.update', $assignment) }}"
 		@else  
@@ -71,154 +71,117 @@
 		@csrf
 		{{-- <input type="hidden" name="number_of_problems" id="nop" value="{{ $edit ? $assignment->problems->count() : $problems->count() }}"/> --}}
 		<div class="row">
-			<div class="col-sm-6">
-				<fieldset class="form-group">
-					<div class="form-row">
-						<div class="col-sm-4">
-							<label for="form_a_name">Assignment Name</label>
-						</div>
-						<div class="col-sm-8">
-							<input id="form_a_name" type="text" name="name" class="form-control col-xs-7" value="{{ $edit ? $assignment->name : old('name') }}"/>
-							@error('name')
-								<div class="alert alert-danger">{{ $message }} </div>
-							@enderror
-						</div>
+			<div class="col-sm-6 ">
+				<div class="form-old-row row gy-2">
+					<div class="col-sm-4">
+						<label for="form_a_name">Assignment Name</label>
 					</div>
-				</fieldset>
-				<fieldset class="form-group">
-					<div class="form-row">
-						<div class="col-sm-4">
-							<label for="start_time">Start Time</label>
-						</div>
-						<div class="col-sm-8">
-							<input id="start_time" type="hidden" name="start_time" class="form-control" value="" />
-							<div class="form-row">
-								<div class="col-xl-7">
-									<input id="start_time_date" type="date" name="start_time_date" class="form-control" value="{{ $edit ? $assignment->start_time->setTimezone($settings['timezone'])->isoFormat('Y-MM-DD')  : old('start_time_date') }}" />
-								</div>
-								<div class="col-xl-5">
-									<input id="start_time_time" type="time" name="start_time_time" class="form-control" value="{{ $edit ? $assignment->start_time->setTimezone($settings['timezone'])->isoFormat('HH:mm')  : old('start_time_time',0) }}" />
-								</div>
-							</div>
-							{{-- {{ form_error('start_time', '<div class="alert alert-danger">', '</div>') }} --}}
-						</div>
+					<div class="col-sm-8">
+						<input id="form_a_name" type="text" name="name" class="form-control col-xs-7" value="{{ $edit ? $assignment->name : old('name') }}"/>
+						@error('name')
+							<div class="alert alert-danger">{{ $message }} </div>
+						@enderror
 					</div>
-				</fieldset>
-	
-				<fieldset class="form-group">
-					<div class="form-row">
-						<div class="col-sm-4">
-							<label for="finish_time">Finish Time
-							<small class="form-text text-muted">Set finish time before start time will set the deadline to <strong>FOREVER</strong></small>
-							</label>
-						</div>
-						<div class="col-sm-8">
-							<input id="finish_time" type="hidden" name="finish_time" class="form-control" value="" />
-							<div class="form-row">
-								<div class="col-xl-7">
-									<input id="finish_time_date" type="date" name="finish_time_date" class="form-control" value="{{ $edit ? $assignment->finish_time->setTimezone($settings['timezone'])->isoFormat('Y-MM-DD') : old('finish_time_date') }}" />
-								</div>
-								<div class="col-xl-5">
-									<input id="finish_time_time" type="time" name="finish_time_time" class="form-control" value="{{ $edit ? $assignment->finish_time->setTimezone($settings['timezone'])->isoFormat('HH:mm') : old('finish_time_time') }}" />
-								</div>
-							</div>
-							{{-- {{ form_error('finish_time', '<div class="alert alert-danger">', '</div>') }} --}}
-						</div>
-					</div>
-				</fieldset>
-	
-				<fieldset class="form-group">
-					<div class="form-row">
-						<div class="col-sm-4">
-							<label for="form_extra_time">
-							Extra Time (seconds)
-							<small class="form-text text-muted">Extra time for late submissions, multiply operator allowed</small>
-							</label>
-						</div>
-						<div class="col-sm-8">
-							<input id="form_extra_time" type="text" name="extra_time" id="extra_time" class="form-control" value="{{ $edit ? $assignment->extra_time : old('extra_time', '0*60*60') }}" />
-							{{-- {{ form_error('extra_time', '<div class="alert alert-danger">', '</div>') }} --}}
-						</div>
-					</div>
-				</fieldset>
 
-				<fieldset class="form-group">
-					<div class="form-row">
-						<div class="col-sm-4">
-							<label>Select class(es)<br>
-								<small class="form-text text-muted">Select the classes that are required to take this assignment. If your class have to take assignment with different start and/or finish time, please craete different assignments.</small>
-							</label>
-						</div>
-						<div class="col-sm-8">
-							<select class="js-example-basic-multiple form-control" multiple="multiple" name="lop_id[]">
-								@foreach( $all_lops as $p)
-								<option value="{{ $p->id }}" data-name="{{$p->name}}" data-id="{{$p->id}}" data-no_of_assignment="{{ $p->no_of_assignment }}"
-									{{ isset($lops[$p->id]) ? 'selected="selected"' : ''  }}
-									> {{$p->name}}</option>
-								@endforeach
-							</select>
-						</div>
+					<div class="col-sm-4">
+						<label for="start_time">Start Time</label>
 					</div>
-				</fieldset>
-				<fieldset class="form-group">
-					<div class="form-row">
-						<div class="col-sm-4">
-							<label for="form_pdf">PDF File<br>
-								<small class="form-text text-muted">PDF File of Assignment</small>
-							</label>
-						</div>
-						<div class="col-sm-8">
-							<div class="custom-file">
-								<input id="form_pdf" type="file" name="pdf" class="custom-file-input"/>
-								<label class="custom-file-label"><small>Choose .pdf</small></label>
+					<div class="col-sm-8">
+						<input id="start_time" type="hidden" name="start_time" class="form-control" value="" />
+						<div class="form-old-row row">
+							<div class="col-xl-7">
+								<input id="start_time_date" type="date" name="start_time_date" class="form-control" value="{{ $edit ? $assignment->start_time->setTimezone($settings['timezone'])->isoFormat('Y-MM-DD')  : old('start_time_date') }}" />
 							</div>
-						 </div>
+							<div class="col-xl-5">
+								<input id="start_time_time" type="time" name="start_time_time" class="form-control" value="{{ $edit ? $assignment->start_time->setTimezone($settings['timezone'])->isoFormat('HH:mm')  : old('start_time_time',0) }}" />
+							</div>
+						</div>
+						{{-- {{ form_error('start_time', '<div class="alert alert-danger">', '</div>') }} --}}
 					</div>
-				</fieldset>
+	
+					<div class="col-sm-4">
+						<label for="finish_time">Finish Time
+						<small class="form-text text-muted">Set finish time before start time will set the deadline to <strong>FOREVER</strong></small>
+						</label>
+					</div>
+					<div class="col-sm-8">
+						<input id="finish_time" type="hidden" name="finish_time" class="form-control" value="" />
+						<div class="form-old-row row">
+							<div class="col-xl-7">
+								<input id="finish_time_date" type="date" name="finish_time_date" class="form-control" value="{{ $edit ? $assignment->finish_time->setTimezone($settings['timezone'])->isoFormat('Y-MM-DD') : old('finish_time_date') }}" />
+							</div>
+							<div class="col-xl-5">
+								<input id="finish_time_time" type="time" name="finish_time_time" class="form-control" value="{{ $edit ? $assignment->finish_time->setTimezone($settings['timezone'])->isoFormat('HH:mm') : old('finish_time_time') }}" />
+							</div>
+						</div>
+						{{-- {{ form_error('finish_time', '<div class="alert alert-danger">', '</div>') }} --}}
+					</div>
+	
+					<div class="col-sm-4">
+						<label for="form_extra_time">
+						Extra Time (seconds)
+						<small class="form-text text-muted">Extra time for late submissions, multiply operator allowed</small>
+						</label>
+					</div>
+					<div class="col-sm-8">
+						<input id="form_extra_time" type="text" name="extra_time" id="extra_time" class="form-control" value="{{ $edit ? $assignment->extra_time : old('extra_time', '0*60*60') }}" />
+						{{-- {{ form_error('extra_time', '<div class="alert alert-danger">', '</div>') }} --}}
+					</div>
+
+					<div class="col-sm-4">
+						<label>Select class(es)<br>
+							<small class="form-text text-muted">Select the classes that are required to take this assignment. If your class have to take assignment with different start and/or finish time, please craete different assignments.</small>
+						</label>
+					</div>
+					<div class="col-sm-8">
+						<select class="js-example-basic-multiple form-control" multiple="multiple" name="lop_id[]">
+							@foreach( $all_lops as $p)
+							<option value="{{ $p->id }}" data-name="{{$p->name}}" data-id="{{$p->id}}" data-no_of_assignment="{{ $p->no_of_assignment }}"
+								{{ isset($lops[$p->id]) ? 'selected="selected"' : ''  }}
+								> {{$p->name}}</option>
+							@endforeach
+						</select>
+					</div>
+					<div class="col-sm-4">
+						<label for="form_pdf">PDF File<br>
+							<small class="form-text text-muted">If the assignment has an additional PDF description file upload it here. </small>
+						</label>
+					</div>
+					<div class="col-sm-8">
+						<input id="form_pdf" type="file" name="pdf" class="form-control"/>
+					</div>
+				</div>
 			</div>
 	
 			<div class="col-sm-6">
-				<fieldset class="form-group">
-					<div class="form-row">
-						<label for="form_late_rule">Description
-						<small class="form-text text-muted medium clear" style="display: block;"></small>
-						</label>
-					</div>
-					<textarea id="form_late_rule" name="description" rows="3" class="form-control add_text">{{ $edit ? $assignment->description : old('description', '') }}</textarea>
-					{{-- {{ form_error('late_rule', '<div class="alert alert-danger">', '</div>') }} --}}
-				</fieldset>
-				<fieldset class="form-group">
-					<div class="custom-control custom-switch">
-						<input id="form_a_open" class="custom-control-input" type="checkbox" name="open" value="1" {!! $edit ? ($assignment->open ? 'checked' : '') :'' !!} />
-						<label for="form_a_open" class="custom-control-label">Open</label>
-					</div>
+				<label for="form_late_rule">Description</label>
+				<textarea id="form_late_rule" name="description" rows="4" class="form-control add_text">{{ $edit ? $assignment->description : old('description', '') }}</textarea>
+				{{-- {{ form_error('late_rule', '<div class="alert alert-danger">', '</div>') }} --}}
+				
+				<div class="form-check form-switch mt-3">
+					<input id="form_a_open" class="form-check-input" type="checkbox" name="open" value="1" {!! $edit ? ($assignment->open ? 'checked' : '') :'' !!} />
+					<label for="form_a_open" class="form-check-label">Open</label>
 					<small class="form-text text-muted ">Open or close this assignment for submission</small>
-					{{-- {{ form_error('open', '<div class="alert alert-danger">', '</div>') }} --}}
-				</fieldset>
-	
-				<fieldset class="form-group">
-					<label class="custom-control custom-switch">
-						<input id="form_a_scoreboard" class="custom-control-input" type="checkbox" name="scoreboard" value="1" {!! $edit ? ($assignment->score_board ? 'checked' : '') : '' !!} />
-						<span {#for="form_a_scoreboard"#} class="custom-control-label">Scoreboard</span>
-					</label>
-					<small class="form-text text-muted ">Check this to publish scoreboard to student, lecturer can always see scoreboard</small>
-					{{-- {{ form_error('scoreboard', '<div class="alert alert-danger">', '</div>') }} --}}
-				</fieldset>
-	
-				<fieldset class="form-group">
-					<div class="form-row">
-							<label for="form_late_rule">Coefficient rule (<a target="_blank" href="https://github.com/truongan/wecode-judge/blob/docs/v1.4/add_assignment.md#coefficient-rule">?</a>)
-							<small class="form-text text-muted medium clear">PHP script without &lt;?php ?&gt; tags. You can use 3 variables: <code>$extra_time</code>, <code>$delay</code>, <code>$submit_time</code></small>
-							</label>
-					<textarea id="form_late_rule" name="late_rule" rows="8" class="form-control add_text">{{ $edit ? $assignment->late_rule : old('late_rule', $settings['default_late_rule'], false) }}</textarea>
-					{{-- {{ form_error('late_rule', '<div class="alert alert-danger">', '</div>') }} --}}
-				</fieldset>
+				</div>
+				{{-- {{ form_error('open', '<div class="alert alert-danger">', '</div>') }} --}}
+
+				<div class="form-check form-switch my-3">
+					<input id="form_a_scoreboard" class="form-check-input" type="checkbox" name="scoreboard" value="1" {!! $edit ? ($assignment->score_board ? 'checked' : '') : '' !!} />
+					<label for="form_a_scoreboard" class="form-check-label">Scoreboard</label>
+				<small class="form-text text-muted mb-3 ">Check this to publish scoreboard to student, lecturer can always see scoreboard</small>
+				</div>
+				{{-- {{ form_error('scoreboard', '<div class="alert alert-danger">', '</div>') }} --}}
+
+				<label for="form_late_rule">Coefficient rule (<a target="_blank" href="https://github.com/truongan/wecode-judge/blob/docs/v1.4/add_assignment.md#coefficient-rule">?</a>)
+					<small class="form-text text-muted  ">PHP script without &lt;?php ?&gt; tags. You can use 3 variables: <code>$extra_time</code>, <code>$delay</code>, <code>$submit_time</code></small>
+				</label>
+				<textarea id="form_late_rule" name="late_rule" rows="8" class="form-control add_text">{{ $edit ? $assignment->late_rule : old('late_rule', $settings['default_late_rule'], false) }}</textarea>
+				{{-- {{ form_error('late_rule', '<div class="alert alert-danger">', '</div>') }} --}}
 			</div>
 		</div>
 	
 	<div class="row">
 		<div class="col-sm-8">
-			<fieldset class="form-group" id="choice_multi_assignment">
 				<label> Select problem(s) for this assignment
 					<small class="form-text text-muted">You can type in the box below to search for problems
 					</small>
