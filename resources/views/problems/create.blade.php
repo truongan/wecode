@@ -204,7 +204,7 @@
 							<div class="col-6">
 								1
 							</div>
-							<div class="col-6 text-right">
+							<div class="col-6 text-end">
 								5
 							</div>
 						</div>

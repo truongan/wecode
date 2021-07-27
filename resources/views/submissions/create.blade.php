@@ -112,7 +112,7 @@
 
 
 		<div class="form-group">
-			<input type="submit" value="Submit" class="btn btn-primary float-right"/>
+			<input type="submit" value="Submit" class="btn btn-primary float-end"/>
 		</div>
 		<textarea style="display:none;" rows="4" cols="80" name="code" class="sharif_input add_text" >
 		</textarea>
