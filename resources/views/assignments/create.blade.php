@@ -180,41 +180,41 @@
 			</div>
 		</div>
 	
-	<div class="row">
-		<div class="col-sm-8">
-				<label> Select problem(s) for this assignment
-					<small class="form-text text-muted">You can type in the box below to search for problems
-					</small>
-				</label>
-				<select class="all_problems form-control" multiple="multiple">
-					@foreach( $all_problems as $p)
-					<option value="{{ $p->id }}" data-name="{{$p->name}}" data-id="{{$p->id}}" data-note="{{ $p->admin_note }}" data-no_of_assignment="{{ $p->no_of_assignment }}"  data-owner="{{ $p->user->username ?? 'none'}}" 
-						{{ isset($problems[$p->id]) ? 'selected="selected"' : ''  }}
-						>
-					 {{$p->id}} - {{$p->name}} ({{ $p->user->username ?? 'none'}}| {{   $p->admin_note }}) </option>
-					@endforeach
-				</select>
-			</fieldset>
-		</div>
-		<div class="col-sm-4">
-			<div class="form-group">
-			  <label for="min_assignment_to_select">Select all problems</label>
-	
-				<div class="input-group input-group-sm">
-					<div class="input-group-prepend">
-						<span class="input-group-text" >used in less than</span>
+		<div class="row mt-3">
+			<div class="col-sm-8">
+					<label> Select problem(s) for this assignment
+						<small class="form-text text-muted">You can type in the box below to search for problems
+						</small>
+					</label>
+					<select class="all_problems form-control" multiple="multiple">
+						@foreach( $all_problems as $p)
+						<option value="{{ $p->id }}" data-name="{{$p->name}}" data-id="{{$p->id}}" data-note="{{ $p->admin_note }}" data-no_of_assignment="{{ $p->no_of_assignment }}"  data-owner="{{ $p->user->username ?? 'none'}}" 
+							{{ isset($problems[$p->id]) ? 'selected="selected"' : ''  }}
+							>
+						{{$p->id}} - {{$p->name}} ({{ $p->user->username ?? 'none'}}| {{   $p->admin_note }}) </option>
+						@endforeach
+					</select>
+				</fieldset>
+			</div>
+			<div class="col-sm-4">
+				<div class="form-group">
+				<label for="min_assignment_to_select">Select all problems</label>
+		
+					<div class="input-group input-group-sm">
+						<div class="input-group-prepend">
+							<span class="input-group-text" >used in less than</span>
+						</div>
+						<input type="number" class="form-control" value="2" id="multiple_problems_min" >
+						<div class="input-group-append">
+							<span class="input-group-text" >assignments</span>
+							<button class="btn btn-outline-primary" type="button" id="select_multiple_problems">Add</button>
+						</div>
 					</div>
-					<input type="number" class="form-control" value="2" id="multiple_problems_min" >
-					<div class="input-group-append">
-						<span class="input-group-text" >assignments</span>
-						<button class="btn btn-outline-primary" type="button" id="select_multiple_problems">Add</button>
-					</div>
+		
+				<small id="helpId" class="text-muted">Use this to select every problems that have been used in no more than a specific number of assignments. You can still fine tuning the selection afterward </small>
 				</div>
-	
-			  <small id="helpId" class="text-muted">Use this to select every problems that have been used in no more than a specific number of assignments. You can still fine tuning the selection afterward </small>
 			</div>
 		</div>
-	</div>
 	
 	<fieldset class="form-group">
 	<label> Set alias, score and order for problems in this assignment  

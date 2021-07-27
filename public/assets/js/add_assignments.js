@@ -7,8 +7,8 @@
 function format_problem(prob){
 	if (!prob.id) return prob.text; // THis is necessary because one dummy options with "searching" text will be created by select2
 
-	var $prob = $('<span class="badge badge-primary">'+ prob.element.dataset.id +'</span>'
-		+ '<span class="badge badge-pill badge-secondary">'+ prob.element.dataset.owner +'</span>'
+	var $prob = $('<span class="badge bg-primary">'+ prob.element.dataset.id +'</span>'
+		+ '<span class="badge rounded-pill bg-secondary">'+ prob.element.dataset.owner +'</span>'
 		+ '<span class="text-dark">' + prob.element.dataset.name + '</span>'
 		+ '<span class="text-small text-secondary">(' +  prob.element.dataset.note +')</span>'
 	);
