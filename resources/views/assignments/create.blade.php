@@ -256,7 +256,7 @@
 			@php($i = $i+1)
 		</div></li>
 		@endforeach
-	<ul class="list-group">
+	</ul>
 	
 	<div class="mt-4">
 		<input type="submit" value="{{ $edit ? "Edit" : "Add" }} Assignment" class="sharif_input btn btn-primary"/>

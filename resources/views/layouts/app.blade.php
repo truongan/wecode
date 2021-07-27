@@ -26,7 +26,7 @@
 
     <div class="content-wrapper"><div class="container-fluid">
         <div class="row">
-            <div id="page_title" class="jumbotron jumbontron-fluid py-3 mb-0 col-12 align-items-center d-flex">
+            <div id="page_title" class="text-dark border bg-light container-fluid py-3 mb-0 col-12 align-items-center d-flex">
                 <i class="@yield('icon') fa-fw fa-lg"></i>
                 <span>@yield('title')</span>
                 @yield('title_menu')
