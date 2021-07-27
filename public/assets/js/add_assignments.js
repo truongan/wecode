@@ -60,10 +60,10 @@ $(document).ready(function(){
 		new_row.find('input[name="problem_name[]"]').val(selected_data.name);
 
 		new_row.find('.lead').html(
-				'<span class="badge badge-light">'
+				'<span class="badge text-dark bg-light">'
 				+ selected_data.id
 				+'</span>'
-				+ '<span class="badge badge-secondary">'
+				+ '<span class="badge bg-secondary rounded-pill">'
 				+ selected_data.owner
 				+'</span>'
 				+selected_data.name 

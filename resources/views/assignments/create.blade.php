@@ -180,43 +180,33 @@
 			</div>
 		</div>
 	
-		<div class="row mt-3">
-			<div class="col-sm-8">
-					<label> Select problem(s) for this assignment
-						<small class="form-text text-muted">You can type in the box below to search for problems
-						</small>
-					</label>
-					<select class="all_problems form-control" multiple="multiple">
-						@foreach( $all_problems as $p)
-						<option value="{{ $p->id }}" data-name="{{$p->name}}" data-id="{{$p->id}}" data-note="{{ $p->admin_note }}" data-no_of_assignment="{{ $p->no_of_assignment }}"  data-owner="{{ $p->user->username ?? 'none'}}" 
-							{{ isset($problems[$p->id]) ? 'selected="selected"' : ''  }}
-							>
-						{{$p->id}} - {{$p->name}} ({{ $p->user->username ?? 'none'}}| {{   $p->admin_note }}) </option>
-						@endforeach
-					</select>
-				</fieldset>
+		<div class="row my-3">
+			<div class="col-sm-8" id="choice_multi_assignment">
+				<label> Select problem(s) for this assignment
+					<small class="form-text text-muted">You can type in the box below to search for problems
+					</small>
+				</label>
+				<select class="all_problems form-control" multiple="multiple">
+					@foreach( $all_problems as $p)
+					<option value="{{ $p->id }}" data-name="{{$p->name}}" data-id="{{$p->id}}" data-note="{{ $p->admin_note }}" data-no_of_assignment="{{ $p->no_of_assignment }}"  data-owner="{{ $p->user->username ?? 'none'}}" 
+						{{ isset($problems[$p->id]) ? 'selected="selected"' : ''  }}
+						>
+					{{$p->id}} - {{$p->name}} ({{ $p->user->username ?? 'none'}}| {{   $p->admin_note }}) </option>
+					@endforeach
+				</select>
 			</div>
 			<div class="col-sm-4">
-				<div class="form-group">
 				<label for="min_assignment_to_select">Select all problems</label>
-		
-					<div class="input-group input-group-sm">
-						<div class="input-group-prepend">
-							<span class="input-group-text" >used in less than</span>
-						</div>
-						<input type="number" class="form-control" value="2" id="multiple_problems_min" >
-						<div class="input-group-append">
-							<span class="input-group-text" >assignments</span>
-							<button class="btn btn-outline-primary" type="button" id="select_multiple_problems">Add</button>
-						</div>
-					</div>
-		
-				<small id="helpId" class="text-muted">Use this to select every problems that have been used in no more than a specific number of assignments. You can still fine tuning the selection afterward </small>
+				<div class="input-group input-group-sm">
+					<span class="input-group-text" >used in less than</span>
+					<input type="number" class="form-control" value="2" id="multiple_problems_min" >
+					<span class="input-group-text" >assignments</span>
+					<button class="btn btn-outline-primary" type="button" id="select_multiple_problems">Add</button>
 				</div>
+				<small id="helpId" class="text-muted">Use this to select every problems that have been used in no more than a specific number of assignments. You can still fine tuning the selection afterward </small>
 			</div>
 		</div>
 	
-	<fieldset class="form-group">
 	<label> Set alias, score and order for problems in this assignment  
 		<small class="form-text text-muted">Problem's alias will be displayed when student view this assignment instead of the problem's original name<br/>
 		You can drag the handle to re-order the problems.<br/>
@@ -227,7 +217,6 @@
 		<br/>Currently: <span class="badge bg-info count_problems">0</span> problems with a total score of <span class="badge bg-info sum_score">0</span>
 		</small>
 	</label>
-
 	<ul id="problem_list" class="list-group">
 		@php($i = 0)
 		@foreach($problems as $problem)
@@ -236,30 +225,29 @@
 				<span><i class="fa fa-grip-vertical fa-lg fa-fw"></i></span>
 			</div>
 			<div class="col">
-				<div class="row  align-items-center" >			
-					<div class="form-inline">
+				<div class="row  row-cols-lg-auto align-items-center" >			
+					{{-- <div class="input-group"> --}}
 						<input type="hidden" name="problem_id[]" value="{{$problem->id}}"/>
-						<span class="lead me-2">
+						<div class="col-auto lead me-2">
 							{{-- @php(dd($problem->user->username)); --}}
-							<span class="badge bg-light">{{ $problem->id }}</span>
+							<span class="badge text-dark bg-light">{{ $problem->id }}</span>
 							<span class="badge bg-secondary rounded-pill">{{ $problem->user->username ??'none' }}</span>
 							{{ $problem->name }}
-						</span>
-						<div class="input-group input-group-sm me-2">
-							<div class="input-group-prepend">
-								<label class="input-group-text">Alias</label>
-							</div>
-							<input type="text" name="problem_name[]" class="form-control form-control-sm " value="{{ $problem->pivot->problem_name }}"/>
 						</div>
-						
-						<div class="input-group input-group-sm me-2">
-							<div class="input-group-prepend">
-							<label class="input-group-text">Score</label>
+						<div class="col-auto">
+							<div class="input-group input-group-sm me-2">
+								<label class="input-group-text">Alias</label>
+								<input type="text" name="problem_name[]" class="form-control " value="{{ $problem->pivot->problem_name }}"/>
 							</div>
-							<input type="number" name="problem_score[]" class="form-control form-control-sm problem-score" value="{{ $problem->pivot->score }}"/>
+						</div>
+						<div class="col-auto">
+							<div class="input-group input-group-sm me-2">
+								<label class="input-group-text">Score</label>
+								<input type="number" name="problem_score[]" class="form-control problem-score" value="{{ $problem->pivot->score }}"/>
+							</div>
 						</div>
 						<span class="text-muted admin_note">{{ $problem->admin_note }}</span>
-					</div>
+					{{-- </div> --}}
 				</div>
 			</div>
 			<div class="col-auto">
@@ -269,11 +257,10 @@
 		</div></li>
 		@endforeach
 	<ul class="list-group">
-	</fieldset>
 	
-	<fieldset class="form-group mt-2">
+	<div class="mt-4">
 		<input type="submit" value="{{ $edit ? "Edit" : "Add" }} Assignment" class="sharif_input btn btn-primary"/>
-	</fieldset>
+	</div>
 	</form>
 </div>
 @endsection
