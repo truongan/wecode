@@ -304,7 +304,7 @@
 	<label>Click on the button to add more language for this problems</label></br>
 	<div class ="form-row">
 		@foreach($all_languages as $lang)
-			<a data-lang="{{ $lang->id }}" class="btn btn-success mr-2 add_language add_language_{{ $lang->id }} 
+			<a data-lang="{{ $lang->id }}" class="btn btn-success me-2 add_language add_language_{{ $lang->id }} 
 				{{ isset($languages[$lang->id]) ? "d-none" : "" }}" href="#" role="button">
 				{{ $lang->name }}
 			</a>

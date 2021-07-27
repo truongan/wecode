@@ -51,7 +51,7 @@
         <li>If you want to send passwords by email, do not add too many users at one time. This may result in mail delivery fail.</li>
     </ul>
     <div class="form-inline form-group">
-        <label for="send_email" class="mr-3"><input type="checkbox" name="send_mail" id="send_mail" />Send usernames and passwords by email</label> 
+        <label for="send_email" class="me-3"><input type="checkbox" name="send_mail" id="send_mail" />Send usernames and passwords by email</label> 
         <label for="delay"> (Waits <input type="number" size="5" name="delay" id="delay" class="form-control" style="width:5rem;" value="2"/> second(s) before sending each email, so please be patient).</label>
     </div>
 </div>

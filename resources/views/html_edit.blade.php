@@ -80,7 +80,7 @@ $(document).ready(function(){
             <a class="btn btn-primary" href="#" id="open"><i class="fa fa-folder-open-o" aria-hidden="true"></i> Open</a>
         </div>
         
-        <div class="col-auto mr-auto ml-auto">		
+        <div class="col-auto me-auto ms-auto">		
             <a class="btn btn-secondary save-button">
                 Save draft (will autosave every 3 minutes)
             </a>

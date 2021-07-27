@@ -45,7 +45,7 @@
 @section('content')
 
 
-<div class="ml-n2 mr-n1">
+<div class="ms-n2 me-n1">
 	{{-- {% set msgclasses = {'text-success': 'text-success', 'text-info': 'text-warning', 'text-danger': 'text-danger'} %} --}}
 	{{-- {% for message in messages %}
 		<p class="{{ msgclasses[message.type] }}">{{ message.text }}</p>
@@ -258,10 +258,10 @@
 		<small class="form-text text-muted">Problem's alias will be displayed when student view this assignment instead of the problem's original name<br/>
 		You can drag the handle to re-order the problems.<br/>
 		Remove one problem from assignment won't remove the submissions of that problem but will reset its alias and score to default if you re-add it later.
-		<br/><input class="ml-auto" type="number" id="score_amount" value="100">
+		<br/><input class="ms-auto" type="number" id="score_amount" value="100">
 			<button  class="m-2 btn btn-info btn-sm" id="distribute_score" type="button" >Distribute score</button>
 			<button class="btn btn-info btn-sm" id="set_score" type="button">Set score all</button>
-		<br/>Currently: <span class="badge badge-info count_problems">0</span> problems with a total score of <span class="badge badge-info sum_score">0</span>
+		<br/>Currently: <span class="badge bg-info count_problems">0</span> problems with a total score of <span class="badge bg-info sum_score">0</span>
 		</small>
 	</label>
 
@@ -276,20 +276,20 @@
 				<div class="row  align-items-center" >			
 					<div class="form-inline">
 						<input type="hidden" name="problem_id[]" value="{{$problem->id}}"/>
-						<span class="lead mr-2">
+						<span class="lead me-2">
 							{{-- @php(dd($problem->user->username)); --}}
-							<span class="badge badge-light">{{ $problem->id }}</span>
-							<span class="badge badge-secondary badge-pill">{{ $problem->user->username ??'none' }}</span>
+							<span class="badge bg-light">{{ $problem->id }}</span>
+							<span class="badge bg-secondary rounded-pill">{{ $problem->user->username ??'none' }}</span>
 							{{ $problem->name }}
 						</span>
-						<div class="input-group input-group-sm mr-2">
+						<div class="input-group input-group-sm me-2">
 							<div class="input-group-prepend">
 								<label class="input-group-text">Alias</label>
 							</div>
 							<input type="text" name="problem_name[]" class="form-control form-control-sm " value="{{ $problem->pivot->problem_name }}"/>
 						</div>
 						
-						<div class="input-group input-group-sm mr-2">
+						<div class="input-group input-group-sm me-2">
 							<div class="input-group-prepend">
 							<label class="input-group-text">Score</label>
 							</div>

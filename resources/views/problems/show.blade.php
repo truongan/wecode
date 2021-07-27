@@ -26,7 +26,7 @@
 	<span class="title_menu_item"><a href="{{ route('problems.template', ['problem_id' => $problem->id, 'assignment_id' => ($all_problems != NULL ? $assignment->id : 'null')] ) }}"><i class="fa fa-download color1"></i> Download the code template</a></span>
 @endif
 @if (in_array( Auth::user()->role->name, ['admin', 'head_instructor']))
-	<span class="title_menu_item ml-auto"><a href="#" class="btn btn-info save-button"><i class="fa fa-floppy-o "></i> Save</a></span>
+	<span class="title_menu_item ms-auto"><a href="#" class="btn btn-info save-button"><i class="fa fa-floppy-o "></i> Save</a></span>
 @endif 
 
 @endsection
@@ -106,7 +106,7 @@
 			</a>
 			@endif
 			
-			<p class="text-muted"><span class="badge badge-secondary count_problems">{{ count($all_problems) }}</span> problems with a total score of <span class="badge badge-secondary sum_score">{{ $sum_score }}</span></p>
+			<p class="text-muted"><span class="badge bg-secondary count_problems">{{ count($all_problems) }}</span> problems with a total score of <span class="badge bg-secondary sum_score">{{ $sum_score }}</span></p>
 			<table class="wecode_table table  table-bordered">
 				<thead>
 				<tr>

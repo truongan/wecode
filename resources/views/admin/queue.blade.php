@@ -11,7 +11,7 @@
   <p>
     Total submissions in queue: {{$queue->count()}}
   </p>
-  <div style="float: left;" class="pr-1">
+  <div style="float: left;" class="pe-1">
     <form action="{{ route('queue.work') }}" method="POST">
       @csrf
       <button href="#" class="shj_act btn btn-primary" id="spawn" data-toggle="tooltip" data-placement="right" title="A queue processor process is spawned every time there is a submission or rejudging request. You can manually spawn one with this link" type="submit"><i class="fa fa-play"></i> Spawn new queue process </button>

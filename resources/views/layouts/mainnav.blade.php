@@ -101,7 +101,7 @@
                 </li>
             </ul> --}}
 
-            <div class="navbar-nav ml-auto p-3">
+            <div class="navbar-nav ms-auto p-3">
                 <div class="top_object shj-spinner d-none">
                     <i class="fa fa-fw fa-refresh fa-spin fa-lg"></i>
                 </div>
@@ -110,7 +110,7 @@
             <div class="navbar-nav">
                 
                     @if(isset(Auth::user()->selected_assignment->name))
-                        <div class="pl-3 pr-3 pt-2 badge-secondary padge-pill" style="height: 40.8px;">
+                        <div class="ps-3 pe-3 pt-2 bg-secondary rounded-pill" style="height: 40.8px;">
                             {{Auth::user()->selected_assignment->name}}  
                         </div>
                     @endif
@@ -132,12 +132,12 @@
                 <li class="nav-item dropdown">
                 <a class="dropdown-toggle nav-link" data-toggle="dropdown" href="#" id="profile_link"><i class="fa fa-fw fa-user"></i>{{Auth::user()->username}}</a>
                     <div class="dropdown-menu dropdown-menu-right logout-menu">
-                        <div class="d-flex pr-3 pl-3">
+                        <div class="d-flex pe-3 ps-3">
                             <div class="">
                                 <div class="d-inline-flex">
                                     <form action="{{route('logout')}}" method="POST">
                                     @csrf
-                                    <button type="submit" class="btn btn-danger mr-2 text-nowrap"><i class="fas fa-fw fa-sign-out-alt"></i>Sign out</button>
+                                    <button type="submit" class="btn btn-danger me-2 text-nowrap"><i class="fas fa-fw fa-sign-out-alt"></i>Sign out</button>
                                     </form>
                                     <a href="{{ route("users.show", Auth::user()->id) }}" class="btn btn-info text-nowrap"><i class="fas fa-fw fa-wrench"></i>Profile</a>
                                 </div>

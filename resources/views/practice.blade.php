@@ -37,7 +37,7 @@
 				</td>
 				<td>
 					@foreach ($problem->languages as $lang_name)
-					<span class="badge badge-pill badge-secondary">{{$lang_name->name}}</span>
+					<span class="badge rounded-pill bg-secondary">{{$lang_name->name}}</span>
 					@endforeach
 				</td>
 				<td> <a href="{{ route('submissions.index', ['assignment_id' => 0, 'problem_id' => $problem->id, 'user_id' =>'all', 'choose' => 'all']) }}"> {{$problem->accepted_submission}}/{{$problem->total_submission}}</a></td>
@@ -49,7 +49,7 @@
 						
 						@foreach ($problem->assignments as $assignment)
 							<a href="{{ route('submissions.index', ['assignment_id' => $assignment->id, 'problem_id' => $problem->id, 'user_id' => 'all' , 'choose' => 'all']) }}" >
-							<span class="btn  btn-secondary btn-sm my-1">{{$assignment->name}} <span class="badge badge-info">{{$assignment->user->username ?? "no-owner"}}</span> </span></a>
+							<span class="btn  btn-secondary btn-sm my-1">{{$assignment->name}} <span class="badge bg-info">{{$assignment->user->username ?? "no-owner"}}</span> </span></a>
 						@endforeach
 					</div>
 
@@ -64,7 +64,7 @@
 				</td>
 				<td>
 					@foreach ($problem->tags as $tag_name)
-					<span class="badge badge-pill badge-info">{{$tag_name->text}}</span>
+					<span class="badge rounded-pill bg-info">{{$tag_name->text}}</span>
 					@endforeach
 				</td>
 			</tr>

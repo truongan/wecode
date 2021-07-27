@@ -11,7 +11,7 @@
 
 @section('title_menu')
 {{-- {% if user.level >= 2 %} --}}
-<div class="ml-4">
+<div class="ms-4">
     <form method="POST"  action="{!! route('tags.store') !!}">
         <input type="hidden"  name ="_token" value="{!! csrf_token() !!}"/>
         <input placeholder="Tag's name here" type="text" name="text" required>

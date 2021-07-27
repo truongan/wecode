@@ -65,7 +65,7 @@
 			</td>
 			<td>
 				@foreach ($item->tags as $tag)
-			  		<span class="badge badge-pill badge-info">{{$tag->text}}</span>
+			  		<span class="badge rounded-pill bg-info">{{$tag->text}}</span>
 			  	@endforeach
 			</td>
 			<td>
@@ -75,7 +75,7 @@
 			<div class="collapse" id="language_list_{{$item->id}}">
 				
 			  @foreach ($item->languages as $language_name)
-			  	<span class="btn btn-sm btn-secondary mb-1">{{$language_name->name}} <span class="badge badge-pill badge-info">{{$language_name->pivot->time_limit/1000}}s</span><span class="badge badge-pill badge-info">{{$language_name->pivot->memory_limit/1000}}MB</span></span>
+			  	<span class="btn btn-sm btn-secondary mb-1">{{$language_name->name}} <span class="badge rounded-pill bg-info">{{$language_name->pivot->time_limit/1000}}s</span><span class="badge rounded-pill bg-info">{{$language_name->pivot->memory_limit/1000}}MB</span></span>
 			  @endforeach
 			</div>
 			</td>
@@ -87,7 +87,7 @@
 					
 					@foreach ($item->assignments as $assignment)
 						<a href="{{ route('submissions.index', ['assignment_id' => $assignment->id, 'problem_id' => $item->id, 'user_id' => 'all' , 'choose' => 'all']) }}" >
-						<span class="btn  btn-secondary btn-sm my-1">{{$assignment->name}} <span class="badge badge-info">{{$assignment->user->username ?? "no-owner"}}</span> </span></a>
+						<span class="btn  btn-secondary btn-sm my-1">{{$assignment->name}} <span class="badge bg-info">{{$assignment->user->username ?? "no-owner"}}</span> </span></a>
 					@endforeach
 				</div>
 

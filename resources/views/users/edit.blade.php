@@ -39,7 +39,7 @@ Users - {{$user->username}}
 			<label for="col-2 form_username" class="col-4">Class:	</label>
 			<div class="col-8" disabled>
 				@foreach ($user->lops as $item)
-					<span class="badge badge-light">{{$item->name}}</span>;
+					<span class="badge bg-light">{{$item->name}}</span>;
 				@endforeach
 			</div>
 		</div>

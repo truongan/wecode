@@ -24,7 +24,7 @@
 		<input type="hidden" value="{{ $problem->id }}" name="problem"/>
 		<div class="form-inline">
 		
-			<div class="form-group mr-3">
+			<div class="form-group me-3">
 				<label for="problems" class="">Problem:</label>
 
 				<select id="problems" name ="problem" class="form-control custom-select">
@@ -43,7 +43,7 @@
 					<div class="alert alert-danger"> {{ $message }}</div>
 				@enderror
 			</div>
-			<div class="form-group mr-3">
+			<div class="form-group me-3">
 				<label for="languages" class="">Language:</label>
 				<select id="languages" name="language" class="form-control custom-select">
 
