@@ -19,25 +19,26 @@ $(document).ready(function(){
 @endsection
 
 @section('content')
-<form action="{{route('lops.store')}}" method="POST">
+<form action="{{route('lops.store')}}" method="POST" class="row g-3">
 @csrf
-    <div class="form-group">
-      <label for="name">Class name</label>
-      <input type="text"
-        class="form-control" name="name" id="name" aria-describedby="_name_desc" placeholder="name">
-      <small id="_name_desc" class="form-text text-muted">The name of this new class</small>
-    </div>
-    <div class="custom-control custom-checkbox">
-      <input type="checkbox" class="custom-control-input" name="open" check="" value="on" id="customCheck1" value="open">
-      <label class="custom-control-label" for="customCheck1">Open for enrollment</label>
-      <small id="helpId" class="form-text text-muted">User will be able to join any classes that are open for enrollment</small>
-    </div>
-    <div class="form-group">
-      <label for="">List of users' names</label>
-      <textarea
-        class="form-control" name="user_list" id="" aria-describedby="helpId" placeholder=""></textarea>
-      <small id="helpId" class="form-text text-muted">The list of users names for every one enroll  in the class, separated by comma</small>
-    </div>
-    <button type="submit" class="btn btn-primary">Add</button>
+  <div class="col-sm-6 form-floating">
+    <input type="text"
+      class="form-control" name="name" id="name" aria-describedby="_name_desc" placeholder="name">
+    <label for="name">Class name</label>
+    <small id="_name_desc" class="form-text text-muted">The name of this new class</small>
+  </div>
+
+  <div class="col-sm-6"><div class=" form-check">
+    <input type="checkbox" class=" form-check-input" name="open" check="" value="on" id="customCheck1" value="open">
+    <label class="custom-control-label" for="customCheck1">Open for enrollment</label>
+    <small id="helpId" class="form-text text-muted">User will be able to join any classes that are open for enrollment</small>
+  </div></div>
+  <div class=" form-floating">
+    <textarea
+      class="form-control" name="user_list" id="" aria-describedby="helpId" placeholder=""></textarea>
+    <label for="">List of users' names</label>
+    <small id="helpId" class="form-text text-muted">The list of users names for every one enroll  in the class, separated by comma</small>
+  </div>
+  <button type="submit" class="btn btn-primary">Add</button>
 </form>
 @endsection

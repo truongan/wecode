@@ -130,8 +130,8 @@
 
             <ul class="nav navbar-nav navbar-right">
                 <li class="nav-item dropdown">
-                <a class="dropdown-toggle nav-link" data-toggle="dropdown" href="#" id="profile_link"><i class="fa fa-fw fa-user"></i>{{Auth::user()->username}}</a>
-                    <div class="dropdown-menu dropdown-menu-right logout-menu">
+                    <a class="dropdown-toggle nav-link" data-bs-toggle="dropdown" href="#" id="profile_link" rol="button" aria-expandd="false"><i class="fa fa-fw fa-user"></i>{{Auth::user()->username}}</a>
+                    <div class="dropdown-menu dropdown-menu-end ">
                         <div class="d-flex pe-3 ps-3">
                             <div class="">
                                 <div class="d-inline-flex">

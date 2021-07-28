@@ -4,10 +4,9 @@ html {
   min-height: 100%;
 }
 
-body {
-  overflow-x: hidden;
+#exampleAccordion{
+  overflow: hidden;
 }
-
 body.sticky-footer {
   margin-bottom: 40px;
 }

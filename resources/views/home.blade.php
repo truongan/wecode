@@ -24,7 +24,7 @@ js') }}"></script>
         var all_assignments = @json($all_assignments);
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
-            díplayEventTime: true,
+            displayEventTime: true,
             editable: false,
             height: "auto",
             firstDay: 1,
