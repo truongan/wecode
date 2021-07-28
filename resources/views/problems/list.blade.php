@@ -34,7 +34,7 @@
 		@endforeach
 	@enderror
 	<table class="table table-striped table-bordered">
-		<thead class="thead-dark">
+		<thead class="thead-old table-dark">
 			<tr>
 				<th>ID</th>
 				<th style="width: 20%">Name</th>

@@ -1,5 +1,5 @@
 <table class="wecode_table table table-striped table-bordered table-sm">
-    <thead class="thead-dark">
+    <thead class="thead-old table-dark">
         <tr>
             <th>#</th>
             <th><small>Username</small></th>

@@ -252,7 +252,7 @@
 	<div class="form-old-row row"> 
 		<div class="table-responsive">
 			<table id="problems_table" class="mt-2 table">
-				<thead class="thead-light">
+				<thead class="thead-old table-light">
 				<tr>
 					<th>ID</th>
 					<th>Name</th>

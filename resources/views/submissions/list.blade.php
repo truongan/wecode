@@ -78,7 +78,7 @@
 
         <div class="table-responsive">
 			<table class=" text-center table-responsive table table-bordered {{$choose == 'all' ? 'table-striped' : 'data-table'}}">
-				<thead class="thead-dark">
+				<thead class="thead-old table-dark">
 					<tr>
 						@if ($choose == 'all')
 							<th width="1%" rowspan="1"><small> Final</small></th>

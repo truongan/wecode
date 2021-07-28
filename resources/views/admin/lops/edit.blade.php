@@ -63,7 +63,7 @@
 		<label {{$ed == 0 ? 'hidden' : ''}}>Select users you wish to remove from the class</label>
 		<div class="table-responsive">
 		<table class="table table-striped table-bordered">
-			<thead class="thead-dark">
+			<thead class="thead-old table-dark">
 			<tr>
 				<th>#</th>
 				<th>User ID</th>
