@@ -17,17 +17,18 @@
 	@else
 	{{-- <div class="row"> --}}
 
-		<form action="{{ route('submissions.store') }}" method="POST">
+		<form action="{{ route('submissions.store') }}" method="POST" class = "">
 		@csrf
 			<input type ="hidden" id="assignment_id_input" value="{{$assignment->id}}" name="assignment"/>
 
 		<input type="hidden" value="{{ $problem->id }}" name="problem"/>
-		<div class="form-inline">
 		
-			<div class="form-group me-3">
-				<label for="problems" class="">Problem:</label>
+		<div class='row row-cols-auto g-4 align-items-end'>
+		
+			<div class="col">
+				<label for="problems" class="">Problem: 				<small class="form-text text-info"><a id="problem_link" href="#" target="_blank">View Problem statement</a></small></label>
 
-				<select id="problems" name ="problem" class="form-control custom-select">
+				<select id="problems" name ="problem" class="form-select ">
 					@if($assignment->id == 0)
 						<option value="{{ $problem->id }}" data-statement="{{ route('problems.show', $problem->id) }}">#{{$problem->id}}--{{ $problem->name }}</option>
 					@endif
@@ -37,26 +38,23 @@
 					@endforeach
 				</select>
 
-				<small class="form-text text-info"><a id="problem_link" href="#" target="_blank">Problem statement</a>
-				</small>
+
 				@error('problem')
 					<div class="alert alert-danger"> {{ $message }}</div>
 				@enderror
 			</div>
-			<div class="form-group me-3">
-				<label for="languages" class="">Language:</label>
-				<select id="languages" name="language" class="form-control custom-select">
 
-				</select>
+			<div class="col form-floating ">
+				<select id="languages" name="language" class="form-select"></select>
+				<label for="languages" class="">Language:</label>
 				@error('language')
 					<div class="alert alert-danger"> {{ $message }}</div>
 				@enderror
 				
 			</div>
 
-			<div class="form-group">
-				<label for="code" class="">Code theme:</label>
-				<select id="theme" class="form-control custom-select">
+			<div class="col form-floating">
+				<select id="theme" class="form-select">
 					<option value="ambiance">ambiance</option>
 					<option value="chaos">chaos</option>
 					<option value="chrome">chrome</option>
@@ -91,8 +89,14 @@
 					<option value="twilight">twilight</option>
 					<option value="vibrant_ink">vibrant_ink</option>
 				</select>
+				<label for="code" class="">Code theme:</label>
+			</div>
+
+			<div class="ms-auto">
+				<input type="submit" value="Submit" class="btn btn-primary btn-lg float-end"/>
 			</div>
 		</div>
+
 		<div class="" id="banned" style="display: none;"></div>
 
 		<div class="template-grp" id="before-grp" style="display: none;">
@@ -111,9 +115,7 @@
 		</div>
 
 
-		<div class="form-group">
-			<input type="submit" value="Submit" class="btn btn-primary float-end"/>
-		</div>
+		
 		<textarea style="display:none;" rows="4" cols="80" name="code" class="sharif_input add_text" >
 		</textarea>
 		</form>
