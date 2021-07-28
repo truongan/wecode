@@ -11,7 +11,7 @@
 @section('title')</i> Assignment: {{ $assignment->name }}@endsection
 	
 @section('content')
-<div class="row">
+{{-- <div class="row"> --}}
 	@if (isset($error) && $error != 'none')
 	<p class="text-warning"> {{ $error }}</p>
 	@else
@@ -97,21 +97,23 @@
 			</div>
 		</div>
 
-		<div class="" id="banned" style="display: none;"></div>
+		<div class="row editor-row mt-3">
+			<div class="" id="banned" style="display: none;"></div>
 
-		<div class="template-grp" id="before-grp" style="display: none;">
-			<label for="">Template's header, <small>these lines will goes before your code</small></label>
-			<div class="template" id="before" >abc</div>
-		</div>
+			<div class="template-grp" id="before-grp" style="display: none;">
+				<label for="">Template's header, <small>these lines will goes before your code</small></label>
+				<div class="template" id="before" >abc</div>
+			</div>
 
-		<div class="editor-grp" id="editor_grp" style="display: none;">
-			<label for="">Your code</label>
-			<div id="editor">{{ $last_code ?? "Write your code here"}}</div>
-		</div>
+			<div class="editor-grp" id="editor_grp" style="display: none;">
+				<label for="">Your code</label>
+				<div id="editor">{{ $last_code ?? "Write your code here"}}</div>
+			</div>
 
-		<div class="template-grp" id="after-grp" style="display: none;">
-			<label for="">Template's footer, <small>These lines will goes after your code</small></label>
-			<div class="template" id="after" >def</div>
+			<div class="template-grp" id="after-grp" style="display: none;">
+				<label for="">Template's footer, <small>These lines will goes after your code</small></label>
+				<div class="template" id="after" >def</div>
+			</div>
 		</div>
 
 
@@ -121,7 +123,7 @@
 		</form>
 	{{-- </div> --}}
 	@endif
-</div>
+{{-- </div> --}}
 
 @endsection
 

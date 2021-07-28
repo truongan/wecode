@@ -1,31 +1,24 @@
-.content-wrapper{
-    display: flex;
-    flex-direction: column;
-    min-height: calc(100vh - 40px);
-}
-.container-fluid{
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-}
+
 #main_content{
+    min-height: calc(100vh - 110px); /* - 40 pixel for top navbar and 70 pixel for titlebar */
     display: flex;
-    flex-grow: 1;
-}
-#main_content .row{
-    display: flex;
-    flex-grow: 1;
 }
 
 form{
     /* Don't know why but remove the height 100% is necessar for the flex thing to wrok */
     /* height: 100%; */
-
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
     width: 100%;
     min-width: 400px;
 }
+.editor-row{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
 
 #editor {
     min-height: 200px;

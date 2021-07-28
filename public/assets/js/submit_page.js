@@ -54,7 +54,7 @@ $(document).ready(function(){
                     data.banned.split("\n").map(function(str){
                         if (str != "")
     
-                        ban_span += "<button type='button' class='btn btn-danger banned_btn'>"+ str +"</button>";
+                        ban_span += "<button type='button' class=' shadow rounded-pill btn btn-sm btn-danger banned_btn'>"+ str +"</button>";
                     });
                     $("#banned").html('<h6>The following keyword(s) are banned. They must not appear anywhere in your submission (not even in comment)<br/>'
                                     + ban_span
