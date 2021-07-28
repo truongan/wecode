@@ -136,7 +136,7 @@
 
 			<span><i class="fa fa-upload fa-lg color11"></i> Submit</span>
 			
-			<form action="{{ route('submissions.store') }}" method="POST" enctype="multipart/form-data" class="row g-1 align-items-end">
+			<form action="{{ route('submissions.store') }}" method="POST" enctype="multipart/form-data" class="row g-2 align-items-end">
 			@csrf
 
 			@if ($all_problems != NULL)
@@ -152,7 +152,7 @@
 				<input type="file" id="file" class=" form-control" name="userfile"/>
 			</div>
 
-			<div class="col-7">
+			<div class="col-8">
 				<div class="form-floating">
 					<select id="languages" name="language" class="form-select">
 						@foreach($problem->languages as $l)
@@ -162,8 +162,8 @@
 					<label>Select language</label>
 				</div>
 			</div>
-			<div class="col-5">
-				<input type="submit" value="Submit" class="form-control"/>
+			<div class="col-4">
+				<input type="submit" value="Submit" class="form-control btn btn-primary btn-lg"/>
 			</div>
 			</form>
 
