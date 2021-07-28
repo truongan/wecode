@@ -136,7 +136,7 @@
 
 			<span><i class="fa fa-upload fa-lg color11"></i> Submit</span>
 			
-			<form action="{{ route('submissions.store') }}" method="POST" enctype="multipart/form-data">
+			<form action="{{ route('submissions.store') }}" method="POST" enctype="multipart/form-data" class="row g-1 align-items-end">
 			@csrf
 
 			@if ($all_problems != NULL)
@@ -146,29 +146,25 @@
 				<input type="hidden" name="assignment" value="0"/>
 			@endif
 			<input type="hidden" name="problem" value="{{ $problem->id }}"/>
-			<fieldset class="form-group form-old-row row">
-				<label>
-					Select language
-				</label>
 
-				<select id="languages" name="language" class="form-control custom-select">
+			<div class="">
+				<label class="custom-file-label text-muted"><small>upload source code</small></label>
+				<input type="file" id="file" class=" form-control" name="userfile"/>
+			</div>
 
-					@foreach($problem->languages as $l)
-                        <option value="{{ $l->id }}">{{ $l->name }} ({{$l->pivot->time_limit /1000}}s, {{ $l->pivot->memory_limit / 1000 }}MB )</option>
-					@endforeach
-				</select>
-			</fieldset>
-
-			<fieldset class="form-group form-old-row row">
-				<div class="col-12 custom-file">
-					<input type="file" id="file" class=" custom-file-input" name="userfile"/>
-					<label class="custom-file-label text-muted"><small>upload source code</small></label>
+			<div class="col-7">
+				<div class="form-floating">
+					<select id="languages" name="language" class="form-select">
+						@foreach($problem->languages as $l)
+							<option value="{{ $l->id }}">{{ $l->name }} ({{$l->pivot->time_limit /1000}}s, {{ $l->pivot->memory_limit / 1000 }}MB )</option>
+						@endforeach
+					</select>
+					<label>Select language</label>
 				</div>
-			</fieldset>
-
-			<fieldset class="form-group form-old-row row">
+			</div>
+			<div class="col-5">
 				<input type="submit" value="Submit" class="form-control"/>
-			</fieldset>
+			</div>
 			</form>
 
 		</div>
