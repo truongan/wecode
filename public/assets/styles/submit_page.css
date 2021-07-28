@@ -1,6 +1,7 @@
 .content-wrapper{
     display: flex;
     flex-direction: column;
+    min-height: calc(100vh - 40px);
 }
 .container-fluid{
     flex-grow: 1;
