@@ -42,7 +42,7 @@
 				</td>
 				<td> <a href="{{ route('submissions.index', ['assignment_id' => 0, 'problem_id' => $problem->id, 'user_id' =>'all', 'choose' => 'all']) }}"> {{$problem->accepted_submission}}/{{$problem->total_submission}}</a></td>
 				<td>
-					<a class="btn btn-sm btn-primary" data-toggle="collapse" href="#assignment_list_{{$problem->id}}" aria-expanded="false" aria-controls="assignment_list_{{$problem->id}}">
+					<a class="btn btn-sm btn-primary" data-bs-toggle="collapse" href="#assignment_list_{{$problem->id}}" aria-expanded="false" aria-controls="assignment_list_{{$problem->id}}">
 						{{ $problem->assignments->count()}}<small> assignments</small>
 					</a>
 					<div class="collapse" id="assignment_list_{{$problem->id}}">

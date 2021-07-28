@@ -54,7 +54,7 @@
 			<td><a href="{{ url("problems/$item->id") }}">{{ $item->name }}</a></td>
 			<td>{{$item->admin_note}}</td>
 			<td>
-				<span data-toggle="tooltip"  
+				<span data-bs-toggle="tooltip"  
 					@if($item->sharable) class="text-success"  title="publicly shared problem"
 					@else class="text-secondary" title="Private problem"
 					@endif
@@ -69,7 +69,7 @@
 			  	@endforeach
 			</td>
 			<td>
-				<a class="btn btn-sm btn-primary" data-toggle="collapse" href="#language_list_{{$item->id}}" aria-expanded="false" aria-controls="language_list_{{$item->id}}">
+				<a class="btn btn-sm btn-primary" data-bs-toggle="collapse" href="#language_list_{{$item->id}}" aria-expanded="false" aria-controls="language_list_{{$item->id}}">
 					{{  $item->languages->pluck('name')->join(", ")  }}
 				</a>
 			<div class="collapse" id="language_list_{{$item->id}}">
@@ -80,7 +80,7 @@
 			</div>
 			</td>
 			<td>
-					<a class="btn btn-sm btn-primary" data-toggle="collapse" href="#assignment_list_{{$item->id}}" aria-expanded="false" aria-controls="assignment_list_{{$item->id}}">
+					<a class="btn btn-sm btn-primary" data-bs-toggle="collapse" href="#assignment_list_{{$item->id}}" aria-expanded="false" aria-controls="assignment_list_{{$item->id}}">
 						{{ $item->assignments->count()}}<small> assignments</small>
 					</a>
 				<div class="collapse" id="assignment_list_{{$item->id}}">
@@ -105,13 +105,13 @@
 					@else
 						text-secondary
 					@endif
-				"  data-toggle="tooltip" data-id='{{$item->id}}'  title='This problem is available for practice'>
+				"  data-bs-toggle="tooltip" data-id='{{$item->id}}'  title='This problem is available for practice'>
 				</i>
 				@if( $item->sharable)
-					<i class="fas fa-share-alt" data-toggle="tooltip" title='This problem is shared among instructors'></i>
+					<i class="fas fa-share-alt" data-bs-toggle="tooltip" title='This problem is shared among instructors'></i>
 				@endif
 				@if($item->editorial != '')
-					<a href="{{ $item->editorial }}" data-toggle="tooltip" title='This problem has some linked editorial'><i class="fas fa-lightbulb fa-2x   "></i></a>
+					<a href="{{ $item->editorial }}" data-bs-toggle="tooltip" title='This problem has some linked editorial'><i class="fas fa-lightbulb fa-2x   "></i></a>
 				@endif
 				
 				@if($item->author != '')
