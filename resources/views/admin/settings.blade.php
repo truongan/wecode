@@ -40,7 +40,7 @@
 
 			<fieldset class="col-md-2">
 				<label for="form_week">Week Start Day</label>
-				<select id="form_week" name="week_start" class="form-control custom-select">
+				<select id="form_week" name="week_start" class="form-select">
 					<option value="0" {{ $week_start == 0 ? 'selected="selected"' : ''}}>Sunday</option>
 					<option value="1" {{ $week_start == 1 ? 'selected="selected"' : '' }}>Monday</option>
 					<option value="2" {{ $week_start == 2 ? 'selected="selected"' : '' }}>Tuesday</option>
@@ -53,7 +53,7 @@
 
 			<fieldset class="col-md-2">
 				<label for="theme">Theme</label>
-				<select id="theme" name="theme" class="form-control custom-select">
+				<select id="theme" name="theme" class="form-select">
 					<option value="cerulean" {{ $theme == 'cerulean' ? 'selected="selected"' : '' }} >cerulean</option>
 					<option value="cosmo" {{ $theme == 'cosmo' ? 'selected="selected"' : '' }} >cosmo</option>
 					<option value="cyborg" {{ $theme == 'cyborg' ? 'selected="selected"' : '' }} >cyborg</option>
@@ -145,11 +145,14 @@
 		</div>
 
 		<div class="form-old-row row">
-			<fieldset class="col-md-2">
-				<label for="form_en_reg">Registration</label>
-				<input id="form_en_reg" type="checkbox" name="enable_registration" value="1" {{ $enable_registration ? 'checked' : '' }}/>
-				<small class="form-text text-muted">Open Public Registration.</small>
+			<fieldset class="col-md-2 ">
+				<div class="form-check">
+					<input class="form-check-input" id="form_en_reg" type="checkbox" name="enable_registration" value="1" {{ $enable_registration ? 'checked' : '' }}/>
+					<label for="form_en_reg" class="form-check-label">Registration</label>
+					<small class="form-text text-muted">Open Public Registration.</small>
+				</div>
 			</fieldset>
+			
 			<fieldset class="col-md-4">
 					<label for="form_reg_code">Registration Code</label>
 					<input id="form_reg_code" type="number" name="registration_code" class="form-control medium" value="{{ $registration_code }}"/>

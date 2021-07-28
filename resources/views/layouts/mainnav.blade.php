@@ -93,13 +93,6 @@
                     <small><span class="timer text-light"></span></small>
                 </div>
             </ul>
-            {{-- <ul class="navbar-nav sidenav-toggler bg-primary">
-                <li class="nav-item">
-                    <a class="nav-link text-center" id="sidenavToggler">
-                    <i class="fa fa-fw fa-fw fa-angle-left"></i>
-                    </a>
-                </li>
-            </ul> --}}
 
             <div class="navbar-nav ms-auto p-3">
                 <div class="top_object shj-spinner d-none">
@@ -108,12 +101,11 @@
             </div>
 
             <div class="navbar-nav">
-                
-                    @if(isset(Auth::user()->selected_assignment->name))
-                        <div class="ps-3 pe-3 pt-2 bg-secondary rounded-pill" style="height: 40.8px;">
-                            {{Auth::user()->selected_assignment->name}}  
-                        </div>
-                    @endif
+                @if(isset(Auth::user()->selected_assignment->name))
+                    <div class="ps-3 pe-3 pt-2 bg-secondary " style="height: 40.8px;">
+                        {{Auth::user()->selected_assignment->name}}  
+                    </div>
+                @endif
                 
                 <div class="top_object countdown d-flex flex-column justify-content-center" id="countdown">
                     <div class="time_block">
