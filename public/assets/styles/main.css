@@ -122,6 +122,7 @@ div#extra_time i {
 	}
 	.nav-item{
 		margin-right: 0!important; /* to counter-act wierd lux theme */
+		margin-left: 0!important; /* to counter-act wierd lux theme */
 	}
 
 	.navbar-sidenav  .nav-link, .sidenav-toggler .nav-link{

@@ -17,12 +17,16 @@
 @section('content')
 <div class="row">
 	<form class="form-inline" method="get" action="{{ route('problems.index') }}">
-		<div class="form-group">
+		<div class="row row-cols-auto g-2 align-items-end">
 			<label for="search">Search by name</label>
-			<input type="text" name="search" id="search" class="form-control" placeholder="Search by name" aria-describedby="Search by name" value="{{ Request::get('search') }} " >
+			<div class="col ">
+				<input type="text" name="search" id="search" class="form-control" placeholder="Search by name" aria-describedby="Search by name" value="{{ Request::get('search') }} " >
+			</div>
+			<div class="col">
+				<button type="button" class="btn btn-danger" onClick="document.getElementById('search').value = '' ;"><i class="fas fa-times    "></i></button>
+				<button type="submit" class="btn btn-primary">Search</button>
+			</div>
 		</div>
-		<button type="button" class="btn btn-danger" onClick="document.getElementById('search').value = '' ;"><i class="fas fa-times    "></i></button>
-		<button type="submit" class="btn btn-primary">Search</button>
 	</form>
 	<div class="table-responsive">
 	@error('messages')
@@ -142,13 +146,13 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title" id="exampleModalLongTitle">Are you sure you want to delete this tag?</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
 				<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
 		  	<div class="modal-footer">
 				<button type="button" class="btn btn-danger confirm-tag-delete">YES</button>
-				<button type="button" class="btn btn-primary" data-dismiss="modal">NO</button>
+				<button type="button" class="btn btn-primary" data-bs-dismiss="modal">NO</button>
 		  	</div>
 		</div>
 	</div>
