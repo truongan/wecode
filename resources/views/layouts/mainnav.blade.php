@@ -86,13 +86,7 @@
             </div>
         </ul>
 
-        <div class="navbar-nav ms-auto p-3">
-            <div class="top_object shj-spinner d-none">
-                <i class="fa fa-fw fa-refresh fa-spin fa-lg"></i>
-            </div>
-        </div>
-
-        <div class="navbar-nav">
+        <div class="navbar-nav ms-auto">
             @if(isset(Auth::user()->selected_assignment->name))
                 <div class="ps-3 pe-3 pt-2 bg-secondary " style="height: 40.8px;">
                     {{Auth::user()->selected_assignment->name}}  

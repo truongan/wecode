@@ -54,32 +54,35 @@
 			<fieldset class="col-md-2">
 				<label for="theme">Theme</label>
 				<select id="theme" name="theme" class="form-select">
-					<option value="cerulean" {{ $theme == 'cerulean' ? 'selected="selected"' : '' }} >cerulean</option>
-					<option value="cosmo" {{ $theme == 'cosmo' ? 'selected="selected"' : '' }} >cosmo</option>
-					<option value="cyborg" {{ $theme == 'cyborg' ? 'selected="selected"' : '' }} >cyborg</option>
-					<option value="darkly" {{ $theme == 'darkly' ? 'selected="selected"' : '' }} >darkly</option>
-					<option value="default" {{ $theme == 'default' ? 'selected="selected"' : '' }} >default</option>
-					<option value="flatly" {{ $theme == 'flatly' ? 'selected="selected"' : '' }} >flatly</option>
-					<option value="journal" {{ $theme == 'journal' ? 'selected="selected"' : '' }} >journal</option>
-					<option value="litera" {{ $theme == 'litera' ? 'selected="selected"' : '' }} >litera</option>
-					<option value="lumen" {{ $theme == 'lumen' ? 'selected="selected"' : '' }} >lumen</option>
-					<option value="lux" {{ $theme == 'lux' ? 'selected="selected"' : '' }} >lux</option>
-					<option value="materia" {{ $theme == 'materia' ? 'selected="selected"' : '' }} >materia</option>
-					<option value="minty" {{ $theme == 'minty' ? 'selected="selected"' : '' }} >minty</option>
-					<option value="morph" {{ $theme == 'morph' ? 'selected="selected"' : '' }} >morph</option>
-					<option value="pulse" {{ $theme == 'pulse' ? 'selected="selected"' : '' }} >pulse</option>
-					<option value="quartz" {{ $theme == 'quartz' ? 'selected="selected"' : '' }} >quartz</option>
-					<option value="sandstone" {{ $theme == 'sandstone' ? 'selected="selected"' : '' }} >sandstone</option>
-					<option value="simplex" {{ $theme == 'simplex' ? 'selected="selected"' : '' }} >simplex</option>
-					<option value="sketchy" {{ $theme == 'sketchy' ? 'selected="selected"' : '' }} >sketchy</option>
-					<option value="slate" {{ $theme == 'slate' ? 'selected="selected"' : '' }} >slate</option>
-					<option value="solar" {{ $theme == 'solar' ? 'selected="selected"' : '' }} >solar</option>
-					<option value="spacelab" {{ $theme == 'spacelab' ? 'selected="selected"' : '' }} >spacelab</option>
-					<option value="superhero" {{ $theme == 'superhero' ? 'selected="selected"' : '' }} >superhero</option>
-					<option value="united" {{ $theme == 'united' ? 'selected="selected"' : '' }} >united</option>
-					<option value="vapor" {{ $theme == 'vapor' ? 'selected="selected"' : '' }} >vapor</option>
-					<option value="yeti" {{ $theme == 'yeti' ? 'selected="selected"' : '' }} >yeti</option>
-					<option value="zephyr" {{ $theme == 'zephyr' ? 'selected="selected"' : '' }} >zephyr</option>
+					<optgroup label="light">
+						<option value="cerulean" {{ $theme == 'cerulean' ? 'selected="selected"' : '' }} >cerulean</option>
+						<option value="cosmo" {{ $theme == 'cosmo' ? 'selected="selected"' : '' }} >cosmo</option>
+						<option value="flatly" {{ $theme == 'flatly' ? 'selected="selected"' : '' }} >flatly</option>
+						<option value="journal" {{ $theme == 'journal' ? 'selected="selected"' : '' }} >journal</option>
+						<option value="litera" {{ $theme == 'litera' ? 'selected="selected"' : '' }} >litera</option>
+						<option value="lumen" {{ $theme == 'lumen' ? 'selected="selected"' : '' }} >lumen</option>
+						<option value="lux" {{ $theme == 'lux' ? 'selected="selected"' : '' }} >lux</option>
+						<option value="materia" {{ $theme == 'materia' ? 'selected="selected"' : '' }} >materia</option>
+						<option value="minty" {{ $theme == 'minty' ? 'selected="selected"' : '' }} >minty</option>
+						<option value="morph" {{ $theme == 'morph' ? 'selected="selected"' : '' }} >morph</option>
+						<option value="pulse" {{ $theme == 'pulse' ? 'selected="selected"' : '' }} >pulse</option>
+						<option value="sandstone" {{ $theme == 'sandstone' ? 'selected="selected"' : '' }} >sandstone</option>
+						<option value="simplex" {{ $theme == 'simplex' ? 'selected="selected"' : '' }} >simplex</option>
+						<option value="sketchy" {{ $theme == 'sketchy' ? 'selected="selected"' : '' }} >sketchy</option>
+						<option value="spacelab" {{ $theme == 'spacelab' ? 'selected="selected"' : '' }} >spacelab</option>
+						<option value="united" {{ $theme == 'united' ? 'selected="selected"' : '' }} >united</option>
+						<option value="yeti" {{ $theme == 'yeti' ? 'selected="selected"' : '' }} >yeti</option>
+						<option value="zephyr" {{ $theme == 'zephyr' ? 'selected="selected"' : '' }} >zephyr</option>
+					</optgroup>
+					<optgroup label="dark">
+						<option value="cyborg" {{ $theme == 'cyborg' ? 'selected="selected"' : '' }} >cyborg</option>
+						<option value="darkly" {{ $theme == 'darkly' ? 'selected="selected"' : '' }} >darkly</option>
+						<option value="quartz" {{ $theme == 'quartz' ? 'selected="selected"' : '' }} >quartz</option>
+						<option value="slate" {{ $theme == 'slate' ? 'selected="selected"' : '' }} >slate</option>
+						<option value="solar" {{ $theme == 'solar' ? 'selected="selected"' : '' }} >solar</option>
+						<option value="superhero" {{ $theme == 'superhero' ? 'selected="selected"' : '' }} >superhero</option>
+						<option value="vapor" {{ $theme == 'vapor' ? 'selected="selected"' : '' }} >vapor</option>
+					</optgroup>
 					
 					<option value="default" {{ $theme == "default" ? 'selected="selected"' : '' }} >default</option>
 				</select>
