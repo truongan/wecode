@@ -121,7 +121,7 @@ class LoginController extends Controller
 		return ($ldap_user && $user_id);
 	}
 
-    public function Login(Request $request)
+    public function login(Request $request)
     {
         $credentials = $request->only('username', 'password');
         $success = false;
@@ -130,11 +130,17 @@ class LoginController extends Controller
             || Auth::attempt($credentials, $request->input('remember') !== NULL) 
         )
         {
+            $user = Auth::user();
 
-            if (Auth::user()->first_login_time == NULL) Auth::user()->first_login_time = now();
-            else Auth::user()->last_login_time=now();
+            if ($user->trial_time
+                && $user->created_at->addHours($user->trial_time) >= Carbon::now()
+            ){
+                $user->role_id = 5; //Hopefully 5 mean guest.
+            }
+            if ($user->first_login_time == NULL) $user->first_login_time = now();
+            else $user->last_login_time=now();
         
-            Auth::user()->save();
+            $user->save();
             $path = parse_url(redirect()->intended(route('home'))->getTargetUrl())['path'];
 
             return redirect(url($path));

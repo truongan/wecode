@@ -95,9 +95,14 @@ Users - {{$user->username}}
 			  <option value="2" {{ $user->role_id=='2' ? "selected":"" }} >head_instructor</option>
 			  <option value="3" {{ $user->role_id=='3' ? "selected":"" }} >instructor</option>
 			  <option value="4" {{ $user->role_id=='4' ? "selected":"" }} >student</option>
+			  <option value="4" {{ $user->role_id=='4' ? "selected":"" }} >guest</option>
 			</select>
 			{{-- {{ form_error('role', '<div class="form-text text-danger">', '</div>') }} --}}
 		  </div>
+		</div>
+
+		<<div class="row">
+			
 		</div>
 		@endif
 		<div class="form-group form-row">
