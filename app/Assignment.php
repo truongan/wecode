@@ -42,7 +42,10 @@ class Assignment extends Model
         $result->error_message = 'Uknown error';
         $result->can_submit = FALSE;
 
-        if (in_array( $user->role->name, ['student']) && $this->open == 0){
+        if (in_array( $user->role->name, ['guest']) ){
+            $result->error_message = ' Guest can not make submissions. Contact site admin to upgrade your account ';
+        }
+        elseif (in_array( $user->role->name, ['student']) && $this->open == 0){
             // if assignment is closed, non-student users (admin, instructors) still can submit
             $result->error_message = 'Selected assignment is closed.';
         }
