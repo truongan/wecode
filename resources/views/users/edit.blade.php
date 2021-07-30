@@ -101,8 +101,11 @@ Users - {{$user->username}}
 		  </div>
 		</div>
 
-		<<div class="row">
-			
+		<div class="row">
+			<label class="col-4">Trial time</label>
+		  	<div class="col-8">
+			<input type="number" class="form-control" name="trial_time" value="{{ $user->trial_time }}"/>
+			</div>
 		</div>
 		@endif
 		<div class="form-group form-row">

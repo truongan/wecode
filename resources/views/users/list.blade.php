@@ -54,7 +54,7 @@ thead tr:after {
           <th>Username</th>
           <th>Display Name</th>
           <th>Email</th>
-          <th>Trial time</th>
+          <th>Trial end</th>
           <th>First Login</th>
           <th>Last Login</th>
           <th>Actions</th>
@@ -67,7 +67,7 @@ thead tr:after {
         <td id="un"> {{$user->username}} </td>
         <td>{{$user->display_name}}</td>
         <td>{{$user->email}}<br/>{{$user->role->name}}</td>
-        <td>{{ $user->trial_time ? ($user->created_at->addHours($user->trial_time)->diffForHuman(Carbon::now(), Carbon\Interface::DIFF_ABSOLUTE)) : "Permanent user" }}</td>
+        <td>{{ $user->trial_time ? ($user->created_at->addHours($user->trial_time)->diffForHumans()) : "Permanent user" }}</td>
         <td>
           <small>{{ $user->first_login_time ? $user->first_login_time->setTimezone($settings['timezone'])->locale('en')->isoFormat('llll (UZZ)') : 'Never'}}</small>
         </td>

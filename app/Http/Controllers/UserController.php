@@ -220,6 +220,7 @@ class UserController extends Controller
             'display_name' => ['nullable', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255'],
             'password' => ['nullable','string', 'min:8', 'confirmed'],
+            'trial_time' => ['nullable','numeric'],
         ]);
         if (Auth::user()->id == $user->id ) 
         {
