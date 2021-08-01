@@ -101,6 +101,7 @@ Users - {{$user->username}}
       <input id="form_name" type="text" name="display_name" class="form-control" value="{{$user->role->name}}" disabled/>
     </div>
   </div>
+
 </div>
 
 <table class=" table table-striped table-bordered table-sm">

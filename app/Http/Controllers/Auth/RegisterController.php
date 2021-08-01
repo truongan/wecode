@@ -80,6 +80,7 @@ class RegisterController extends Controller
             'display_name' => $data['display_name'],
             'password' => Hash::make($data['password']),
             'role_id' => Role::where('name','student')->first()->id,
+            'trial_time' => Setting::get('default_trial_time')
         ]);
     }
 }

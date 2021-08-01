@@ -125,7 +125,7 @@
 		</div>
 
 		<br><h5>Judge settings</h5><hr>
-		<div class="form-old-row row mb-3">
+		<div class="g-4 row mb-3">
 			<fieldset class="col-md-3">
 				<label for="form_up_limit">Upload Size Limit (kB)</label>
 				<input id="form_up_limit" type="number" name="file_size_limit" class="form-control medium" value="{{ $file_size_limit }}"/>
@@ -147,32 +147,38 @@
 			</fieldset>
 		</div>
 
-		<div class="form-old-row row">
+		<div class="g-3 row">
 			<fieldset class="col-md-2 ">
 				<div class="form-check">
 					<input class="form-check-input" id="form_en_reg" type="checkbox" name="enable_registration" value="1" {{ $enable_registration ? 'checked' : '' }}/>
-					<label for="form_en_reg" class="form-check-label">Registration</label>
+					<label for="form_en_reg" class="form-check-label">Registration</label><br/>
 					<small class="form-text text-muted">Open Public Registration.</small>
 				</div>
 			</fieldset>
 			
-			<fieldset class="col-md-4">
-					<label for="form_reg_code">Registration Code</label>
-					<input id="form_reg_code" type="number" name="registration_code" class="form-control medium" value="{{ $registration_code }}"/>
-					<small class="form-text text-muted">If you want to enable registration (above option), It is better to give a registration code	to students in your class for validating registration. Enter 0 to disable.</small>
+			<fieldset class="col-md-3  ">
+						<label for="form_reg_code">Registration Code</label>
+				<div class="input-group">
+					{{-- <div class="form-floating"> --}}
+						<input id="form_reg_code" type="text" name="registration_code" class="form-control medium" value="{{ $registration_code }}"/>
+					{{-- </div> --}}
+					<button class="btn btn-info" type="button" onClick="document.getElementById('form_reg_code').value =  Math.random().toString(36).substring(2,4) + Math.random().toString(36).substring(2,4);"><i class="fas fa-random    "></i></button>
+				</div>
+				<small class="form-text text-muted">If you want to enable registration (above option), It is better to give a registration code	to students in your class for validating registration. Enter 0 to disable.</small>
 			</fieldset>
 
-			<fieldset class="col-md-6">
-				<div class="row">
-					<div class="col-sm-3">
-						<label for="form_late_rule">Default Coefficient Rule</label>
-						<small class="form-text text-muted">PHP script without &lt;?php ?&gt; tags</small>
-					</div>
-						<div class="col-sm-9">
-						<textarea id="form_late_rule" name="default_late_rule" rows="15" class="form-control add_text clear">{{ $default_late_rule }}</textarea>
-					</div>
-				</div>
-			</fieldset>
+			<div class="col-md-3 form-floating">
+				<input id="default_trial_time" type="number" name="default_trial_time" class="form-control medium" value="{{ $default_trial_time }}"/>
+				<label for="default_trial_time">Default trial time</label>
+				<small class="form-text text-muted">The default trial time for newly added or newly registred students. Set to 0 to make all new user permanent student.</small>
+			</div>
+
+			<div class="col-sm-4 form-floating">
+				<textarea id="form_late_rule" name="default_late_rule" rows="15" class="form-control add_text clear" style="height: 15em">{{ $default_late_rule }}</textarea>
+				<label for="form_late_rule">Default Coefficient Rule</label>
+				<small class="form-text text-muted">PHP script without &lt;?php ?&gt; tags</small>
+			</div>
+
 		</div>
 
 		{{-- Hide these for now until we have proper mail implementation later  --}}

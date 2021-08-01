@@ -72,6 +72,7 @@ class setting_controller extends Controller
                  'theme',
                 'concurent_queue_process',
                 'default_language_number',
+                'default_trial_time',
             ];
             // var_dump($submitted);die();
             if (!isset($submitted['enable_registration']))  $submitted['enable_registration'] = 0;

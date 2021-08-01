@@ -232,6 +232,11 @@ class UserController extends Controller
                     }
                 }],
             ]);
+            $a = $request->input();
+            if ( isset( $a['trial_time'] ) )
+            {
+                abort(403, 'Only site admin can update user trial time');
+            }
         }
 
 
