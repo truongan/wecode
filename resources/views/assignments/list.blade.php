@@ -142,24 +142,27 @@
 	{{-- @php(dd(DB::getQueryLog())) --}}
 </div>
 
-<div class="modal fade" id="assignment_delete" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLongTitle">Are you sure you want to delete this assignment?</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-      <div class="modal-footer">
-          <button type="button" class="btn btn-danger confirm-assignment-delete">YES</button>
-      <button type="button" class="btn btn-primary" data-bs-dismiss="modal">NO</button>
-        </div>
-      </div>
-    </div>
-</div>
+	<div class="modal fade" id="assignment_delete" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+			<h5 class="modal-title" id="exampleModalLongTitle">Are you sure you want to delete this assignment?</h5>
+			<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-danger confirm-assignment-delete">YES</button>
+		<button type="button" class="btn btn-primary" data-bs-dismiss="modal">NO</button>
+			</div>
+		</div>
+		</div>
+	</div>
 @endsection
+
+
+
 @section('body_end')
 
-<script type='text/javascript' src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.10.25/datatables.min.js"></script>
 <script>
 $(document).ready(function () {
 	$('.del_n').click(function () {
@@ -214,7 +217,7 @@ $(document).ready(function () {
 	});
 
     $("table").DataTable({
-		"pageLength": 60,
+		{{-- "pageLength": 60, --}}
 		{{-- "ordering":false, --}}
 		"order":['0', 'desc'],
 		"columns": [

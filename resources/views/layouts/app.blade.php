@@ -35,8 +35,8 @@
         <div id="main_content" > 
             @yield('content')
         </div>
-    
     </div>
+    
     <script type="text/javascript" src="{{ asset('assets/js/jquery-3.6.0.min.js') }}"></script>
     {{-- <script type="text/javascript" src="{{ asset('assets/js/popper.min.js') }}"></script>  --}}
     {{-- Popper is included in bootstrap.bundle --}}
