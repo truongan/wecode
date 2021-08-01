@@ -125,11 +125,11 @@
 			
 			<td>
 				<a href="{{ route('problems.downloadtestsdesc',$item->id) }}">
-					<i title="Download Tests and Descriptions" class="fa fa-cloud-download-alt fa-lg color11"></i>
+					<i title="Download Tests and Descriptions" class="fa fa-cloud-download-alt fa-lg text-success"></i>
 				</a>
 				<a href="{{ route('problems.edit', $item) }}"> <i title="Edit" class="far fa-edit fa-lg color3"> </i> </a>
 				<span title="Delete problem" class="del_n delete_tag pointer">
-				  <i title="Delete problem" class="far fa-trash-alt fa-lg color1"></i>
+				  <i title="Delete problem" class="far fa-trash-alt fa-lg text-danger"></i>
 				</span>
 			  
 			</td>

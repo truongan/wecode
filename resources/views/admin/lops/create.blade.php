@@ -6,7 +6,7 @@
 @section('title', 'New Class')
 
 @section('title_menu')
-	<span class="title_menu_item"><a href="{{ route('lops.index') }}"><i class="fa fa-list color11"></i>Back to list of class</a></span>
+	<span class="title_menu_item"><a href="{{ route('lops.index') }}"><i class="fa fa-list text-success"></i>Back to list of class</a></span>
 @endsection
 
 @section('body_end')

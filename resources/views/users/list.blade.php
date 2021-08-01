@@ -38,7 +38,7 @@ thead tr:after {
 @section('title_menu')
   {{-- <span class="title_menu_item"><a href="https://github.com/truongan/wecode-judge/blob/docs/v1.4/users.md" target="_blank"><i class="fa fa-question-circle color6"></i> Help</a></span> --}}
   
-  <span class="title_menu_item"><a href="{{ url('users/add_multiple') }}"><i class="fa fa-user-plus color11"></i> Add Users</a></span>
+  <span class="title_menu_item"><a href="{{ url('users/add_multiple') }}"><i class="fa fa-user-plus text-success"></i> Add Users</a></span>
   <span class="title_menu_item"><a href="{{ 'mailto:' .  App\User::pluck('email')->join(',') }}"><i class="fas fa-mail-bulk    "></i> Email all users</a></span>
 	{{-- <span class="title_menu_item"><a href="{{ url('users/list_excel') }}"><i class="fa fa-download color9"></i> Excel</a></span> --}}
 @endsection
@@ -79,7 +79,7 @@ thead tr:after {
           <a title="Edit" href="{{ route('users.edit', $user) }}"><i class="fas fa-user-edit fa-lg color9"></i></a>
           <a title="Submissions" href="{{ url('submissions/all/user/'.$user->username) }}"><i class="fa fa-bars fa-lg color12"></i></a>
           <span title="Delete User" class="delete-btn delete_user pointer"><i title="Delete User" class="fa fa-user-times fa-lg color2"></i></span>
-          <span title="Delete Submissions" class="delete-btn delete_submissions pointer"><i class="far fa-trash-alt fa-lg color1"></i></span>
+          <span title="Delete Submissions" class="delete-btn delete_submissions pointer"><i class="far fa-trash-alt fa-lg text-danger"></i></span>
         </td>
       </tr>
       @endforeach
@@ -87,7 +87,7 @@ thead tr:after {
   </div>
 </div>
 
-{{-- <span><a href="{{ route('users.create') }}"><i class="fa fa-user-plus color11"></i> Add 1 User</a></span> --}}
+{{-- <span><a href="{{ route('users.create') }}"><i class="fa fa-user-plus text-success"></i> Add 1 User</a></span> --}}
 
 @endsection
 

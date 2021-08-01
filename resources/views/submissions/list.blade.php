@@ -114,7 +114,7 @@
 			<tr data-u="{{$submission->user->username}}" data-a="{{ $assignment->id }}" data-p="{{ $submission->problem_id }}" data-id="{{$submission->id}}">
 				@if ($choose == 'all')
 					<td>
-						<i class="pointer set_final far {{ $submission->is_final ? 'fa-check-circle color11' : 'fa-circle' }} fa-2x"></i>
+						<i class="pointer set_final far {{ $submission->is_final ? 'fa-check-circle text-success' : 'fa-circle' }} fa-2x"></i>
 					</td>
 				@endif
 				

@@ -44,7 +44,7 @@
             </td>
             <td> 
                 <a title="Edit" href="{{ route('tags.edit', $item) }}"><i class="fas fa-edit fa-lg color9"></i></a>
-                <span title="Delete Tag" class="del_n delete_tag pointer"><i title="Delete Tag" class="far fa-trash-alt fa-lg color1"></i></span>
+                <span title="Delete Tag" class="del_n delete_tag pointer"><i title="Delete Tag" class="far fa-trash-alt fa-lg text-danger"></i></span>
             </td>
         
         </tr>

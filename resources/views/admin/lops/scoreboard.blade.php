@@ -19,9 +19,9 @@
 @endsection
 
 @section('title_menu')
-	<span class="title_menu_item"><a href="{{ route('lops.index') }}"><i class="fa fa-list color11"></i>Back to list of class</a></span>
+	<span class="title_menu_item"><a href="{{ route('lops.index') }}"><i class="fa fa-list text-success"></i>Back to list of class</a></span>
 	@if (in_array( Auth::user()->role->name, ['admin', 'head_instructor']))
-	<span class="title_menu_item"><a href="{{ route('lops.create') }}"><i class="fa fa-plus color11"></i>Add class</a></span>
+	<span class="title_menu_item"><a href="{{ route('lops.create') }}"><i class="fa fa-plus text-success"></i>Add class</a></span>
 	@endif
 @endsection
 

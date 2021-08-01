@@ -25,10 +25,10 @@
 
 @section('title_menu')
 <span class="title_menu_item">
-	<a href="{{ route('problems.index') }} " target="_blank"><i class="fa fa-list color1"></i> List of problems</a>
+	<a href="{{ route('problems.index') }} " target="_blank"><i class="fa fa-list text-danger"></i> List of problems</a>
 </span>
 <span class="title_menu_item">
-	<a href="https://github.com/truongan/wecode-judge/blob/docs/v1.4/add_assignment.md" target="_blank"><i class="fa fa-question-circle color1"></i> Help</a>
+	<a href="https://github.com/truongan/wecode-judge/blob/docs/v1.4/add_assignment.md" target="_blank"><i class="fa fa-question-circle text-danger"></i> Help</a>
 </span>
 @endsection
 

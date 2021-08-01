@@ -7,7 +7,7 @@
 
 @section('title_menu')
 @if ( in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
-    <span class="title_menu_item"><a href="{{ route('lops.create') }}"><i class="fa fa-plus color11"></i>Add class</a></span>
+    <span class="title_menu_item"><a href="{{ route('lops.create') }}"><i class="fa fa-plus text-success"></i>Add class</a></span>
 @endif
 @endsection
 
@@ -42,7 +42,7 @@
             <a title="Email all student" href = {{ 'mailto:' . $lop->users->pluck('email')->join(',') }}> <i class="fas fa-mail-bulk    "></i> </a>
             <a title="scores" href="{{ route('lop.scoreboard', $lop->id) }}" class = "fas fa-clipboard-list fa-lg color8"></a>
             <a title="Edit" href="{{ route('lops.edit', $lop->id) }}"><i class="fas fa-edit fa-lg color9"></i></a>
-            <span title="Delete lop" class="delete-btn del_n delete_lop pointer" href="{{ route('lops.destroy', $lop->id) }}"><i class="fa fa-times-circle fa-lg color1"></i></span>
+            <span title="Delete lop" class="delete-btn del_n delete_lop pointer" href="{{ route('lops.destroy', $lop->id) }}"><i class="fa fa-times-circle fa-lg text-danger"></i></span>
           @endif
         </td>
       </tr>

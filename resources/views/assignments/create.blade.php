@@ -18,7 +18,7 @@
 
 @section('title_menu')
 <span class="title_menu_item">
-	<a href="https://github.com/truongan/wecode-judge/blob/docs/v1.4/add_assignment.md" target="_blank"><i class="fa fa-question-circle color1"></i> Help</a>
+	<a href="https://github.com/truongan/wecode-judge/blob/docs/v1.4/add_assignment.md" target="_blank"><i class="fa fa-question-circle text-danger"></i> Help</a>
 	@if (Route::currentRouteName() == 'assignments.edit')
 	<a href="{{ route('submissions.index', ['assignment_id' => $assignment->id, 'problem_id' => 'all', 'user_id' =>'all', 'choose' => 'all']) }}"> <i class="fa fa-list color2"></i> Submissions list</a>
 	@endif

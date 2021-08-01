@@ -20,10 +20,10 @@
 @section('title_menu')
 
 @if($problem->has_pdf)
-	<span class="title_menu_item"><a href="{{ route('problems.pdf',$problem->id) }}"><i class="fas fa-file-pdf color1"></i> PDF</a></span>
+	<span class="title_menu_item"><a href="{{ route('problems.pdf',$problem->id) }}"><i class="fas fa-file-pdf text-danger"></i> PDF</a></span>
 @endif
 @if ($problem->has_template)
-	<span class="title_menu_item"><a href="{{ route('problems.template', ['problem_id' => $problem->id, 'assignment_id' => ($all_problems != NULL ? $assignment->id : 'null')] ) }}"><i class="fa fa-download color1"></i> Download the code template</a></span>
+	<span class="title_menu_item"><a href="{{ route('problems.template', ['problem_id' => $problem->id, 'assignment_id' => ($all_problems != NULL ? $assignment->id : 'null')] ) }}"><i class="fa fa-download text-danger"></i> Download the code template</a></span>
 @endif
 @if (in_array( Auth::user()->role->name, ['admin', 'head_instructor']))
 	<span class="title_menu_item ms-auto"><a href="#" class="btn btn-info save-button"><i class="fa fa-floppy-o "></i> Save</a></span>
@@ -134,7 +134,7 @@
 		@if ($can_submit)
 		<div class="problems_widget ">
 
-			<span><i class="fa fa-upload fa-lg color11"></i> Submit</span>
+			<span><i class="fa fa-upload fa-lg text-success"></i> Submit</span>
 			
 			<form action="{{ route('submissions.store') }}" method="POST" enctype="multipart/form-data" class="row g-2 align-items-end">
 			@csrf

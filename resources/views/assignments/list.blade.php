@@ -17,9 +17,9 @@
 @section('title_menu')
 <small><nav class="nav nav-pills">
 	<a class="nav-link" href="{{ route('assignments.create') }}"><i class="fa fa-plus color8"></i> Add</a>
-	<a class="nav-link active" href="{{ route('assignments.index') }}"><i class="far fa-star color1"></i>Assingments setting</a>
-	<a class="nav-link" href="{{ route('assignments.score_accepted') }}"><i class="far fa-star color1"></i>Assignments score accepted</a>
-	<a class="nav-link" href="{{ route('assignments.score_sum') }}"><i class="far fa-star color1"></i>Assignments score olp</a>
+	<a class="nav-link active" href="{{ route('assignments.index') }}"><i class="far fa-star text-danger"></i>Assingments setting</a>
+	<a class="nav-link" href="{{ route('assignments.score_accepted') }}"><i class="far fa-star text-danger"></i>Assignments score accepted</a>
+	<a class="nav-link" href="{{ route('assignments.score_sum') }}"><i class="far fa-star text-danger"></i>Assignments score olp</a>
 </nav></small>
 @endsection
 @endif
@@ -115,16 +115,15 @@
 			</td>
 			@if (!in_array( Auth::user()->role->name, ['student']))
 			<td>
-				<div class="custom-control custom-switch">
-					<input id="ass{{$assignment->id}}" class="custom-control-input"  type="checkbox" value="{{$assignment->open}}" {{$assignment->open ? 'checked' : ''}} />
-					<label for="ass{{$assignment->id}}" class="custom-control-label"></label>
+				<div class="form-check form-switch">
+					<input id="ass{{$assignment->id}}" class="form-check-input"  type="checkbox" value="{{$assignment->open}}" {{$assignment->open ? 'checked' : ''}} />
 				</div>
 			</td>
 			<td>
-				<a href="{{ route('assignments.duplicate', $assignment->id) }}" title="Duplicate assignment" ><i title="Duplicate assignment" class="far fa-copy fa-lg color1"></i></a>
-				<a href="{{ route('submissions.rejudge_view', $assignment->id) }}"><i title="Rejudge submissions" class="fa fa-retweet fa-lg color11"></i></a>
+				<a href="{{ route('assignments.duplicate', $assignment->id) }}" title="Duplicate assignment" ><i title="Duplicate assignment" class="far fa-copy fa-lg text-danger"></i></a>
+				<a href="{{ route('submissions.rejudge_view', $assignment->id) }}"><i title="Rejudge submissions" class="fa fa-retweet fa-lg text-success"></i></a>
 				<a title="Edit" href="{{ route('assignments.edit', $assignment) }}"><i class="fas fa-edit fa-lg color9"></i></a>
-				<span title="Delete Assignment" class="del_n delete_Assignment pointer"><i title="Delete Assignment" class="far fa-trash-alt fa-lg color1"></i></span>
+				<span title="Delete Assignment" class="del_n delete_Assignment pointer"><i title="Delete Assignment" class="far fa-trash-alt fa-lg text-danger"></i></span>
 				
 				<a href="#extra_action_{{$assignment->id}}" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="#extra_action_{{$assignment->id}}" ><i class="fas fa-ellipsis-v text-info m-2"></i></i></a>
 				<div class="collapse" id="extra_action_{{$assignment->id}}">
@@ -132,7 +131,7 @@
 					<a href="{{ route('assignments.download_submissions', ['type'=>'by_problem', 'assignment_id'=>$assignment->id]) }}"><i title="Download Final Submissions (by problem)" class="fa fa-download fa-lg color2"></i></a>
 					<a href="{{ route('assignments.download_all_submissions', $assignment->id) }}"><i title="Download all submissions" class="fas fa-cloud-download-alt"></i></a>
 					<a href="{{ route('moss.index', $assignment->id) }}"><i title="Detect Similar Codes" class="fa fa-user-secret fa-lg color7"></i></a>
-					<a href="{{ route('assignments.reload_scoreboard', $assignment->id) }}"><i title="Force reload scoreboard" class="fa fa-redo fa-lg color11"></i></a>
+					<a href="{{ route('assignments.reload_scoreboard', $assignment->id) }}"><i title="Force reload scoreboard" class="fa fa-redo fa-lg text-success"></i></a>
 				</div>
 			</td>
 			@endif
