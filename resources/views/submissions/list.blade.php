@@ -77,7 +77,7 @@
 	</div>
 
 </div>
-<div class="row row-cols-auto">
+<div class="row ">
 	<div class="table-responsive">
 		<table class=" text-center table-responsive table table-bordered {{$choose == 'all' ? 'table-striped' : 'data-table'}}">
 			<thead class="thead-old table-dark">
