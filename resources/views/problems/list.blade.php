@@ -9,9 +9,9 @@
 
 @section('title_menu')
 {{-- {% if user.level >= 2 %} --}}
-<span class="title_menu_item"><a href="{{ route('problems.create') }}"><i class="fas fa-plus fa-lg color8"></i> Add</a></span>
-<span class="title_menu_item"><a href="{{ route('submissions.index',[0, Auth::user()->id, 'all', 'all'] ) }}"><i class="fas fa-list-ul fa-lg color8"></i>Review test submissions for problems</a></span>
-{{-- <span class="title_menu_item"><a href="{{ url('problems/download_all') }}"><i class="fas fa-download fa-lg color8"></i>Download all problem's test and description</a></span> --}}
+<a href="{{ route('problems.create') }}"><span class="ms-4 fs-6 text-dark"><i class="fas fa-plus fa-lg color8"></i> Add</span></a>
+<a href="{{ route('submissions.index',[0, Auth::user()->id, 'all', 'all'] ) }}"><span class="ms-4 fs-6 text-dark"><i class="fas fa-list-ul fa-lg color8"></i>Review test submissions for problems</span></a>
+{{-- <span class="ms-4 fs-6"><a href="{{ url('problems/download_all') }}"><i class="fas fa-download fa-lg color8"></i>Download all problem's test and description</a></span> --}}
 @endsection
 
 @section('content')
@@ -60,7 +60,7 @@
 			<td>
 				<span data-bs-toggle="tooltip"  
 					@if($item->sharable) class="text-success"  title="publicly shared problem"
-					@else class="text-secondary" title="Private problem"
+					@else class="text-black-50" title="Private problem"
 					@endif
 				>
 					{{$item->user->username ?? 'no-owner'}}
@@ -107,7 +107,7 @@
 					@if( $item->allow_practice)
 						text-success
 					@else
-						text-secondary
+						text-black-50
 					@endif
 				"  data-bs-toggle="tooltip" data-id='{{$item->id}}'  title='This problem is available for practice'>
 				</i>
@@ -216,12 +216,12 @@
 					console.log(response);
 					console.log(icon);
 					icon.classList.remove('text-success');
-					icon.classList.remove('text-secondary');
+					icon.classList.remove('text-black-50');
 					if (response == '1') {
 						icon.classList.add('text-success');
 					}
 					else if (response == ''){
-						icon.classList.add('text-secondary');
+						icon.classList.add('text-black-50');
 					}
 					else
 						shj.loading_failed(response.message);

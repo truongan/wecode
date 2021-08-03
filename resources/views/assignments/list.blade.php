@@ -107,7 +107,7 @@
 					@if ($assignment->score_board)
 						View<i class="fas fa-external-link-alt"></i>
 					@elseif (!in_array( Auth::user()->role->name, ['student']))
-						<span class="text-secondary">View<i class="fas fa-external-link-alt "></i></span>
+						<span class="text-black-50">View<i class="fas fa-external-link-alt "></i></span>
 					@endif
 				</a>
 				<br/>

@@ -24,10 +24,10 @@
 @endsection
 @section('title_menu')
 @if ($user_id != 'all' and !in_array( Auth::user()->role->name, ['student'])) 
-		<span class="title_menu_item"><a href="{{route('submissions.index', [$assignment->id, 'all', $problem_id, 'all'])}}">Remove filter user</a></span>
+		<span class="ms-4 fs-6"><a href="{{route('submissions.index', [$assignment->id, 'all', $problem_id, 'all'])}}">Remove filter user</a></span>
 @endif
 @if ($problem_id != 'all')
-	<span class="title_menu_item"><a href="{{route('submissions.index', [$assignment->id, $user_id, 'all', 'all'])}}">Remove filter problem</a></span>
+	<span class="ms-4 fs-6"><a href="{{route('submissions.index', [$assignment->id, $user_id, 'all', 'all'])}}">Remove filter problem</a></span>
 @endif
 @endsection
 @section('body_end')

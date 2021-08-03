@@ -14,11 +14,9 @@
 
 
 @section('title_menu')
-<span class="title_menu_item">
-
-  
-  <a href="{{ route('users.index') }}"> <i class="fa fa-list color2"></i>List all users</a>
-
+<span class=" ms-4 fs-6 ">  
+  <a class=" link-dark" href="{{ route('users.edit', $user) }}"> <i class="fa fa-user-edit color2"></i>Edit user profile</a>
+  <a class="link-dark" href="{{ route('users.index') }}"> <i class="fa fa-list color2"></i>List all users</a>
 </span>
 @endsection
 
@@ -76,32 +74,32 @@ Users - {{$user->username}}
 @endsection
 
 @section('content')
-<div class=" form-inline">
-  <div class="form-group">
-    <label for="form_username">Username:	</label>
-    <div class="col-8">
-      <input id="form_username" type="text" name="username" class="form-control" value="{{$user->username}}"  disabled/>
-    </div>
+<div class="row mb-3">
+  <div class="col-3 mb-3">
+      <div class="input-group ">
+          <span class="input-group-text" for="form_username">Username: </span>
+          <input id="form_username" type="text" name="username" class="form-control" value="{{$user->username}}" disabled />
+      </div>
   </div>
-  <div class="form-group">
-    <label for="form_name">Name:</label>
-    <div class="col-8">
-      <input id="form_name" type="text" name="display_name" class="form-control" value="{{$user->display_name}}" disabled/>
-    </div>
+  <div class="col-3">
+      <div class="input-group ">
+          <span class="input-group-text" for="form_name">Name:</span>
+          <input id="form_name" type="text" name="display_name" class="form-control" value="{{$user->display_name}}" disabled />
+      </div>
   </div>
-  <div class="form-group">
-    <label for="form_email">Email:</label>
-      <div class="col-8">
-      <input id="form_email" type="text" name="email" class="form-control" value="{{$user->email}}" disabled/>
-    </div>
-  </div>  
-  <div class="form-group">
-    <label for="form_role">Role:</label>
-    <div class="col-8">
-      <input id="form_name" type="text" name="display_name" class="form-control" value="{{$user->role->name}}" disabled/>
-    </div>
+  <div class="col-3">
+      <div class="input-group ">
+          <span class="input-group-text" for="form_email">Email:</span>
+          <input id="form_email" type="text" name="email" class="form-control" value="{{$user->email}}" disabled />
+      </div>
   </div>
-
+  <div class="col-3">
+      <div class="input-group ">
+          <span class="input-group-text" for="form_role">Role:</span>
+          <input id="form_name" type="text" name="display_name" class="form-control" value="{{$user->role->name}}"
+              disabled />
+      </div>
+  </div>
 </div>
 
 <table class=" table table-striped table-bordered table-sm">

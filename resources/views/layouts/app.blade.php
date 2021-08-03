@@ -26,13 +26,13 @@
 
     <div class="content-wrapper"><div class="container-fluid">
         <div class="row">
-            <div id="page_title" class=" border shadow bg-light text-dark container-fluid py-3 mb-0 col-12 align-items-center d-flex">
+            <div id="page_title" class="fs-5 border shadow bg-light text-dark container-fluid py-3 mb-0 col-12 align-items-center d-flex">
                 <i class="@yield('icon') fa-fw fa-lg"></i>
                 <span>@yield('title')</span>
                 @yield('title_menu')
             </div>
         </div>
-        <div id="main_content" > 
+        <div id="main_content" class="px-2 pt-3" > 
             @yield('content')
         </div>
     </div>

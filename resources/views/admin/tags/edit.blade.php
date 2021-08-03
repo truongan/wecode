@@ -6,7 +6,7 @@
 @section('title', 'Edit Tags')
 
 @section('title_menu')
-	<span class="title_menu_item"><a href="{{ route('tags.index') }}"><i class="fa fa-list text-success"></i>Back to list of tag</a></span>
+	<span class="ms-4 fs-6"><a href="{{ route('tags.index') }}"><i class="fa fa-list text-success"></i>Back to list of tag</a></span>
 @endsection
 
 @section('content')
