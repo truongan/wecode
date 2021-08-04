@@ -258,15 +258,21 @@ class submission_controller extends Controller
 	{
 		if (in_array( Auth::user()->role->name, ['student']))
 			abort(403,"You don't have permission to do that");
-		if (Auth::user()->selected_assignment_id != null)
-			$assignment = Assignment::with('problems')->find(Auth::user()->selected_assignment_id);
-		else
-			$assignment = Assignment::with('problems')->find(0);
+		if ($request->assignment_id != null)
+			$assignment = Assignment::with('problems')->find($request->assignment_id);
+		else {
+			abort(404, 'Need assignment to do rejudge all');
+		}
+			
 
 		if ($request->problem_id == 'all')
 			$submissions = Submission::where('assignment_id',$assignment->id)->get();
 		else
 			$submissions = Submission::where('assignment_id',$assignment->id)->where('problem_id', $request->problem_id)->get();
+		
+		if ($submissions->count() == 0){
+			abort(404, 'invalid assignment_id and problem_id combo');
+		}
 		foreach ($submissions as $submission)
 		{
 			$a = Queue_item::add_not_process($submission->id, 'rejudge');
@@ -277,7 +283,7 @@ class submission_controller extends Controller
 		for ($i=0; $i < Setting::get('concurent_queue_process', 2); $i++) { 
 			Queue_item::work();
 		}
-		return redirect()->back()->with('success', 'Rejudge in progress');   
+		return redirect()->back()->with('status', 'Rejudge in progress');   
 	}
 
 	public function rejudge(Request $request){

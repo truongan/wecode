@@ -26,16 +26,15 @@
 		<form action="{{ route('submissions.rejudge_all_problems_assignment') }}" method="POST">
 		@csrf
 			<input type="hidden" name="problem_id" value="{{ $problem->id }}"/>
+			<input type="hidden" name="assignment_id" value="{{ $assignment->id }}"/>
 			<input type="submit" class="btn btn-primary m-1" value="Rejudge Problem {{ $problem->id }} ({{ $problem->pivot->problem_name }})"/>
 		</form>
 	@endforeach
 
-	@if (\Session::has('success'))
-	    <div class="alert alert alert-success fade show" role="alert">
-		  	<strong>Success!</strong> {!! \Session::get('success') !!}.
-		  	<button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
-		    	<span aria-hidden="true">&times;</span>
-		  	</button>
+	@if (\Session::has('status'))
+	    <div class="alert alert-info fade show" role="alert">
+		  	{!! \Session::get('status') !!}.
+		  	<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 		</div>
 	@endif
 	
