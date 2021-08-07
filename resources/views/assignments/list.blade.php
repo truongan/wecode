@@ -100,8 +100,8 @@
 				@endif
 				</small>
 			</td>
-			<td><small>{{$assignment->start_time->setTimezone($settings['timezone'])->locale('en')->isoFormat('llll (UZZ)') }}</small></td>
-			<td><small>{{$assignment->finish_time->setTimezone($settings['timezone'])->locale('en')->isoFormat('llll (UZZ)') }}</small></td>
+			<td><small>{{$assignment->start_time->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('llll (UZZ)') }}</small></td>
+			<td><small>{{$assignment->finish_time->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('llll (UZZ)') }}</small></td>
 			<td>
 				<a href="{{ route('scoreboards.index', $assignment->id)}}" title="Click to viewa assignment's scoreboard">
 					@if ($assignment->score_board)

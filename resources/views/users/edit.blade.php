@@ -7,6 +7,13 @@
 Users - {{$user->username}}
 @endsection
 
+@section('title_menu')
+
+  <a class=" ms-4 fs-6 link-dark" href="{{ route('users.show', $user) }}"> <i class="fa fa-user-edit color2"></i>View user profile</a>
+  <a class="ms-2 fs-6 link-dark" href="{{ route('users.index') }}"> <i class="fa fa-list color2"></i>List all users</a>
+
+@endsection
+
 @section('content')
 @if ($errors->any())
 	<div class="alert alert-danger">

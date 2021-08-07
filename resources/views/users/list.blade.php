@@ -38,8 +38,8 @@ thead tr:after {
 @section('title_menu')
   {{-- <span class="ms-4 fs-6"><a href="https://github.com/truongan/wecode-judge/blob/docs/v1.4/users.md" target="_blank"><i class="fa fa-question-circle color6"></i> Help</a></span> --}}
   
-  <span class="ms-4 fs-6"><a href="{{ url('users/add_multiple') }}"><i class="fa fa-user-plus text-success"></i> Add Users</a></span>
-  <span class="ms-4 fs-6"><a href="{{ 'mailto:' .  App\User::pluck('email')->join(',') }}"><i class="fas fa-mail-bulk    "></i> Email all users</a></span>
+  <a class="ms-4 fs-6 link-dark" href="{{ url('users/add_multiple') }}"><i class="fa fa-user-plus text-success"></i> Add Users</a>
+  <a class="ms-4 fs-6 link-dark" href="{{ 'mailto:' .  App\User::pluck('email')->join(',') }}"><i class="fas fa-mail-bulk    "></i> Email all users</a>
 	{{-- <span class="ms-4 fs-6"><a href="{{ url('users/list_excel') }}"><i class="fa fa-download color9"></i> Excel</a></span> --}}
 @endsection
 
@@ -69,10 +69,10 @@ thead tr:after {
         <td>{{$user->email}}<br/>{{$user->role->name}}</td>
         <td>{{ $user->trial_time ? ($user->created_at->addHours($user->trial_time)->diffForHumans()) : "Permanent user" }}</td>
         <td>
-          <small>{{ $user->first_login_time ? $user->first_login_time->setTimezone($settings['timezone'])->locale('en')->isoFormat('llll (UZZ)') : 'Never'}}</small>
+          <small>{{ $user->first_login_time ? $user->first_login_time->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('lll') : 'Never'}}</small>
         </td>
         <td>
-          <small>{{ $user->last_login_time ? $user->last_login_time->setTimezone($settings['timezone'])->locale('en')->isoFormat('llll (UZZ)') : 'Never'}} </small>
+          <small>{{ $user->last_login_time ? $user->last_login_time->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('lll') : 'Never'}} </small>
         </td>
         <td>
           <a title="Profile" href="{{ route('users.show', $user) }}" class = "fas fa-address-book fa-lg color0"></a>

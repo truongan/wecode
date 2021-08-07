@@ -144,7 +144,7 @@
 					<a href="{{route('submissions.create', [$assignment->id,$submission->problem_id,$submission->id])}}"><span class="btn btn-dark btn-sm"><i class="fas fa-edit"></i></span></a>
 					<a href="{{route('submissions.index', [$assignment->id, $user_id, strval($submission->problem_id), 'all'])}}"><span class="btn btn-info btn-sm m-1"><i class="fas fa-filter"></i></span></a>
 				</td>
-				<td><small>{{$submission->created_at->setTimezone($settings['timezone'])->locale('en')->isoFormat('llll (UZZ)') }}</small></td>
+				<td><small>{{$submission->created_at->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('llll (UZZ)') }}</small></td>
 
 				<td>
 					<span class="small {{ $submission->delay->total('seconds') > 0 ? 'text-danger' :'text-secondary' }} ">
