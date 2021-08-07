@@ -15,22 +15,20 @@
 @endsection
 @if (!in_array( Auth::user()->role->name, ['student']))
 @section('title_menu')
-<small><nav class="nav nav-pills">
-	<a class="nav-link" href="{{ route('assignments.create') }}"><i class="fa fa-plus color8"></i> Add</a>
-	<a class="nav-link active" href="{{ route('assignments.index') }}"><i class="far fa-star text-danger"></i>Assingments setting</a>
-	<a class="nav-link" href="{{ route('assignments.score_accepted') }}"><i class="far fa-star text-danger"></i>Assignments score accepted</a>
-	<a class="nav-link" href="{{ route('assignments.score_sum') }}"><i class="far fa-star text-danger"></i>Assignments score olp</a>
-</nav></small>
+<nav class=" ms-3 fs-6 nav nav-pills">
+	<a class="nav-link link-dark" href="{{ route('assignments.create') }}"><i class="fa fa-plus color8"></i> Add</a>
+	<a class="nav-link link-dark active" href="{{ route('assignments.index') }}"><i class="far fa-star text-danger"></i>Assingments setting</a>
+</nav>
 @endsection
 @endif
 @section('content')
 @if (\Session::has('success'))
-	    <div class="alert alert-success alert-dismissible fade show" role="alert">
-		  	<strong>Success!</strong> {!! \Session::get('success') !!}.
-			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+	<div class="alert alert-success alert-dismissible fade show" role="alert">
+		<strong>Success!</strong> {!! \Session::get('success') !!}.
+		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 
-		</div>
-	@endif
+	</div>
+@endif
 <div class="row">
 	<table class="wecode_table table table-striped table-bordered">
 		<thead class="thead-old table-dark">
