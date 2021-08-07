@@ -14,10 +14,10 @@
 
 
 @section('title_menu')
-<span class=" ms-4 fs-6 ">  
-  <a class=" link-dark" href="{{ route('users.edit', $user) }}"> <i class="fa fa-user-edit color2"></i>Edit user profile</a>
-  <a class="link-dark" href="{{ route('users.index') }}"> <i class="fa fa-list color2"></i>List all users</a>
-</span>
+
+  <a class=" ms-4 fs-6 link-dark" href="{{ route('users.edit', $user) }}"> <i class="fa fa-user-edit color2"></i>Edit user profile</a>
+  <a class="ms-2 fs-6 link-dark" href="{{ route('users.index') }}"> <i class="fa fa-list color2"></i>List all users</a>
+
 @endsection
 
 @section('body_end')
@@ -75,31 +75,47 @@ Users - {{$user->username}}
 
 @section('content')
 <div class="row mb-3">
-  <div class="col-3 mb-3">
-      <div class="input-group ">
-          <span class="input-group-text" for="form_username">Username: </span>
-          <input id="form_username" type="text" name="username" class="form-control" value="{{$user->username}}" disabled />
-      </div>
-  </div>
-  <div class="col-3">
-      <div class="input-group ">
-          <span class="input-group-text" for="form_name">Name:</span>
-          <input id="form_name" type="text" name="display_name" class="form-control" value="{{$user->display_name}}" disabled />
-      </div>
-  </div>
-  <div class="col-3">
-      <div class="input-group ">
-          <span class="input-group-text" for="form_email">Email:</span>
-          <input id="form_email" type="text" name="email" class="form-control" value="{{$user->email}}" disabled />
-      </div>
-  </div>
-  <div class="col-3">
-      <div class="input-group ">
-          <span class="input-group-text" for="form_role">Role:</span>
-          <input id="form_name" type="text" name="display_name" class="form-control" value="{{$user->role->name}}"
-              disabled />
-      </div>
-  </div>
+	<div class="col-4 mb-3">
+		<div class="input-group ">
+			<span class="input-group-text" for="form_username">Username: </span>
+			<input id="form_username" type="text" name="username" class="form-control" value="{{$user->username}}"
+				disabled />
+		</div>
+	</div>
+	<div class="col-4">
+		<div class="input-group ">
+			<span class="input-group-text" for="form_name">Name:</span>
+			<input id="form_name" type="text" name="display_name" class="form-control" value="{{$user->display_name}}"
+				disabled />
+		</div>
+	</div>
+	<div class="col-4">
+		<div class="input-group ">
+			<span class="input-group-text" for="form_email">Email:</span>
+			<input id="form_email" type="text" name="email" class="form-control" value="{{$user->email}}" disabled />
+		</div>
+	</div>
+	<div class="col-4">
+		<div class="input-group ">
+			<span class="input-group-text" for="form_role">Role:</span>
+			<input id="form_name" type="text" name="display_name" class="form-control" value="{{$user->role->name}}"
+				disabled />
+		</div>
+	</div>
+	<div class="col-4">
+		<div class="input-group ">
+			<span class="input-group-text" for="form_role">Trial left</span>
+			<input id="form_name" type="text" name="display_name" class="form-control" value="{{ $user->trial_time ? ($user->created_at->addHours($user->trial_time)->diffForHumans()) : "Permanent user" }}"
+				disabled />
+		</div>
+	</div>
+	<div class="col-4">
+		<div class="input-group ">
+			<span class="input-group-text" for="form_role">First login</span>
+			<input id="form_name" type="text" name="display_name" class="form-control" value="{{ $user->first_login_time ? $user->first_login_time->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('llll (UZZ)') : 'Never'}}"
+				disabled />
+		</div>
+	</div>
 </div>
 
 <table class=" table table-striped table-bordered table-sm">
