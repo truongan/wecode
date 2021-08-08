@@ -11,10 +11,10 @@ Users - ranking
 @endsection
 @section('content')
 
-<form class="form-inline">
-	<div class="form-group">
+<form >
+	<div class="form-floating">
+		<textarea name="names" id="names" class="form-control" style="height:8em;" placeholder="Paste username list here" aria-describedby="help_names" value="">{{ Request::get('names') }}</textarea>
 		<label for="names">Username lists</label>
-		<textarea name="names" id="names" class="form-control" placeholder="Paste username list here" aria-describedby="help_names">{{ Request::get('names') }}</textarea>
 		<small id="help_names" class="text-muted">A list of usernames, sperarated by white space to see ranking among them</small>
 	</div>
 	<button type="submit" class="btn btn-primary">Submit</button>

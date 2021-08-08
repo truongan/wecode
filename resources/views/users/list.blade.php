@@ -40,6 +40,7 @@ thead tr:after {
   
   <a class="ms-4 fs-6 link-dark" href="{{ url('users/add_multiple') }}"><i class="fa fa-user-plus text-success"></i> Add Users</a>
   <a class="ms-4 fs-6 link-dark" href="{{ 'mailto:' .  App\User::pluck('email')->join(',') }}"><i class="fas fa-mail-bulk    "></i> Email all users</a>
+  <a class="ms-4 fs-6 link-dark" href="{{route('users.set_trial') }}"><i class="fas fa-highlighter    "></i>Update multiple users trial time</a>
 	{{-- <span class="ms-4 fs-6"><a href="{{ url('users/list_excel') }}"><i class="fa fa-download color9"></i> Excel</a></span> --}}
 @endsection
 

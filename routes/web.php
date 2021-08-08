@@ -35,6 +35,8 @@ Route::post('/users/adds', 'UserController@add')->name('users.add');
 Route::post('/users/delete_submissions/{user}', 'UserController@delete_submissions')->name('users.delete_submissions');
 Route::delete('users/{id}', 'UserController@destroy')->name('users.destroy');
 Route::get('users/ranking', 'UserController@rank')->name('users.rank');
+Route::view('users/set_trial', 'users.set_trial')->name('users.set_trial')->middleware('auth');
+Route::post('users/set_trial', 'UserController@set_trial')->name('users.set_trial_post');
 
 Route::get('/problems/downloadtestsdesc/{id}', 'problem_controller@downloadtestsdesc')->name('problems.downloadtestsdesc');
 Route::get('/problems/downloadpdf/{id}', 'problem_controller@pdf')->name('problems.pdf');

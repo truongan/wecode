@@ -7,7 +7,7 @@
 
 @section('title_menu')
 @if ( in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
-    <span class="ms-4 fs-6"><a href="{{ route('lops.create') }}"><i class="fa fa-plus text-success"></i>Add class</a></span>
+    <a class="link-dark ms-3 fs-6" href="{{ route('lops.create') }}"><i class="fa fa-plus text-success"></i>Add class</a>
 @endif
 @endsection
 

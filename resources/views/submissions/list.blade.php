@@ -20,14 +20,14 @@
 	fas {{$choose =='all' ? 'fa-bars' : 'fa-map-marker'}}
 @endsection
 @section('title')
-	{{$choose =='all' ? 'All submissions' : 'Final submissions'}}  for <a href=" @if($assignment->id !=0) {{ route('assignments.edit', $assignment)  }} @else # @endif "> {{$assignment->name}} </a>
+	{{$choose =='all' ? 'All submissions' : 'Final submissions'}}  for <a class="link-dark" href=" @if($assignment->id !=0) {{ route('assignments.edit', $assignment)  }} @else # @endif "> {{$assignment->name}} </a>
 @endsection
 @section('title_menu')
 @if ($user_id != 'all' and !in_array( Auth::user()->role->name, ['student'])) 
-		<span class="ms-4 fs-6"><a href="{{route('submissions.index', [$assignment->id, 'all', $problem_id, 'all'])}}">Remove filter user</a></span>
+		<a class="ms-4 fs-6 link-dark" href="{{route('submissions.index', [$assignment->id, 'all', $problem_id, 'all'])}}">Remove filter user</a>
 @endif
 @if ($problem_id != 'all')
-	<span class="ms-4 fs-6"><a href="{{route('submissions.index', [$assignment->id, $user_id, 'all', 'all'])}}">Remove filter problem</a></span>
+	<a class="ms-4 fs-6 link-dark" href="{{route('submissions.index', [$assignment->id, $user_id, 'all', 'all'])}}">Remove filter problem</a>
 @endif
 @endsection
 @section('body_end')
