@@ -1,17 +1,12 @@
 <nav id="mainNav" class="mainNav navbar navbar-expand-lg navbar-dark fixed-top color-{{ $selected }} bg-dark ">
-    <div  class="navbar-brand">
-        <a href="{{ route('home') }}">
-            <img src="{{ asset('images/logo.png') }}" height="30px" />
-        </a>
-        {{ $settings['site_name'] }}
-    </div>
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
     </button>
 
+    <a  class="navbar-brand" href="{{ route('home') }}" class="link-none"><img src="{{ asset('images/logo.png') }}" height="30px" />{{ $settings['site_name'] }}</a>
     <div class="collapse navbar-collapse" id="navbarCollapse">
-        <ul class="navbar-nav navbar p-0 border-bottom-0 border-start-0 border-end-0 bg-dark navbar-dark navbar-sidenav color-{{ $selected }}" id="exampleAccordion">
+        <ul class="navbar-nav navbar p-0 border-bottom-0 border-start-0 border-end-0 bg-dark navbar-dark navbar-sidenav color-{{ $selected }} align-items-start" id="exampleAccordion">
             <li class="nav-item color-dashboard {{ ($selected=="dashboard") ? "selected" : ""}}">
             <a class="nav-link" href="{{ url('home') }}">
                 <i class="fa fa-fw fa-tachometer-alt fa-lg"></i>
