@@ -65,7 +65,9 @@
 	<p>Scoreboard is disabled.</p>
 	@else
 		<p>Scoreboard of <span> {{ $assignment->name }}</span></p>
-		{!! $scoreboard !!}
+		<div class="table-responsive">
+			{!! $scoreboard !!}
+		</div>
 		<span class="text-danger">*: Not full mark</span>
 		<br/>
 		<span class="text-info">Number of tries - Submit time</span>
