@@ -45,6 +45,7 @@ thead tr:after {
 @endsection
 
 @section('content')
+<a name="" id="copy_user_list" class="btn btn-primary my-2" href="#" role="button"><i class="fas fa-copy    "></i> copy user name list</a>
 <div class="row">
   <div class="table-responsive">
     <table class="table table-striped table-bordered">
@@ -118,6 +119,17 @@ thead tr:after {
 
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.10.25/datatables.min.js"></script>
 <script>
+document.getElementById('copy_user_list').addEventListener('click', function(){
+  cells = document.querySelectorAll('tr > #un');
+  window.getSelection().removeAllRanges();
+  for(cell of cells){
+    x = new Range();
+    x.setStart(cell, 0);
+    x.setEnd(cell, 1);
+    window.getSelection().addRange(x);
+  }
+  document.execCommand("copy");
+});
 /**
  * "Users" page
  */
