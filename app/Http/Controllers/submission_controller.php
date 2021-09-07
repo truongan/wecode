@@ -20,6 +20,8 @@ class submission_controller extends Controller
 	public function __construct()
 	{
 		$this->middleware('auth'); // phải login
+
+
 	}
 
 	private function _do_access_check($submission){

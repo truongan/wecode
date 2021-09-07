@@ -133,10 +133,11 @@ class LoginController extends Controller
             $user = Auth::user();
 
             if ($user->trial_time
-                && $user->created_at->addHours($user->trial_time) >= Carbon::now()
+                && $user->created_at->addHours($user->trial_time) <=  Carbon\Carbon::now()
             ){
                 $user->role_id = 5; //Hopefully 5 mean guest.
             }
+
             if ($user->first_login_time == NULL) $user->first_login_time = now();
             else $user->last_login_time=now();
         
@@ -156,5 +157,8 @@ class LoginController extends Controller
         Auth::logout();
         return redirect()->route('login');
     }
-    
+    public function authenticated(Request $request, $user) {
+
+
+    }
 }
