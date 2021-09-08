@@ -23,7 +23,7 @@
 	{{$choose =='all' ? 'All submissions' : 'Final submissions'}}  for <a class="link-dark" href=" @if($assignment->id !=0) {{ route('assignments.edit', $assignment)  }} @else # @endif "> {{$assignment->name}} </a>
 @endsection
 @section('title_menu')
-@if ($user_id != 'all' and !in_array( Auth::user()->role->name, ['student'])) 
+@if ($user_id != 'all' and !in_array( Auth::user()->role->name, ['student', 'guest'])) 
 		<a class="ms-4 fs-6 link-dark" href="{{route('submissions.index', [$assignment->id, 'all', $problem_id, 'all'])}}">Remove filter user</a>
 @endif
 @if ($problem_id != 'all')
@@ -89,7 +89,7 @@
 						<th width="1%" rowspan="1">#</th>
 					@endif
 						<th width="2%" rowspan="1"><small> Submit ID</small></th>
-					@if (in_array( Auth::user()->role->name, ['student']))
+					@if (in_array( Auth::user()->role->name, ['student', 'guest']))
 						<th width="15%"><small> Problem</small></th>
 						<th width="10%"><small> Submit Time</small></th>
 						<th width="10%"><small> Delay (%)</small></th>
@@ -122,7 +122,7 @@
 					<td>{{$loop->iteration}} </td>
 				@endif
 				<td>{{$submission->id}}</td>
-				@if (!in_array( Auth::user()->role->name, ['student']))
+				@if (!in_array( Auth::user()->role->name, ['student', 'guest']))
 				<td>
 					<a href="{{route('submissions.index', [$assignment->id, strval($submission->user_id), $problem_id, 'all'])}}">
 						{{$submission->user->username}}
@@ -174,7 +174,7 @@
 					<div class="btn btn-warning" data-type="code">Code</div>
 				</td>
 
-				@if (!in_array( Auth::user()->role->name, ['student']))
+				@if (!in_array( Auth::user()->role->name, ['student', 'guest']))
 				<td>
 					<div class="btn btn-secondary" data-type="log">Log</div>
 					<div class="shj_rejudge pointer m-2"><i class="fa fa-redo fa-lg color10"></i></div>

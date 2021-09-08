@@ -13,7 +13,7 @@
 	}
 </script>
 @endsection
-@if (!in_array( Auth::user()->role->name, ['student']))
+@if (in_array( Auth::user()->role->name, ['admin',  'head_instructor', 'instructor']))
 @section('title_menu')
 <nav class=" ms-3 fs-6 nav nav-pills">
 	<a class="nav-link link-dark" href="{{ route('assignments.create') }}"><i class="fa fa-plus color8"></i> Add</a>
@@ -43,7 +43,7 @@
 				<th>Start</th>
 				<th>Finish</th>
 				<th><small>Score-board</small></th>
-				@if (!in_array( Auth::user()->role->name, ['student']))
+				@if (!in_array( Auth::user()->role->name, ['student', 'guest']))
 					<th><small>Open</small></th>
 					<th>Action</th>
 				@endif
@@ -75,7 +75,7 @@
 			</td>
 			<td>
 				<a href="
-					@if ( in_array( Auth::user()->role->name, ['student']) )
+					@if ( in_array( Auth::user()->role->name, ['student', 'guest']) )
 						 {{ route('submissions.index', [$assignment->id, Auth::user()->id, 'all', 'all'])}}
 					@else
 						{{ route('submissions.index', [$assignment->id, 'all', 'all', 'all'])}}
@@ -104,14 +104,14 @@
 				<a href="{{ route('scoreboards.index', $assignment->id)}}" title="Click to viewa assignment's scoreboard">
 					@if ($assignment->score_board)
 						View<i class="fas fa-external-link-alt"></i>
-					@elseif (!in_array( Auth::user()->role->name, ['student']))
+					@elseif (!in_array( Auth::user()->role->name, ['student', 'guest']))
 						<span class="text-black-50">View<i class="fas fa-external-link-alt "></i></span>
 					@endif
 				</a>
 				<br/>
 				{{-- <a href="{{ url("assignments/pdf/$assignment->id") }}"><i class="far fa-lg fa-file-pdf"></i></a> --}}
 			</td>
-			@if (!in_array( Auth::user()->role->name, ['student']))
+			@if (!in_array( Auth::user()->role->name, ['student', 'guest']))
 			<td>
 				<div class="form-check form-switch">
 					<input id="ass{{$assignment->id}}" class="form-check-input"  type="checkbox" value="{{$assignment->open}}" {{$assignment->open ? 'checked' : ''}} />

@@ -8,7 +8,7 @@
 @section('other_assets')
 <link rel='stylesheet' type='text/css' href='https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap5.min.css'/>
 @endsection
-@if (!in_array( Auth::user()->role->name, ['student']))
+@if (!in_array( Auth::user()->role->name, ['student', 'guest']))
     @section('title_menu')
     <small><nav class="nav nav-pills">
         <a class="nav-link" href="{{ route('assignments.create') }}"><i class="fa fa-plus color8"></i> Add</a>

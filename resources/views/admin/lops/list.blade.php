@@ -32,7 +32,7 @@
         <td>{{$lop->id}} </td>
         <td>{{$lop->name}}</td>
         <td><i  class=" far {{ $lop->open ? 'fa-check-square color6' : 'fa-square' }} fa-2x"></i></td>
-        <td>{{$lop->users->filter(function($item){return $item->role->name != 'student';})->pluck('username')->join(', ') }}</td>
+        <td>{{$lop->users->filter(function($item){return in_array( $item->role->name, ['admin', 'head_instructor', 'instructor'];})->pluck('username')->join(', ') }}</td>
         <td>{{$lop->users()->count() }}</td>
         <td>{{$lop->assignments()->count() }}</td>
         <td>
