@@ -25,7 +25,7 @@ class submission_controller extends Controller
 	}
 
 	private function _do_access_check($submission){
-		if (in_array(Auth::user()->role->name, ['student'])){
+		if (in_array(Auth::user()->role->name, ['student', 'guest'])){
 			if ($submission->user_id!=Auth::user()->id)
 				abort(403,"You don't have permission to view another user's submissions");
 			if (!$submission->assignment->open)
@@ -37,7 +37,7 @@ class submission_controller extends Controller
 	private function _valid_creation_guard($assignment_id, $problem_id){
 		if ($assignment_id == 0){
 			$problem = Problem::find($problem_id);
-			if ($problem->allow_practice == 0 && in_array( Auth::user()->role->name, ['student']) ){
+			if ($problem->allow_practice == 0 && in_array( Auth::user()->role->name, ['student', 'guest']) ){
 				abort(404);
 			}
 		}
@@ -87,7 +87,7 @@ class submission_controller extends Controller
 		Auth::user()->save(); 
 
 		$submissions =$assignment->submissions();;
-		if ( in_array( Auth::user()->role->name, ['student']) )
+		if ( in_array( Auth::user()->role->name, ['student', 'guest']) )
 		{
 			//Student can only view their own submissions, regardless of assignment, so we don't check assignment permissions for student
 			$submissions = $submissions->where('user_id',Auth::user()->id);
@@ -120,7 +120,7 @@ class submission_controller extends Controller
 		
 		if ($assignment_id == 0){
 			$problem = Problem::find($problem_id);
-			if ($problem->allow_practice == 0 && in_array( Auth::user()->role->name, ['student']) ){
+			if ($problem->allow_practice == 0 && in_array( Auth::user()->role->name, ['student', 'guest']) ){
 				abort(404);
 			}
 		}
@@ -164,7 +164,7 @@ class submission_controller extends Controller
 
 		if ($request->assignment == 0){
 			$problem = Problem::find($request->problem);
-			if ($problem->allow_practice == 0 && in_array( Auth::user()->role->name, ['student']) ){
+			if ($problem->allow_practice == 0 && in_array( Auth::user()->role->name, ['student', 'guest']) ){
 				abort(404);
 			}
 		} else {
@@ -258,7 +258,7 @@ class submission_controller extends Controller
 
 	public function rejudge_all_problems_assignment(Request $request)
 	{
-		if (in_array( Auth::user()->role->name, ['student']))
+		if (!in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']))
 			abort(403,"You don't have permission to do that");
 		if ($request->assignment_id != null)
 			$assignment = Assignment::with('problems')->find($request->assignment_id);
@@ -289,7 +289,7 @@ class submission_controller extends Controller
 	}
 
 	public function rejudge(Request $request){
-		if (!in_array( Auth::user()->role->name, ['student'])){
+		if (!in_array( Auth::user()->role->name, ['student', 'guest'])){
 			$validated = $request->validate([
 				'submission_id' => ['integer'],
 			]);	

@@ -45,11 +45,13 @@ class Assignment extends Model
         //2021-09-08 : An's note: leave it here till i found somewhere better
         // dd('shit');
         if ($user->trial_time
+            && in_array( $user->role->name, ['student']) 
             && $user->created_at->addHours($user->trial_time) <=  Carbon::now()
         ){
             $user->role_id = 5; //Hopefully 5 mean guest.
             $user->save();
         }
+        
 
         if (in_array( $user->role->name, ['guest']) ){
             $result->error_message = ' Guest can not make submissions. Contact site admin to upgrade your account ';
