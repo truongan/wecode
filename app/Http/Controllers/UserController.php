@@ -429,7 +429,7 @@ class UserController extends Controller
 
 		$request->validate(['names'=>'required']);
 		$name_list = preg_split("/[\s,]+/",$request->get('names'));
-		$where_clause = User::whereIn('username', $name_list)->where(['role_id' => 4]);
+		$where_clause = User::whereIn('username', $name_list)->whereIn('role_id' => [4,5]);
 
 		// $request->validate(['names' => function ($attribute, $value, $fail) use($name_list) {
 
@@ -439,7 +439,7 @@ class UserController extends Controller
         // },]);
 
 		if ($request->get('set_choice') == 'new_time'){
-			$count = $where_clause->update(['trial_time' => $request->get('new_trial_time') ]);
+			$count = $where_clause->update(['trial_time' => $request->get('new_trial_time') , 'role_id' => 4]);
 		} else {
 			$zone = Carbon::now()->getTimezone();
 			// $request->validate(['new_trial_end_time' => 'required']);
@@ -447,7 +447,7 @@ class UserController extends Controller
 			$end_time =strval( (new Carbon($request->get('new_trial_end_time') . ' ' . Setting::get('timezone')))->setTimezone($zone) );
 
 			// dd($end_time);
-			$count = $where_clause->update(['trial_time' => DB::Raw(" TIMESTAMPDIFF(HOUR, `created_at`, '$end_time' )") ]  );
+			$count = $where_clause->update(['trial_time' => DB::Raw(" TIMESTAMPDIFF(HOUR, `created_at`, '$end_time' )") ,'role_id' => 4 ]  );
 		}
 		// dd($count);
 		return back()->with(['success' => $count ])->withInput()
