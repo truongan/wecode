@@ -429,7 +429,7 @@ class UserController extends Controller
 
 		$request->validate(['names'=>'required']);
 		$name_list = preg_split("/[\s,]+/",$request->get('names'));
-		$where_clause = User::whereIn('username', $name_list)->whereIn('role_id' => [4,5]);
+		$where_clause = User::whereIn('username', $name_list)->whereIn('role_id' , [4,5]);
 
 		// $request->validate(['names' => function ($attribute, $value, $fail) use($name_list) {
 
