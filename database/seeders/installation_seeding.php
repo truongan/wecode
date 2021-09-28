@@ -45,6 +45,7 @@ class installation_seeding extends Seeder
                 array('key' => 'theme',             'value' => 'default'),
                 ['key'=> 'concurent_queue_process', 'value'=> '2'],
                 ['key'=> 'default_language_number', 'value'=> '1'],
+                ['key'=> 'default_trial_time', 'value'=> '0'],
             )
         );
 

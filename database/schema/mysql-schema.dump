@@ -6,11 +6,11 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 DROP TABLE IF EXISTS `assignment_lop`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `assignment_lop` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `assignment_id` bigint(20) NOT NULL,
-  `lop_id` bigint(20) NOT NULL,
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `assignment_id` bigint NOT NULL,
+  `lop_id` bigint NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -19,47 +19,47 @@ CREATE TABLE `assignment_lop` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `assignment_problem`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `assignment_problem` (
-  `assignment_id` bigint(20) unsigned NOT NULL,
-  `problem_id` bigint(20) unsigned NOT NULL,
-  `score` int(11) NOT NULL,
-  `ordering` int(11) NOT NULL,
-  `problem_name` char(150) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `assignment_id` bigint unsigned NOT NULL,
+  `problem_id` bigint unsigned NOT NULL,
+  `score` int NOT NULL,
+  `ordering` int NOT NULL,
+  `problem_name` char(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `assignments`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `assignments` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `name` char(150) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `total_submits` int(10) unsigned NOT NULL DEFAULT '0',
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `name` char(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `total_submits` int unsigned NOT NULL DEFAULT '0',
   `open` tinyint(1) NOT NULL,
   `score_board` tinyint(1) NOT NULL,
   `start_time` datetime NOT NULL,
   `finish_time` datetime NOT NULL,
-  `extra_time` int(11) NOT NULL,
-  `late_rule` text COLLATE utf8mb4_unicode_ci,
-  `description` text COLLATE utf8mb4_unicode_ci,
-  `moss_update` char(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `extra_time` int NOT NULL,
+  `late_rule` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `moss_update` char(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `user_id` bigint(20) DEFAULT NULL,
+  `user_id` bigint DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `language_problem`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `language_problem` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `language_id` bigint(20) unsigned NOT NULL,
-  `problem_id` bigint(20) unsigned NOT NULL,
-  `time_limit` int(10) unsigned NOT NULL,
-  `memory_limit` int(10) unsigned NOT NULL,
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `language_id` bigint unsigned NOT NULL,
+  `problem_id` bigint unsigned NOT NULL,
+  `time_limit` int unsigned NOT NULL,
+  `memory_limit` int unsigned NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -67,14 +67,14 @@ CREATE TABLE `language_problem` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `languages`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `languages` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `name` char(45) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `extension` char(8) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `default_time_limit` int(10) unsigned NOT NULL,
-  `default_memory_limit` int(10) unsigned NOT NULL,
-  `sorting` int(10) unsigned NOT NULL,
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `name` char(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `extension` char(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `default_time_limit` int unsigned NOT NULL,
+  `default_memory_limit` int unsigned NOT NULL,
+  `sorting` int unsigned NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -82,11 +82,11 @@ CREATE TABLE `languages` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `lop_user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `lop_user` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `lop_id` bigint(20) NOT NULL,
-  `user_id` bigint(20) NOT NULL,
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `lop_id` bigint NOT NULL,
+  `user_id` bigint NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -95,10 +95,10 @@ CREATE TABLE `lop_user` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `lops`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `lops` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `name` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `name` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `open` tinyint(1) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -107,24 +107,24 @@ CREATE TABLE `lops` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `migrations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `migrations` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `batch` int(11) NOT NULL,
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `migration` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `batch` int NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `notifications`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `notifications` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `title` char(200) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `text` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `author` int(10) unsigned NOT NULL,
-  `last_author` int(10) unsigned NOT NULL,
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `title` char(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `text` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `author` int unsigned NOT NULL,
+  `last_author` int unsigned NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -132,11 +132,11 @@ CREATE TABLE `notifications` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `problem_tag`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `problem_tag` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `problem_id` bigint(20) NOT NULL,
-  `tag_id` bigint(20) NOT NULL,
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `problem_id` bigint NOT NULL,
+  `tag_id` bigint NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -145,31 +145,33 @@ CREATE TABLE `problem_tag` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `problems`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `problems` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `name` char(150) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `allow_practice` tinyint(4) NOT NULL,
-  `diff_cmd` char(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `diff_arg` char(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `admin_note` text COLLATE utf8mb4_unicode_ci,
-  `difficult` tinyint(4) DEFAULT NULL,
-  `elo` bigint(20) DEFAULT NULL,
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `name` char(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `allow_practice` tinyint NOT NULL,
+  `diff_cmd` char(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `diff_arg` char(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `admin_note` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `difficult` tinyint DEFAULT NULL,
+  `elo` bigint DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `user_id` bigint(20) DEFAULT NULL,
+  `user_id` bigint DEFAULT NULL,
   `sharable` tinyint(1) DEFAULT '1',
+  `author` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `editorial` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `queue_items`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `queue_items` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `submission_id` int(10) unsigned NOT NULL,
-  `type` char(8) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `processid` int(10) unsigned DEFAULT NULL,
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `submission_id` int unsigned NOT NULL,
+  `type` char(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `processid` int unsigned DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -177,20 +179,20 @@ CREATE TABLE `queue_items` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `roles`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `roles` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` char(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `name` char(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `scoreboards`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `scoreboards` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `assignment_id` smallint(5) unsigned NOT NULL,
-  `scoreboard` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `assignment_id` smallint unsigned NOT NULL,
+  `scoreboard` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -198,11 +200,11 @@ CREATE TABLE `scoreboards` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `settings`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `settings` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `key` char(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `value` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `key` char(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `value` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -211,18 +213,18 @@ CREATE TABLE `settings` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `submissions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `submissions` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `assignment_id` bigint(20) unsigned NOT NULL,
-  `problem_id` bigint(20) unsigned NOT NULL,
-  `user_id` bigint(20) unsigned NOT NULL,
-  `is_final` tinyint(4) NOT NULL,
-  `status` char(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `pre_score` int(11) NOT NULL,
-  `coefficient` char(6) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `file_name` char(30) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `language_id` bigint(20) unsigned NOT NULL,
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `assignment_id` bigint unsigned NOT NULL,
+  `problem_id` bigint unsigned NOT NULL,
+  `user_id` bigint unsigned NOT NULL,
+  `is_final` tinyint NOT NULL,
+  `status` char(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `pre_score` int NOT NULL,
+  `coefficient` char(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `file_name` char(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `language_id` bigint unsigned NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -231,10 +233,10 @@ CREATE TABLE `submissions` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `tags`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tags` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `text` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `text` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -242,20 +244,22 @@ CREATE TABLE `tags` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `users` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `username` char(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `password` char(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `display_name` char(240) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `email` char(240) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `role_id` int(10) unsigned NOT NULL,
-  `selected_assignment_id` int(10) unsigned DEFAULT NULL,
-  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `username` char(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` char(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `display_name` char(240) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email` char(240) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `role_id` int unsigned NOT NULL,
+  `selected_assignment_id` int unsigned DEFAULT NULL,
+  `remember_token` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `first_login_time` datetime DEFAULT NULL,
   `last_login_time` datetime DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
+  `elo` int DEFAULT NULL,
+  `trial_time` int unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_username_unique` (`username`),
   UNIQUE KEY `users_email_unique` (`email`)
@@ -273,3 +277,8 @@ INSERT INTO `migrations` VALUES (2,'2020_01_15_190447_create_tag_and_class_table
 INSERT INTO `migrations` VALUES (3,'2020_10_31_070914_user-problem-permssion',2);
 INSERT INTO `migrations` VALUES (4,'2020_11_01_083749_assignment_ownership',3);
 INSERT INTO `migrations` VALUES (5,'2021_01_01_083857_create_index_for_some_tables',4);
+INSERT INTO `migrations` VALUES (6,'2021_03_26_203806_add_js_to_languages',5);
+INSERT INTO `migrations` VALUES (7,'2021_04_10_195540_add_elo',5);
+INSERT INTO `migrations` VALUES (8,'2021_04_29_174742_add_author_editoral_to_problem',5);
+INSERT INTO `migrations` VALUES (9,'2021_07_29_233209_add_trial_time',5);
+INSERT INTO `migrations` VALUES (10,'2021_08_01_042317_trial_settings',5);
