@@ -80,7 +80,7 @@ class lop_controller extends Controller
             
             $new->users()->sync($userids);
         }
-        $new->users()->attach(Auth::user()->id); //The user creating classes will be auto enrol
+        $new->users()->syncWithoutDetaching(Auth::user()->id); //The user creating classes will be auto enrol
 
         return redirect()->route('lops.show', ['lop' => $new]);
     }
@@ -197,13 +197,14 @@ class lop_controller extends Controller
 
         $usernames = preg_split("/[\s,]+/", $request->input('user_list'));
         if($usernames != []){
-            $users = User::WhereIn('username', $usernames)->get();
-            $userids = $users->reduce(function($carry, $i){
-                array_push($carry, $i->id);
-                return $carry;
-            }, []);
+            // $users = User::WhereIn('username', $usernames)->get();
+            $userids = User::WhereIn('username', $usernames)->get()->pluck('id');
+            // $users->reduce(function($carry, $i){
+            //     array_push($carry, $i->id);
+            //     return $carry;
+            // }, []);
             
-            $lop->users()->attach($userids);
+            $lop->users()->syncWithoutDetaching($userids);
         }
 
         return redirect()->route('lops.index');
@@ -237,7 +238,7 @@ class lop_controller extends Controller
 
     public function enrol(Request $request, Lop $lop, $in){
         if($in == 1){
-            if ($lop->open == 1) $lop->users()->attach(Auth::user()->id);
+            if ($lop->open == 1) $lop->users()->syncWithoutDetaching(Auth::user()->id);
         }
         else {
             $lop->users()->detach(Auth::user()->id);
