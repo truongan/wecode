@@ -53,6 +53,7 @@ class check_duplicate_many_to_many_relation_record extends Command
             'problem_tag' => ['problem_id', 'tag_id']
         ];
         foreach ($list_table as $table => $columns){
+            echo ($table);
             var_dump(
                 DB::table($table)
                     ->selectRaw(sprintf("min(id) as min_id , count(id) as number_of_rows, %s, %s", $columns[0], $columns[1]))
@@ -63,20 +64,27 @@ class check_duplicate_many_to_many_relation_record extends Command
         }
         
         if ($this->option('force')){
+            echo (" -- START PRUNING DUPLICATION --");
             foreach ($list_table as $table => $columns){
+                DB::enableQueryLog();
                 $keep_ids = DB::table($table)
                     ->selectRaw(sprintf("min(id) as min_id , count(id) as number_of_rows, %s, %s", $columns[0], $columns[1]))
                     ->groupBy($columns)
                     ->having('number_of_rows', '>', 1)
                     ->get()->pluck('min_id');
-                var_dump($keep_ids);
+                // var_dump($keep_ids);
 
                 $t = join(', ', $columns);
                 $delete_id = DB::table($table)
-                    ->whereRaw(sprintf(' (%s) in ( SELECT %s FROM `lop_user` group by %s having count(id) > 1) ', $t, $t, $t))
+                    // ->whereRaw(sprintf(' %s in ( SELECT %s FROM `lop_user` group by %s having count(id) > 1) ', $t, $t, $t)) //Keep this line here as a reminder some mistake can be very deadly
+                    ->whereRaw(sprintf(' (%s) in ( SELECT %s FROM `%s` group by %s having count(id) > 1) ', $t, $t,  $table, $t))
                     ->whereNotIn('id', $keep_ids)
                     ->get()->pluck('id');
                 
+                if (count($delete_id) > 0){
+                    var_dump($delete_id);
+                    // dd(DB::getQueryLog());
+                }
                 DB::table($table)->whereIn('id', $delete_id)->delete();
 
             }
