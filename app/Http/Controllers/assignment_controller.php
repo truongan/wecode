@@ -101,8 +101,8 @@ class assignment_controller extends Controller
 
         $problems[-1] = $this->dummy_problem();
         
-        if(Auth::user()->role->name == 'admin') $allprob = Problem::latest()->get();
-        else $allprob = Problem::available(Auth::user()->id)->latest()->get();
+        if(Auth::user()->role->name == 'admin') $allprob = Problem::withCount('assignments')->latest()->get();
+        else $allprob = Problem::available(Auth::user()->id)->latest()->withCount('assignments')->get();
 
         return view('assignments.create',['all_problems' => $allprob, 'all_lops' =>$all_lops, 'extra_time'=>'0*60*60', 'lops' => [], 'messages' => [], 'problems' => $problems, 'selected' => 'assignments']);
     }
@@ -369,8 +369,8 @@ class assignment_controller extends Controller
         $lops = $assignment->lops->keyBy('id');
 
 
-        if(Auth::user()->role->name == 'admin') $allprob = Problem::latest()->get();
-        else $allprob = Problem::available(Auth::user()->id)->latest()->get();
+        if(Auth::user()->role->name == 'admin') $allprob = Problem::withCount('assignments')->latest()->get();
+        else $allprob = Problem::available(Auth::user()->id)->latest()->withCount('assignments')->get();
 
         return view('assignments.create',['assignment' => $assignment, 'all_problems' => $allprob, 'messages' => [], 'problems' => $problems, 'all_lops' => $all_lops, 'lops' => $lops, 'selected' => 'assignments']);
     }

@@ -136,7 +136,7 @@
 					<div class="col-sm-8">
 						<select class="js-example-basic-multiple form-control" multiple="multiple" name="lop_id[]">
 							@foreach( $all_lops as $p)
-							<option value="{{ $p->id }}" data-name="{{$p->name}}" data-id="{{$p->id}}" data-no_of_assignment="{{ $p->no_of_assignment }}"
+							<option value="{{ $p->id }}" data-name="{{$p->name}}"
 								{{ isset($lops[$p->id]) ? 'selected="selected"' : ''  }}
 								> {{$p->name}}</option>
 							@endforeach
@@ -188,7 +188,7 @@
 				</label>
 				<select class="all_problems form-control" multiple="multiple">
 					@foreach( $all_problems as $p)
-					<option value="{{ $p->id }}" data-name="{{$p->name}}" data-id="{{$p->id}}" data-note="{{ $p->admin_note }}" data-no_of_assignment="{{ $p->no_of_assignment }}"  data-owner="{{ $p->user->username ?? 'none'}}" 
+					<option value="{{ $p->id }}" data-name="{{$p->name}}" data-id="{{$p->id}}" data-note="{{ $p->admin_note }}" data-no_of_assignment="{{ $p->assignments_count }}"  data-owner="{{ $p->user->username ?? 'none'}}" 
 						{{ isset($problems[$p->id]) ? 'selected="selected"' : ''  }}
 						>
 					{{$p->id}} - {{$p->name}} ({{ $p->user->username ?? 'none'}}| {{   $p->admin_note }}) </option>

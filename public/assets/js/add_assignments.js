@@ -83,7 +83,7 @@ $(document).ready(function(){
 		console.log('shit');
 		var min = document.getElementById('multiple_problems_min').value;
 		var will_select = [];
-		$('option').each(function(idx, obj){
+		document.querySelectorAll('.all_problems > option').forEach(function(obj, idx){
 			console.log(obj.selected);
 			console.log(obj.dataset.no_of_assignment);
 			if(obj.dataset.no_of_assignment <= min && obj.selected == false){
