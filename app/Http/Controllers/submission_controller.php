@@ -328,7 +328,7 @@ class submission_controller extends Controller
 		if (
 			$problem == NULL  ||
 			( $assignment->id != 0 &&
-			!in_array($request->input('problem_id'), $assignment->problems()->pluck('id')->all())
+			!in_array($request->input('problem_id'), $assignment->problems()->pluck('problems.id')->all())
 			)
 		)
 		{
