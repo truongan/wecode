@@ -31,7 +31,8 @@ class Problem extends Model
 		return $template_file;
     }
 
-    public function template_content($language_extension = 'cpp'){
+    public function template_content($language_id){
+        $language_extension = $this->languages()->find($language_id)->extension;
         $file_glob = $this->template_path($language_extension);
         if ($file_glob){
             $template = file_get_contents($file_glob[0]);

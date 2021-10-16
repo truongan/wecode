@@ -34,24 +34,7 @@ class submission_controller extends Controller
 	}
 
 	//abort on invalid creation
-	private function _valid_creation_guard($assignment_id, $problem_id){
-		if ($assignment_id == 0){
-			$problem = Problem::find($problem_id);
-			if ($problem->allow_practice == 0 && in_array( Auth::user()->role->name, ['student', 'guest']) ){
-				abort(404);
-			}
-		}
-		else {
-			if ($problem_id != 0) $problem = $assignment->problems->find($problem_id);
-			else $problem = $assignment->problems->first();	
 
-			$check = $assignment->can_submit(Auth::user());
-			if (!$check->can_submit){
-				abort(403, $check->error_message);
-			}
-
-		} 
-	}
 	/**
 	 * Display a listing of the resource.
 	 *
@@ -115,7 +98,7 @@ class submission_controller extends Controller
 		return view('submissions.list',['submissions' => $submissions, 'assignment' => $assignment, 'user_id' => $user_id, 'problem_id' => $problem_id, 'choose' => $choose, 'all_problems' => $all_problems]); 
 	}
 
-	public function create($assignment_id, $problem_id, $old_sub = -1){
+	private function _creation_guard_check($assignment_id, $problem_id){
 		$assignment = Assignment::find($assignment_id);
 		
 		if ($assignment_id == 0){
@@ -125,8 +108,8 @@ class submission_controller extends Controller
 			}
 		}
 		else {
-			if ($problem_id != 0) $problem = $assignment->problems->find($problem_id);
-			else $problem = $assignment->problems->first();	
+			$problem = $assignment->problems->find($problem_id);
+			if ($problem == NULL) abort(404);
 
 			$check = $assignment->can_submit(Auth::user());
 			if (!$check->can_submit){
@@ -135,7 +118,14 @@ class submission_controller extends Controller
 
 		} 
 
-		if ($problem == NULL) abort(404);
+		return $problem;
+
+	}
+
+	public function create($assignment_id, $problem_id, $old_sub = -1){
+		$assignment = Assignment::find($assignment_id);
+		
+		$problem = $this->_creation_guard_check($assignment_id, $problem_id);
 
 		$last = Submission::where(['assignment_id' => 0, 'problem_id' => $problem_id, 'user_id' => Auth::user()->id]);
 		if ($old_sub != -1) $last = $last->where(['id'=> $old_sub]);
@@ -162,14 +152,7 @@ class submission_controller extends Controller
 			'problem' => ['integer', 'gt:0'],
 		]);
 
-		if ($request->assignment == 0){
-			$problem = Problem::find($request->problem);
-			if ($problem->allow_practice == 0 && in_array( Auth::user()->role->name, ['student', 'guest']) ){
-				abort(404);
-			}
-		} else {
-
-		}
+		$this->_creation_guard_check($request->input('assignment'), $request->input('problem'));
 		if ($this->upload($request))
 			return redirect()->route('submissions.index', [$request->assignment, 'all', 'all', 'all']);
 		else
@@ -216,17 +199,10 @@ class submission_controller extends Controller
 		return TRUE;
 	}
 
-	private function in_queue ($user_id, $assignment_id, $problem_id)
+	private function _in_queue ($user_id, $assignment_id, $problem_id)
 	{
 		return Queue_item::whereHas('submission', function($q) use($user_id, $assignment_id, $problem_id){$q->where(['user_id' => $user_id, 'assignment_id' => $assignment_id, 'problem_id' => $problem_id]);})->count() > 0;
-		// $queries = Queue_item::all();
-		// foreach ($queries as $query)
-		// {
-		// 	$tmp = $query->submission->where(array('user_id' => $user_id, 'assignment_id' => $assignment_id, 'problem_id' => $problem_id));
-		// 	if ($tmp->count() > 0) 
-		// 		return TRUE;
-		// }
-		// return FALSE;
+
 	}
 
 	private function add_to_queue($submission, $assignment, $file_name)
@@ -316,26 +292,12 @@ class submission_controller extends Controller
 		$validated = $request->validate([
 			'assignment_id' => ['integer'],
 			'problem_id' => 'integer',
+			'language_id' => 'integer'
 		]);
-		// dd($request->input());
-		$assignment = Assignment::with('problems')->find($request->input('assignment_id'));
-		// dd($assignment->can_submit(Auth::user()));
-		if ($assignment == NULL || $assignment->can_submit(Auth::user())->can_submit == false){
-			abort(403, 'Either assigment ID is invalid or you cannot submit to this assigment');
-		}
 		
-		$problem = Problem::find($request->problem_id);
-		if (
-			$problem == NULL  ||
-			( $assignment->id != 0 &&
-			!in_array($request->input('problem_id'), $assignment->problems()->pluck('problems.id')->all())
-			)
-		)
-		{
-			abort(404, 'Invalid problem ID');
-		}
+		$problem = $this->_creation_guard_check($request->input('assignment_id'), $request->input('problem_id'));
 
-		$template = $problem->template_content('cpp');
+		$template = $problem->template_content($request->input('language_id'));
 		
 		if ($template == NULL)
 			$result = array('banned' => '', 'before'  => '', 'after' => '');
@@ -385,7 +347,7 @@ class submission_controller extends Controller
 			$a = $assignment->can_submit(Auth::user());
 			if(!$a->can_submit) abort(403, $a->error_message);
 
-			if ($this->in_queue(Auth::user()->id, $assignment->id, $problem->id))
+			if ($this->_in_queue(Auth::user()->id, $assignment->id, $problem->id))
 				abort(403,'You have already submitted for this problem. Your last submission is still in queue.');
 
 			if ($problem->languages->where('id',$language->id)->count() == 0)

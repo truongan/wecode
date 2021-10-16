@@ -46,9 +46,12 @@ $(document).ready(function(){
             data: {
                 '_token': $('meta[name="csrf-token"]').attr('content'),
                 'problem_id': problem_id,
-                'assignment_id': assignment_id
+                'assignment_id': assignment_id,
+                'language_id':  document.querySelectorAll('select#languages')[0].value,
             },
             success : function(data){
+                
+
                 if (data.banned != ""){
                     var ban_span = "";
                     data.banned.split("\n").map(function(str){
@@ -135,6 +138,7 @@ $(document).ready(function(){
     	all_ace_s.map(function(editor){
             editor.session.setMode(mode);
         });
+        get_template(document.querySelector('select#problems').value, $('#assignment_id_input').val());
     });
 
 

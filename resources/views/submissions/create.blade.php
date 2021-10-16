@@ -26,7 +26,7 @@
 		<div class='row row-cols-auto g-4 align-items-end'>
 		
 			<div class="col">
-				<label for="problems" class="">Problem: 				<small class="form-text text-info"><a id="problem_link" href="#" target="_blank">View Problem statement</a></small></label>
+				<label for="problems" class="">Problem:<small class="form-text text-info"><a id="problem_link" href="#" target="_blank">View Problem statement</a></small></label>
 
 				<select id="problems" name ="problem" class="form-select ">
 					@if($assignment->id == 0)
@@ -115,8 +115,6 @@
 				<div class="template" id="after" >def</div>
 			</div>
 		</div>
-
-
 		
 		<textarea style="display:none;" rows="4" cols="80" name="code" class="sharif_input add_text" >
 		</textarea>
