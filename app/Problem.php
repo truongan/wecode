@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Setting;
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
@@ -16,6 +17,12 @@ class Problem extends Model
         return $problem_dir;
     }
 
+    public function can_practice(User $user){
+        if ($user->role->name == 'admin') return true;
+        if ($user->id == $this->owner->id) return true;
+        if ($this->allow_practice) return true;
+        return false;
+    }
 
     public function template_path($language_extension = 'cpp'){
         $pattern1 = rtrim($this->get_directory_path()
@@ -29,6 +36,24 @@ class Problem extends Model
 			$template_file = glob($pattern);
 		}
 		return $template_file;
+    }
+
+    public function description(){
+       
+        $problem_dir = $this->get_directory_path($this->id);
+        
+		$result =  array(
+			'description' => '<p>Description not found</p>',
+			'has_pdf' => glob("$problem_dir/*.pdf") != FALSE,
+			'has_template' => glob("$problem_dir/template.cpp") != FALSE
+        );
+		
+		$path = "$problem_dir/desc.html";
+        
+		if (file_exists($path))
+            $result['description'] = file_get_contents($path);   
+       
+		return $result;
     }
 
     public function template_content($language_id){

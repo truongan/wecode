@@ -103,7 +103,7 @@ class submission_controller extends Controller
 		
 		if ($assignment_id == 0){
 			$problem = Problem::find($problem_id);
-			if ($problem->allow_practice == 0 && in_array( Auth::user()->role->name, ['student', 'guest']) ){
+			if ($problem->can_practice(Auth::user()) == false ){
 				abort(404);
 			}
 		}

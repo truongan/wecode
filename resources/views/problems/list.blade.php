@@ -55,7 +55,7 @@
 	  @foreach ($problems as $item)
 		<tr data-id="{{$item->id}}">
 			<td>{{ $item->id}}</td>
-			<td><a href="{{ url("problems/$item->id") }}">{{ $item->name }}</a></td>
+			<td><a href="{{ route( 'practices.show' ,$item->id) }}">{{ $item->name }}</a></td>
 			<td>{{$item->admin_note}}</td>
 			<td>
 				<span data-bs-toggle="tooltip"  

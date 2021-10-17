@@ -212,8 +212,8 @@ class assignment_controller extends Controller
             if ($problem_id == null) abort(403, 'No problem to show');
         }
         
-        $result = $this->get_description($problem_id);
         $problem = Problem::find($problem_id);
+        $result = $problem->description();
         $problem['has_pdf'] = $result['has_pdf'];
         $problem['description'] = $result['description'];
         $problem['has_template'] = $result['has_template'];
@@ -295,23 +295,7 @@ class assignment_controller extends Controller
         return $problem_dir;
     }
     
-    public function get_description($id = NULL){
-       
-        $problem_dir = $this->get_directory_path($id);
-        
-		$result =  array(
-			'description' => '<p>Description not found</p>',
-			'has_pdf' => glob("$problem_dir/*.pdf") != FALSE,
-			'has_template' => glob("$problem_dir/template.cpp") != FALSE
-        );
-		
-		$path = "$problem_dir/desc.html";
-        
-		if (file_exists($path))
-            $result['description'] = file_get_contents($path);   
-       
-		return $result;
-    }
+
     
 
     public function duplicate(Assignment $assignment){

@@ -62,7 +62,7 @@ Route::post('/queue/{item}/unlock', 'queue_controller@unlock')->name('queue.unlo
 Route::post('/queue/empty', 'queue_controller@empty')->name('queue.empty');
 
 Route::get('/practice', 'practice_controller@index')->name('practice');
-Route::get('/practice/show/{problem_id}', 'practice_controller@show')->name('practices.show');
+Route::get('/practice/show/{problem}', 'practice_controller@show')->name('practices.show');
 
 Route::get('/scoreboard/full/{id}', 'scoreboard_controller@index')->name('scoreboards.index');
 

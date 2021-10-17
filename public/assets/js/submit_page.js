@@ -50,7 +50,6 @@ $(document).ready(function(){
                 'language_id':  document.querySelectorAll('select#languages')[0].value,
             },
             success : function(data){
-                
 
                 if (data.banned != ""){
                     var ban_span = "";
@@ -87,10 +86,15 @@ $(document).ready(function(){
 
     $("select#problems").change(function(){
         var v = $(this).val();
+
         $('select#languages').empty();
         //$('<option value="0" selected="selected">-- Select Language --</option>').appendTo('select#languages');
-        if (v==0)
+        if (v==0 || problem_languages[v] == 0){
+            get_template($(this).val(), $('#assignment_id_input').val());
+
             return;
+        }
+
         first_lang = problem_languages[v][0].id;
 
         for (var i=0;i<problem_languages[v].length;i++)

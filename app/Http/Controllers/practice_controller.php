@@ -54,19 +54,15 @@ class practice_controller extends Controller
     	return view('practice',['problems' => $problems, 'selected' => 'practice']);
 	}
 	
-	public function show($problem_id){
-		$problem = Problem::find($problem_id);
-		if (!$problem){
-			return view('problems.show',['error'=>'not found problem']);
-		}
-		if ($problem->allow_practice == 0)
-		{
-			return view('problems.show',['error'=>'the problem is not public']);
+	public function show(Problem $problem){
+		// $problem = Problem::find($problem_id);
+		if (! $problem->can_practice(Auth::user()) )  {
+			abort(403, 'This problem is not available for practice to you');
 		}
 		 
-        $result = $this->get_description($problem_id);
+        $result = $problem->description();
         
-        $problem = Problem::find($problem_id);
+        $problem = Problem::find($problem->id);
         $problem['has_pdf'] = $result['has_pdf'];
         $problem['description'] = $result['description'];
         return view('problems.show', ['problem'=>$problem,
@@ -75,23 +71,6 @@ class practice_controller extends Controller
 									  'assignment'=>NULL,
 									  'selected' => "users"
                                       ]);    
-	}
-
-	public function get_description($id = NULL){
-        $problem_dir = $this->get_directory_path($id);
-        
-		$result =  array(
-			'description' => '<p>Description not found</p>',
-			'has_pdf' => glob("$problem_dir/*.pdf") != FALSE,
-			'has_template' => glob("$problem_dir/template.cpp") != FALSE
-        );
-		
-		$path = "$problem_dir/desc.html";
-        
-		if (file_exists($path))
-            $result['description'] = file_get_contents($path);   
-       
-		return $result;
 	}
 
 	public function get_directory_path($id = NULL){

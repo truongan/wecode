@@ -159,17 +159,7 @@ class problem_controller extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id){
-        $result = $this->get_description($id);
-        
-        $problem = Problem::find($id);
-        $problem['has_pdf'] = $result['has_pdf'];
-        $problem['description'] = $result['description'];
-        $problem['has_template'] = $result['has_template'];
-        return view('problems.show', ['problem'=>$problem,
-                                      'all_problems'=>NULL,
-                                      'can_submit'=>TRUE,
-                                      'assignment'=>NULL,
-                                      ]);    
+       abort(404, 'Problem can be view through assignment or practice only'); 
     }
 
     /**
@@ -442,23 +432,6 @@ class problem_controller extends Controller
         mkdir("$problem_dir/in", 0700, TRUE);
         mkdir("$problem_dir/out", 0700, TRUE);
             
-    }
-
-    public function get_description($id = NULL){
-        $problem_dir = $this->get_directory_path($id);
-        
-        $result =  array(
-            'description' => '<p>Description not found</p>',
-            'has_pdf' => glob("$problem_dir/*.pdf") != FALSE,
-            'has_template' => glob("$problem_dir/template.cpp") != FALSE
-        );
-        
-        $path = "$problem_dir/desc.html";
-        
-        if (file_exists($path))
-            $result['description'] = file_get_contents($path);   
-       
-        return $result;
     }
     
     public function delete_problem($id){
