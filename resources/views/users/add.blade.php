@@ -13,31 +13,36 @@
 @endsection
 
 @section('body_end')
-<script type='text/javascript' src="{{ asset('assets/js/taboverride.min.js') }}"></script>
-<script>
-	$(document).ready(function(){
-		tabOverride.set(document.getElementsByTagName('textarea'));
-	});
-</script>
 <script> 
-	$(document).ready(function(){
-		$("#add_users_button").click(function(){
-			$("#loading").css('display','inline');
-			$.post(
-					"{{ route('users.add') }}",
-					// Chỗ ni bỏ cái đường link dẫn tới hàm add
-					{
-						'_token': $('meta[name=csrf-token]').attr('content'),
-						send_mail: ($("#send_mail").is(":checked")?1:0),
-						delay: $("#delay").val(),
-						new_users:$("#new_users").val(),
-						wcj_csrf_name: shj.csrf_token
-					},
-					function(data) {
-						$("#main_content").html(data);
-					}
+	document.querySelector("#add_users_button").addEventListener('click',function(){
+		document.querySelector('#loading').style.display = 'inline';
+
+		fetch(
+			"{{ route('users.add') }}",
+			{
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: 	JSON.stringify({
+					'_token':  "{{ csrf_token() }}",
+					'send_mail':  (document.querySelector("#send_mail").checked ?1:0),
+					'delay': document.querySelector("#delay").value,
+					'new_users':document.querySelector("#new_users").value,
+				})
+			}
+		)
+		.then(response => {
+			if (response.status == 200) response.text().then(
+				data => document.getElementById('main_content').innerHTML = data	
 			);
+			else response.text().then(data => {
+				document.querySelector('#main_content').innerHTML = "<div class='col-12'><iframe style='width:100%; height:80vh'></iframe></div>";
+				frame = document.querySelector('iframe');
+				frame.contentDocument.write(data);
+			});
 		});
+
 	});
 </script>
 @endsection
