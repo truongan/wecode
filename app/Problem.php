@@ -19,7 +19,7 @@ class Problem extends Model
 
     public function can_practice(User $user){
         if ($user->role->name == 'admin') return true;
-        if ($user->id == $this->owner->id) return true;
+        if ($user->id == $this->user->id) return true;
         if ($this->allow_practice) return true;
         return false;
     }

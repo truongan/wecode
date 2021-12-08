@@ -36,10 +36,27 @@ class Assignment extends Model
         return $this->hasOne('App\Scoreboard');
     }
 
+    public function cannot_edit(User $actor){
+        // dd($actor->role->name);
+        if ($actor->role->name == 'admin'){
+            return false;
+        } else if ($actor->role->name == 'head_instructor'){
+            if ($this->user->id != $actor->id 
+                && !$actor->lops()->with('assignments')->get()->pluck('assignments')->collapse()->pluck('id')->contains($this->id)
+            ){
+                return('You can only edit assignment you created or assignment belongs to one of your classes');
+            }
+            else {
+                return false;
+            }
+        }
+        else return('You do not have permission to edit assignment');
+    }
+
     public function can_submit(User $user)
     {   
         $result = new class{};
-        $result->error_message = 'Uknown error';
+        $result->error_message = 'Unknown error';
         $result->can_submit = FALSE;
 
         //2021-09-08 : An's note: leave it here till i found somewhere better

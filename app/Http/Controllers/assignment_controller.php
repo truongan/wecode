@@ -299,16 +299,9 @@ class assignment_controller extends Controller
     
 
     public function duplicate(Assignment $assignment){
-        if (Auth::user()->role->name == 'admin'){
-            // Admin can duplicate anything
-        } else if (Auth::user()->role->name == 'head_instructor'){
-            if ($assignment->user != Auth::user() 
-                && !Auth::user()->lops()->with('assignments')->get()->pluck('assignments')->collapse()->pluck('id')->contains($assignment->id)
-            ){
-                abort(403, 'You can only edit assignment you created or assignment belongs to one of your classes');
-            }
+        if (($t = $assignment->cannot_edit(Auth::user())) !== false){
+            abort(403, $t);
         }
-        else abort(403,'You do not have permission to edit assignment');
 
         $new = $assignment->replicate();
         $new->user_id = Auth::user()->id;
@@ -330,18 +323,15 @@ class assignment_controller extends Controller
     public function edit(Assignment $assignment)
     {
         
+        if (($t = $assignment->cannot_edit(Auth::user())) !== false){
+            abort(403, $t);
+        }
+
         if (Auth::user()->role->name == 'admin'){
             $all_lops = Lop::latest()->get();
-        } else if (Auth::user()->role->name == 'head_instructor'){
-            if ($assignment->user != Auth::user() 
-                && !Auth::user()->lops()->with('assignments')->get()->pluck('assignments')->collapse()->pluck('id')->contains($assignment->id)
-            ){
-                abort(403, 'You can only edit assignment you created or assignment belongs to one of your classes');
-            }
+        } else {
             $all_lops = Auth::user()->lops->keyBy('id');
         }
-        else abort(403,'You do not have permission to edit assignment');
-
 
         $problems = [];
         $problems = $assignment->problems()->orderBy('ordering')->get()->push($this->dummy_problem())->keyBy('id');
@@ -368,19 +358,9 @@ class assignment_controller extends Controller
      */
     public function update(Request $request, Assignment $assignment)
     {
-        //
-        if (Auth::user()->role->name == 'admin'){
-            // Admin always go through
-        } else if (Auth::user()->role->name == 'head_instructor'){
-            if ($assignment->user != Auth::user() 
-                && !Auth::user()->lops()->with('assignments')->get()->pluck('assignments')->collapse()->pluck('id')->contains($assignment->id)
-            ){
-                abort(403, 'You can only edit assignment you created or assignment belongs to one of your classes');
-            }
+        if (($t = $assignment->cannot_edit(Auth::user())) !== false){
+            abort(403, $t);
         }
-        else abort(403,'You do not have permission to edit assignment');
-
-
         $validated = $request->validate([
             'name' => ['required','max:150'],
             'pdf' => 'mimes:pdf',
@@ -438,38 +418,35 @@ class assignment_controller extends Controller
      */
     public function destroy($id)
     {
-        //
-
-        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
-            abort(403);
-        elseif ($id == 0){
+        if ($id == 0){
             //Do nothing, we just don't touch the practice assignment
-        }
-        elseif ($id === NULL)
-        {
-            $json_result = array('done' => 0, 'message' => 'Input Error');
         }
         else
         {
-           
             //TO DO SOMETHING HERE
-
             if (Assignment::find($id) == null)
-                $json_result = array('done' => 0, 'message' => 'Not found detailed');
+                $json_result = array('done' => 0, 'message' => 'Cannot delete assignment: "Not found"');
             else
             {
                 $assignment = Assignment::find($id);
-                $submissions_in_queue = Submission::Where(['assignment_id' => $id, 'status' => 'pending'])->pluck('id')->toArray();
-                DB::table('queue_items')->whereIn('submission_id', $submissions_in_queue)->delete();
-                DB::table('submissions')->where('assignment_id', '=', $id)->delete();
-                DB::table('assignment_lop')->where('assignment_id', '=', $id)->delete();
-                DB::table('assignment_problem')->where('assignment_id', '=', $id)->delete();
-                $path_pdf = Setting::get('assignments_root') . "/assignment_" .  strval($assignment->id);
-                if (file_exists($path_pdf)) {
-                    shell_exec("rm -r -f $path_pdf");
+
+                if (($t = $assignment->cannot_edit(Auth::user())) !== false){
+                    $json_result = ['done' => 0, 'message' => $t];
+                } else {
+
+                    $submissions_in_queue = Submission::Where(['assignment_id' => $id, 'status' => 'pending'])->pluck('id')->toArray();
+                    DB::table('queue_items')->whereIn('submission_id', $submissions_in_queue)->delete();
+                    DB::table('submissions')->where('assignment_id', '=', $id)->delete();
+                    DB::table('assignment_lop')->where('assignment_id', '=', $id)->delete();
+                    DB::table('assignment_problem')->where('assignment_id', '=', $id)->delete();
+                    $path_pdf = Setting::get('assignments_root') . "/assignment_" .  strval($assignment->id);
+                    if (file_exists($path_pdf)) {
+                        shell_exec("rm -r -f $path_pdf");
+                    }
+                    Assignment::destroy($id);
+                    $json_result = array('done' => 1);
                 }
-                Assignment::destroy($id);
-                $json_result = array('done' => 1);
+
             }
         }
         
@@ -612,6 +589,13 @@ class assignment_controller extends Controller
         $assignment_id = $request->assignment_id;
         $assignment = Assignment::find($assignment_id);
         if ($assignment != NULL){
+
+            if (($t = $assignment->cannot_edit(Auth::user())) !== false){
+                echo "error, " . $t;
+                return;
+            }
+               
+
             $assignment->open=!$assignment->open;
             $assignment->save();
             echo "success";

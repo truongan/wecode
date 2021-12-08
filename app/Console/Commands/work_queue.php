@@ -124,6 +124,11 @@ class work_queue extends Command
 				putenv('LANG=en_US.UTF-8');
 				putenv('PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games');
 				putenv('APP_ENV=local');
+				
+				
+				echo ("about to exec: ");
+				var_dump($cmd);
+
 				$output = trim(shell_exec($cmd));
 				
 				if (is_numeric($output)) {
