@@ -2,11 +2,11 @@
 
 @section('content')
 <div class="row justify-content-center align-middle">
-    <div class="box login">
-    <h1 class="display-4 text-center ">{{ $settings['site_name']  }}</h1>
+    <div class="col-auto gy-5 login">
+        <h1 class="display-4 text-center ">{{ $settings['site_name']  }}</h1>
         {{-- <div class="jumbotron"> --}}
         {{-- </div> --}}
-        <div class="login_form px-5">
+        <div class="login_form">
             <form method="POST" action="{{ route('login') }}">
                 @csrf
                 <div class="login1">
@@ -50,9 +50,8 @@
                 </div>
             </form>
         </div>
-
     </div>
 </div>
-</body>
+
 
 @endsection

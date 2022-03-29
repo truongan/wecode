@@ -7,7 +7,7 @@
 }
 
 body {
-	background: #333;
+	background: #303531;
 	color: #8d8d8d;
 	font-family: sans-serif;
 }
@@ -22,28 +22,6 @@ a {
 }
 ::-moz-selection {
 	background-color: #b2cce6;
-}
-
-div.box {
-	top: 50%;
-	left: 50%;
-	width: 40rem;
-	position: absolute;
-	margin-left: -20rem;
-	/* padding-left: 10rem;
-	padding-right: 10rem; */
-}
-
-div.login {
-	margin-top: -190px;
-}
-
-div.register {
-	margin-top: -250px;
-}
-
-div.success {
-	margin-top: -130px;
 }
 
 div.judge_logo {
@@ -78,46 +56,6 @@ div.login2 {
 	border-bottom-left-radius: 4px;
 	box-shadow: rgba(0, 0, 0, 0.2) 0 0 4px -1px;
 	background-color: rgba(199, 224, 219, 0.3);
-}
-
-div.login1 p {
-	padding: 0;
-	margin: 10px 0 0 0;
-}
-
-div.login2 a {
-	line-height: 27px;
-}
-
-input.sharif_input {
-	background-color: #fefefe;
-	color: #111;
-	width: 100%;
-	line-height: 1;
-	font-family: sans-serif;
-	font-size: 20px;
-	padding: 6px 5px;
-	margin-top: 4px;
-	border-radius: 2px;
-	border: 1px solid #c4c4c4;
-	transition: box-shadow 200ms ease;
-	box-shadow: rgba(0,0,0,0.04) 0 0 0 1px inset;
-
-}
-
-input.sharif_input:focus {
-	outline: 0;
-	border-color: rgba(82, 168, 236, 0.6);
-	box-shadow: rgba(82, 168, 236, 0.6) 0 0 3px;
-}
-
-.text-danger {
-	color: red;
-	
-}
-
-.text-success {
-	color: green;
 }
 
 input#sharif_submit {
@@ -164,12 +102,3 @@ input#sharif_submit:active {
 	position: relative;
 }
 
-div#install_form {
-	width: 300px;
-	margin: 100px auto;
-}
-
-div#install_success {
-	width: 600px;
-	margin: 100px auto;
-}
