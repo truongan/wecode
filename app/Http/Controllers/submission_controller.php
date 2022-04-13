@@ -127,7 +127,7 @@ class submission_controller extends Controller
 		
 		$problem = $this->_creation_guard_check($assignment_id, $problem_id);
 
-		$last = Submission::where(['assignment_id' => 0, 'problem_id' => $problem_id, 'user_id' => Auth::user()->id]);
+		$last = Submission::where(['assignment_id' => $assignment_id, 'problem_id' => $problem_id, 'user_id' => Auth::user()->id]);
 		if ($old_sub != -1) $last = $last->where(['id'=> $old_sub]);
 
 		$last = $last->get()->last();
