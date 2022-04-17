@@ -369,8 +369,8 @@ for((i=1;i<=TST;i++)); do
 		#Perhaps 5 times longer than the solution timelimit is enough
 		ulimit -t $(($TIMELIMITINT*5))
 		# ./shj_tester $PROBLEMPATH/in/input$i.txt $PROBLEMPATH/out/output$i.txt out 2>cerr
-		./shj_tester $PROBLEMPATH/in/input$i.txt $PROBLEMPATH/out/output$i.txt out &>cerr
 		shj_log "--Tester code verdict:"
+		./shj_tester $PROBLEMPATH/in/input$i.txt $PROBLEMPATH/out/output$i.txt out &>cerr
 		EC=$?
 		shj_log "$EC"
 		cat cerr >>$LOGFILE
