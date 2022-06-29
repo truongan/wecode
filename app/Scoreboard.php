@@ -212,7 +212,6 @@ class Scoreboard extends Model
 			'stat_print' => $stat_print,
 			'no_of_problems'=> $assignment->problems->count(),
 			'number_of_submissions' => $number_of_submissions,
-			'assignment_id' => $assignment->id
 		);
 		// dd($data);
 

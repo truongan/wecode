@@ -26,7 +26,7 @@ class setting_controller extends Controller
     public function index()
     {
         $t = Setting::all();
-        $data;
+        $data = array();
         foreach($t as $setting){
             $data[$setting->key] = $setting->value;
         }
