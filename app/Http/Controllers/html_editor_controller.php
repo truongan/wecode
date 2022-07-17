@@ -13,9 +13,16 @@ class html_editor_controller extends Controller
      *
      * @return void
      */
+    private $autosave;
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware(function ($request, $next) {
+            // We need this so that the 'auth' middleware will run before the following line of code
+            $this->autosave  = sprintf('%s/%s/_htmleditor.auto.save.txt', Setting::get('assignments_root'), Auth::id());
+            return $next($request);
+        });
+        
     }
 
     /**
@@ -24,8 +31,7 @@ class html_editor_controller extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index(){
-        $user_id = Auth::user()->id;
-		$this->autosave = Setting::get('assignments_root') . "/{$user_id}_htmleditor.auto.save.txt";
+		
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
             abort(404);
         $content = '';
@@ -43,8 +49,6 @@ class html_editor_controller extends Controller
     }  
 
     public function autosave(Request $request){
-        $user_id = Auth::user()->id;
-		$this->autosave = Setting::get('assignments_root') . "/{$user_id}_htmleditor.auto.save.txt";
         // $this->form_validation->set_rules('content', 'content', 'required');    
         // if ($this->form_validation->run())
         // {
