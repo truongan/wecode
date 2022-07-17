@@ -7,6 +7,9 @@ use Illuminate\Pagination\Paginator;
 
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\URL;
+
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -32,7 +35,7 @@ class AppServiceProvider extends ServiceProvider
         // code getting for stack overflow https://stackoverflow.com/questions/35304448/laravel-change-base-url
         URL::forceRootUrl(config('app.url'));  
         if (Str::contains(config('app.url'), 'https://')) {
-            \URL::forceScheme('https');
+            URL::forceScheme('https');
             //use \URL:forceSchema('https') if you use laravel < 5.4
         }
 
