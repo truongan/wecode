@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Setting;
+
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
+
 class Submission extends Model
 {
     protected $fillable = ['id', 'user_id','assignment_id','problem_id','is_final','time','status','pre_score'
@@ -42,6 +46,29 @@ class Submission extends Model
 	public function directory(){
 		return Submission::get_path($this->user->username, $this->assignment_id, $this->problem_id);
 	}
+
+
+    public function get_judgement_from_result_html(){
+        $result = file_get_contents( $this->directory() . "/result-" . $this->id . ".html");
+        $results = explode("</span>\n", $result);
+        
+        $times_and_mem = Arr::flatten(array_filter($results, function($i){return str_contains($i, 'text-muted');}));
+        $times = array_map(function($i){ return floatval( Str::before(Str::after($i, "<small>"), " s and")  )  ;},  $times_and_mem);
+        $mems = array_map(function($i){ return floatval( Str::before(Str::after($i, "s and "), " KiB")  )  ;},  $times_and_mem);
+        
+        $testcase_verdict = array_filter($results, function($s){
+            return $s != '' && !Str::contains($s, ['text-muted', 'text-primary', 'text-success']);
+        });
+
+        $testcase_verdict = array_map( function($s) {return Str::before( Str::after($s, '>'), "<" );}, $testcase_verdict );
+        $verdicts = [];
+        foreach ($testcase_verdict as $key => $value) {
+            $verdicts[$value] = ($verdicts[$value] ?? 0) + 1;
+        }
+
+        $a = [ "times" => $times, "mems" => $mems, "verdicts" => $verdicts ]  ;
+        return $a;
+    }
 
     public static function get_final_submissions($assignment_id)
     {

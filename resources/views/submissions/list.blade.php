@@ -71,7 +71,7 @@
 		{{-- <hr> --}}
 		@if ($choose == 'all')
 		<span>
-		<i class="fa fa-warning color3"></i> You cannot change your final submissions after assignment finishes.
+		<i class="fa fa-warning color3"></i> You cannot change your final submissions after assignment finishes.<i class="fa-solid fa-memory"></i><i class="fa-regular fa-clock"></i>
 		</span>
 		@endif
 	</div>
@@ -99,6 +99,8 @@
 					<th width="15%"><small> Problem</small></th>
 					<th width="10%"><small> Submit Time</small></th>
 					<th width="25%"><small> judge verdict </small></th>
+					<th width="1%"><small> Max <i class="far fa-clock"></i></small></th>
+					<th width="1%"><small> Max <i class="fas fa-memory"></i> </small></th>
 					<th width="6%"><small> Score</small></th>
 					<th width="5%"><small> Code</small></th>
 				</tr>
@@ -152,36 +154,27 @@
 					</span><br>
 					
 				</td>
+				<td class="js-verdict">
+					<x-submission.verdict :submission=$submission/>
+				</td>
 				<td>
-					<span class="lead">
-						@if ((count($submission->judgement->mems) > 0))
-							@if (count( array( $submission->judgement->verdicts) ) > 0)
-								@foreach ($submission->judgement->verdicts as $v => $c)
-									{{-- {{dd($v)}} --}}
-									<button disabled class="btn btn-sm btn-danger position-relative">{{$v}}<span class="badge position-absolute top-0 start-100 translate-middle bg-dark">{{$c}} </span></button>
-								@endforeach
-							@endif
-							<br/>
-							<button disabled class="btn btn-sm btn-outline-info">Max memory<span class="badge bg-info">{{max($submission->judgement->mems) }}KiB</span></button>
-							<button disabled class="btn btn-sm btn-outline-info">Max times<span class="badge bg-info">{{max($submission->judgement->times) }}s</span></button>
-						@else
-							No testcase was run
-						@endif	
-					{{-- </br>
-						{{  json_encode( $submission->judgement )}} --}}
-					</span>
+					@if ((count($submission->judgement->mems ?? []) > 0)) {{max($submission->judgement->times) }}s
+					@endif
+				</td>
+				<td>
+					@if ((count($submission->judgement->mems ?? []) > 0))
+					{{max($submission->judgement->mems) }}KiB
+					@endif
 				</td>
 				<td class="status">
 					@if (strtolower($submission->status) == "pending")
 						<div class="btn btn-secondary pending" data-type="result">PENDING</div>
-					@elseif (strtolower($submission->status) == "score")
+					@else 
 						@if ($submission->pre_score == 10000)
 							<div class="btn btn-success" data-type="result">{{$submission->final_score}}</div>
 						@else
 							<div class="btn btn-danger" data-type="result">{{$submission->final_score}}</div>
 						@endif
-					@else 
-						<div class="btn btn-danger" data-type="result">{{$submission->status}}</div>
 					@endif
 				</td>
 				<td>

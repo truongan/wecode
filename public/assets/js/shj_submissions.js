@@ -102,7 +102,7 @@ $(document).ready(function () {
 		}
 
 	});
-	$(".shj_rejudge").attr('title', 'Rejudge');
+
 	$(".shj_rejudge").click(function () {
 		var row = $(this).parents('tr');
 		console.log(row);
@@ -112,14 +112,13 @@ $(document).ready(function () {
 			type: 'POST',
 			url: site_url + '/submissions/rejudge',
 			data: {
-				
 				submission_id: row.data('id'),
 			},
 			error: shj.loading_error,
 			success: function (response) {
 				if (response.done) {
 					// console.log(row.children());
-					row.children('.status').html('<div class="btn btn-secondary pending" data-type="code">PENDING</div>');
+					row.children('.js-verdict').html('<div class="btn btn-secondary pending" data-type="code">PENDING</div>');
 					$.notify('Rejudge in progress', {position: 'bottom right', className: 'info', autoHideDelay: 2500});
 					setTimeout(update_status, update_status_interval);
 				}
@@ -170,6 +169,7 @@ function update_status(){
 
 	$('tr').each(function(){
 		var status = $(this).children('.status');
+		var row = $(this);
 		if (status.children('div').hasClass('pending')){
 			$.ajax({
 				type: 'POST',
@@ -200,11 +200,8 @@ function update_status(){
 						default:
 							element = ('<div class="btn btn-primary"  data-type="result">' + response.status + '</div>');
 					}
-					status.html(element);
-
-					// }
-					// else
-					// 	shj.loading_failed(response.message);
+					// status.html(element);
+					row.children('js-verdict').html(response.verdict);
 				}
 			});
 		}

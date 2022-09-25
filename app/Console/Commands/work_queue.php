@@ -139,7 +139,8 @@ class work_queue extends Command
 					$item->submission->pre_score = 0;
 					$item->submission->status = $output;
 				}
-				
+
+				$item->submission->judgement = $item->submission->get_judgement_from_result_html();
 				var_dump($output);
 			}
 
