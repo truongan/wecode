@@ -9,8 +9,10 @@ use App\Setting;
 class Submission extends Model
 {
     protected $fillable = ['id', 'user_id','assignment_id','problem_id','is_final','time','status','pre_score'
-                            ,'coefficient','file_name','language_id'];
-
+                            ,'coefficient','file_name','language_id', 'judgement'];
+    protected $casts = [
+        'judgement' => 'object'
+    ];
     public function problem()
     {
         return $this->belongsTo('App\Problem');

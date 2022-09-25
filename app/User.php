@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use Hash;
 
+use Role;
+
 
 class User extends Authenticatable
 {
@@ -44,7 +46,6 @@ class User extends Authenticatable
     ];
     protected $dates = ['first_login_time', 'last_login_time'];
     // protected $dateFormat = 'Y-m-d\TH:i:sP';
-
 
     public function role(){
         return $this->belongsTo('App\Role');

@@ -13,41 +13,44 @@
 
 @section('content')
 <div class="row">
-  <table class="wecode_table table table-striped table-bordered">
-    <thead class="thead-old table-dark">
-      <tr>
-        <th>#</th>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Open</th>
-        <th>Instructors</th>
-        <th><small>Users count</small></th>
-        <th><small>Assignments count</small></th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    @foreach ($lops as $lop)
-      <tr data-id="{{$lop->id}}">
-        <td>{{$loop->iteration}} </td>
-        <td>{{$lop->id}} </td>
-        <td>{{$lop->name}}</td>
-        <td><i  class=" far {{ $lop->open ? 'fa-check-square color6' : 'fa-square' }} fa-2x"></i></td>
-        <td>{{$lop->users->filter(function($item){return in_array( $item->role->name, ['admin', 'head_instructor', 'instructor']);})->pluck('username')->join(', ') }}</td>
-        <td>{{$lop->users()->count() }}</td>
-        <td>{{$lop->assignments()->count() }}</td>
-        <td>
-          
-          <a title="student list" href="{{ route('lops.show', $lop->id) }}" class = "fas fa-list fa-lg color8"></a>
-          @if ( in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
-            <a title="Email all student" href = {{ 'mailto:' . $lop->users->pluck('email')->join(',') }}> <i class="fas fa-mail-bulk    "></i> </a>
-            <a title="scores" href="{{ route('lop.scoreboard', $lop->id) }}" class = "fas fa-clipboard-list fa-lg color8"></a>
-            <a title="Edit" href="{{ route('lops.edit', $lop->id) }}"><i class="fas fa-edit fa-lg color9"></i></a>
-            <span title="Delete lop" class="delete-btn del_n delete_lop pointer" href="{{ route('lops.destroy', $lop->id) }}"><i class="fa fa-times-circle fa-lg text-danger"></i></span>
-          @endif
-        </td>
-      </tr>
-      @endforeach
-  </table>
+  <div class="table-respnosive">
+    <table class=" table table-striped table-bordered">
+      <thead class="thead-old table-dark">
+        <tr>
+          <th>#</th>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Open</th>
+          <th>Instructors</th>
+          <th><small>Users count</small></th>
+          <th><small>Assignments count</small></th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      @foreach ($lops as $lop)
+        <tr data-id="{{$lop->id}}">
+          <td>{{$loop->iteration}} </td>
+          <td>{{$lop->id}} </td>
+          <td>{{$lop->name}}</td>
+          <td><i  class=" far {{ $lop->open ? 'fa-check-square color6' : 'fa-square' }} fa-2x"></i></td>
+          <td>{{$lop->users->filter(function($item){return in_array( $item->role->name, ['admin', 'head_instructor', 'instructor']);})->pluck('username')->join(', ') }}</td>
+          <td>{{$lop->users()->count() }}</td>
+          <td>{{$lop->assignments()->count() }}</td>
+          <td>
+            
+            <a title="student list" href="{{ route('lops.show', $lop->id) }}" class = "fas fa-list fa-lg color8"></a>
+            @if ( in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
+              <a title="Email all student" href = {{ 'mailto:' . $lop->users->pluck('email')->join(',') }}> <i class="fas fa-mail-bulk    "></i> </a>
+              <a title="scores" href="{{ route('lop.scoreboard', $lop->id) }}" class = "fas fa-clipboard-list fa-lg color8"></a>
+              <a title="Edit" href="{{ route('lops.edit', $lop->id) }}"><i class="fas fa-edit fa-lg color9"></i></a>
+              <span title="Delete lop" class="delete-btn del_n delete_lop pointer" href="{{ route('lops.destroy', $lop->id) }}"><i class="fa fa-times-circle fa-lg text-danger"></i></span>
+            @endif
+          </td>
+        </tr>
+        @endforeach
+    </table>
+  </div>
+
 </div>
 <div class="modal fade" id="lop_delete" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
   <div class="modal-dialog" role="document">
