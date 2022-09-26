@@ -1,8 +1,6 @@
 #!/bin/bash
 
 cp $USERDIR/$FILENAME.$EXT $FILENAME.$EXT
-shj_log "Checking Python Syntax"
-
 
 shj_log "$tester_dir/run_judge_in_docker.sh "`pwd` "${languages_to_docker[$EXT]} node --check $FILENAME.$EXT >/dev/null 2>cerr"
 $tester_dir/run_judge_in_docker.sh `pwd` ${languages_to_docker[$EXT]} node --check $FILENAME.$EXT >/dev/null 2>cerr
