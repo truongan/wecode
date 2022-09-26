@@ -157,17 +157,17 @@
 				<td class="js-verdict">
 					<x-submission.verdict :submission=$submission/>
 				</td>
-				<td>
+				<td class="js-mem">
 					@if ((count($submission->judgement->mems ?? []) > 0)) {{max($submission->judgement->times) }}s
 					@endif
 				</td>
-				<td>
+				<td class = "js-time">
 					@if ((count($submission->judgement->mems ?? []) > 0))
 					{{max($submission->judgement->mems) }}KiB
 					@endif
 				</td>
-				<td class="status">
-					@if (strtolower($submission->status) == "pending")
+				<td class="status js-score">
+					{{-- @if (strtolower($submission->status) == "pending")
 						<div class="btn btn-secondary pending" data-type="result">PENDING</div>
 					@else 
 						@if ($submission->pre_score == 10000)
@@ -175,6 +175,18 @@
 						@else
 							<div class="btn btn-danger" data-type="result">{{$submission->final_score}}</div>
 						@endif
+					@endif --}}
+					@if (strtolower($submission->status) != "pending")
+
+						<span class= "lead 
+						@if ($submission->pre_score == 10000)
+							text-success
+						@else
+							text-danger
+						@endif
+						">
+							{{$submission->final_score}}
+						</span>
 					@endif
 				</td>
 				<td>

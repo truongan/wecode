@@ -105,9 +105,10 @@ $(document).ready(function () {
 
 	$(".shj_rejudge").click(function () {
 		var row = $(this).parents('tr');
-		console.log(row);
-		console.log(row.data());
-		console.log(row.data('id'));
+		var vanilajs_row = row[0];
+		// console.log(row);
+		// console.log(row.data());
+		// console.log(row.data('id'));
 		$.ajax({
 			type: 'POST',
 			url: site_url + '/submissions/rejudge',
@@ -118,7 +119,11 @@ $(document).ready(function () {
 			success: function (response) {
 				if (response.done) {
 					// console.log(row.children());
-					row.children('.js-verdict').html('<div class="btn btn-secondary pending" data-type="code">PENDING</div>');
+					row.children('.js-verdict').html('<div class="btn btn-secondary pending" data-type="result">PENDING</div>');
+					vanilajs_row.querySelector('.js-time').innerHTML = '';
+					vanilajs_row.querySelector('.js-mem').innerHTML = '';
+					vanilajs_row.querySelector('.js-score').innerHTML = '';
+					
 					$.notify('Rejudge in progress', {position: 'bottom right', className: 'info', autoHideDelay: 2500});
 					setTimeout(update_status, update_status_interval);
 				}
@@ -168,8 +173,8 @@ update_status_interval = 6000;
 function update_status(){
 
 	$('tr').each(function(){
-		var status = $(this).children('.status');
-		var row = $(this);
+		var status = $(this).children('.js-verdict');
+		var row = $(this)[0];
 		if (status.children('div').hasClass('pending')){
 			$.ajax({
 				type: 'POST',
@@ -180,19 +185,22 @@ function update_status(){
 				error: shj.loading_error,
 				success: function (response) {
 					response = JSON.parse(response);
-					//console.log(response.status);
-					//console.log(typeof response);
+					console.log(response.status);
+					console.log(typeof response);
 					var element;
 					switch (response.status.toLowerCase() ){
 						case 'pending':
-							element = ('<div class="btn btn-secondary pending" data-type="result" data-type="code">PENDING</div>');
+							element = ('<div class="btn btn-secondary pending" data-type="result" >PENDING</div>');
 							$.notify('Still pending', {position: 'bottom right', className: 'info', autoHideDelay: 2000});
 
 						break;
 
 						case  'score' :
-							element = '<div class="btn ' + (response.pre_score == 10000 ? 'btn-success' : 'btn-danger');
-							element += '" data-type="result" >' + response.final_score + '</div>';
+							if (response.judgement.mems.length > 0) row.querySelector('.js-time').innerHTML = Math.max(...response.judgement.times);
+							if (response.judgement.mems.length > 0) row.querySelector('.js-mem').innerHTML = Math.max(...response.judgement.mems);
+							row.querySelector('.js-mem').innerHTML = '<span class = "lead " > ' + response.final_score + '</span>';
+							if (response.pre_score == 10000)
+
 							$.notify('Submission has been judged', {position: 'bottom right', className: 'success', autoHideDelay: 2000});
 
 						break;
@@ -201,7 +209,7 @@ function update_status(){
 							element = ('<div class="btn btn-primary"  data-type="result">' + response.status + '</div>');
 					}
 					// status.html(element);
-					row.children('js-verdict').html(response.verdict);
+					row.querySelector('.js-verdict').innerHTML = response.rendered_verdict;
 				}
 			});
 		}
