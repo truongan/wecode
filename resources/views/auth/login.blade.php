@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="row justify-content-center align-middle">
-    <div class="col-auto gy-5 login">
+    <div class="col-sm-auto col-lg-5 gy-5 login">
         <h1 class="display-4 text-center ">{{ $settings['site_name']  }}</h1>
         {{-- <div class="jumbotron"> --}}
         {{-- </div> --}}
