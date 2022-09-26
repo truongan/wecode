@@ -198,8 +198,8 @@ function update_status(){
 						case  'score' :
 							if (response.judgement.mems.length > 0) row.querySelector('.js-time').innerHTML = Math.max(...response.judgement.times);
 							if (response.judgement.mems.length > 0) row.querySelector('.js-mem').innerHTML = Math.max(...response.judgement.mems);
-							row.querySelector('.js-mem').innerHTML = '<span class = "lead " > ' + response.final_score + '</span>';
-							if (response.pre_score == 10000)
+							row.querySelector('.js-score').innerHTML = '<span class = "lead " > ' + response.final_score + '</span>';
+							row.querySelector('.js-score').classList.add( response.pre_score == 10000 ? 'text-success' : 'text-danger');
 
 							$.notify('Submission has been judged', {position: 'bottom right', className: 'success', autoHideDelay: 2000});
 

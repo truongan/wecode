@@ -99,8 +99,8 @@
 					<th width="15%"><small> Problem</small></th>
 					<th width="10%"><small> Submit Time</small></th>
 					<th width="25%"><small> judge verdict </small></th>
-					<th width="1%"><small> Max <i class="far fa-clock"></i></small></th>
-					<th width="1%"><small> Max <i class="fas fa-memory"></i> </small></th>
+					<th width="1%"><small> Max <i class="far fa-clock"></i>(s)</small></th>
+					<th width="1%"><small> Max <i class="fas fa-memory"></i>(kiB) </small></th>
 					<th width="6%"><small> Score</small></th>
 					<th width="5%"><small> Code</small></th>
 				</tr>
@@ -157,13 +157,13 @@
 				<td class="js-verdict">
 					<x-submission.verdict :submission=$submission/>
 				</td>
-				<td class="js-mem">
-					@if ((count($submission->judgement->mems ?? []) > 0)) {{max($submission->judgement->times) }}s
+				<td class="js-time">
+					@if ((count($submission->judgement->mems ?? []) > 0)) {{max($submission->judgement->times) }}
 					@endif
 				</td>
-				<td class = "js-time">
+				<td class = "js-mem">
 					@if ((count($submission->judgement->mems ?? []) > 0))
-					{{max($submission->judgement->mems) }}KiB
+					{{max($submission->judgement->mems) }}
 					@endif
 				</td>
 				<td class="status js-score">
