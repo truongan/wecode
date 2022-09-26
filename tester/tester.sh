@@ -368,10 +368,12 @@ for((i=1;i<=TST;i++)); do
 		#Limit the amount of time tester run.
 		#Perhaps 5 times longer than the solution timelimit is enough
 		ulimit -t $(($TIMELIMITINT*5))
-		./shj_tester $PROBLEMPATH/in/input$i.txt $PROBLEMPATH/out/output$i.txt out 2>cerr
+		# ./shj_tester $PROBLEMPATH/in/input$i.txt $PROBLEMPATH/out/output$i.txt out 2>cerr
+		shj_log "--Tester code verdict:"
+		./shj_tester $PROBLEMPATH/in/input$i.txt $PROBLEMPATH/out/output$i.txt out &>cerr
 		EC=$?
 		shj_log "$EC"
-		shj_log `cat cerr`
+		cat cerr >>$LOGFILE
 		if [ $EC -eq 0 ]; then
 			ACCEPTED=true
 		fi

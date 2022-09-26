@@ -9,7 +9,7 @@ use App\Submission;
 use App\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Hash;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
@@ -225,10 +225,10 @@ class UserController extends Controller
 		]);
 		if (Auth::user()->id == $user->id ) 
 		{
-			// When changing oneself's password (ofc you have to be admin at thí point)
+			// When changing oneself's password (ofc you have to be admin at this point)
 			$request->validate([
 				'old_password' => ['required_with:password', function ($attribute, $value, $fail) use ($user) {
-					if (isset($value) && !\Hash::check($value, $user->password)) {
+					if (isset($value) && !Hash::check($value, $user->password)) {
 						return $fail(__('The current password is incorrect.'));
 					}
 				}],

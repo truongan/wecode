@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
+use App\View\Components\submission\verdict;
+
 class submission_controller extends Controller
 {
 	public function __construct()
@@ -127,7 +129,7 @@ class submission_controller extends Controller
 		
 		$problem = $this->_creation_guard_check($assignment_id, $problem_id);
 
-		$last = Submission::where(['assignment_id' => 0, 'problem_id' => $problem_id, 'user_id' => Auth::user()->id]);
+		$last = Submission::where(['assignment_id' => $assignment_id, 'problem_id' => $problem_id, 'user_id' => Auth::user()->id]);
 		if ($old_sub != -1) $last = $last->where(['id'=> $old_sub]);
 
 		$last = $last->get()->last();
@@ -361,6 +363,7 @@ class submission_controller extends Controller
 			'is_final' => 0,
 			'status' => 'pending',
 			'pre_score' => 0,
+			'judgement' => "",
 			'coefficient' => $coefficient,
 			'file_name' => null,
 			'language_id' => $language->id,
@@ -462,7 +465,10 @@ class submission_controller extends Controller
 		$this->_do_access_check($submission);
 
 		$this->_status($submission);
-		
+
+		$a = new verdict($submission);
+
+		$submission->rendered_verdict = $a->resolveView()->with($a->data())->render();
 		echo json_encode($submission);
 		
 	}

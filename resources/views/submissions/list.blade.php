@@ -71,7 +71,7 @@
 		{{-- <hr> --}}
 		@if ($choose == 'all')
 		<span>
-		<i class="fa fa-warning color3"></i> You cannot change your final submissions after assignment finishes.
+		<i class="fa fa-warning color3"></i> You cannot change your final submissions after assignment finishes.<i class="fa-solid fa-memory"></i><i class="fa-regular fa-clock"></i>
 		</span>
 		@endif
 	</div>
@@ -89,25 +89,20 @@
 						<th width="1%" rowspan="1">#</th>
 					@endif
 						<th width="2%" rowspan="1"><small> Submit ID</small></th>
+					
 					@if (in_array( Auth::user()->role->name, ['student', 'guest']))
-						<th width="15%"><small> Problem</small></th>
-						<th width="10%"><small> Submit Time</small></th>
-						<th width="10%"><small> Delay (%)</small></th>
-						<th width="1%"><small> Language</small></th>
-						<th width="5%"><small> Status</small></th>
-						<th width="5%"><small> Code</small></th>
+	
 					@else
 						<th width="10%"><small> Username</small></th>
-						{{-- <th width="20%"><small> Name</small></th> --}}
-						<th width="15%"><small> Problem</small></th>
-						<th width="10%"><small> Submit Time</small></th>
-						<th width="6%"><small> Delay %</small></th>
-						<th width="1%"><small> Lang</small></th>
-						<th width="6%"><small> Status</small></th>
-						<th width="6%"><small> Code</small></th>
 						<th width="6%"><small> Log / rejudge</small></th>
-						{{-- <th width="1%"><small> Rejudge</small></th> --}}
 					@endif
+					<th width="15%"><small> Problem</small></th>
+					<th width="10%"><small> Submit Time</small></th>
+					<th width="25%"><small> judge verdict </small></th>
+					<th width="1%"><small> Max <i class="far fa-clock"></i></small></th>
+					<th width="1%"><small> Max <i class="fas fa-memory"></i> </small></th>
+					<th width="6%"><small> Score</small></th>
+					<th width="5%"><small> Code</small></th>
 				</tr>
 			</thead>
 			@foreach ($submissions as $submission)
@@ -130,7 +125,10 @@
 					<br/><i class="fas fa-filter"></i>
 					</a><br/>
 				</td>
-				{{-- <td></td> --}}
+				<td>
+					<div class="btn btn-secondary" data-type="log">Log</div>
+					<span class="shj_rejudge pointer m-2"><i class="fa fa-redo fa-lg color10"></i></span>
+				</td>
 				@endif
 				<td>
 					@if ($assignment->id == 0)
@@ -144,43 +142,45 @@
 					<a href="{{route('submissions.create', [$assignment->id,$submission->problem_id,$submission->id])}}"><span class="btn btn-dark btn-sm"><i class="fas fa-edit"></i></span></a>
 					<a href="{{route('submissions.index', [$assignment->id, $user_id, strval($submission->problem_id), 'all'])}}"><span class="btn btn-info btn-sm m-1"><i class="fas fa-filter"></i></span></a>
 				</td>
-				<td><small>{{$submission->created_at->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('llll (UZZ)') }}</small></td>
-
-				<td>
-					<span class="small {{ $submission->delay->total('seconds') > 0 ? 'text-danger' :'text-secondary' }} ">
-						@if ($submission->delay->total('seconds') <= 0)
-							No Delay
-						@else
-							{{ $submission->delay->forHumans(['short'=>true]) }}
+				<td title="reward / penalty on submission time: {{ $submission->coefficient }}%">
+					<span class="small">
+						{{$submission->created_at->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('llll:ss') }}
+					</span>
+					<br/>
+					<span class="small {{ $submission->delay->total('seconds') > 0 ? 'text-danger' :'text-secondary' }} " tool >
+						@if ($submission->delay->total('seconds') > 0)
+							{{ $submission->delay->forHumans(['short'=>true, 'parts' => 2]) }} late
 						@endif
-						</span><br>
-					{{ $submission->coefficient }}%
+					</span><br>
+					
 				</td>
-				<td>{{$submission->language->name}}</td>
+				<td class="js-verdict">
+					<x-submission.verdict :submission=$submission/>
+				</td>
+				<td>
+					@if ((count($submission->judgement->mems ?? []) > 0)) {{max($submission->judgement->times) }}s
+					@endif
+				</td>
+				<td>
+					@if ((count($submission->judgement->mems ?? []) > 0))
+					{{max($submission->judgement->mems) }}KiB
+					@endif
+				</td>
 				<td class="status">
 					@if (strtolower($submission->status) == "pending")
 						<div class="btn btn-secondary pending" data-type="result">PENDING</div>
-					@elseif (strtolower($submission->status) == "score")
+					@else 
 						@if ($submission->pre_score == 10000)
 							<div class="btn btn-success" data-type="result">{{$submission->final_score}}</div>
 						@else
 							<div class="btn btn-danger" data-type="result">{{$submission->final_score}}</div>
 						@endif
-					@else 
-						<div class="btn btn-danger" data-type="result">{{$submission->status}}</div>
 					@endif
 				</td>
 				<td>
-					<div class="btn btn-warning" data-type="code">Code</div>
+					<div class="btn btn-warning" data-type="code">{{$submission->language->name}}</div>
 				</td>
 
-				@if (!in_array( Auth::user()->role->name, ['student', 'guest']))
-				<td>
-					<div class="btn btn-secondary" data-type="log">Log</div>
-					<div class="shj_rejudge pointer m-2"><i class="fa fa-redo fa-lg color10"></i></div>
-				</td>
-
-				@endif
 			</tr>
 			@endforeach
 		</table>
