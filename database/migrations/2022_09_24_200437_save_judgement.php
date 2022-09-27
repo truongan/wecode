@@ -15,7 +15,7 @@ class SaveJudgement extends Migration
      */
     public function up()
     {
-        if (!Schema::hasColumn('submissions')){
+        if (!Schema::hasColumn('submissions', 'judgement')){
 
             Schema::table('submissions', function (Blueprint $table) {
                 //
@@ -24,7 +24,7 @@ class SaveJudgement extends Migration
         }
 
         $progress = 0;
-        Submission::chunk(400, function($subs) use (&$progress){
+        Submission::chunk(800, function($subs) use (&$progress){
             foreach ($subs as  $sub){
                 $result = file_get_contents( $sub->directory() . "/result-" . $sub->id . ".html");
                 $results = explode("</span>\n", $result);
@@ -64,7 +64,7 @@ class SaveJudgement extends Migration
      */
     public function down()
     {
-        if (Schema::hasColumn('submissions')){
+        if (Schema::hasColumn('submissions', 'judgement')){
 
             Schema::table('submissions', function (Blueprint $table) {
                 //
