@@ -26,7 +26,7 @@ class SaveJudgement extends Migration
         $progress = 0;
         Submission::chunk(8000, function($subs) use (&$progress){
             foreach ($subs as  $sub){
-                if($sub->judgement == "") continue;
+                if($sub->judgement != "") continue;
                 $result = mb_convert_encoding( file_get_contents( $sub->directory() . "/result-" . $sub->id . ".html"), 'UTF-8');
                 $results = explode("</span>\n", $result);
                 
