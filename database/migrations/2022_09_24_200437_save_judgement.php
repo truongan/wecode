@@ -47,8 +47,13 @@ class SaveJudgement extends Migration
                 // echo($result . "\n");
                 // echo($a );
                 // echo("-------------\n");
-                $sub->judgement = $a;
-                $sub->save();
+                try{
+                    $sub->judgement = $a;
+                    $sub->save();
+                } catch (Exception $e){
+                    echo 'Caught exception: ',  $e->getMessage(), "\n";
+                    var_dump($a); 
+                }
             }
             $progress += $subs->count();
             echo ("----Process " . $progress . "\n");
