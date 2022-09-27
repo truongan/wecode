@@ -49,7 +49,7 @@ class Submission extends Model
 
 
     public function get_judgement_from_result_html(){
-        $result = file_get_contents( $this->directory() . "/result-" . $this->id . ".html");
+        $result = mb_convert_encoding( file_get_contents( $this->directory() . "/result-" . $this->id . ".html"), 'UTF-8');
         $results = explode("</span>\n", $result);
         
         $times_and_mem = Arr::flatten(array_filter($results, function($i){return str_contains($i, 'text-muted');}));
