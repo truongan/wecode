@@ -27,11 +27,11 @@ class SaveJudgement extends Migration
         Submission::chunk(8000, function($subs) use (&$progress){
             foreach ($subs as  $sub){
                 if($sub->judgement != "") continue;
-                try{
-
-                    $result = mb_convert_encoding( file_get_contents( $sub->directory() . "/result-" . $sub->id . ".html"), 'UTF-8');
+                $path =  $sub->directory() . "/result-" . $sub->id . ".html";
+                if (file_exists($path)){
+                    $result = mb_convert_encoding( file_get_contents($path), 'UTF-8');
                 }
-                catch(Execption $e){
+                else{
                     $result = "";
                 }
                 $results = explode("</span>\n", $result);
