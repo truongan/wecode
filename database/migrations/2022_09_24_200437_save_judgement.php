@@ -27,7 +27,13 @@ class SaveJudgement extends Migration
         Submission::chunk(8000, function($subs) use (&$progress){
             foreach ($subs as  $sub){
                 if($sub->judgement != "") continue;
-                $result = mb_convert_encoding( file_get_contents( $sub->directory() . "/result-" . $sub->id . ".html"), 'UTF-8');
+                try{
+
+                    $result = mb_convert_encoding( file_get_contents( $sub->directory() . "/result-" . $sub->id . ".html"), 'UTF-8');
+                }
+                catch(Execption $e){
+                    $result = "";
+                }
                 $results = explode("</span>\n", $result);
                 
                 $times_and_mem = Arr::flatten(array_filter($results, function($i){return str_contains($i, 'text-muted');}));
