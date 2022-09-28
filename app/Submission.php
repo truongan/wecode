@@ -3,6 +3,8 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Prunable;
+
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Setting;
@@ -12,6 +14,12 @@ use Illuminate\Support\Str;
 
 class Submission extends Model
 {
+    use Prunable;
+
+    public function prunable(){
+        return static::doesntHave('user');
+    }
+
     protected $fillable = ['id', 'user_id','assignment_id','problem_id','is_final','time','status','pre_score'
                             ,'coefficient','file_name','language_id', 'judgement'];
     protected $casts = [

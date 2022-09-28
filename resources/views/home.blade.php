@@ -82,7 +82,18 @@ js') }}"></script>
                 </div>
             </div>
         </div>
-
+        <div class="m-2">
+            <div class="card bg-dark text-light">
+                <i class="text-center card-img-top fas fa-clipboard-list fa-2x p-3"></i>
+                <div class="card-body bg-light text-dark">
+                    <small><strong class="card-title">User statistics</strong></small>
+                    <small>
+                        <p class="card-text">Thống kê tình hình submit của user</p>
+                    </small>
+                    <a href="{{ route('users.rank') }}" class="stretched-link"></a>
+                </div>
+            </div>
+        </div>
         <div class="m-2">
             <div class="card bg-dark text-light">
                 <i class="text-center card-img-top fas fa-laptop-code fa-2x p-3"></i>
@@ -115,6 +126,18 @@ js') }}"></script>
 @if ( in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
 <div class="row">
     <div class="card-group ">
+        <div class="m-2">
+            <div class="card bg-dark text-light">
+                <i class="text-center card-img-top fas fa-users fa-2x p-3"></i>
+                <div class="card-body bg-light text-dark">
+                    <small><strong class="card-title">USERS</strong></small>
+                    <small>
+                        <p class="card-text">Quản lý người dùng</p>
+                    </small>
+                    <a href="{{ route('users.index') }}" class="stretched-link"></a>
+                </div>
+            </div>
+        </div>
         <div class="m-2">
             <div class="card bg-dark text-light">
                 <i class="text-center card-img-top fas fa-clipboard-list fa-2x p-3"></i>
