@@ -304,11 +304,17 @@ class UserController extends Controller
 
 	public function add_multiple()
 	{
+		if( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor'])){
+			abort(403);
+		}
 		return view('users.add');
 	}
 
 	public function add(Request $request)
 	{
+		if( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor'])){
+			abort(403);
+		}
 		if ($request->has(['new_users'])) {
 			$all = $this->add_users(
 				$request['new_users'],
@@ -342,6 +348,9 @@ class UserController extends Controller
 	// add one user 
 	public  function add_user($username, $email, $password, $role, $display_name="")
 	{
+		if( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor'])){
+			abort(403);
+		}
 		$json = [];
 		// $name = ['username'=>$username];
 		$user = [
@@ -362,9 +371,39 @@ class UserController extends Controller
 				array_push($json, $message);
 			}
 		}
-		
+
+
+		// Check permissions
+		// admin can create any user
+		// head_instructor can create instructor and student
+		// instructor can create student
+
+		if (Auth::user()->role->name == 'admin'){
+			//nothing to be done, admin do whatever he wants
+		} 
+		elseif (Auth::user()->role->name == 'head_instructor'){
+			if (!in_array($role, ['instructor', 'student']))
+			{
+				array_push($json, 'you can add user with role "instructor" or "student" only');
+			}
+		}
+		elseif (Auth::user()->role->name == 'instructor'){
+			
+			if (!in_array($role, [ 'student']))
+			{
+				array_push($json, 'you can add user with role "student" only');
+			}
+		}
+		else {
+			
+			array_push($json, 'you do not have permission to add user');
+		}
+
 		if (count($json)>0)
 			return $json;
+		
+
+		
 		$user['password'] = Hash::make($password);
 
 		
@@ -376,7 +415,9 @@ class UserController extends Controller
 	// add multiple user 
 	public function add_users($text, $send_mail, $delay)
 	{
-
+		if( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor'])){
+			abort(403);
+		}
 		$lines = preg_split('/\r?\n|\n?\r/', $text);
 		
 		$users_ok = [];
