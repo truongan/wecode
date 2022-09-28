@@ -98,7 +98,7 @@ class problem_controller extends Controller
     public function store(Request $request)
     {
         //dd($request->input('tag_id'));
-        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
+        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
             abort(404);
         
         $validatedData = $request->validate([
@@ -278,9 +278,11 @@ class problem_controller extends Controller
     public function destroy($id = NULL)
     {
         
+
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
             abort(404);
             
+        
         elseif ($id === NULL)
         {
             $json_result = array('done' => 0, 'message' => 'Input Error');
@@ -289,6 +291,9 @@ class problem_controller extends Controller
         {
            
             $problem = Problem::find($id);
+
+            $this->can_edit_or_404($problem);
+            
             $result['no_of_ass'] = $problem->assignments->count();
             $result['no_of_sub'] = $problem->submissions->count();
             $result['languages'] = $problem->languages;
