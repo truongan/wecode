@@ -346,7 +346,7 @@ class UserController extends Controller
 	}
 
 	// add one user 
-	public  function add_user($username, $email, $password, $role, $display_name="")
+	public  function add_user($username, $email, $password, $role, $display_name="", $role_name = '')
 	{
 		if( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor'])){
 			abort(403);
@@ -377,25 +377,23 @@ class UserController extends Controller
 		// admin can create any user
 		// head_instructor can create instructor and student
 		// instructor can create student
-
 		if (Auth::user()->role->name == 'admin'){
 			//nothing to be done, admin do whatever he wants
 		} 
 		elseif (Auth::user()->role->name == 'head_instructor'){
-			if (!in_array($role, ['instructor', 'student']))
+			if (!in_array($role_name, ['instructor', 'student']))
 			{
 				array_push($json, 'you can add user with role "instructor" or "student" only');
 			}
 		}
 		elseif (Auth::user()->role->name == 'instructor'){
 			
-			if (!in_array($role, [ 'student']))
+			if (!in_array($role_name, [ 'student']))
 			{
 				array_push($json, 'you can add user with role "student" only');
 			}
 		}
 		else {
-			
 			array_push($json, 'you do not have permission to add user');
 		}
 
@@ -424,6 +422,7 @@ class UserController extends Controller
 		$users_error = [];
 		
 		$role_name_to_id = Role::all()->pluck('id', 'name');
+		$role_id_to_name = Role::all()->pluck('name', 'id');
 
 		// loop over lines of $text :
 		foreach ($lines as $line)
@@ -446,10 +445,17 @@ class UserController extends Controller
 					$parts[2] = substr(md5(rand()),0,$len);
 				}
 			}
-			$parts[3] = $role_name_to_id[$parts[3]];
-			$result = $this->add_user($parts[0], $parts[1], $parts[2], $parts[3], $parts[4]);
-			
 			$infomation_user = array($parts[0], $parts[1], $parts[2], $parts[3], $parts[4]);
+
+			if (!$role_id_to_name->contains($parts[3])){
+				array_push($infomation_user,['invalid role ' . $parts[3]]);
+				array_push($users_error,$infomation_user);
+				continue;
+			}
+
+			$result = $this->add_user($parts[0], $parts[1], $parts[2],  $role_name_to_id[$parts[3]], $parts[4], $parts[3]);
+			
+			
 			
 			if ($result === TRUE)
 				array_push($users_ok,$infomation_user);
