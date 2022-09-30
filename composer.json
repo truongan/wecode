@@ -8,6 +8,7 @@
     ],
     "license": "MIT",
     "require": {
+        "doctrine/dbal": "^3.4",
         "fideloper/proxy": "^4.0",
         "laravel/framework": "^8.0",
         "laravel/tinker": "^2.0",
