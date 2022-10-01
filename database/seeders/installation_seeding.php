@@ -24,7 +24,7 @@ class installation_seeding extends Seeder
                 array('key' => 'file_size_limit',        'value' => '50'),
                 array('key' => 'output_size_limit',      'value' => '1024'),
                 array('key' => 'queue_is_working',       'value' => '0'),
-                array('key' => 'default_late_rule',      'value' => "/* \n * Put coefficient (from 100) in variable \$coefficient.\n * You can use variables \$extra_time and \$delay.\n * \$extra_time is the total extra time given to users\n * (in seconds) and \$delay is number of seconds passed\n * from finish time (can be negative).\n *  In this example, \$extra_time is 172800 (2 days):\n */\n\nif (\$delay<=0)\n  // no delay\n  \$coefficient = 100;\n\nelseif (\$delay<=3600)\n  // delay less than 1 hour\n  \$coefficient = ceil(100-((30*\$delay)/3600));\n\nelseif (\$delay<=86400)\n  // delay more than 1 hour and less than 1 day\n  \$coefficient = 70;\n\nelseif ((\$delay-86400)<=3600)\n  // delay less than 1 hour in second day\n  \$coefficient = ceil(70-((20*(\$delay-86400))/3600));\n\nelseif ((\$delay-86400)<=86400)\n  // delay more than 1 hour in second day\n  \$coefficient = 50;\n\nelseif (\$delay > \$extra_time)\n  // too late\n  \$coefficient = 0;"),
+                array('key' => 'default_late_rule',      'value' => "  \$coefficient = 100;"),
                 array('key' => 'enable_c_shield',        'value' => '0'),
                 array('key' => 'enable_cpp_shield',      'value' => '0'),
                 array('key' => 'enable_py2_shield',      'value' => '0'),

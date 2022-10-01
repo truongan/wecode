@@ -34,10 +34,10 @@ $(document).ready(function(){
     <small id="helpId" class="form-text text-muted">User will be able to join any classes that are open for enrollment</small>
   </div></div>
   <div class=" form-floating">
-    <textarea
-      class="form-control" name="user_list" id="" aria-describedby="helpId" placeholder=""></textarea>
+    <textarea style="height: 8em"
+      class="form-control" name="user_list"  id="" aria-describedby="helpId" placeholder=""></textarea>
     <label for="">List of users' names</label>
-    <small id="helpId" class="form-text text-muted">The list of users names for every one enroll  in the class, separated by comma</small>
+    <small id="helpId" class="form-text text-muted">The list of usernames for every one enroll  in the class, separated by comma, space, tab or</small>
   </div>
   <button type="submit" class="btn btn-primary">Add</button>
 </form>
