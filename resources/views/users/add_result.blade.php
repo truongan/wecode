@@ -22,8 +22,8 @@
 					<span class="text-muted">Usename: {{$item[0]}} </span> 
 					<span class="text-muted">Email: {{$item[1]}}</span>   
 					<span class="text-muted">Password: </span><code> {{$item[2]}} </code> 
-					<span class="text-muted">Role:</span>  {{$item[3]}} ( {{$item[4]}} )
-					<span class="text-muted">Role:</span>  {{$item[3]}} ( {{$item[4]}} )
+					<span class="text-muted">Role:   {{$item[3]}} </span>
+					<span class="text-muted">Name:  {{$item[4]}} </span> 
 					@foreach ($item[5] as $message)
 						<p>{{$loop->index + 1}} - {{$message}}</p>
 					@endforeach
