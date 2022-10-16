@@ -25,11 +25,11 @@ class practice_controller extends Controller
     	Auth::user()->selected_assignment_id = 0;
     	Auth::user()->save(); 
 		$problems = Problem
-		// ::with('submissions.assignment','languages')
-		::with('languages')
-		->where('allow_practice',1)
-		->latest()
-		->paginate(Setting::get('results_per_page_all'));
+			// ::with('submissions.assignment','languages')
+			::with('languages')
+			->where('allow_practice',1)
+			->latest()
+			->paginate(Setting::get('results_per_page_all'));
 
 
 		$a  =  $problems->pluck('id');

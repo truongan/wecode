@@ -21,6 +21,7 @@ class Problem extends Model
         if ($user->role->name == 'admin') return true;
         if ($user->id == $this->user->id) return true;
         if ($this->allow_practice) return true;
+        if ($this->sharable &&  in_array( $user->role->name, ['head_instructor', 'instructor']) ) return true;
         return false;
     }
 
