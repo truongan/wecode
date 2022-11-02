@@ -46,6 +46,6 @@ class AppServiceProvider extends ServiceProvider
            return $url->current();
         });
 
-        Paginator::useBootstrap();
+        Paginator::useBootstrapFive();
     }
 }
