@@ -6,7 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
 
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\App;
+// use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\URL;
 
 
