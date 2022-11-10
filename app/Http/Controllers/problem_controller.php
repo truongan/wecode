@@ -485,11 +485,12 @@ class problem_controller extends Controller
             abort(404,"File not found");
 
         // Download the file to browser
-        
-        return response()->file($pdf_files);
+        $headers = [
+            'Content-Description' => 'File Transfer',
+            'Content-Type' => 'application/pdf',
+        ];
+        return response()->file($pdf_files, $headers);
 
-        
-    
     }
 
     public function template($problem_id, $assignment_id)
