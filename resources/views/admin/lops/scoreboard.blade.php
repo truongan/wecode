@@ -2,31 +2,23 @@
 @php($ed = Route::currentRouteName() == 'lops.show' ? '0' : '1')
 @extends('layouts.app')
 @section('head_title')
-	@if ($ed)
-		Edit Classes
-	@else
-		Classes list
-	@endif
+	Class scores
 @endsection
-@section('icon', 'fas fa-school')
+@section('icon', 'fas fa-clipboard-list')
 
 @section('title')
-	@if ($ed)
-		Edit Classes
-	@else
-		Classes list
-	@endif
+Class scores
 @endsection
 
 @section('title_menu')
 	<span class="ms-4 fs-6"><a href="{{ route('lops.index') }}"><i class="fa fa-list text-success"></i>Back to list of class</a></span>
 	@if (in_array( Auth::user()->role->name, ['admin', 'head_instructor']))
-	<span class="ms-4 fs-6"><a href="{{ route('lops.create') }}"><i class="fa fa-plus text-success"></i>Add class</a></span>
+	<span class="ms-4 fs-6" onclick="document.querySelectorAll('a.btn-outline-success').forEach(i => {console.log(i.classList); i.classList.remove('btn')}) "><a href="#"><i class="fa fa-broom text-success"></i>remove button (reload to restore)</a></span>
 	@endif
 @endsection
 
 @section('other_assets')
-  <link rel='stylesheet' type='text/css' href='https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap5.min.css'/>
+  <link rel='stylesheet' type='text/css' href='https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css'/>
 @endsection
 
 @section('content')
@@ -89,7 +81,7 @@
 @section('body_end')
 
 
-<script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.10.25/datatables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
 
 <script>
 
