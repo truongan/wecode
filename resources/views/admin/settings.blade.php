@@ -180,13 +180,17 @@
 	</div>
 
 	{{-- Hide these for now until we have proper mail implementation later  --}}
-	{{-- <br><h4>Emails settings</h4><hr>
+	<br><h4>Emails settings</h4><hr>
 	<div class="form-old-row row mb-3">
-		<fieldset class="col-md-6">
-			<label for="form_mail_from">Send Emails From</label>
+		<fieldset class="col-md-4">
+			<label for="form_mail_from">Send Emails From address</label>
 			<input id="form_mail_from" type="text" name="mail_from" class="form-control medium" value="{{ $mail_from }}"/>
 		</fieldset>
-		<fieldset class="col-md-6">
+		<fieldset class="col-md-4">
+			<label for="form_mail_from">Email address password</label>
+			<input id="form_mail_from" type="text" name="mail_from" class="form-control medium" value="{{ $mail_from }}"/>
+		</fieldset>
+		<fieldset class="col-md-4">
 			<label for="form_mail_name">Send Emails "From" Name</label>
 			<input id="form_mail_name" type="text" name="mail_from_name" class="form-control medium" value="{{ $mail_from_name }}"/>
 		</fieldset>
@@ -214,7 +218,7 @@
 				</div>
 			</div>
 		</fieldset>
-	</div> --}}
+	</div>
 
 
 
