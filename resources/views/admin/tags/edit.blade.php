@@ -10,9 +10,7 @@
 @endsection
 
 @section('content')
-@section('other_assets')
-  <link rel='stylesheet' type='text/css' href='https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css'/>
-@endsection
+
 
 <div class="row">
   	<form action="{{route('tags.update', $tag->id)}}" method="POST">
@@ -71,7 +69,7 @@
 @section('body_end')
 
 
-<script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.10.25/datatables.min.js"></script>
 <script>
 
 $(document).ready(function(){

@@ -84,6 +84,7 @@
 		@if($problem->has_pdf)
 			<div class="problem_description" id="problem_pdf_embed">
 				<object data="{{ route('problems.pdf',$problem->id) }}" type="application/pdf" width="100%" height="100%">
+					
 					<p>If this browser does not support PDFs. Please download the PDF to view it: 
 					<a href="{{ route('problems.pdf',$problem->id) }}">Download PDF</a>.</p>
 				</object>

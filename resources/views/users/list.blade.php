@@ -5,7 +5,7 @@
 @section('title', 'Users')
 
 @section('other_assets')
-  <link rel='stylesheet' type='text/css' href='https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css'/>
+  <link rel='stylesheet' type='text/css' href='https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap5.min.css'/>
   {{-- <style>
 
 tbody{
@@ -117,7 +117,7 @@ thead tr:after {
 </div>
 </div>
 
-<script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.10.25/datatables.min.js"></script>
 <script>
 document.getElementById('copy_user_list').addEventListener('click', function(){
   cells = document.querySelectorAll('tr > #un');
