@@ -64,7 +64,11 @@ class problem_controller extends Controller
             $p->ratio = round($p->accepted_submit / max($p->total_submit,1), 2)*100;
         }
         // dd(DB::getQueryLog());
-        return view('problems.list',['problems'=>$all_problem]); 
+        return view('problems.list',[
+                'problems'=>$all_problem,
+                'all_tags' => Tag::all(),
+            ]
+        ); 
     }
 
     /**

@@ -16,18 +16,30 @@
 
 @section('content')
 <div class="row">
-	<form class="form-inline" method="get" action="{{ route('problems.index') }}">
-		<div class="row row-cols-auto g-2 align-items-end">
-			<label for="search">Search by name</label>
-			<div class="col ">
-				<input type="text" name="search" id="search" class="form-control" placeholder="Search by name" aria-describedby="Search by name" value="{{ Request::get('search') }} " >
+	<div class="row ">
+		<form class="form-inline col-6" method="get" action="{{ route('problems.index') }}">
+			<div class="row row-cols-auto g-2 align-items-end">
+				<label for="search">Search by name</label>
+				<div class="col ">
+					<input type="text" name="search" id="search" class="form-control" placeholder="Search by name" aria-describedby="Search by name" value="{{ Request::get('search') }} " >
+				</div>
+				<div class="col">
+					<button type="button" class="btn btn-danger" onClick="document.getElementById('search').value = '' ;"><i class="fas fa-times    "></i></button>
+					<button type="submit" class="btn btn-primary">Search</button>
+				</div>
 			</div>
-			<div class="col">
-				<button type="button" class="btn btn-danger" onClick="document.getElementById('search').value = '' ;"><i class="fas fa-times    "></i></button>
-				<button type="submit" class="btn btn-primary">Search</button>
-			</div>
+		</form>
+		<div class="just-for-gutter col-6">
+			<label>Tag(s)</label>
+			<select class="js-example-tokenizer form-control" multiple="multiple" name="tag_id[]">
+				@foreach( $all_tags as $t)
+				<option value="{{ $t->id }}" data-text="{{$t->text}}" data-id="{{$t->id}}" 
+					{{ isset($tags[$t->id]) ? 'selected="selected"' : ''  }}
+					>{{$t->text}}</option>
+				@endforeach
+			</select>
 		</div>
-	</form>
+	</div>
 	<div class="table-responsive">
 	@error('messages')
 		@php( $msgclasses = array('text-success'=> 'text-success', 'text-info'=> 'text-warning', 'text-danger'=> 'text-danger') )
