@@ -4,6 +4,8 @@
 @section('icon', 'fas fa-clipboard-list')
 @section('other_assets')
   <link rel='stylesheet' type='text/css' href='https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css'/>
+  <link rel="stylesheet" type="text/css" href="{{ asset('assets/select2/select2.min.css') }}">
+
 @endsection
 @section('title','Problems')
 
@@ -16,30 +18,32 @@
 
 @section('content')
 <div class="row">
-	<div class="row ">
-		<form class="form-inline col-6" method="get" action="{{ route('problems.index') }}">
-			<div class="row row-cols-auto g-2 align-items-end">
-				<label for="search">Search by name</label>
-				<div class="col ">
-					<input type="text" name="search" id="search" class="form-control" placeholder="Search by name" aria-describedby="Search by name" value="{{ Request::get('search') }} " >
-				</div>
-				<div class="col">
-					<button type="button" class="btn btn-danger" onClick="document.getElementById('search').value = '' ;"><i class="fas fa-times    "></i></button>
-					<button type="submit" class="btn btn-primary">Search</button>
-				</div>
+	<form class="row gx-3  align-items-center" method="get" action="{{ route('problems.index') }}">
+		<div class=" col-5">
+			<div class="input-group">
+
+				<label class="input-group-text" for="search">Search by name</label>
+				<input type="text" name="search" id="search" class="form-control" placeholder="Search by name" aria-describedby="Search by name" value="{{ Request::get('search') }} " >
+				<button type="button" class="btn btn-danger" onClick="document.getElementById('search').value = '' ;"><i class="fas fa-times    "></i></button>
 			</div>
-		</form>
-		<div class="just-for-gutter col-6">
-			<label>Tag(s)</label>
-			<select class="js-example-tokenizer form-control" multiple="multiple" name="tag_id[]">
-				@foreach( $all_tags as $t)
-				<option value="{{ $t->id }}" data-text="{{$t->text}}" data-id="{{$t->id}}" 
-					{{ isset($tags[$t->id]) ? 'selected="selected"' : ''  }}
-					>{{$t->text}}</option>
-				@endforeach
-			</select>
 		</div>
-	</div>
+		<div class="col-5">
+			<div class="input-group">
+				<label class="input-group-text"> and by tag(s)</label>
+				<select class="js-example-tokenizer form-control" multiple="multiple" name="tag_id[]">
+					@foreach( $all_tags as $t)
+					<option value="{{ $t->id }}" data-text="{{$t->text}}" data-id="{{$t->id}}" 
+						{{ isset($tags[$t->id]) ? 'selected="selected"' : ''  }}
+						>{{$t->text}}</option>
+					@endforeach
+				</select>
+			</div>
+		</div>
+		<div class="col-auto">
+
+			<button type="submit" class="btn btn-primary">Search</button>
+		</div>
+	</form>
 	<div class="table-responsive">
 	@error('messages')
 		@php( $msgclasses = array('text-success'=> 'text-success', 'text-info'=> 'text-warning', 'text-danger'=> 'text-danger') )
@@ -171,13 +175,23 @@
 
 
 @section('body_end')
+<script type="text/javascript" src="{{ asset('assets/select2/select2.min.js') }}"></script>
 
 <script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
 <script>
+
+	var all_tags = {!! $all_tags !!};
+	// alert(all_tags);
 /**
 * Notifications
 */
   $(document).ready(function () {
+
+	$(".js-example-tokenizer").select2({
+		tags: true,
+		tokenSeparators: [','],
+	});
+
 	$('.del_n').click(function () {
 	  var row = $(this).parents('tr');
 	  var id = row.data('id');
