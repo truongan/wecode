@@ -27,10 +27,10 @@
 				<button type="button" class="btn btn-danger" onClick="document.getElementById('search').value = '' ;"><i class="fas fa-times    "></i></button>
 			</div>
 		</div>
-		<div class="col-5">
+		<div class="col-6">
 			<div class="input-group">
 				<label class="input-group-text"> and by tag(s)</label>
-				<select class="js-example-tokenizer form-control" multiple="multiple" name="tag_id[]">
+				<select class="js-example-tokenizer form-control"multiple="multiple" name="tag_id[]">
 					@foreach( $all_tags as $t)
 					<option value="{{ $t->id }}" data-text="{{$t->text}}" data-id="{{$t->id}}" 
 						{{ isset($tags[$t->id]) ? 'selected="selected"' : ''  }}
@@ -39,9 +39,9 @@
 				</select>
 			</div>
 		</div>
-		<div class="col-auto">
+		<div class="col-1">
 
-			<button type="submit" class="btn btn-primary">Search</button>
+			<button type="submit" class="btn btn-primary form-control">Search</button>
 		</div>
 	</form>
 	<div class="table-responsive">
@@ -190,6 +190,7 @@
 	$(".js-example-tokenizer").select2({
 		tags: true,
 		tokenSeparators: [','],
+		// width : 'style'
 	});
 
 	$('.del_n').click(function () {
