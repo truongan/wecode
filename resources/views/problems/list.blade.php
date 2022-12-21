@@ -5,6 +5,7 @@
 @section('other_assets')
   <link rel='stylesheet' type='text/css' href='https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css'/>
   <link rel="stylesheet" type="text/css" href="{{ asset('assets/select2/select2.min.css') }}">
+  {{-- <link rel="stylesheet" type="text/css" href="{{ asset('assets/select2/select2-bootstrap-5-theme.min.css') }}"> --}}
 <style>
 	.top-search-bar > .select2-container {
 		flex: 1 1;
@@ -33,12 +34,12 @@
 		<div class="col-6">
 			<div class="input-group  top-search-bar">
 				<label class="input-group-text"> and by tag(s)</label>
-				<select class="js-example-tokenizer form-control"multiple="multiple" name="tag_id[]">
-					@foreach( $all_tags as $t)
+				<select class="search-by-tags form-control"multiple="multiple" name="tag_id[]">
+					{{-- @foreach( $all_tags as $t)
 					<option value="{{ $t->id }}" data-text="{{$t->text}}" data-id="{{$t->id}}" 
 						{{ isset($tags[$t->id]) ? 'selected="selected"' : ''  }}
 						>{{$t->text}}</option>
-					@endforeach
+					@endforeach --}}
 				</select>
 			</div>
 		</div>
@@ -86,11 +87,13 @@
 
 			</td>
 			<td>
-				@foreach ($item->tags as $tag)
-			  		<span class="badge rounded-pill bg-info">{{$tag->text}}</span>
-			  	@endforeach
+				<div class="holder-for-one-problem-tags">
+					@foreach ($item->tags as $tag)
+						<span class="badge rounded-pill bg-info" data-id="{{$tag->id}}">{{$tag->text}}</span>
+					@endforeach
+				</div>
 				@if($item->can_edit(Auth::user()))
-
+				<a href="#"> <i title="Edit" class="far fa-edit fa-lg text-warning"> </i> </a>
 				@endif 
 
 			</td>
@@ -193,14 +196,13 @@
 */
   $(document).ready(function () {
 
-	$(".js-example-tokenizer").select2({
+	$(".search-by-tags").select2({
 		tags: true,
 		tokenSeparators: [','],
-		// width : 'style'
-		// theme: 'bootstrap',
 	});
-
-	$(".js-example-tokenizer").val( {!! json_encode(Request::get('tag_id')) !!} ).trigger('change');
+	document.querySelector(".search-by-tags").textContent = '' ;
+	$(".search-by-tags").append(all_tags.map(i=> new Option(i.text, i.id, false, false)));
+	$(".search-by-tags").val( {!! json_encode(Request::get('tag_id')) !!} ).trigger('change');
 
 	$('.del_n').click(function () {
 	  var row = $(this).parents('tr');
