@@ -25,6 +25,18 @@ class Problem extends Model
         return false;
     }
 
+    public function can_edit(User $user){
+        if ( ! in_array( $user->role->name, ['admin']) )
+        {
+            //Admin can always edit
+            if ($this->user->id != $user->id){
+                //Others can only edit problems they own
+                return false;
+            } 
+        }
+        return true;
+    }
+
     public function template_path($language_extension = 'cpp'){
         $pattern1 = rtrim($this->get_directory_path()
 		."/template.public." . $language_extension);

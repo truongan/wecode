@@ -27,7 +27,7 @@
 			<div class="input-group">
 				<label class="input-group-text" for="search">Search by name</label>
 				<input type="text" name="search" id="search" class="form-control" placeholder="Search by name" aria-describedby="Search by name" value="{{ Request::get('search') }} " >
-				<button type="button" class="btn btn-danger" onClick="document.getElementById('search').value = '' ;"><i class="fas fa-times    "></i></button>
+				<button type="button" class="btn btn-outline-danger" onClick="document.getElementById('search').value = '' ;"><i class="fas fa-times    "></i></button>
 			</div>
 		</div>
 		<div class="col-6">
@@ -89,6 +89,10 @@
 				@foreach ($item->tags as $tag)
 			  		<span class="badge rounded-pill bg-info">{{$tag->text}}</span>
 			  	@endforeach
+				@if($item->can_edit(Auth::user()))
+
+				@endif 
+
 			</td>
 			<td>
 				<a class="btn btn-sm btn-primary" data-bs-toggle="collapse" href="#language_list_{{$item->id}}" aria-expanded="false" aria-controls="language_list_{{$item->id}}">
@@ -120,7 +124,6 @@
 				<span class="text-info">{{ $item->total_submit }} ({{ $item->ratio }}%) </span>
 			</td>
 			<td>  
-				
 				<i  style="cursor:pointer" class="toggle_practice fas fa-dumbbell fa-2x clickable .stretched-link
 					@if( $item->allow_practice)
 						text-success
@@ -145,11 +148,12 @@
 				<a href="{{ route('problems.downloadtestsdesc',$item->id) }}">
 					<i title="Download Tests and Descriptions" class="fa fa-cloud-download-alt fa-lg text-success"></i>
 				</a>
-				<a href="{{ route('problems.edit', $item) }}"> <i title="Edit" class="far fa-edit fa-lg color3"> </i> </a>
-				<span title="Delete problem" class="del_n delete_tag pointer">
-				  <i title="Delete problem" class="far fa-trash-alt fa-lg text-danger"></i>
-				</span>
-			  
+				@if($item->can_edit(Auth::user()))
+					<a href="{{ route('problems.edit', $item) }}"> <i title="Edit" class="far fa-edit fa-lg color3"> </i> </a>
+					<span title="Delete problem" class="del_n delete_tag pointer">
+					<i title="Delete problem" class="far fa-trash-alt fa-lg text-danger"></i>
+					</span>
+				@endif
 			</td>
 		
 		</tr>
@@ -193,6 +197,7 @@
 		tags: true,
 		tokenSeparators: [','],
 		// width : 'style'
+		// theme: 'bootstrap',
 	});
 
 	$(".js-example-tokenizer").val( {!! json_encode(Request::get('tag_id')) !!} ).trigger('change');

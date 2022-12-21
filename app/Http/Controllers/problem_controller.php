@@ -28,15 +28,18 @@ class problem_controller extends Controller
     }
     
     private function can_edit_or_404($problem){
-        if ( ! in_array( Auth::user()->role->name, ['admin']) )
-        {
-            //Admin can always edit
-            if ($problem->user->id != Auth::user()->id){
-                //Others can only edit problems they own
-                abort(404); 
-            } 
-        }
-        return true;
+        if ($problem->can_edit(Auth::user())){
+            return true;
+        } else abort(404);
+        // if ( ! in_array( Auth::user()->role->name, ['admin']) )
+        // {
+        //     //Admin can always edit
+        //     if ($problem->user->id != Auth::user()->id){
+        //         //Others can only edit problems they own
+        //         abort(404); 
+        //     } 
+        // }
+        // return true;
     }
 
     public function index(Request $request)
