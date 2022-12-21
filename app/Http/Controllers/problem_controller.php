@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Database\Eloquent\Builder;
 
 class problem_controller extends Controller
 {
@@ -48,6 +49,11 @@ class problem_controller extends Controller
 
         if ($request->get('search') != ""){
             $all_problem->where('name', 'like', "%".trim($request->get('search'))."%");
+        }
+        if ($request->get('tag_id') != null){
+            $all_problem->whereHas('tags', function (Builder $query) use($request) {
+                $query->whereIn('tag_id', $request->get('tag_id') );
+            });
         }
 
         $all_problem = $all_problem->with('assignments', 'languages')->paginate(Setting::get('results_per_page_all'));

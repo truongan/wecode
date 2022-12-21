@@ -5,7 +5,11 @@
 @section('other_assets')
   <link rel='stylesheet' type='text/css' href='https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css'/>
   <link rel="stylesheet" type="text/css" href="{{ asset('assets/select2/select2.min.css') }}">
-
+<style>
+	.top-search-bar > .select2-container {
+		flex: 1 1;
+	}
+</style>
 @endsection
 @section('title','Problems')
 
@@ -21,14 +25,13 @@
 	<form class="row gx-3  align-items-center" method="get" action="{{ route('problems.index') }}">
 		<div class=" col-5">
 			<div class="input-group">
-
 				<label class="input-group-text" for="search">Search by name</label>
 				<input type="text" name="search" id="search" class="form-control" placeholder="Search by name" aria-describedby="Search by name" value="{{ Request::get('search') }} " >
 				<button type="button" class="btn btn-danger" onClick="document.getElementById('search').value = '' ;"><i class="fas fa-times    "></i></button>
 			</div>
 		</div>
 		<div class="col-6">
-			<div class="input-group">
+			<div class="input-group  top-search-bar">
 				<label class="input-group-text"> and by tag(s)</label>
 				<select class="js-example-tokenizer form-control"multiple="multiple" name="tag_id[]">
 					@foreach( $all_tags as $t)
@@ -40,7 +43,6 @@
 			</div>
 		</div>
 		<div class="col-1">
-
 			<button type="submit" class="btn btn-primary form-control">Search</button>
 		</div>
 	</form>
@@ -192,6 +194,8 @@
 		tokenSeparators: [','],
 		// width : 'style'
 	});
+
+	$(".js-example-tokenizer").val( {!! json_encode(Request::get('tag_id')) !!} ).trigger('change');
 
 	$('.del_n').click(function () {
 	  var row = $(this).parents('tr');
