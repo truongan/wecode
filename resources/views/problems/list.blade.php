@@ -22,7 +22,7 @@
 
 @section('content')
 <div class="row">
-	<form class="row gx-3  align-items-center" method="get" action="{{ route('problems.index') }}">
+	<form class="row mb-3 gx-3  align-items-center" method="get" action="{{ route('problems.index') }}">
 		<div class=" col-5">
 			<div class="input-group">
 				<label class="input-group-text" for="search">Search by name</label>
