@@ -93,7 +93,7 @@
 					@endforeach
 				</div>
 				@if($item->can_edit(Auth::user()))
-				<a href="#"> <i title="Edit" class="far fa-edit fa-lg text-warning"> </i> </a>
+					<a href="#"  class = "edit-tag-list-handle"> <i title="Edit tag list" class="far fa-edit fa-lg text-warning"> </i> </a>
 				@endif 
 
 			</td>
@@ -203,6 +203,16 @@
 	document.querySelector(".search-by-tags").textContent = '' ;
 	$(".search-by-tags").append(all_tags.map(i=> new Option(i.text, i.id, false, false)));
 	$(".search-by-tags").val( {!! json_encode(Request::get('tag_id')) !!} ).trigger('change');
+
+	document.querySelectorAll('.edit-tag-list-handle').forEach(
+		i => i.addEventListener('click'
+			, () => {
+				console.log(event.target);
+				
+				tag_id_list = [...event.target.parentElement.parentElement.querySelectorAll('span')].map(i => i.dataset.id);
+				console.log(tag_id_list);
+			})
+	);
 
 	$('.del_n').click(function () {
 	  var row = $(this).parents('tr');
