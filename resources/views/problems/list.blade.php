@@ -61,9 +61,9 @@
 			<tr>
 				<th>ID</th>
 				<th style="width: 20%">Name</th>
-				<th style="width: 20%">Note</th>
+				<th style="width: 15%">Note</th>
 				<th>owner</th>
-				<th>Tags</th>
+				<th style="width: 15%">Tags</th>
 				<th>Lang</th>
 				<th><small>Assignmnet</small></th>
 				<th><small>Submission</small></th>
@@ -73,10 +73,13 @@
 		</thead>
 	  @foreach ($problems as $item)
 		<tr data-id="{{$item->id}}">
-			<td>{{ $item->id}}</td>
+			<td>{{ $item->id}}</td> 
+			{{-- NAME --}}
 			<td><a href="{{ route( 'practices.show' ,$item->id) }}">{{ $item->name }}</a></td>
+			{{-- NOTE --}}
 			<td>{{$item->admin_note}}</td>
-			<td>
+			{{-- OWNER --}}
+			<td> 
 				<span data-bs-toggle="tooltip"  
 					@if($item->sharable) class="text-success"  title="publicly shared problem"
 					@else class="text-black-50" title="Private problem"
@@ -86,28 +89,34 @@
 				</span>
 
 			</td>
+			{{-- TAGS --}}
 			<td>
 				<div class="holder-for-one-problem-tags">
 					@foreach ($item->tags as $tag)
 						<span class="badge rounded-pill bg-info" data-id="{{$tag->id}}">{{$tag->text}}</span>
 					@endforeach
 				</div>
+				<form action="{{ route('problems.edit_tags', $item->id) }}" method="post" class="edit-tag-form d-none">
+					<select  multiple="multiple" class="form-control edit-tag-list"></select>
+					<button type="submit" class="btn btn-small btn-primary">done</button>
+				</form>
 				@if($item->can_edit(Auth::user()))
 					<a href="#"  class = "edit-tag-list-handle"> <i title="Edit tag list" class="far fa-edit fa-lg text-warning"> </i> </a>
 				@endif 
-
 			</td>
+			{{-- LANG --}}
 			<td>
 				<a class="btn btn-sm btn-primary" data-bs-toggle="collapse" href="#language_list_{{$item->id}}" aria-expanded="false" aria-controls="language_list_{{$item->id}}">
 					{{  $item->languages->pluck('name')->join(", ")  }}
 				</a>
-			<div class="collapse" id="language_list_{{$item->id}}">
-				
-			  @foreach ($item->languages as $language_name)
-			  	<span class="btn btn-sm btn-secondary mb-1">{{$language_name->name}} <span class="badge rounded-pill bg-info">{{$language_name->pivot->time_limit/1000}}s</span><span class="badge rounded-pill bg-info">{{$language_name->pivot->memory_limit/1000}}MB</span></span>
-			  @endforeach
-			</div>
+				<div class="collapse" id="language_list_{{$item->id}}">
+					
+				@foreach ($item->languages as $language_name)
+					<span class="btn btn-sm btn-secondary mb-1">{{$language_name->name}} <span class="badge rounded-pill bg-info">{{$language_name->pivot->time_limit/1000}}s</span><span class="badge rounded-pill bg-info">{{$language_name->pivot->memory_limit/1000}}MB</span></span>
+				@endforeach
+				</div>
 			</td>
+			{{-- ASSIGNMENTS --}}
 			<td>
 					<a class="btn btn-sm btn-primary" data-bs-toggle="collapse" href="#assignment_list_{{$item->id}}" aria-expanded="false" aria-controls="assignment_list_{{$item->id}}">
 						{{ $item->assignments->count()}}<small> assignments</small>
@@ -121,11 +130,13 @@
 				</div>
 
 			</td>
+			{{-- SUBMISSIONS --}}
 			<td>
 				<span class="text-success">{{ $item->accepted_submit }}</span> 
 				/
 				<span class="text-info">{{ $item->total_submit }} ({{ $item->ratio }}%) </span>
 			</td>
+			{{-- SHARE, PRACTICE, EDITORIAL --}}
 			<td>  
 				<i  style="cursor:pointer" class="toggle_practice fas fa-dumbbell fa-2x clickable .stretched-link
 					@if( $item->allow_practice)
@@ -146,7 +157,7 @@
 					<br/><i class="fas fa-user   "></i> {{$item->author}}
 				@endif
 			</td>
-			
+			{{-- DOWNLOAD, EDIT, DELETE --}}
 			<td>
 				<a href="{{ route('problems.downloadtestsdesc',$item->id) }}">
 					<i title="Download Tests and Descriptions" class="fa fa-cloud-download-alt fa-lg text-success"></i>
@@ -208,11 +219,31 @@
 		i => i.addEventListener('click'
 			, () => {
 				console.log(event.target);
+				var tag_list_div = event.target.parentElement.parentElement.querySelector('.holder-for-one-problem-tags')
+				tag_id_list = [...tag_list_div.querySelectorAll('span')].map(i => i.dataset.id);
 				
-				tag_id_list = [...event.target.parentElement.parentElement.querySelectorAll('span')].map(i => i.dataset.id);
+				var tag_edit_form = event.target.parentElement.parentElement.querySelector('form')
+				tag_edit_form.classList.remove('d-none');
+
+				var select_element = tag_edit_form.querySelector('select');
+				select_element.textContent = '';
+				var select_obj = $(select_element).select2({
+					tags:true,
+					tokenSeparators: [',']
+				})
+				select_obj.append(all_tags.map(i=> new Option(i.text, i.id, false, false)));
+				select_obj.val(tag_id_list);
 				console.log(tag_id_list);
+
+				tag_list_div.classList.add('d-none')
+				event.target.parentElement.classList.add('d-none');
 			})
 	);
+	document.querySelectorAll('.edit-tag-form').forEach(
+		i => i.addEventListener('submit', ()=>{
+			event.preventDefault;
+		})
+	);	
 
 	$('.del_n').click(function () {
 	  var row = $(this).parents('tr');

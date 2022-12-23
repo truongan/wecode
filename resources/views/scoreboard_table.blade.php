@@ -77,8 +77,8 @@
     </tr>
     @endforeach
 
-    <tr class="bg-dark">
-        <th colspan="6"></th>
+    <thead class="bg-dark text-light">
+        <th colspan="6">Sumarry</th>
         @foreach ($problems as $problem)
         <th>
             <a class="small" href="{{ route('assignments.show', ['assignment'=>$assignment_id, 'problem_id'=> $problem->id]) }}">{{ $problem->pivot->problem_name }}</a>
@@ -88,7 +88,7 @@
         </th>
         @endforeach
 
-    </tr>
+    </thead>
     <tr class="bg-dark text-light">
         <td colspan="6">Solved/tries</td>
         @foreach ($problems as $p)
