@@ -47,7 +47,7 @@ Route::get('/problems/downloadpdf/{id}', [App\Http\Controllers\problem_controlle
 Route::get('/problems/downloadtemplate/{problem_id}/{assignment_id}', [App\Http\Controllers\problem_controller::class, 'template'])->name('problems.template');
 Route::post('/problems/edit_description/{problem_id}', [App\Http\Controllers\problem_controller::class, 'edit_description'])->name('problems.edit_description');
 Route::post('/problems/toggle_practice/{problem?}', [App\Http\Controllers\problem_controller::class, 'toggle_practice'])->name('problems.toggle_practice');
-Route::post('/problems/edit_tags/{problem?}', [App\Http\Controllers\problem_controller::class, 'toggle_practice'])->name('problems.edit_tags');
+Route::post('/problems/edit_tags/{problem?}', [App\Http\Controllers\problem_controller::class, 'edit_tags'])->name('problems.edit_tags');
 
 Route::get('/submissions/assignment/{assignment_id}/user/{user_id}/problem/{problem_id}/view/{choose}', [App\Http\Controllers\submission_controller::class, 'index'])->name('submissions.index');
 Route::get('/submissions/create/assignment/{assignment}/problem/{problem}/{oldsub?}', [App\Http\Controllers\submission_controller::class, 'create'])->name('submissions.create');

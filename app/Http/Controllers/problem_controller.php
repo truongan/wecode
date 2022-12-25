@@ -101,7 +101,24 @@ class problem_controller extends Controller
                                   ]);
                                 
     }
-
+    private function add_missing_tags($tags){
+        foreach ($tags as $i => $tag) 
+        {
+            if (Tag::find($tag) == null)
+                if (Tag::where('text', $tag)->first() == [])
+                {
+                    $new_tag = new Tag;
+                    $new_tag->text = $tag;
+                    $new_tag->save();
+                    $tags[$i]=(string)$new_tag->id;
+                }
+                else
+                {
+                    array_splice($tags, $i, 1);
+                }
+        }
+        return $tags;
+    }
     /**
      * Store a newly created resource in storage.
      *
@@ -121,21 +138,7 @@ class problem_controller extends Controller
         $tags = $request->input('tag_id');
         if ($tags != null)
         {
-            foreach ($tags as $i => $tag) 
-            {
-                if (Tag::find($tag) == null)
-                    if (Tag::where('text', $tag)->first() == [])
-                    {
-                        $new_tag = new Tag;
-                        $new_tag->text = $tag;
-                        $new_tag->save();
-                        $tags[$i]=(string)$new_tag->id;
-                    }
-                    else
-                    {
-                         \array_splice($tags, $i, 1);
-                    }
-            }
+            $tags = $this->add_missing_tags($tags);
         }
         
         $langs = [];
@@ -224,21 +227,7 @@ class problem_controller extends Controller
 
         if ($tags != null)
         {
-            foreach ($tags as $i => $tag) 
-            {
-                if (Tag::find($tag) == null)
-                    if (Tag::where('text', $tag)->first() == [])
-                    {
-                        $new_tag = new Tag;
-                        $new_tag->text = $tag;
-                        $new_tag->save();
-                        $tags[$i]=(string)$new_tag->id;
-                    }
-                    else
-                    {
-                        array_splice($tags, $i, 1);
-                    }
-            }
+            $tags = $this->add_missing_tags($tags);
         } 
 
         $problem->tags()->sync($tags);
@@ -481,7 +470,6 @@ class problem_controller extends Controller
 
     }
 
-  
     /** Dowload file pdf  */
     public function pdf($problem_id)
     {
@@ -525,7 +513,6 @@ class problem_controller extends Controller
         return response()->download($template_file[0]);
     }
 
-
     public function downloadtestsdesc($problem_id)
     {
         $a =Problem::find($problem_id); 
@@ -544,7 +531,6 @@ class problem_controller extends Controller
         return response()->download($zipFile)->deleteFileAfterSend();
     }
     
-
     public function get_template_path($problem_id = NULL){
         $pattern1 = rtrim($this->get_directory_path($problem_id)
         ."/template.public.cpp");
@@ -558,12 +544,6 @@ class problem_controller extends Controller
         }
         return $template_file;
     }
-
-    // public function test()
-    // {
-    //     $data = Problem::problem_info_detailed(1);
-    //     return view('problems.test',['data'=>$data]);
-    // }
 
     private function handle_test_dir_upload(Request $request,$assignments_root,$up_dir, $problem_dir, &$messages)
     {
@@ -660,11 +640,16 @@ class problem_controller extends Controller
         DB::commit();
     }
 
-
     public function toggle_practice(Request $request, Problem $problem){
         $this->can_edit_or_404($problem);
         $problem->allow_practice = ! $problem->allow_practice;
         $problem->save();
         return $problem->allow_practice;
+    }
+    public function edit_tags(Request $request, Problem $problem){
+        $this->can_edit_or_404($problem);
+        $tags = $this->add_missing_tags($request->input('tag_id'));
+        $problem->tags()->sync($tags);
+        return json_encode(['all_tags' => Tag::all(), 'new_tags' => $tags]);
     }
 }

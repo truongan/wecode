@@ -96,11 +96,12 @@
 						<span class="badge rounded-pill bg-info" data-id="{{$tag->id}}">{{$tag->text}}</span>
 					@endforeach
 				</div>
-				<form action="{{ route('problems.edit_tags', $item->id) }}" method="post" class="edit-tag-form d-none">
-					<select  multiple="multiple" class="form-control edit-tag-list"></select>
-					<button type="submit" class="btn btn-small btn-primary">done</button>
-				</form>
 				@if($item->can_edit(Auth::user()))
+					<form action="{{ route('problems.edit_tags', $item->id) }}" method="post" class="edit-tag-form d-none">
+						<select  multiple="multiple" class="form-control edit-tag-list"></select>
+						<button type="button" class="btn btn-small btn-danger tags-edit-cancel"><i class="fas fa-window-close"></i></button>
+						<button type="submit" class="btn btn-small btn-primary" ><i class="fa fa-check" aria-hidden="true"></i></button>
+					</form>
 					<a href="#"  class = "edit-tag-list-handle"> <i title="Edit tag list" class="far fa-edit fa-lg text-warning"> </i> </a>
 				@endif 
 			</td>
@@ -202,14 +203,13 @@
 
 	var all_tags = {!! $all_tags !!};
 	// alert(all_tags);
-/**
-* Notifications
-*/
+
+	function populate_search(){}
+
   $(document).ready(function () {
 
 	$(".search-by-tags").select2({
-		tags: true,
-		tokenSeparators: [','],
+		closeOnSelect: false
 	});
 	document.querySelector(".search-by-tags").textContent = '' ;
 	$(".search-by-tags").append(all_tags.map(i=> new Option(i.text, i.id, false, false)));
@@ -218,30 +218,66 @@
 	document.querySelectorAll('.edit-tag-list-handle').forEach(
 		i => i.addEventListener('click'
 			, () => {
-				console.log(event.target);
-				var tag_list_div = event.target.parentElement.parentElement.querySelector('.holder-for-one-problem-tags')
+				console.log(event.currentTarget);
+				var tag_list_div = event.currentTarget.parentElement.querySelector('.holder-for-one-problem-tags')
 				tag_id_list = [...tag_list_div.querySelectorAll('span')].map(i => i.dataset.id);
 				
-				var tag_edit_form = event.target.parentElement.parentElement.querySelector('form')
+				var tag_edit_form = event.currentTarget.parentElement.querySelector('form')
 				tag_edit_form.classList.remove('d-none');
 
 				var select_element = tag_edit_form.querySelector('select');
 				select_element.textContent = '';
 				var select_obj = $(select_element).select2({
 					tags:true,
-					tokenSeparators: [',']
-				})
+					tokenSeparators: [','],
+					closeOnSelect: false
+				});
 				select_obj.append(all_tags.map(i=> new Option(i.text, i.id, false, false)));
 				select_obj.val(tag_id_list);
 				console.log(tag_id_list);
 
 				tag_list_div.classList.add('d-none')
-				event.target.parentElement.classList.add('d-none');
+				event.currentTarget.classList.add('d-none');
 			})
 	);
+	document.querySelectorAll('.tags-edit-cancel').forEach(
+		i => i.addEventListener('click', ()=>{
+			console.log(event.currentTarget);
+			event.currentTarget.parentElement.classList.add('d-none');
+			event.currentTarget.parentElement.parentElement.querySelector('.holder-for-one-problem-tags').classList.remove('d-none');
+			event.currentTarget.parentElement.parentElement.querySelector('.edit-tag-list-handle').classList.remove('d-none');
+		})
+	)
 	document.querySelectorAll('.edit-tag-form').forEach(
 		i => i.addEventListener('submit', ()=>{
-			event.preventDefault;
+			event.preventDefault();
+			var select_obj = $(event.currentTarget.querySelector('select'));
+			fetch(event.currentTarget.action, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'X-CSRF-TOKEN' : document.querySelector('meta[name="csrf-token"]').getAttribute('content') 
+				},
+				body: JSON.stringify({
+					tag_id: select_obj.val(),
+				})
+			}).then( response =>  response.json()
+			).then((data) => {
+				all_tags = data.all_tags;
+				// event.currentTarget.parentElement.querySelector('.holder-for-one-problem-tags').textContent = '';
+				console.log(data.all_tags);
+				data.new_tags.map(i => {
+					console.log(i);
+				})
+				// event.currentTarget.parentElement.querySelector('.holder-for-one-problem-tags').append(
+				// 	...data.new_tags.map(i => {
+				// 		a = document.createElement('span');
+				// 		a.classList.add(...['badge', 'rounded-pill', 'bg-info'])
+				// 		a.dataset.setAttribute('data-id', i)
+				// 	})
+				// )
+			}).catch(error => console.log("Error", error));
+
 		})
 	);	
 
