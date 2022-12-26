@@ -44,9 +44,6 @@ class problem_controller extends Controller
 
     public function index(Request $request)
     {
-        // DB::enableQueryLog();
-        // if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
-        //     abort(404);  
         if (Auth::user()->role->name == 'admin') $all_problem = Problem::latest();
         else $all_problem = Problem::available(Auth::user()->id)->latest();
 
@@ -398,7 +395,7 @@ class problem_controller extends Controller
                     for($i = 0; $i < count($in); $i++){
                         $real_id = $i+1;
                         if (!in_array($problem_dir."/in/input$real_id.txt",$in)){
-                                                        $messages[]= "A file name input$real_id.txt seem to be missing in your folder";
+                            $messages[]= "A file name input$real_id.txt seem to be missing in your folder";
                         } else {
                             if (!in_array($problem_dir."/out/output$real_id.txt",$out)){
                                 $messages[] = "A file name output$real_id.txt seem to be missing in your folder";
@@ -650,6 +647,6 @@ class problem_controller extends Controller
         $this->can_edit_or_404($problem);
         $tags = $this->add_missing_tags($request->input('tag_id'));
         $problem->tags()->sync($tags);
-        return json_encode(['all_tags' => Tag::all(), 'new_tags' => $tags]);
+        return json_encode(['all_tags' => Tag::all(), 'new_tags' => $problem->tags]);
     }
 }

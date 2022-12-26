@@ -204,21 +204,23 @@
 	var all_tags = {!! $all_tags !!};
 	// alert(all_tags);
 
-	function populate_search(){}
+	function populate_search(){
+		document.querySelector(".search-by-tags").textContent = '' ;
+		$(".search-by-tags").append(all_tags.map(i=> new Option(i.text, i.id, false, false)));
+		$(".search-by-tags").val( {!! json_encode(Request::get('tag_id')) !!} ).trigger('change');
+	}
 
   $(document).ready(function () {
 
 	$(".search-by-tags").select2({
 		closeOnSelect: false
 	});
-	document.querySelector(".search-by-tags").textContent = '' ;
-	$(".search-by-tags").append(all_tags.map(i=> new Option(i.text, i.id, false, false)));
-	$(".search-by-tags").val( {!! json_encode(Request::get('tag_id')) !!} ).trigger('change');
+	populate_search();
 
 	document.querySelectorAll('.edit-tag-list-handle').forEach(
 		i => i.addEventListener('click'
 			, () => {
-				console.log(event.currentTarget);
+				// console.log(event.currentTarget);
 				var tag_list_div = event.currentTarget.parentElement.querySelector('.holder-for-one-problem-tags')
 				tag_id_list = [...tag_list_div.querySelectorAll('span')].map(i => i.dataset.id);
 				
@@ -234,7 +236,7 @@
 				});
 				select_obj.append(all_tags.map(i=> new Option(i.text, i.id, false, false)));
 				select_obj.val(tag_id_list);
-				console.log(tag_id_list);
+				// console.log(tag_id_list);
 
 				tag_list_div.classList.add('d-none')
 				event.currentTarget.classList.add('d-none');
@@ -242,15 +244,17 @@
 	);
 	document.querySelectorAll('.tags-edit-cancel').forEach(
 		i => i.addEventListener('click', ()=>{
-			console.log(event.currentTarget);
+			// console.log(event.currentTarget);
 			event.currentTarget.parentElement.classList.add('d-none');
 			event.currentTarget.parentElement.parentElement.querySelector('.holder-for-one-problem-tags').classList.remove('d-none');
 			event.currentTarget.parentElement.parentElement.querySelector('.edit-tag-list-handle').classList.remove('d-none');
 		})
 	)
 	document.querySelectorAll('.edit-tag-form').forEach(
-		i => i.addEventListener('submit', ()=>{
+		i => i.addEventListener('submit', (event)=>{
 			event.preventDefault();
+			// console.log('outside', event);
+			// console.log('outside', event.currentTarget);
 			var select_obj = $(event.currentTarget.querySelector('select'));
 			fetch(event.currentTarget.action, {
 				method: 'POST',
@@ -264,18 +268,10 @@
 			}).then( response =>  response.json()
 			).then((data) => {
 				all_tags = data.all_tags;
-				// event.currentTarget.parentElement.querySelector('.holder-for-one-problem-tags').textContent = '';
-				console.log(data.all_tags);
-				data.new_tags.map(i => {
-					console.log(i);
-				})
-				// event.currentTarget.parentElement.querySelector('.holder-for-one-problem-tags').append(
-				// 	...data.new_tags.map(i => {
-				// 		a = document.createElement('span');
-				// 		a.classList.add(...['badge', 'rounded-pill', 'bg-info'])
-				// 		a.dataset.setAttribute('data-id', i)
-				// 	})
-				// )
+
+				event.target.parentElement.querySelector('.holder-for-one-problem-tags').innerHTML = data.new_tags.map(i => '<span class="badge rounded-pill bg-info" data-id="'+i.id+'">'+i.text+'</span>').join('');
+				event.target.querySelector('.tags-edit-cancel').click();
+				populate_search();
 			}).catch(error => console.log("Error", error));
 
 		})
