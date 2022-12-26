@@ -11,6 +11,7 @@ function format_problem(prob){
 		+ '<span class="badge rounded-pill bg-secondary">'+ prob.element.dataset.owner +'</span>'
 		+ '<span class="text-dark">' + prob.element.dataset.name + '</span>'
 		+ '<span class="text-small text-secondary">(' +  prob.element.dataset.note +')</span>'
+		+ '<span class="text-small text-dark">(' +  prob.element.dataset.tags +')</span>'
 	);
 	return $prob
 }

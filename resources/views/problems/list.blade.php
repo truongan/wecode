@@ -10,6 +10,9 @@
 	.top-search-bar > .select2-container {
 		flex: 1 1;
 	}
+	.select2-container  textarea {
+		color: black;
+	}
 </style>
 @endsection
 @section('title','Problems')
