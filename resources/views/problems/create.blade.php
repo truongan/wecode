@@ -68,9 +68,22 @@
 		@endif
 	});
 	$(".js-example-tokenizer").select2({
-    tags: true,
-    tokenSeparators: [',']
-	})
+		tags: true,
+		tokenSeparators: [','],
+		createTag: function(params) {
+			var term = $.trim(params.term);
+
+			if (term === '') return null;
+			if (term[0] != '#') return null;
+
+			return {
+				id: term,
+				text: term,
+				newTag: true // add additional parameters
+			}
+		},
+		closeOnSelect: false,
+	});
 
 </script>
 @endsection
@@ -182,6 +195,7 @@
 
 				<div class="just-for-gutter">
 					<label>Tag(s)</label>
+					<small class="text-secondary">You can add new tag by precedding them with '#' character (this character will not be present in the tag's text)</small>
 					<select class="js-example-tokenizer form-control" multiple="multiple" name="tag_id[]">
 						@foreach( $all_tags as $t)
 						<option value="{{ $t->id }}" data-text="{{$t->text}}" data-id="{{$t->id}}" 

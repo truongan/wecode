@@ -102,7 +102,7 @@
 						<button type="button" class="btn btn-small btn-danger tags-edit-cancel"><i class="fas fa-window-close"></i></button>
 						<button type="submit" class="btn btn-small btn-primary" ><i class="fa fa-check" aria-hidden="true"></i></button>
 					</form>
-					<a href="#"  class = "edit-tag-list-handle"> <i title="Edit tag list" class="far fa-edit fa-lg text-warning"> </i> </a>
+					<span  class = "edit-tag-list-handle"> <i title="Edit tag list" class="far fa-edit fa-lg text-warning"> </i> </span>
 				@endif 
 			</td>
 			{{-- LANG --}}
@@ -232,7 +232,19 @@
 				var select_obj = $(select_element).select2({
 					tags:true,
 					tokenSeparators: [','],
-					closeOnSelect: false
+					closeOnSelect: false,
+					createTag: (params) => {
+						var term = $.trim(params.term);
+
+						if (term === '') return null;
+						if (term[0] != '#') return null;
+
+						return {
+							id: term,
+							text: term,
+							newTag: true // add additional parameters
+						}
+					},
 				});
 				select_obj.append(all_tags.map(i=> new Option(i.text, i.id, false, false)));
 				select_obj.val(tag_id_list);

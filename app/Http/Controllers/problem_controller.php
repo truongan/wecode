@@ -101,7 +101,10 @@ class problem_controller extends Controller
     private function add_missing_tags($tags){
         foreach ($tags as $i => $tag) 
         {
-            if (Tag::find($tag) == null)
+            
+            if (Tag::find($tag) == null){
+                $tag  = substr($tag, 1);  // Remove the first character (which should be '#') from new tag
+                
                 if (Tag::where('text', $tag)->first() == [])
                 {
                     $new_tag = new Tag;
@@ -113,7 +116,9 @@ class problem_controller extends Controller
                 {
                     array_splice($tags, $i, 1);
                 }
+            }
         }
+        // dd($tags);
         return $tags;
     }
     /**
