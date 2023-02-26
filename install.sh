@@ -1,14 +1,15 @@
 
 usage(){
 cat << EOF
-usage: $0 [-a admin_user_name] [-e admin_email] -u db_user -p password -s site_url
+usage: $0 [-a admin_user_name] [-e admin_email] -u db_user -d db -p password -s site_url
 base url will be set in config.php
 
 OPTIONS:
 	-a admin username default to be "abc"
-	-p admin password
+	-p database and admin password
 	-e admin email default to be "abc@def.com"
-	-s site url
+	-d database name
+	-s site url with format "http://..."
 EOF
 }
 echo "Running install.sh in `pwd`"
@@ -54,17 +55,18 @@ wget https://github.com/composer/composer/releases/download/2.1.9/composer.phar
 
 php composer.phar install
 cp .env.example .env
-site_url=`printf "%q" "$site_url"`
-password=`printf "%q" "$password"`
+# site_url=`printf "%q" "$site_url"`
+# password=`printf "%q" "$password"`
 
-sed -i "s,APP_URL.*,APP_URL=$site_url,g" .env # Can't use / chracter here because it's url 
+sed -i "s,APP_URL.*,APP_URL=$site_url,g" .env # Can't use / character here because it's url 
 sed -i "s/DB_USERNAME.*/DB_USERNAME=$db_user/g" .env
 sed -i "s/DB_DATABASE.*/DB_DATABASE=$db/g" .env
 sed -i "s/DB_PASSWORD.*/DB_PASSWORD=$password/g" .env
 
+composer update
 php artisan key:generate
-php artisan migrate:refresh 
+php artisan migrate:refresh
 php artisan db:seed --class=installation_seeding
- 
-php artisan add_admin truonganpn truonganpnt@ttafs.uit.edu.vn $password$(($RANDOM))
+
+php artisan add_admin truonganpn truonganpnt@ttafs.uit.edu.vn $password
 php artisan add_admin $username $email $password
