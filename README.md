@@ -47,7 +47,7 @@ For running Wecode judge, a Linux server with following requirements is needed:
 ## Setup the judge
 
 Since wecode-jduge use docker to isolate the submitted code, you have to setup docker and other settings so that judge can call it.
- 1. Install docker-ce in your server. The instruction for Ubuntu can be found on docker guide: https://docs.docker.com/install/linux/docker-ce/ubuntu/
+ 1. Install docker-ce in your server. The instruction for Ubuntu can be found on [docker guide](https://docs.docker.com/install/linux/docker-ce/ubuntu/)
  2. Follow docker instruction to allow http user manage docker: https://docs.docker.com/install/linux/linux-postinstall/
  
 
@@ -57,7 +57,7 @@ Since wecode-jduge use docker to isolate the submitted code, you have to setup d
 * **[IMPORTANT]** Move folders `tester` and `assignments` somewhere outside your public directory. Then save their full path in `Settings` page. **These two folders must be writable by PHP.** Submitted files will be stored in `assignments` folder. So it should be somewhere not publicly accessible.
 * **[IMPORTANT]** [Secure Wecode judge](https://github.com/truongan/wecode-judge/blob/docs/v1.4/security.md)
 
-* Read the [documentation]https://github.com/truongan/wecode-judge/tree/docs)
+* Read the [documentation](https://github.com/truongan/wecode-judge/tree/docs)
 
 ## License
 
