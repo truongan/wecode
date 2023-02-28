@@ -39,11 +39,10 @@ For running Wecode judge, a Linux server with following requirements is needed:
 ## Installation
 
   1. Clone latest release from [github repository](https://github.com/truongan/wecode) into a directory with read/write permission. Then put the index.php file in your webserver's serving directory
-  3. Create a MySql or PostgreSql database for Wecode judge.
-  5. Copy `.env.example` to `.env` and edit database settings
-  6. cd into your `wecode` directory and run `./install.sh`
-  6. install necessary library with `composer install` then generate a specific encryption key with `php artisan key:generate`
-  7. Open the main page of Wecode in a web browser and follow the installation process.
+  2. Create a MySql or PostgreSql database for Wecode judge.
+  3. Copy `.env.example` to `.env` and edit database settings
+  4. cd into your `wecode` directory and run `./install.sh`
+  5. Open the main page of Wecode in a web browser and follow the installation process.
 
 ## Setup the judge
 
