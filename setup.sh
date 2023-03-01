@@ -4,7 +4,7 @@ usage(){
 cat << EOF
 usage: $0 [-i install_dir] [-o public_dir] -u db_user -p db_password [-n site_name] [base_url]
 
-base url will be set in config.php
+base_url will be set in config.php
 
 OPTIONS:
 	-h show this message
@@ -14,8 +14,8 @@ OPTIONS:
 	-u database username
 	-p database password
 	-d database name
-	-n site name to display on top bar and construct base url for uit classes
-	base_url: Will be use to set base url for the site when site_name is not specified. The https:// part must be included
+	-n site name to display on top bar and construct base_url for uit classes
+	base_url: Will be use to set base_url for the site when site_name is not specified. The https:// part must be included
 EOF
 }
 
@@ -59,7 +59,7 @@ fi
 if [ "$db_user" = "" ]; then
 	usage; exit 1
 fi
-echo $public
+
 if [ "$public" = "" ]; then
 	public="$install/../public_html"
 fi
@@ -97,13 +97,13 @@ git clone  'https://github.com/truongan/wecode' .
 
 cd $public
 if cmp -s $install $public; then
-	echo "Installation dir and public dir are the same; that may pose security risk"
+	echo "Installation directory and public directoy are the same; that may pose security risk"
 else
 	read -p "$public/index.php $public/assets $public/.htaccess will be delete permenantly. Continue?" -n 1 -r REPLY
 	echo
 	if [[ $REPLY =~ ^[Yy]$ ]]
 	then
-	  	rm index.html index.php .htacess
+	  	rm index.html index.php .htaccess
 	  	rm -rf ./assets
 		ln -s $install/public/* . 
 		ln -s $install/public/.* . 
