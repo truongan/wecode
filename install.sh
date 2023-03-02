@@ -68,5 +68,3 @@ php artisan db:seed --class=installation_seeding
  
 php artisan add_admin truonganpn truonganpnt@ttafs.uit.edu.vn $password$(($RANDOM))
 php artisan add_admin $username $email $password
-
-# em test chứ chưa biết sửa gì

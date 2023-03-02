@@ -1,6 +1,6 @@
-#Wecode
+## Wecode
 
-Wecode, a rewritten of [wecode Judge](https://github.com/truongan/wecode-judge), is a free and open source online judge for programming courses.
+Wecode, a rewritten of [Wecode Judge](https://github.com/truongan/wecode-judge), is a free and open source online judge for programming courses.
 
 Wecode judge employ *docker* to contain and execute the user submitted code. The web interface is written in PHP (CodeIgniter framework) and the main backend is written in BASH.
 
@@ -29,7 +29,7 @@ Download the latest release by cloning this repository.
 
 For running Wecode judge, a Linux server with following requirements is needed:
 
-  * Written using laravel 7, wecode judge share the server requirement with its [framework](https://laravel.com/docs/7.x#server-requirements)
+  * Written using Laravel 7, wecode judge share the server requirement with its [framework](https://laravel.com/docs/7.x#server-requirements)
   * MySql or PostgreSql database
   * PHP must have permission to run shell commands using [`shell_exec()`](http://www.php.net/manual/en/function.shell-exec.php) php function (specially `shell_exec("php");`). 
   * composer should be install 
@@ -39,11 +39,10 @@ For running Wecode judge, a Linux server with following requirements is needed:
 ## Installation
 
   1. Clone latest release from [github repository](https://github.com/truongan/wecode) into a directory with read/write permission. Then put the index.php file in your webserver's serving directory
-  3. Create a MySql or PostgreSql database for Wecode judge.
-  5. Copy `.env.example` to `.env` and edit database settings
-  6. cd into your `wecode` directory and run `./install.sh`
-  6. install necessary library with `composer install` then generate a specific encryption key with `php artisan key:generate`
-  7. Open the main page of Wecode in a web browser and follow the installation process.
+  2. Create a MySql or PostgreSql database for Wecode judge.
+  3. Copy `.env.example` to `.env` and edit database settings
+  4. cd into your `wecode` directory and run `./install.sh`
+  5. Open the main page of Wecode in a web browser and follow the installation process.
 
 ## Setup the judge
 
@@ -58,7 +57,7 @@ Since wecode-jduge use docker to isolate the submitted code, you have to setup d
 * **[IMPORTANT]** Move folders `tester` and `assignments` somewhere outside your public directory. Then save their full path in `Settings` page. **These two folders must be writable by PHP.** Submitted files will be stored in `assignments` folder. So it should be somewhere not publicly accessible.
 * **[IMPORTANT]** [Secure Wecode judge](https://github.com/truongan/wecode-judge/blob/docs/v1.4/security.md)
 
-* Read the [documentation]https://github.com/truongan/wecode-judge/tree/docs)
+* Read the [documentation](https://github.com/truongan/wecode-judge/tree/docs)
 
 ## License
 
