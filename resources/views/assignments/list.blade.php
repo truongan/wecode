@@ -17,7 +17,7 @@
 @section('title_menu')
 <nav class=" ms-3 fs-6 nav nav-pills">
 	<a class="nav-link link-dark" href="{{ route('assignments.create') }}"><i class="fa fa-plus color8"></i> Add</a>
-	<a class="nav-link link-dark active" href="{{ route('assignments.index') }}"><i class="far fa-star text-danger"></i>Assingments setting</a>
+	<a class="nav-link link-dark active" href="{{ route('assignments.index') }}"><i class="far fa-star text-danger"></i>Assignments setting</a>
 </nav>
 @endsection
 @endif
