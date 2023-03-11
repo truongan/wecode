@@ -112,11 +112,9 @@
 
 @section('body_end')
 
-<link rel='stylesheet' type='text/css' href='https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css'/>
-
-<script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+<link rel='stylesheet' type='text/css' href="{{ asset('assets/DataTables/datatables.min.css') }}"/>
+<script type='text/javascript' src="{{ asset('assets/DataTables/datatables.min.js') }}"></script>
 <script>
-
 
 $(document).ready(function(){
   $("table").DataTable({
