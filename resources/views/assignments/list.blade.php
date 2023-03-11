@@ -5,7 +5,7 @@
 @section('title', 'Assignments')
 
 @section('other_assets')
-<link rel='stylesheet' type='text/css' href='https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css'/>
+<link rel='stylesheet' type='text/css' href="{{ asset('assets/DataTables/datatables.min.css') }}"/>
 <script>
 	if(!!window.performance && window.performance.navigation.type === 2)
 	{
@@ -161,7 +161,7 @@
 
 @section('body_end')
 
-<script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+<script type='text/javascript' src="{{ asset('assets/DataTables/datatables.min.js') }}"></script>
 <script>
 $(document).ready(function () {
 	$('.del_n').click(function () {
@@ -228,8 +228,11 @@ $(document).ready(function () {
 		    null,//start
 		    null,//finish
 		    { "orderable": false }, //scoreboard
-		    { "orderable": false }, //open
-		    { "orderable": false }, //action
+			if (!in_array( Auth::user()->role->name, ['student', 'guest']))
+			{
+				{ "orderable": false }, //open
+		    	{ "orderable": false }, //action
+			}
 		  ],
 		"lengthMenu": [ [20, 60, 150, 500, -1], [20, 60, 150, 500, "All"] ]
 	});
