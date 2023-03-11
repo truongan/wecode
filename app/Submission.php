@@ -12,9 +12,11 @@ use App\Setting;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 class Submission extends Model
 {
-    use Prunable;
+    use Prunable, HasFactory;
 
     public function prunable(){
         return static::doesntHave('user');
