@@ -15,7 +15,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('assignments', function (Blueprint $table) {
-            $table->date('freeze_time')->nullable();
+            $table->datetime('freeze_time')->nullable();
         });
     }
 

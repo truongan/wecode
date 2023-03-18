@@ -45,16 +45,19 @@ class scoreboard_controller extends Controller
 		{
 			// Scoreboard::update_scoreboard($assignment_id); 
 
-			if (Cacbon::now() < $assignment->freeze_time)
-				$scoreboard = $this->get_scoreboard($assignment_id);
-			else $scoreboard = $this->get_scoreboard_freeze($assignment_id);
-		
-		}
+			if ($assignment->freeze_time && Carbon::now() >= $assignment->freeze_time) {
+				if (Carbon::now() >= $assignment->freeze_time) {
+					$scoreboard = $this->get_scoreboard_freeze($assignment_id);
+				}
+			}
+			else $scoreboard = $this->get_scoreboard($assignment_id);
+
 		return view('scoreboard', ['selected' => 'scoreboard',
 									'place' => 'full',	
 									'assignment' => $assignment,
 									'scoreboard' => $scoreboard,					
 								]);
+		}
 	}
 	
 	public function get_scoreboard($assignment_id)
