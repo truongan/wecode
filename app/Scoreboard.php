@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Carbon\CarbonInterval;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 class Scoreboard extends Model
 {
@@ -37,7 +38,7 @@ class Scoreboard extends Model
             $number_of_submissions[$item->user->username][$item->problem_id]=0;
         }
 
-		$lopsnames = array();
+		$lopsnames = array(); //Student in which class
 		foreach ($assignment->lops()->with('users')->get() as $key =>$lop) {
 			foreach ($lop->users as $key => $user) {
 				$lopsnames[$user->username] = $lop->name;
@@ -157,7 +158,7 @@ class Scoreboard extends Model
 			$a->solved = ($a->solved ?? 0) + $ag->submit;
 			$a->solved_user = ($a->solved_user ?? 0) + 1;
 		}
-
+		
 		$stat_print = array();
 		foreach($problems as $id=>$p){
 			$a = &$statistics[$id] ;
@@ -166,17 +167,17 @@ class Scoreboard extends Model
 			$stat_print[$id]->solved_tries_users = "$a->solved_user / $a->tries_user " 
 				. ($a->tries_user == 0 ? "" : "(" . round($a->solved_user * 100/$a->tries_user, 2) . "%)" )
 				. (count($users) == 0 ? "" : "(" . round($a->solved_user * 100/count($users), 2) . "%)" );
-			$stat_print[$id]->average_tries =  ($a->tries == 0 ? "" : round($a->tries /$a->tries_user, 1) );
-			$stat_print[$id]->average_tries_2_solve =  ($a->solved == 0 ? "" : round($a->tries /$a->solved, 1) );
+				$stat_print[$id]->average_tries =  ($a->tries == 0 ? "" : round($a->tries /$a->tries_user, 1) );
+				$stat_print[$id]->average_tries_2_solve =  ($a->solved == 0 ? "" : round($a->tries /$a->solved, 1) );
+				
+			}
 			
+			// dd($statistics);
+			// dd($stat_print);
+			return array($scores, $scoreboard, $number_of_submissions, $stat_print);
 		}
 
-		// dd($statistics);
-		// dd($stat_print);
-        return array($scores, $scoreboard, $number_of_submissions, $stat_print);
-    }
-
-	public function _update_scoreboard()
+		public function _update_scoreboard()
 	{
 
 		if ($this->assignment->id == 0)
@@ -191,6 +192,7 @@ class Scoreboard extends Model
 
 		list ($scores, $scoreboard, $number_of_submissions,$stat_print) = $this->_generate_scoreboard();
 		$all_problems = $assignment->problems;
+		Log::info($all_problems);
 		
 		$total_score = 0;
 		foreach($all_problems as $item)

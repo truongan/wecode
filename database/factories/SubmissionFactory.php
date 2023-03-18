@@ -43,7 +43,7 @@ class SubmissionFactory extends Factory
             ])->count()) ? 0 : 1,
             'status' => 'SCORE',
             'pre_score' => rand(0,10)*1000,
-            'coefficient' => rand(0,10)*10,
+            'coefficient' => 100,
             'file_name' => '',
             'language_id' => 2,
             'judgement' => json_decode("{}"),
