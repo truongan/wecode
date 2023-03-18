@@ -5,7 +5,7 @@
 @section('title', 'Assignments')
 
 @section('other_assets')
-<link rel='stylesheet' type='text/css' href="{{ asset('assets/DataTables/datatables.min.css') }}"/>
+<link rel='stylesheet' type='text/css' href='https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css'/>
 <script>
 	if(!!window.performance && window.performance.navigation.type === 2)
 	{
@@ -17,7 +17,7 @@
 @section('title_menu')
 <nav class=" ms-3 fs-6 nav nav-pills">
 	<a class="nav-link link-dark" href="{{ route('assignments.create') }}"><i class="fa fa-plus color8"></i> Add</a>
-	<a class="nav-link link-dark active" href="{{ route('assignments.index') }}"><i class="far fa-star text-danger"></i>Assignments setting</a>
+	<a class="nav-link link-dark active" href="{{ route('assignments.index') }}"><i class="far fa-star text-danger"></i>Assingments setting</a>
 </nav>
 @endsection
 @endif
@@ -100,6 +100,8 @@
 					</small>
 				</td>
 				<td><small>{{$assignment->start_time->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('llll (UZZ)') }}</small></td>
+				<td><small>{{$assignment->freeze_time->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('llll (UZZ)') }}</small></td>
+				<td><small>{{$assignment->unfreeze_time->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('llll (UZZ)') }}</small></td>
 				<td><small>{{$assignment->finish_time->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('llll (UZZ)') }}</small></td>
 				<td>
 					<a href="{{ route('scoreboards.index', $assignment->id)}}" title="Click to viewa assignment's scoreboard">
@@ -161,7 +163,7 @@
 
 @section('body_end')
 
-<script type='text/javascript' src="{{ asset('assets/DataTables/datatables.min.js') }}"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
 <script>
 $(document).ready(function () {
 	$('.del_n').click(function () {
@@ -228,11 +230,8 @@ $(document).ready(function () {
 		    null,//start
 		    null,//finish
 		    { "orderable": false }, //scoreboard
-			if (!in_array( Auth::user()->role->name, ['student', 'guest']))
-			{
-				{ "orderable": false }, //open
-		    	{ "orderable": false }, //action
-			}
+		    { "orderable": false }, //open
+		    { "orderable": false }, //action
 		  ],
 		"lengthMenu": [ [20, 60, 150, 500, -1], [20, 60, 150, 500, "All"] ]
 	});
