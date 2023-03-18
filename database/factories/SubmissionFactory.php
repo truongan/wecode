@@ -23,7 +23,7 @@ class SubmissionFactory extends Factory
         $last_assignment_id = Assignment::latest('id')->first()->id;
         $last_problem_id = Problem::latest('id')->first()->id;
         // Random user_id in range
-        $rand_user_id = rand(4,14);
+        $rand_user_id = rand(5,7);
 
         // Random assignment_id in range
         $assignment_id = rand(2,$last_assignment_id);
