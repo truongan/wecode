@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Log;
 
 class Scoreboard extends Model
 {
-	protected $fillable = ['assignment_id', 'scoreboard'];
+	protected $fillable = ['assignment_id', 'scoreboard','scoreboard_freeze'];
 
 	public function assignment(){
         return $this->belongsTo('App\Assignment');

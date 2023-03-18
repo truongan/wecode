@@ -10,6 +10,8 @@ use App\Setting;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use DOMDocument;
+use Carbon\Carbon;
+
 
 // use Illuminate\Database\Eloquent\Collection;
 
@@ -43,7 +45,9 @@ class scoreboard_controller extends Controller
 		{
 			// Scoreboard::update_scoreboard($assignment_id); 
 
-			$scoreboard = $this->get_scoreboard($assignment_id);
+			if (Cacbon::now() < $assignment->freeze_time)
+				$scoreboard = $this->get_scoreboard($assignment_id);
+			else $scoreboard = $this->get_scoreboard_freeze($assignment_id);
 		
 		}
 		return view('scoreboard', ['selected' => 'scoreboard',
@@ -62,6 +66,18 @@ class scoreboard_controller extends Controller
 		else
 		{
 			return $query->first()->scoreboard;
+		}
+	}
+
+	public function get_scoreboard_freeze($assignment_id)
+	{
+		$query =  DB::table('scoreboards')->where('assignment_id',$assignment_id)->get();
+
+		if ($query->count() != 1)
+			return false;//$message = array('error' => 'Scoreboard not found');
+		else
+		{
+			return $query->first()->scoreboard_freeze;
 		}
 	}
 

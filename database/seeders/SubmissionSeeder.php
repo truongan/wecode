@@ -17,7 +17,7 @@ class SubmissionSeeder extends Seeder
     public function run()
     {
         // Create 2 dummy submissions
-        Submission::factory(2)->create();
+        Submission::factory(15)->create();
         echo ('SubmissionSeeder seeded successfully! ');
         // Remember to add assignment_id
         Scoreboard::update_scoreboard(2);
