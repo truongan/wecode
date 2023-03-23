@@ -42,6 +42,7 @@
 					<th width="15%"><small>Submit</small></th>
 					{{-- <th>Coef</th> --}}
 					<th>Start</th>
+					<th>Freeze</th>
 					<th>Finish</th>
 					<th><small>Score-board</small></th>
 					@if (!in_array( Auth::user()->role->name, ['student', 'guest']))
@@ -100,6 +101,7 @@
 					</small>
 				</td>
 				<td><small>{{$assignment->start_time->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('llll (UZZ)') }}</small></td>
+				<td><small>{{$assignment->freeze_time->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('llll (UZZ)') }}</small></td>
 				<td><small>{{$assignment->finish_time->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('llll (UZZ)') }}</small></td>
 				<td>
 					<a href="{{ route('scoreboards.index', $assignment->id)}}" title="Click to viewa assignment's scoreboard">

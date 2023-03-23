@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 class Assignment extends Model
 {
     //
-    protected $fillable = ['name', 'total_submits', 'open', 'score_board', 'javaexceptions', 'start_time', 'finish_time', 'extra_time', 'late_rule', 'participants', 'description', 'user_id' ];
-    protected $dates = ['start_time', 'finish_time'];
+    protected $fillable = ['name', 'total_submits', 'open', 'score_board', 'javaexceptions', 'start_time', 'finish_time', 'freeze_time', 'extra_time', 'late_rule', 'participants', 'description', 'user_id' ];
+    protected $dates = ['start_time', 'finish_time', 'freeze_time'];
 
     public function problems()
     {
@@ -106,7 +106,7 @@ class Assignment extends Model
     }
 
     public function started(){
-        return strtotime(date("Y-m-d H:i:s")) >= strtotime($this->start_time) ; //now should be larger than start time
+        return strtotime(date("Y-m-d H:i:s")) >= strtotime($this->start_time)  ; //now should be larger than start time
     }
 
     public function update_submissions_coefficient(){
@@ -163,6 +163,7 @@ class Assignment extends Model
                 'id' => 0,
                 'name' => "instructors'submit",
                 'finish_time' => 0,
+                'freeze_time' => 0,
                 'extra_time' => 0,
                 'problems' => 0,
                 'open' => 0,
