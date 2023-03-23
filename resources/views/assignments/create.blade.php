@@ -101,6 +101,39 @@
 						</div>
 						{{-- {{ form_error('start_time', '<div class="alert alert-danger">', '</div>') }} --}}
 					</div>
+
+					<div class="col-sm-4">
+						<label for="freeze_time">Freeze Time
+						<small class="form-text text-muted">Time when the freeze starts: the results of submissions made after this time are not revealed until the scoreboard unfreeze time below has passed.</small>
+						</label>
+					</div>
+					<div class="col-sm-8">
+						<input id="freeze_time" type="hidden" name="freeze_time" class="form-control" value="" />
+						<div class="form-old-row row">
+							<div class="col-xl-7">
+								<input id="freeze_time_date" type="date" name="freeze_time_date" class="form-control" value="{{ $edit ? $assignment->freeze_time->setTimezone($settings['timezone'])->isoFormat('Y-MM-DD')  : old('freeze_time_date') }}" />
+							</div>
+							<div class="col-xl-5">
+								<input id="freze_time_time" type="time" name="freeze_time_time" class="form-control" value="{{ $edit ? $assignment->freeze_time->setTimezone($settings['timezone'])->isoFormat('HH:mm')  : old('frezze_time_time',0) }}" />
+							</div>
+						</div>
+						{{-- {{ form_error('freeze_time', '<div class="alert alert-danger">', '</div>') }} --}}
+					</div>
+					<div class="col-sm-4">
+						<label for="unfreeze_time">  UnFreeze Time</label>
+					</div>
+					<div class="col-sm-8">
+						<input id="unfreeze_time" type="hidden" name="unfreeze_time" class="form-control" value="" />
+						<div class="form-old-row row">
+							<div class="col-xl-7">
+								<input id="unfreeze_time_date" type="date" name="unfreeze_time_date" class="form-control" value="{{ $edit ? $assignment->unfreeze_time->setTimezone($settings['timezone'])->isoFormat('Y-MM-DD')  : old('unfreeze_time_date') }}" />
+							</div>
+							<div class="col-xl-5">
+								<input id="unfreze_time_time" type="time" name="unfreze_time_time" class="form-control" value="{{ $edit ? $assignment->unfreeze_time->setTimezone($settings['timezone'])->isoFormat('HH:mm')  : old('unfreze_time_time',0) }}" />
+							</div>
+						</div>
+						{{-- {{ form_error('finish_freeze_time', '<div class="alert alert-danger">', '</div>') }} --}}
+					</div>
 	
 					<div class="col-sm-4">
 						<label for="finish_time">Finish Time
@@ -145,14 +178,14 @@
 							@endforeach
 						</select>
 					</div>
-					<div class="col-sm-4">
+					<!-- <div class="col-sm-4">
 						<label for="form_pdf">PDF File<br>
 							<small class="form-text text-muted">If the assignment has an additional PDF description file upload it here. </small>
 						</label>
-					</div>
-					<div class="col-sm-8">
+					</div> -->
+					<!-- <div class="col-sm-8">
 						<input id="form_pdf" type="file" name="pdf" class="form-control"/>
-					</div>
+					</div> -->
 				</div>
 			</div>
 	
@@ -180,7 +213,17 @@
 				</label>
 				<textarea id="form_late_rule" name="late_rule" rows="8" class="form-control add_text">{{ $edit ? $assignment->late_rule : old('late_rule', $settings['default_late_rule'], false) }}</textarea>
 				{{-- {{ form_error('late_rule', '<div class="alert alert-danger">', '</div>') }} --}}
+
+				<div class="col-sm">
+						<label for="form_pdf">PDF File<br>
+							<small class="form-text text-muted">If the assignment has an additional PDF description file upload it here. </small>
+						</label>
+					</div>
+					<div class="col-sm">
+						<input id="form_pdf" type="file" name="pdf" class="form-control"/>
+				</div>
 			</div>
+			
 		</div>
 	
 		<div class="row my-3">
