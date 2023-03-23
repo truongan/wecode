@@ -219,9 +219,12 @@ class Scoreboard extends Model
 
 
 		$scoreboard_table = view('scoreboard_table', $data)->render();
+		$scoreboard_table_freeze = view('scoreboard_table_freeze', $data)->render();
 		#Minify the scoreboard's html code
 		// $scoreboard_table = $this->output->minify($scoreboard_table, 'text/html');
 		$this->scoreboard = $scoreboard_table;
+		$this->scoreboard_freeze = $scoreboard_table_freeze;
+
 		$this->save();
 		
 		return true;
