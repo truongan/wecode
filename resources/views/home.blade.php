@@ -70,7 +70,7 @@ js') }}"></script>
             </div>
         </div>
 
-        <div class="m-2">
+        {{-- <div class="m-2">
             <div class="card bg-dark text-light">
                 <i class="text-center card-img-top fas fa-users fa-2x p-3"></i>
                 <div class="card-body bg-light text-dark">
@@ -93,7 +93,7 @@ js') }}"></script>
                     <a href="{{ route('users.rank') }}" class="stretched-link"></a>
                 </div>
             </div>
-        </div>
+        </div> --}}
         <div class="m-2">
             <div class="card bg-dark text-light">
                 <i class="text-center card-img-top fas fa-laptop-code fa-2x p-3"></i>
