@@ -126,6 +126,7 @@ class assignment_controller extends Controller
         $zone = Carbon::now()->getTimezone();
 
         $request['start_time'] = (new Carbon($request['start_time_date'] . ' ' . $request['start_time_time'] . ' ' . Setting::get('timezone')))->setTimezone($zone);
+        $request['freeze_time'] = (new Carbon($request['freeze_time_date'] . ' ' . $request['freeze_time_time'] . ' ' . Setting::get('timezone')))->setTimezone($zone);
         $request['finish_time'] = (new Carbon($request['finish_time_date'] . ' ' . $request['finish_time_time'] . ' ' . Setting::get('timezone')))->setTimezone($zone);
       
     }

@@ -42,6 +42,7 @@
 					<th width="15%"><small>Submit</small></th>
 					{{-- <th>Coef</th> --}}
 					<th>Start</th>
+					<th>Freeze</th>
 					<th>Finish</th>
 					<th><small>Score-board</small></th>
 					@if (!in_array( Auth::user()->role->name, ['student', 'guest']))
@@ -100,6 +101,7 @@
 					</small>
 				</td>
 				<td><small>{{$assignment->start_time->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('llll (UZZ)') }}</small></td>
+				<td><small>{{$assignment->freeze_time->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('llll (UZZ)') }}</small></td>
 				<td><small>{{$assignment->finish_time->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('llll (UZZ)') }}</small></td>
 				<td>
 					<a href="{{ route('scoreboards.index', $assignment->id)}}" title="Click to viewa assignment's scoreboard">
@@ -160,7 +162,6 @@
 
 
 @section('body_end')
-
 <script type='text/javascript' src="{{ asset('assets/DataTables/datatables.min.js') }}"></script>
 <script>
 $(document).ready(function () {
@@ -228,11 +229,10 @@ $(document).ready(function () {
 		    null,//start
 		    null,//finish
 		    { "orderable": false }, //scoreboard
-			if (!in_array( Auth::user()->role->name, ['student', 'guest']))
-			{
+			@if (!in_array( Auth::user()->role->name, ['student', 'guest']))
 				{ "orderable": false }, //open
 		    	{ "orderable": false }, //action
-			}
+			@endif
 		  ],
 		"lengthMenu": [ [20, 60, 150, 500, -1], [20, 60, 150, 500, "All"] ]
 	});
