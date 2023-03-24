@@ -49,7 +49,7 @@
             @if (isset($scores[$sc_username][$problem->id]['score']))
                 <a href="{{ route('submissions.index', ['assignment_id' => $assignment_id, 'problem_id' => $problem->id, 'user_id' => $scores[$sc_username]['id'] , 'choose' => 'all']) }}"
                     class = "lead 
-                    @if ($scores[$sc_username][$problem->id]['after_freeze'] == 1)
+                    @if ($scores[$sc_username][$problem->id]['is_freeze'] == 1)
                         text-warning" >
                             {{(int)$number_of_submissions[$sc_username][$problem->id] - (int)$number_of_submissions_during_freeze[$sc_username][$problem->id]}} + {{$number_of_submissions_during_freeze[$sc_username][$problem->id]}} tries
                     @else
@@ -62,7 +62,7 @@
                         @endif
                     @endif
                 </a>
-                @if ($scores[$sc_username][$problem->id]['after_freeze'] == 0)
+                @if ($scores[$sc_username][$problem->id]['is_freeze'] == 0)
                     <p class="excess">
                         <span class="small text-info" title="Total tries and time to final submit">
                         {{$number_of_submissions[$sc_username][$problem->id]}}

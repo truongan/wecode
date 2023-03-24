@@ -33,8 +33,8 @@ class Scoreboard extends Model
         
         $problems = $assignment->problems->keyBy('id');
         $number_of_submissions= [];
-        {        foreach($assignment->submissions as $item)
-
+        foreach($assignment->submissions as $item)
+		{
             $number_of_submissions[$item->user->username][$item->problem_id]=0;
         }
 
@@ -77,7 +77,7 @@ class Scoreboard extends Model
 			$fullmark = ($submission->pre_score == 10000);
 			$time = CarbonInterval::seconds( $assignment->start_time->diffInSeconds($submission->created_at, true))->cascade(); // time is absolute different
 			$late = CarbonInterval::seconds( $assignment->finish_time->diffInSeconds($submission->created_at, false))->cascade(); //late can either be negative (submit in time) or positive (submit late)
-			$after_freeze = ($assignment->freeze_time <= $submission->created_at);
+			$is_freeze = ($assignment->freeze_time <= $submission->created_at);
 
 			// dd($late);
             $username = $submission->user->username;
@@ -85,7 +85,7 @@ class Scoreboard extends Model
 			$scores[$username][$submission->problem_id]['time'] = $time;
 			$scores[$username][$submission->problem_id]['late'] = $late;
 			$scores[$username][$submission->problem_id]['fullmark'] = $fullmark;
-			$scores[$username][$submission->problem_id]['after_freeze'] = $after_freeze;
+			$scores[$username][$submission->problem_id]['is_freeze'] = $is_freeze;
 			$scores[$username]['id'] = $submission->user_id;
 			if ( ! isset($total_score[$username])){
 				$total_score[$username] = 0;
