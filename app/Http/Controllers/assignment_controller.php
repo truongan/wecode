@@ -146,6 +146,9 @@ class assignment_controller extends Controller
         $validated = $request->validate([
             'name' => ['required','max:150'],
             'pdf_file' => 'mimes:pdf',
+            'freeze_time' => 'required|date|before:finish_time'
+        ],[
+            'freeze_time' => 'freeze time is less than finish time'
         ]);
         
         $input = $request->input();

@@ -117,7 +117,9 @@
 								<input id="freeze_time_time" type="time" name="freeze_time_time" class="form-control" value="{{ $edit ? $assignment->freeze_time->setTimezone($settings['timezone'])->isoFormat('HH:mm') : old('freeze_time_time') }}" />
 							</div>
 						</div>
-						{{-- {{ form_error('freeze_time', '<div class="alert alert-danger">', '</div>') }} --}}
+							@error('freeze_time')
+								<div class="alert alert-danger">{{ $message }} </div>
+							@enderror
 					</div>					
 
 					<div class="col-sm-4">
