@@ -43,7 +43,7 @@ class scoreboard_controller extends Controller
 		$scoreboard = NULL;
 		if ($assignment)
 		{
-			// Scoreboard::update_scoreboard($assignment_id); 
+				Scoreboard::update_scoreboard($assignment_id); 
 
 			if ($assignment->freeze_time && Carbon::now() >= $assignment->freeze_time) {
 				if (Carbon::now() >= $assignment->freeze_time) {

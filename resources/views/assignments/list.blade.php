@@ -227,6 +227,7 @@ $(document).ready(function () {
 		    null,
 		    null,
 		    null,//start
+		    null,//freeze
 		    null,//finish
 		    { "orderable": false }, //scoreboard
 			@if (!in_array( Auth::user()->role->name, ['student', 'guest']))

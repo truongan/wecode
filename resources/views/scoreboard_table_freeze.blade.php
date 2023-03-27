@@ -84,12 +84,12 @@
     </tr>
     @endforeach
 
-    <thead class="bg-dark text-light">
+    {{-- <thead class="bg-dark text-light">
         <th colspan="6">Sumarry</th>
         @foreach ($problems as $problem)
         <th>
             <a class="small" href="{{ route('assignments.show', ['assignment'=>$assignment_id, 'problem_id'=> $problem->id]) }}">{{ $problem->pivot->problem_name }}</a>
-            {{-- <a class="small" href="{{ route('submissions.index', ['assignment_id' => $assignment_id, 'problem_id' => $problem->id, 'user_id' => 'all' , 'choose' => 'final']) }}">{{ $problem->pivot->problem_name }}</a> --}}
+            <a class="small" href="{{ route('submissions.index', ['assignment_id' => $assignment_id, 'problem_id' => $problem->id, 'user_id' => 'all' , 'choose' => 'final']) }}">{{ $problem->pivot->problem_name }}</a>
             <br>
             <a class="text-light" href="{{ route('submissions.index', ['assignment_id' => $assignment_id, 'problem_id' => $problem->id, 'user_id' =>'all' , 'choose' => 'final']) }}">{{ $problem->pivot->score }}</a>
         </th>
@@ -127,5 +127,5 @@
             {{$stat_print[$p->id]->average_tries_2_solve}}
         </td>
         @endforeach
-    </tr>
+    </tr> --}}
     </table>
