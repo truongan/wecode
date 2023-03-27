@@ -85,7 +85,19 @@ $(document).ready(function () {
 	$("table").DataTable({
 		"paging": false,
 		"ordering": true,
+		// "ajax": "{{ route('scoreboards.index', Auth::user()->selected_assignment_id) }}"",
 	});
+
+	// setInterval(() => {
+	// 	$.ajax({
+	// 		url: "{{ route('scoreboards.index', Auth::user()->selected_assignment_id) }}",
+	// 	})
+	// }, 1000);
+
 });
+
+// setInterval(() => {
+// 	window.location.reload();
+// }, 1000);
 </script>
 @endsection
