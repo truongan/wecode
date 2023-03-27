@@ -65,9 +65,15 @@
 	<p>Scoreboard is disabled.</p>
 	@else
 		<p>Scoreboard of <span> {{ $assignment->name }}</span></p>
-		<div class="table-responsive">
-			{!! $scoreboard !!}
-		</div>
+		<ul id="show-view" class="nav nav-pills">
+			<li class="nav-item">
+				<a id="normal-view" class="nav-link active" aria-current="page" onclick="handleClick()">Normal</a>
+			</li>
+			<li class="nav-item">
+				<a id="freeze-view" class="nav-link" onclick="handleClick()">Freeze</a>
+			</li>
+		</ul>
+		<div class="table-responsive">{!! $scoreboard !!}</div>
 		<span class="text-danger">*: Not full mark</span>
 		<br/>
 		<span class="text-info">Number of tries - Submit time</span>
@@ -99,5 +105,29 @@ $(document).ready(function () {
 // setInterval(() => {
 // 	window.location.reload();
 // }, 1000);
+
+function handleClick() {
+	let element = document.querySelector("#show-view .active");
+	element.classList.remove("active")
+	element = event.target
+	element.classList.add("active")
+	console.log(element.id)
+	if (element.id === "normal-view") {
+		let table = document.querySelector(".mx-n2 > .table-responsive")
+		table.innerHTML = `{!! $scoreboard !!}`
+	} else {
+		let table = document.querySelector(".mx-n2 > .table-responsive")
+		table.innerHTML = `{!! $scoreboard_freeze !!}`
+	}
+	$(document).ready(function () {
+		$("table").DataTable({
+			"paging": false,
+			"ordering": true,
+			// "ajax": "{{ route('scoreboards.index', Auth::user()->selected_assignment_id) }}"",
+		})
+	})
+}
+
+
 </script>
 @endsection

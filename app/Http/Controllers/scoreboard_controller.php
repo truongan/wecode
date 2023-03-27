@@ -41,21 +41,22 @@ class scoreboard_controller extends Controller
 			abort(404, "This assignment does not have scoreboard");
 		}
 		$scoreboard = NULL;
+		$scoreboard_freeze = NULL;
 		if ($assignment)
 		{
 			Scoreboard::update_scoreboard($assignment_id); 
 
-			if ($assignment->freeze_time && Carbon::now() >= $assignment->freeze_time) {
-				if (Carbon::now() >= $assignment->freeze_time) {
-					$scoreboard = $this->get_scoreboard_freeze($assignment_id);
-				}
-			}
-			else $scoreboard = $this->get_scoreboard($assignment_id);
+			// if ($assignment->freeze_time && Carbon::now() >= $assignment->freeze_time) {
+					$scoreboard_freeze = $this->get_scoreboard_freeze($assignment_id);
+			// }
+			// else 
+			$scoreboard = $this->get_scoreboard($assignment_id);
 
 		return view('scoreboard', ['selected' => 'scoreboard',
 									'place' => 'full',	
 									'assignment' => $assignment,
-									'scoreboard' => $scoreboard,					
+									'scoreboard' => $scoreboard,	
+									'scoreboard_freeze' => $scoreboard_freeze,									
 								]);
 		}
 	}
