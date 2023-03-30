@@ -34,7 +34,7 @@ class Scoreboard extends Model
         $problems = $assignment->problems->keyBy('id');
         $number_of_submissions= [];
         foreach($assignment->submissions as $item)
-        {
+		{
             $number_of_submissions[$item->user->username][$item->problem_id]=0;
         }
 
@@ -48,7 +48,18 @@ class Scoreboard extends Model
 		
         foreach($assignment->submissions as $item)
         {
-            $number_of_submissions[$item->user->username][$item->problem_id]+=1;
+			$number_of_submissions[$item->user->username][$item->problem_id]+=1;
+		}
+		
+		$number_of_submissions_during_freeze = [];
+        foreach($assignment->submissions as $item)
+        {
+            $number_of_submissions_during_freeze[$item->user->username][$item->problem_id]=0;
+        }
+
+		foreach($assignment->submissions->where('created_at', '>=', $assignment->freeze_time) as $item)
+        {
+            $number_of_submissions_during_freeze[$item->user->username][$item->problem_id]+=1;
 		}
 		
 		$statistics = array();
@@ -66,12 +77,15 @@ class Scoreboard extends Model
 			$fullmark = ($submission->pre_score == 10000);
 			$time = CarbonInterval::seconds( $assignment->start_time->diffInSeconds($submission->created_at, true))->cascade(); // time is absolute different
 			$late = CarbonInterval::seconds( $assignment->finish_time->diffInSeconds($submission->created_at, false))->cascade(); //late can either be negative (submit in time) or positive (submit late)
+			$is_freeze = ($assignment->freeze_time <= $submission->created_at);
+
 			// dd($late);
             $username = $submission->user->username;
 			$scores[$username][$submission->problem_id]['score'] = $final_score;
 			$scores[$username][$submission->problem_id]['time'] = $time;
 			$scores[$username][$submission->problem_id]['late'] = $late;
 			$scores[$username][$submission->problem_id]['fullmark'] = $fullmark;
+			$scores[$username][$submission->problem_id]['is_freeze'] = $is_freeze;
 			$scores[$username]['id'] = $submission->user_id;
 			if ( ! isset($total_score[$username])){
 				$total_score[$username] = 0;
@@ -174,7 +188,7 @@ class Scoreboard extends Model
 			
 			// dd($statistics);
 			// dd($stat_print);
-			return array($scores, $scoreboard, $number_of_submissions, $stat_print);
+			return array($scores, $scoreboard, $number_of_submissions, $stat_print, $number_of_submissions_during_freeze);
 		}
 
 		public function _update_scoreboard()
@@ -190,10 +204,9 @@ class Scoreboard extends Model
 			return false;
 		}
 
-		list ($scores, $scoreboard, $number_of_submissions,$stat_print) = $this->_generate_scoreboard();
+		list ($scores, $scoreboard, $number_of_submissions,$stat_print, $number_of_submissions_during_freeze) = $this->_generate_scoreboard();
 		$all_problems = $assignment->problems;
-		Log::info($all_problems);
-		
+
 		$total_score = 0;
 		foreach($all_problems as $item)
 			$total_score += $item->pivot->score;
@@ -214,14 +227,18 @@ class Scoreboard extends Model
 			'stat_print' => $stat_print,
 			'no_of_problems'=> $assignment->problems->count(),
 			'number_of_submissions' => $number_of_submissions,
+			'number_of_submissions_during_freeze' => $number_of_submissions_during_freeze,
 		);
 		// dd($data);
 
 
 		$scoreboard_table = view('scoreboard_table', $data)->render();
+		$scoreboard_table_freeze = view('scoreboard_table_freeze', $data)->render();
 		#Minify the scoreboard's html code
 		// $scoreboard_table = $this->output->minify($scoreboard_table, 'text/html');
 		$this->scoreboard = $scoreboard_table;
+		$this->scoreboard_freeze = $scoreboard_table_freeze;
+
 		$this->save();
 		
 		return true;

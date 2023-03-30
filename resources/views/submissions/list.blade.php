@@ -71,12 +71,12 @@
 		{{-- <hr> --}}
 		@if ($choose == 'all')
 		<span>
-		<i class="fa fa-warning color3"></i> You cannot change your final submissions after assignment finishes.<i class="fa-solid fa-memory"></i><i class="fa-regular fa-clock"></i>
+			<i class="fas fa-exclamation-triangle"></i> You cannot change your final submissions after assignment finishes.
 		</span>
 		@endif
 	</div>
 
-</div>
+</div
 <div class="row ">
 	<div class="table-responsive">
 		<table class=" text-center table-responsive table table-bordered {{$choose == 'all' ? 'table-striped' : 'data-table'}}">

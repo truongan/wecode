@@ -49,25 +49,32 @@
             @if (isset($scores[$sc_username][$problem->id]['score']))
                 <a href="{{ route('submissions.index', ['assignment_id' => $assignment_id, 'problem_id' => $problem->id, 'user_id' => $scores[$sc_username]['id'] , 'choose' => 'all']) }}"
                     class = "lead 
-                    @if ($scores[$sc_username][$problem->id]['fullmark'] == true)
-                        text-success" >
-                            {{ $scores[$sc_username][$problem->id]['score'] }}
+                    @if ($scores[$sc_username][$problem->id]['is_freeze'] == 1)
+                        text-warning" >
+                            {{(int)$number_of_submissions[$sc_username][$problem->id] - (int)$number_of_submissions_during_freeze[$sc_username][$problem->id]}} + {{$number_of_submissions_during_freeze[$sc_username][$problem->id]}} tries
                     @else
-                        text-danger">
-                            {{ $scores[$sc_username][$problem->id]['score'] }}
+                        @if ($scores[$sc_username][$problem->id]['fullmark'] == true)
+                            text-success" >
+                                {{ $scores[$sc_username][$problem->id]['score'] }}
+                        @else
+                            text-danger" >
+                                {{ $scores[$sc_username][$problem->id]['score'] }}
+                        @endif
                     @endif
                 </a>
-                <p class="excess">
-                    <span class="small text-info" title="Total tries and time to final submit">
-                    {{$number_of_submissions[$sc_username][$problem->id]}}
-                        - </span>
+                @if ($scores[$sc_username][$problem->id]['is_freeze'] == 0)
+                    <p class="excess">
+                        <span class="small text-info" title="Total tries and time to final submit">
+                        {{$number_of_submissions[$sc_username][$problem->id]}}
+                            - </span>
 
-                    @if ($scores[$sc_username][$problem->id]['late']->totalSeconds > 0)
-                        <span class="text-warning">{{ $scores[$sc_username][$problem->id]['late']->forHumans(['short' => true]) }}</span>
-                    @else
-                        <span class="small text-info">{{ $scores[$sc_username][$problem->id]['time']->forHumans(['short' => true]) }}</span>
-                    @endif
-                </p>
+                        @if ($scores[$sc_username][$problem->id]['late']->totalSeconds > 0)
+                            <span class="text-warning">{{ $scores[$sc_username][$problem->id]['late']->forHumans(['short' => true]) }}</span>
+                        @else
+                            <span class="small text-info">{{ $scores[$sc_username][$problem->id]['time']->forHumans(['short' => true]) }}</span>
+                        @endif
+                    </p>
+                @endif
             @else
                 -
             @endif
