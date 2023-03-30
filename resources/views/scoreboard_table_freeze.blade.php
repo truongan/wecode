@@ -38,7 +38,7 @@
                 </p>
 
         </td>
-        <td class="bg-warning text-white" >
+        <td class="bg-success text-white" >
         <span class="lead"><strong>{{ $scoreboard['accepted_score'][$loop->index] }}</strong></span>
         <p class="excess">
             <span class="small" title="Solved : Attack ratio">{{ $scoreboard['solved'][$loop->index]}}:{{ $scoreboard['tried_to_solve'][$loop->index]}}</span>
@@ -49,9 +49,32 @@
             @if (isset($scores[$sc_username][$problem->id]['score']))
                 <a href="{{ route('submissions.index', ['assignment_id' => $assignment_id, 'problem_id' => $problem->id, 'user_id' => $scores[$sc_username]['id'] , 'choose' => 'all']) }}"
                     class = "lead 
-                        text-warning">
-                            tried
+                    @if ($scores[$sc_username][$problem->id]['is_freeze'] == 1)
+                        text-warning" >
+                            {{(int)$number_of_submissions[$sc_username][$problem->id] - (int)$number_of_submissions_during_freeze[$sc_username][$problem->id]}} + {{$number_of_submissions_during_freeze[$sc_username][$problem->id]}} tries
+                    @else
+                        @if ($scores[$sc_username][$problem->id]['fullmark'] == true)
+                            text-success" >
+                                {{ $scores[$sc_username][$problem->id]['score'] }}
+                        @else
+                            text-danger" >
+                                {{ $scores[$sc_username][$problem->id]['score'] }}
+                        @endif
+                    @endif
                 </a>
+                @if ($scores[$sc_username][$problem->id]['is_freeze'] == 0)
+                    <p class="excess">
+                        <span class="small text-info" title="Total tries and time to final submit">
+                        {{$number_of_submissions[$sc_username][$problem->id]}}
+                            - </span>
+
+                        @if ($scores[$sc_username][$problem->id]['late']->totalSeconds > 0)
+                            <span class="text-warning">{{ $scores[$sc_username][$problem->id]['late']->forHumans(['short' => true]) }}</span>
+                        @else
+                            <span class="small text-info">{{ $scores[$sc_username][$problem->id]['time']->forHumans(['short' => true]) }}</span>
+                        @endif
+                    </p>
+                @endif
             @else
                 -
             @endif
@@ -61,16 +84,48 @@
     </tr>
     @endforeach
 
-    <thead class="bg-dark text-light">
+    {{-- <thead class="bg-dark text-light">
         <th colspan="6">Sumarry</th>
         @foreach ($problems as $problem)
         <th>
             <a class="small" href="{{ route('assignments.show', ['assignment'=>$assignment_id, 'problem_id'=> $problem->id]) }}">{{ $problem->pivot->problem_name }}</a>
-            {{-- <a class="small" href="{{ route('submissions.index', ['assignment_id' => $assignment_id, 'problem_id' => $problem->id, 'user_id' => 'all' , 'choose' => 'final']) }}">{{ $problem->pivot->problem_name }}</a> --}}
+            <a class="small" href="{{ route('submissions.index', ['assignment_id' => $assignment_id, 'problem_id' => $problem->id, 'user_id' => 'all' , 'choose' => 'final']) }}">{{ $problem->pivot->problem_name }}</a>
             <br>
             <a class="text-light" href="{{ route('submissions.index', ['assignment_id' => $assignment_id, 'problem_id' => $problem->id, 'user_id' =>'all' , 'choose' => 'final']) }}">{{ $problem->pivot->score }}</a>
         </th>
         @endforeach
 
     </thead>
-</table>
+    <tr class="bg-dark text-light">
+        <td colspan="6">Solved/tries</td>
+        @foreach ($problems as $p)
+        <td>
+            {{$stat_print[$p->id]->solved_tries}}
+        </td>
+        @endforeach
+    </tr>
+    <tr class="bg-dark text-light">
+        <td colspan="6">Solved users/tries users/Total users</td>
+        @foreach ($problems as $p)
+        <td>
+           {{$stat_print[$p->id]->solved_tries_users}}
+        </td>
+        @endforeach
+    </tr>
+    <tr class="bg-dark text-light">
+        <td colspan="6">Average tries per users</td>
+        @foreach ($problems as $p)
+        <td>
+            {{$stat_print[$p->id]->average_tries}}
+        </td>
+        @endforeach
+    </tr>
+    <tr class="bg-dark text-light">
+        <td colspan="6">Average tries to solve</td>
+        @foreach ($problems as $p)
+        <td>
+            {{$stat_print[$p->id]->average_tries_2_solve}}
+        </td>
+        @endforeach
+    </tr> --}}
+    </table>
