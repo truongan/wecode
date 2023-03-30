@@ -160,7 +160,6 @@
 
 
 @section('body_end')
-
 <script type='text/javascript' src="{{ asset('assets/DataTables/datatables.min.js') }}"></script>
 <script>
 $(document).ready(function () {
@@ -228,11 +227,10 @@ $(document).ready(function () {
 		    null,//start
 		    null,//finish
 		    { "orderable": false }, //scoreboard
-			if (!in_array( Auth::user()->role->name, ['student', 'guest']))
-			{
+			@if (!in_array( Auth::user()->role->name, ['student', 'guest']))
 				{ "orderable": false }, //open
 		    	{ "orderable": false }, //action
-			}
+			@endif
 		  ],
 		"lengthMenu": [ [20, 60, 150, 500, -1], [20, 60, 150, 500, "All"] ]
 	});

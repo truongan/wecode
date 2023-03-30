@@ -63,7 +63,6 @@ sed -i "s/DB_USERNAME.*/DB_USERNAME=$db_user/g" .env
 sed -i "s/DB_DATABASE.*/DB_DATABASE=$db/g" .env
 sed -i "s/DB_PASSWORD.*/DB_PASSWORD=$password/g" .env
 
-composer update
 php artisan key:generate
 php artisan migrate:refresh
 php artisan db:seed --class=installation_seeding

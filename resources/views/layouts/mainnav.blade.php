@@ -83,8 +83,8 @@
 
         <div class="navbar-nav ms-auto">
             @if(isset(Auth::user()->selected_assignment->name))
-                <div class="px-3 d-flex flex-column justify-content-center  bg-secondary " >
-                    {{Auth::user()->selected_assignment->name}}  
+                <div class="px-3 d-flex flex-column justify-content-center  bg-secondary bg-opacity-75" >
+                        {{Auth::user()->selected_assignment->name}}  
                 </div>
             @endif
             

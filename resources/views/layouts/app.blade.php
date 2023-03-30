@@ -18,7 +18,7 @@
 	<link rel="stylesheet" type='text/css' href="{{ asset('assets/styles/bootstrap/' . $settings['theme']  . '.min.css') }}">
     <link rel="stylesheet" type='text/css' href="{{ asset('assets/sbadmin/css/sb-admin.css') }}">
     <link href="{{ asset('assets/styles/main.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets/fontawesome/css/all.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/fontawesome/css/all.min.css') }}" rel="stylesheet">
     @yield('other_assets')
 </head>
 <body id="body" class="fixed-nav ">
