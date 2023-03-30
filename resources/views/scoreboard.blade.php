@@ -65,6 +65,7 @@
 	<p>Scoreboard is disabled.</p>
 	@else
 		<p>Scoreboard of <span> {{ $assignment->name }}</span></p>
+		@if (in_array( Auth::user()->role->name, ['admin', 'head_instructor']))
 		<ul id="show-view" class="nav nav-pills">
 			<li class="nav-item">
 				<a id="normal-view" class="nav-link active" aria-current="page" onclick="handleClick()">Normal</a>
@@ -73,6 +74,7 @@
 				<a id="freeze-view" class="nav-link" onclick="handleClick()">Freeze</a>
 			</li>
 		</ul>
+		@endif
 		<div class="table-responsive">{!! $scoreboard !!}</div>
 		<span class="text-danger">*: Not full mark</span>
 		<br/>

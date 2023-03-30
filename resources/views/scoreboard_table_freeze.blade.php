@@ -1,3 +1,4 @@
+@if ($is_freeze)
 <table class="wecode_table table table-striped table-bordered table-sm">
     <thead class="thead-old table-dark">
         <tr>
@@ -128,4 +129,7 @@
         </td>
         @endforeach
     </tr>
-    </table>
+</table>
+@else
+    <h1>Freeze time is not occurred.</h1>
+@endif

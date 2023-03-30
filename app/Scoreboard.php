@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Log;
 
 class Scoreboard extends Model
 {
-	protected $fillable = ['assignment_id', 'scoreboard','scoreboard_freeze'];
+	protected $fillable = ['assignment_id', 'scoreboard','scoreboard_freeze','users_ranking'];
 
 	public function assignment(){
         return $this->belongsTo('App\Assignment');
@@ -113,6 +113,10 @@ class Scoreboard extends Model
 			$users[] = $submission->user;
 
         }
+
+		
+		$this->users_ranking = $users;
+		$this->save();
 
         $scoreboard = array(
 			'username' => array(),
@@ -228,9 +232,9 @@ class Scoreboard extends Model
 			'no_of_problems'=> $assignment->problems->count(),
 			'number_of_submissions' => $number_of_submissions,
 			'number_of_submissions_during_freeze' => $number_of_submissions_during_freeze,
+			'is_freeze' => (Carbon::now() >= $assignment->freeze_time),
 		);
 		// dd($data);
-
 
 		$scoreboard_table = view('scoreboard_table', $data)->render();
 		$scoreboard_table_freeze = view('scoreboard_table_freeze', $data)->render();
