@@ -84,48 +84,47 @@
     </tr>
     @endforeach
 
-    {{-- <thead class="bg-dark text-light">
+    <tfoot class="bg-dark text-light">
         <th colspan="6">Sumarry</th>
         @foreach ($problems as $problem)
         <th>
             <a class="small" href="{{ route('assignments.show', ['assignment'=>$assignment_id, 'problem_id'=> $problem->id]) }}">{{ $problem->pivot->problem_name }}</a>
-            <a class="small" href="{{ route('submissions.index', ['assignment_id' => $assignment_id, 'problem_id' => $problem->id, 'user_id' => 'all' , 'choose' => 'final']) }}">{{ $problem->pivot->problem_name }}</a>
+            {{-- <a class="small" href="{{ route('submissions.index', ['assignment_id' => $assignment_id, 'problem_id' => $problem->id, 'user_id' => 'all' , 'choose' => 'final']) }}">{{ $problem->pivot->problem_name }}</a> --}}
             <br>
             <a class="text-light" href="{{ route('submissions.index', ['assignment_id' => $assignment_id, 'problem_id' => $problem->id, 'user_id' =>'all' , 'choose' => 'final']) }}">{{ $problem->pivot->score }}</a>
         </th>
         @endforeach
-
-    </thead>
-    <tr class="bg-dark text-light">
-        <td colspan="6">Solved/tries</td>
-        @foreach ($problems as $p)
-        <td>
-            {{$stat_print[$p->id]->solved_tries}}
-        </td>
-        @endforeach
-    </tr>
-    <tr class="bg-dark text-light">
-        <td colspan="6">Solved users/tries users/Total users</td>
-        @foreach ($problems as $p)
-        <td>
-           {{$stat_print[$p->id]->solved_tries_users}}
-        </td>
-        @endforeach
-    </tr>
-    <tr class="bg-dark text-light">
-        <td colspan="6">Average tries per users</td>
-        @foreach ($problems as $p)
-        <td>
-            {{$stat_print[$p->id]->average_tries}}
-        </td>
-        @endforeach
-    </tr>
-    <tr class="bg-dark text-light">
-        <td colspan="6">Average tries to solve</td>
-        @foreach ($problems as $p)
-        <td>
-            {{$stat_print[$p->id]->average_tries_2_solve}}
-        </td>
-        @endforeach
-    </tr> --}}
-    </table>
+        <tr class="bg-dark text-light">
+            <td colspan="6">Solved/tries</td>
+            @foreach ($problems as $p)
+            <td>
+                {{$stat_print[$p->id]->solved_tries}}
+            </td>
+            @endforeach
+        </tr>
+        <tr class="bg-dark text-light">
+            <td colspan="6">Solved users/tries users/Total users</td>
+            @foreach ($problems as $p)
+            <td>
+            {{$stat_print[$p->id]->solved_tries_users}}
+            </td>
+            @endforeach
+        </tr>
+        <tr class="bg-dark text-light">
+            <td colspan="6">Average tries per users</td>
+            @foreach ($problems as $p)
+            <td>
+                {{$stat_print[$p->id]->average_tries}}
+            </td>
+            @endforeach
+        </tr>
+        <tr class="bg-dark text-light">
+            <td colspan="6">Average tries to solve</td>
+            @foreach ($problems as $p)
+            <td>
+                {{$stat_print[$p->id]->average_tries_2_solve}}
+            </td>
+            @endforeach
+        </tr>
+    </tfoot>
+</table>
