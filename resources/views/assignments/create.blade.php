@@ -108,7 +108,7 @@
 						</label>
 					</div>
 					<div class="col-sm-8">
-						<input id="freeze_time" type="hidden" name="freeze_time" class="form-control" value="" />
+						<input id="freeze_time" type="hidden" name="_time" class="form-control" value="" />
 						<div class="form-old-row row">
 							<div class="col-xl-7">
 								<input id="freeze_time_date" type="date" name="freeze_time_date" class="form-control" value="{{ $edit ? $assignment->freeze_time->setTimezone($settings['timezone'])->isoFormat('Y-MM-DD') : old('freeze_time_date') }}" />
