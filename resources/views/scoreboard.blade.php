@@ -82,9 +82,10 @@
 <script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
 <script>
 $(document).ready(function () {
+	console.log(document.getElementsByTagName('table'))
 	$("table").DataTable({
 		"paging": false,
-		"ordering": true,
+		"ordering": false,
 	});
 });
 </script>
