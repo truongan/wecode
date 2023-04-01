@@ -117,8 +117,11 @@
 								<input id="freeze_time_time" type="time" name="freeze_time_time" class="form-control" value="{{ $edit ? $assignment->freeze_time->setTimezone($settings['timezone'])->isoFormat('HH:mm') : old('freeze_time_time') }}" />
 							</div>
 						</div>
-							@error('freeze_time')
-								<div class="alert alert-danger">{{ $message }} </div>
+							@error('freeze_time_date')
+								<div class="alert alert-danger">{{ $message }}</div>
+							@enderror
+							@error('freeze_time_time')
+								<div class="alert alert-danger">{{ $message }}</div>
 							@enderror
 					</div>					
 
@@ -139,6 +142,29 @@
 						</div>
 						{{-- {{ form_error('finish_time', '<div class="alert alert-danger">', '</div>') }} --}}
 					</div>
+
+					<div class="col-sm-4">
+						<label for="unfreeze_time">UnFreeze Time
+						<small class="form-text text-muted">Time when the final scoreboard is revealed. Usually this is a few hours after the contest ends and the award ceremony is over.</small>
+						</label>
+					</div>
+					<div class="col-sm-8">
+						<input id="unfreeze_time" type="hidden" name="unfreeze_time" class="form-control" value="" />
+						<div class="form-old-row row">
+							<div class="col-xl-7">
+								<input id="unfreeze_time_date" type="date" name="unfreeze_time_date" class="form-control" value="{{ $edit ? $assignment->unfreeze_time->setTimezone($settings['timezone'])->isoFormat('Y-MM-DD') : old('unfreeze_time_date') }}" />
+							</div>
+							<div class="col-xl-5">
+								<input id="unfreeze_time_time" type="time" name="unfreeze_time_time" class="form-control" value="{{ $edit ? $assignment->unfreeze_time->setTimezone($settings['timezone'])->isoFormat('HH:mm') : old('unfreeze_time_time') }}" />
+							</div>
+						</div>
+							@error('unfreeze_time_date')
+								<div class="alert alert-danger">{{ $message }}</div>
+							@enderror
+							@error('unfreeze_time_time')
+								<div class="alert alert-danger">{{ $message }}</div>
+							@enderror
+					</div>	
 	
 					<div class="col-sm-4">
 						<label for="form_extra_time">
@@ -149,29 +175,6 @@
 					<div class="col-sm-8">
 						<input id="form_extra_time" type="text" name="extra_time" id="extra_time" class="form-control" value="{{ $edit ? $assignment->extra_time : old('extra_time', '0*60*60') }}" />
 						{{-- {{ form_error('extra_time', '<div class="alert alert-danger">', '</div>') }} --}}
-					</div>
-
-					<div class="col-sm-4">
-						<label>Select class(es)<br>
-							<small class="form-text text-muted">Select the classes that are required to take this assignment. If your class have to take assignment with different start and/or finish time, please craete different assignments.</small>
-						</label>
-					</div>
-					<div class="col-sm-8">
-						<select class="js-example-basic-multiple form-control" multiple="multiple" name="lop_id[]">
-							@foreach( $all_lops as $p)
-							<option value="{{ $p->id }}" data-name="{{$p->name}}"
-								{{ isset($lops[$p->id]) ? 'selected="selected"' : ''  }}
-								> {{$p->name}}</option>
-							@endforeach
-						</select>
-					</div>
-					<div class="col-sm-4">
-						<label for="form_pdf">PDF File<br>
-							<small class="form-text text-muted">If the assignment has an additional PDF description file upload it here. </small>
-						</label>
-					</div>
-					<div class="col-sm-8">
-						<input id="form_pdf" type="file" name="pdf" class="form-control"/>
 					</div>
 				</div>
 			</div>
@@ -200,6 +203,34 @@
 				</label>
 				<textarea id="form_late_rule" name="late_rule" rows="8" class="form-control add_text">{{ $edit ? $assignment->late_rule : old('late_rule', $settings['default_late_rule'], false) }}</textarea>
 				{{-- {{ form_error('late_rule', '<div class="alert alert-danger">', '</div>') }} --}}
+
+				<div class="col-sm-12">
+					<label>Select class(es)<br>
+						<small class="form-text text-muted">Select the classes that are required to take this assignment. If your class have to take assignment with different start and/or finish time, please craete different assignments.</small>
+					</label>
+				</div>
+				<div class="col-sm-12">
+					<select class="js-example-basic-multiple form-control" multiple="multiple" name="lop_id[]">
+						@foreach( $all_lops as $p)
+						<option value="{{ $p->id }}" data-name="{{$p->name}}"
+							{{ isset($lops[$p->id]) ? 'selected="selected"' : ''  }}
+							> {{$p->name}}</option>
+						@endforeach
+					</select>
+				</div>
+
+				<div class="col-sm-12">
+					<label for="form_pdf">PDF File<br>
+						<small class="form-text text-muted">If the assignment has an additional PDF description file upload it here. </small>
+					</label>
+				</div>
+				<div class="col-sm-12">
+					<input id="form_pdf" type="file" name="pdf" class="form-control"/>
+					@error('pdf_file')
+						<div class="alert alert-danger">{{ $message }} </div>
+					@enderror
+				</div>
+
 			</div>
 		</div>
 	

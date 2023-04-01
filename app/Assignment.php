@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 class Assignment extends Model
 {
     //
-    protected $fillable = ['name', 'total_submits', 'open', 'score_board', 'javaexceptions', 'start_time', 'finish_time', 'freeze_time', 'extra_time', 'late_rule', 'participants', 'description', 'user_id' ];
-    protected $dates = ['start_time', 'finish_time', 'freeze_time'];
+    protected $fillable = ['name', 'total_submits', 'open', 'score_board', 'javaexceptions', 'start_time', 'finish_time', 'freeze_time','unfreeze_time', 'extra_time', 'late_rule', 'participants', 'description', 'user_id' ];
+    protected $dates = ['start_time', 'finish_time', 'freeze_time','unfreeze_time'];
 
     public function problems()
     {
@@ -164,6 +164,7 @@ class Assignment extends Model
                 'name' => "instructors'submit",
                 'finish_time' => 0,
                 'freeze_time' => 0,
+                'unfreeze_time' => 0,
                 'extra_time' => 0,
                 'problems' => 0,
                 'open' => 0,

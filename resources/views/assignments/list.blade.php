@@ -44,6 +44,7 @@
 					<th>Start</th>
 					<th>Freeze</th>
 					<th>Finish</th>
+					<th>Unfreeze</th>
 					<th><small>Score-board</small></th>
 					@if (!in_array( Auth::user()->role->name, ['student', 'guest']))
 						<th><small>Open</small></th>
