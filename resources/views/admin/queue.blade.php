@@ -32,6 +32,7 @@
       <th>Assignment</th>
       <th>Problem</th>
       <th>Type (judge/rejudge)</th>
+      <th>created at</th>
       <th>Process PID</th>
       <th><i class="fas fa-toolbox"></i></th>
     </tr>
@@ -44,6 +45,7 @@
         <td>{{ $item->submission->assignment->id }} (<span>{{ $item->submission->assignment->name }}</span>)</td>
         <td>{{ $item->submission->problem->id }}</td>
         <td>{{ $item->type }}</td>
+        <td>{{ $item->created_at->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('llll') }}</td>
         <td>{{ $item->processid }}</td>
         <td>
           @if ($item->processid)
