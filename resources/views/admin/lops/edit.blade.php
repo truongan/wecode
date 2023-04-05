@@ -112,14 +112,15 @@
 
 @section('body_end')
 
-
-<script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+<link rel='stylesheet' type='text/css' href="{{ asset('assets/DataTables/datatables.min.css') }}"/>
+<script type='text/javascript' src="{{ asset('assets/DataTables/datatables.min.js') }}"></script>
 <script>
 
 $(document).ready(function(){
   $("table").DataTable({
 		"pageLength": 50,
-		"lengthMenu": [ [20, 50, 100, 200, -1], [20, 50, 100, 200, "All"] ]
+		"lengthMenu": [ [20, 50, 100, 200, -1], [20, 50, 100, 200, "All"] ],
+		"pagingType": "first_last_numbers"
 	});
 });
 
