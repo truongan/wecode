@@ -25,24 +25,24 @@
         </tr>
     </thead>
    
-    @foreach ($scoreboard['username'] as $i => $sc_username)
+    @foreach ($scoreboard_freeze['username'] as $i => $sc_username)
     <tr>
         <td>{{ $loop->index + 1}}</td>
         <td> <a href="{{ route('submissions.index', ['assignment_id' => $assignment_id, 'problem_id' => 'all', 'user_id' => $scores[$sc_username]['id'] , 'choose' => 'all']) }}" >{{ $sc_username }}</a></td>
         <td>{{ $names[$sc_username] }}</td>
-        <td>{{ $scoreboard['lops'][$sc_username] ?? 'none' }}</td>
+        <td>{{ $scoreboard_freeze['lops'][$sc_username] ?? 'none' }}</td>
         <td>
 
-                <span>{{ $scoreboard['score'][$loop->index] }}</span>
+                <span>{{ $scoreboard_freeze['score'][$loop->index] }}</span>
                 <p class="excess">
-                    <span class="small" title="Total Time + Submit Penalty">{{($scoreboard['submit_penalty'][$loop->index]->cascade()->forHumans(['short' => true]) ) }}</span>
+                    <span class="small" title="Total Time + Submit Penalty">{{($scoreboard_freeze['submit_penalty'][$loop->index]->cascade()->forHumans(['short' => true]) ) }}</span>
                 </p>
 
         </td>
         <td class="bg-success text-white" >
-        <span class="lead"><strong>{{ $scoreboard['accepted_score'][$loop->index] }}</strong></span>
+        <span class="lead"><strong>{{ $scoreboard_freeze['accepted_score'][$loop->index] }}</strong></span>
         <p class="excess">
-            <span class="small" title="Solved : Attack ratio">{{ $scoreboard['solved'][$loop->index]}}:{{ $scoreboard['tried_to_solve'][$loop->index]}}</span>
+            <span class="small" title="Solved : Attack ratio">{{ $scoreboard_freeze['solved'][$loop->index]}}:{{ $scoreboard_freeze['tried_to_solve'][$loop->index]}}</span>
         </p>
         </td>
         @foreach ($problems as $problem)
@@ -85,7 +85,7 @@
     </tr>
     @endforeach
 
-    <thead class="bg-dark text-light">
+    <tfoot class="bg-dark text-light">
         <th colspan="6">Sumarry</th>
         @foreach ($problems as $problem)
         <th>
@@ -95,40 +95,39 @@
             <a class="text-light" href="{{ route('submissions.index', ['assignment_id' => $assignment_id, 'problem_id' => $problem->id, 'user_id' =>'all' , 'choose' => 'final']) }}">{{ $problem->pivot->score }}</a>
         </th>
         @endforeach
-
-    </thead>
-    <tr class="bg-dark text-light">
-        <td colspan="6">Solved/tries</td>
-        @foreach ($problems as $p)
-        <td>
-            {{$stat_print[$p->id]->solved_tries}}
-        </td>
-        @endforeach
-    </tr>
-    <tr class="bg-dark text-light">
-        <td colspan="6">Solved users/tries users/Total users</td>
-        @foreach ($problems as $p)
-        <td>
-           {{$stat_print[$p->id]->solved_tries_users}}
-        </td>
-        @endforeach
-    </tr>
-    <tr class="bg-dark text-light">
-        <td colspan="6">Average tries per users</td>
-        @foreach ($problems as $p)
-        <td>
-            {{$stat_print[$p->id]->average_tries}}
-        </td>
-        @endforeach
-    </tr>
-    <tr class="bg-dark text-light">
-        <td colspan="6">Average tries to solve</td>
-        @foreach ($problems as $p)
-        <td>
-            {{$stat_print[$p->id]->average_tries_2_solve}}
-        </td>
-        @endforeach
-    </tr>
+        <tr class="bg-dark text-light">
+            <td colspan="6">Solved/tries</td>
+            @foreach ($problems as $p)
+            <td>
+                {{$stat_print[$p->id]->solved_tries}}
+            </td>
+            @endforeach
+        </tr>
+        <tr class="bg-dark text-light">
+            <td colspan="6">Solved users/tries users/Total users</td>
+            @foreach ($problems as $p)
+            <td>
+            {{$stat_print[$p->id]->solved_tries_users}}
+            </td>
+            @endforeach
+        </tr>
+        <tr class="bg-dark text-light">
+            <td colspan="6">Average tries per users</td>
+            @foreach ($problems as $p)
+            <td>
+                {{$stat_print[$p->id]->average_tries}}
+            </td>
+            @endforeach
+        </tr>
+        <tr class="bg-dark text-light">
+            <td colspan="6">Average tries to solve</td>
+            @foreach ($problems as $p)
+            <td>
+                {{$stat_print[$p->id]->average_tries_2_solve}}
+            </td>
+            @endforeach
+        </tr>
+    </tfoot>
 </table>
 @else
     <h1>Freeze time is not occurred.</h1>
