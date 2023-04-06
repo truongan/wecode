@@ -130,7 +130,7 @@ class Scoreboard extends Model
 				if ($submission['coefficient'] === 'error') $final_score = 0;
 				else $final_score = ceil($pre_score*$submission['coefficient']/100);
 				
-				$fullmark = ($submission->pre_score == 10000);
+				$fullmark = ($prescore_before_freeze == 10000);
 
 				$solved_before_freeze[$username] += $fullmark;
 				$total_score_before_freeze[$username] += $final_score;
@@ -142,9 +142,8 @@ class Scoreboard extends Model
 						+ ((int)$number_of_submissions[$submission->user->username][$submission->problem_id] - (int)$number_of_submissions_during_freeze[$submission->user->username][$submission->problem_id] -1)
 							* Setting::get('submit_penalty'), 'seconds');
 						}
-			}
-
-			if (!$is_freeze) {
+				}
+			else {
 				$solved_before_freeze[$username] += $fullmark;
 				$total_score_before_freeze[$username] += $final_score;
 				if ($fullmark) $total_accepted_score_before_freeze[$username] += $final_score;
