@@ -121,13 +121,27 @@ class Scoreboard extends Model
 
 			// Log::info($submissions);
 			if ($is_freeze) {
-				Log::info($submission->user->id);
-				$submission_before_freeze = $assignment->submissions
+				$prescore_before_freeze = $assignment->submissions
 					->where('created_at', '<', $assignment->freeze_time)
 					->where('problem_id', $submission->problem_id)
 					->where('user_id', $submission->user->id)
 					->max('pre_score');
-				Log::info($submission_before_freeze);
+				$pre_score = ceil($prescore_before_freeze*($problems[$submission->problem_id]->pivot->score ?? 0 )/10000);
+				if ($submission['coefficient'] === 'error') $final_score = 0;
+				else $final_score = ceil($pre_score*$submission['coefficient']/100);
+				
+				$fullmark = ($submission->pre_score == 10000);
+
+				$solved_before_freeze[$username] += $fullmark;
+				$total_score_before_freeze[$username] += $final_score;
+				if ($fullmark) $total_accepted_score_before_freeze[$username] += $final_score;
+				if($fullmark
+					&& $final_score > 0 //Only count problem with larger than 0 score
+				) {
+					$penalty_before_freeze[$username]->add($time->totalSeconds
+						+ ((int)$number_of_submissions[$submission->user->username][$submission->problem_id] - (int)$number_of_submissions_during_freeze[$submission->user->username][$submission->problem_id] -1)
+							* Setting::get('submit_penalty'), 'seconds');
+						}
 			}
 
 			if (!$is_freeze) {
