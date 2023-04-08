@@ -65,7 +65,6 @@ class Scoreboard extends Model
 		$statistics = array();
         foreach($submissions as $submission)
         {
-
 			$pre_score = ceil(
 						$submission->pre_score*
 						($problems[$submission->problem_id]->pivot->score ?? 0 )/10000
@@ -91,18 +90,27 @@ class Scoreboard extends Model
 				$total_score[$username] = 0;
 				$total_accepted_score[$username] = 0;
 			}
+			// Log::info(! isset($total_score_before_freeze['user4']));
+			if ( ! isset($total_score_before_freeze[$username])){
+				$total_score_before_freeze[$username] = 0;
+				$total_accepted_score_before_freeze[$username] = 0;
+			}
 			if ( !isset($solved[$username])){
 				$solved[$username] = 0;
 				$tried_to_solve[$username] = 0;
+
+				$solved_before_freeze[$username] = 0;
 			}
 			if ( ! isset($penalty[$username]))
 				$penalty[$username] = CarbonInterval::seconds(0);
+			if ( ! isset($penalty_before_freeze[$username]))
+				$penalty_before_freeze[$username] = CarbonInterval::seconds(0);
 
 			$solved[$username] += $fullmark;
 			$tried_to_solve[$username] += 1;
 			$total_score[$username] += $final_score;
 			if ($fullmark) $total_accepted_score[$username] += $final_score;
-			
+
 			if($fullmark
 				&& $final_score > 0 //Only count problem with larger than 0 score
 			) {
@@ -110,11 +118,63 @@ class Scoreboard extends Model
 					+ ($number_of_submissions[$submission->user->username][$submission->problem_id]-1)
 						* Setting::get('submit_penalty'), 'seconds');
 			}
+
+			// Log::info($submissions);
+			if ($is_freeze) {
+				$prescore_before_freeze = $assignment->submissions
+					->where('created_at', '<', $assignment->freeze_time)
+					->where('problem_id', $submission->problem_id)
+					->where('user_id', $submission->user->id)
+					->max('pre_score');
+				$pre_score = ceil($prescore_before_freeze*($problems[$submission->problem_id]->pivot->score ?? 0 )/10000);
+				if ($submission['coefficient'] === 'error') $final_score = 0;
+				else $final_score = ceil($pre_score*$submission['coefficient']/100);
+				
+				$fullmark = ($prescore_before_freeze == 10000);
+
+				$solved_before_freeze[$username] += $fullmark;
+				$total_score_before_freeze[$username] += $final_score;
+				if ($fullmark) $total_accepted_score_before_freeze[$username] += $final_score;
+				if($fullmark
+					&& $final_score > 0 //Only count problem with larger than 0 score
+				) {
+					$penalty_before_freeze[$username]->add($time->totalSeconds
+						+ ((int)$number_of_submissions[$submission->user->username][$submission->problem_id] - (int)$number_of_submissions_during_freeze[$submission->user->username][$submission->problem_id] -1)
+							* Setting::get('submit_penalty'), 'seconds');
+						}
+				}
+			else {
+				$solved_before_freeze[$username] += $fullmark;
+				$total_score_before_freeze[$username] += $final_score;
+				if ($fullmark) $total_accepted_score_before_freeze[$username] += $final_score;
+				if($fullmark
+					&& $final_score > 0 //Only count problem with larger than 0 score
+				) {
+					$penalty_before_freeze[$username]->add($time->totalSeconds
+						+ ((int)$number_of_submissions[$submission->user->username][$submission->problem_id] - (int)$number_of_submissions_during_freeze[$submission->user->username][$submission->problem_id] -1)
+							* Setting::get('submit_penalty'), 'seconds');
+						}
+			}
+
 			$users[] = $submission->user;
+			// Log::info($total_score_before_freeze);
+			
 
         }
 
+
         $scoreboard = array(
+			'username' => array(),
+			'user_id' => array(),
+			'score' => array(),
+			'lops' => $lopsnames,
+			'accepted_score' => array(),
+			'submit_penalty' => array()
+			,'solved' => array()
+			,'tried_to_solve' => array()
+        );
+
+		$scoreboard_freeze = array(
 			'username' => array(),
 			'user_id' => array(),
 			'score' => array(),
@@ -146,11 +206,34 @@ class Scoreboard extends Model
 			$scoreboard['tried_to_solve'],
 			$scoreboard['submit_penalty'], SORT_NATURAL
         );
+
+		foreach($users as $user){
+			array_push($scoreboard_freeze['username'], $user->username);
+			array_push($scoreboard_freeze['score'], $total_score_before_freeze[$user->username]); //
+			array_push($scoreboard_freeze['accepted_score'], $total_accepted_score_before_freeze[$user->username]); //
+			array_push($scoreboard_freeze['submit_penalty'], $penalty_before_freeze[$user->username]); //
+			array_push($scoreboard_freeze['solved'], $solved_before_freeze[$user->username]); //
+			array_push($scoreboard_freeze['tried_to_solve'], $tried_to_solve[$user->username]);
+		}
+		
+		
+        array_multisort(
+			$scoreboard_freeze['accepted_score'], SORT_NUMERIC, SORT_DESC,
+			//$scoreboard_freeze['submit_penalty'], SORT_NATURAL, SORT_ASC,
+			array_map(function($time){return $time->total('seconds');}, $scoreboard_freeze['submit_penalty']),
+			$scoreboard_freeze['solved'], SORT_NUMERIC, SORT_DESC,
+			$scoreboard_freeze['score'], SORT_NUMERIC, SORT_DESC,
+			$scoreboard_freeze['username'],
+			$scoreboard_freeze['tried_to_solve'],
+			$scoreboard_freeze['submit_penalty'], SORT_NATURAL
+        );
 		// DB::enableQueryLog();
 		$aggr = $assignment->submissions()->groupBy('user_id', 'problem_id')->select(DB::raw('user_id, problem_id, count(*) as submit'))->get();
 		$aggr_ac = $assignment->submissions()->groupBy('user_id', 'problem_id')->where('pre_score', 10000)->select(DB::raw('user_id, problem_id, count(*) as submit'))->get();
 		// dd(DB::getQueryLog());
 		// DB::disableQueryLog();
+		// Log::info($scoreboard['score']);
+		// Log::info($scoreboard_freeze['score']);
 
 		foreach($problems as $id=>$p){
 			$statistics[$id] ??= new class{};
@@ -188,8 +271,9 @@ class Scoreboard extends Model
 			
 			// dd($statistics);
 			// dd($stat_print);
-			return array($scores, $scoreboard, $number_of_submissions, $stat_print, $number_of_submissions_during_freeze);
+			return array($scores, $scoreboard, $number_of_submissions, $stat_print, $number_of_submissions_during_freeze, $scoreboard_freeze);
 		}
+
 
 		public function _update_scoreboard()
 	{
@@ -204,7 +288,7 @@ class Scoreboard extends Model
 			return false;
 		}
 
-		list ($scores, $scoreboard, $number_of_submissions,$stat_print, $number_of_submissions_during_freeze) = $this->_generate_scoreboard();
+		list ($scores, $scoreboard, $number_of_submissions,$stat_print, $number_of_submissions_during_freeze, $scoreboard_freeze) = $this->_generate_scoreboard();
 		$all_problems = $assignment->problems;
 
 		$total_score = 0;
@@ -228,9 +312,10 @@ class Scoreboard extends Model
 			'no_of_problems'=> $assignment->problems->count(),
 			'number_of_submissions' => $number_of_submissions,
 			'number_of_submissions_during_freeze' => $number_of_submissions_during_freeze,
+			'is_freeze' => (Carbon::now() >= $assignment->freeze_time),
+			'scoreboard_freeze' => $scoreboard_freeze,
 		);
 		// dd($data);
-
 
 		$scoreboard_table = view('scoreboard_table', $data)->render();
 		$scoreboard_table_freeze = view('scoreboard_table_freeze', $data)->render();

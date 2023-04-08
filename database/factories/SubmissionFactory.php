@@ -25,6 +25,19 @@ class SubmissionFactory extends Factory
         $rand_assignment_id = Assignment::all()->random()->id;
         $rand_problem_id = Problem::all()->random()->id;
         $rand_user_id = User::all()->random()->id;
+        $rand_score = rand(1,10);
+
+        while (Submission::where([
+            ['user_id',$rand_user_id],
+            ['problem_id', $rand_problem_id],
+            ['assignment_id',2],
+            ['is_final',1],
+            ['pre_score', 10000],
+        ])->first()) {
+            $rand_assignment_id = 2;
+            $rand_problem_id = Problem::all()->random()->id;
+            $rand_user_id = User::all()->random()->id;
+        }
 
         return [
             'assignment_id' => 2,
@@ -32,7 +45,7 @@ class SubmissionFactory extends Factory
             'user_id' => $rand_user_id,
             'is_final' => 0,
             'status' => 'SCORE',
-            'pre_score' => rand(1,10)*1000,
+            'pre_score' => $rand_score*1000,
             'coefficient' => 100,
             'file_name' => '',
             'language_id' => 2,
@@ -43,16 +56,14 @@ class SubmissionFactory extends Factory
     public function configure(): static
     {
         return $this->afterCreating(function (Submission $submission) {
-            $freeze_time = Assignment::where('id', $submission->assignment_id)->value('freeze_time');
-            $fullmark_sub = Submission::where([
+            $first_highest_score = Submission::where([
                 ['user_id',$submission->user_id],
                 ['problem_id', $submission->problem_id],
                 ['assignment_id',$submission->assignment_id],
+                ['pre_score', '>=', $submission->pre_score],
                 ['is_final',1],
-                ['pre_score', 10000],
-                ['created_at', '<', $freeze_time]
             ])->first();
-            if (!$fullmark_sub) {
+            if (!$first_highest_score) {
                 Submission::where([
                     ['user_id',$submission->user_id],
                     ['problem_id', $submission->problem_id],

@@ -1,3 +1,4 @@
+@if ($is_freeze)
 <table class="wecode_table table table-striped table-bordered table-sm">
     <thead class="thead-old table-dark">
         <tr>
@@ -24,24 +25,24 @@
         </tr>
     </thead>
    
-    @foreach ($scoreboard['username'] as $i => $sc_username)
+    @foreach ($scoreboard_freeze['username'] as $i => $sc_username)
     <tr>
         <td>{{ $loop->index + 1}}</td>
         <td> <a href="{{ route('submissions.index', ['assignment_id' => $assignment_id, 'problem_id' => 'all', 'user_id' => $scores[$sc_username]['id'] , 'choose' => 'all']) }}" >{{ $sc_username }}</a></td>
         <td>{{ $names[$sc_username] }}</td>
-        <td>{{ $scoreboard['lops'][$sc_username] ?? 'none' }}</td>
+        <td>{{ $scoreboard_freeze['lops'][$sc_username] ?? 'none' }}</td>
         <td>
 
-                <span>{{ $scoreboard['score'][$loop->index] }}</span>
+                <span>{{ $scoreboard_freeze['score'][$loop->index] }}</span>
                 <p class="excess">
-                    <span class="small" title="Total Time + Submit Penalty">{{($scoreboard['submit_penalty'][$loop->index]->cascade()->forHumans(['short' => true]) ) }}</span>
+                    <span class="small" title="Total Time + Submit Penalty">{{($scoreboard_freeze['submit_penalty'][$loop->index]->cascade()->forHumans(['short' => true]) ) }}</span>
                 </p>
 
         </td>
         <td class="bg-success text-white" >
-        <span class="lead"><strong>{{ $scoreboard['accepted_score'][$loop->index] }}</strong></span>
+        <span class="lead"><strong>{{ $scoreboard_freeze['accepted_score'][$loop->index] }}</strong></span>
         <p class="excess">
-            <span class="small" title="Solved : Attack ratio">{{ $scoreboard['solved'][$loop->index]}}:{{ $scoreboard['tried_to_solve'][$loop->index]}}</span>
+            <span class="small" title="Solved : Attack ratio">{{ $scoreboard_freeze['solved'][$loop->index]}}:{{ $scoreboard_freeze['tried_to_solve'][$loop->index]}}</span>
         </p>
         </td>
         @foreach ($problems as $problem)
@@ -128,3 +129,6 @@
         </tr>
     </tfoot>
 </table>
+@else
+    <h1>Freeze time is not occurred.</h1>
+@endif
