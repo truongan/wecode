@@ -165,10 +165,10 @@ class submission_controller extends Controller
  
 	public function upload_file_code($request, $user_dir, $submission)
 	{
-		$ext = substr(strrchr($request->userfile->getClientOriginalName(),'.'),1);
-		// $file_name = basename($request->userfile->getClientOriginalName(), ".{$ext}"); // uploaded file name without extension    
-		// $file_name = preg_replace('/[^a-zA-Z0-9_\-()]+/', '', $file_name);
-		$file_name = "solution-upload-".($submission->assignment->total_submits);
+		if ($request->userfile->getSize() > Setting::get("file_size_limit") * 1024 )
+			abort(403, "Your submission is larger than system limited size");
+
+		$file_name = "solution-upload-id".($submission->id);
 		
 		$path = Storage::disk('assignment_root')->path('');
 		$user_dir = substr($user_dir, strlen($path));
@@ -191,7 +191,7 @@ class submission_controller extends Controller
 			abort(403, "Your submission is larger than system limited size");
 
 		$ext = $submission->language->extension;
-		$file_name = "solution-" .($submission->assignment->total_submits);
+		$file_name = "solution-editcode-id" .($submission->id);
 		file_put_contents("{$user_dir}/${file_name}"
 							. "." . $ext, $code);
 
