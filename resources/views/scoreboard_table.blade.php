@@ -36,31 +36,25 @@
                 <p class="excess">
                     <span class="small" title="Total Time + Submit Penalty">{{($scoreboard['submit_penalty'][$loop->index]->cascade()->forHumans(['short' => true]) ) }}</span>
                 </p>
-
         </td>
-        <td class="bg-success text-white" >
+        <td class="bg-danger text-white" >
         <span class="lead"><strong>{{ $scoreboard['accepted_score'][$loop->index] }}</strong></span>
         <p class="excess">
             <span class="small" title="Solved : Attack ratio">{{ $scoreboard['solved'][$loop->index]}}:{{ $scoreboard['tried_to_solve'][$loop->index]}}</span>
         </p>
         </td>
         @foreach ($problems as $problem)
-        <td>
+        <td class="{{ isset($scores[$sc_username][$problem->id]['score']) ? 'bg-success' : '' }}">
             @if (isset($scores[$sc_username][$problem->id]['score']))
                 <a href="{{ route('submissions.index', ['assignment_id' => $assignment_id, 'problem_id' => $problem->id, 'user_id' => $scores[$sc_username]['id'] , 'choose' => 'all']) }}"
-                    class = "lead 
-                    @if ($scores[$sc_username][$problem->id]['fullmark'] == true)
-                        text-success" >
-                            {{ $scores[$sc_username][$problem->id]['score'] }}
-                    @else
-                        text-danger">
-                            {{ $scores[$sc_username][$problem->id]['score'] }}
-                    @endif
+                    class = "lead text-white">
+                    {{ $scores[$sc_username][$problem->id]['score'] }}
                 </a>
                 <p class="excess">
                     <span class="small text-info" title="Total tries and time to final submit">
-                    {{$number_of_submissions[$sc_username][$problem->id]}}
-                        - </span>
+                        {{$number_of_submissions[$sc_username][$problem->id]}}
+                        - 
+                    </span>
 
                     @if ($scores[$sc_username][$problem->id]['late']->totalSeconds > 0)
                         <span class="text-warning">{{ $scores[$sc_username][$problem->id]['late']->forHumans(['short' => true]) }}</span>
@@ -73,6 +67,7 @@
             @endif
         </td>
         @endforeach
+
     </tr>
     @endforeach
     

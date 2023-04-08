@@ -15,7 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-
+use Illuminate\Validation\Rules\AfterOrEqualIfOtherFieldIsEqualRule;
 class assignment_controller extends Controller
 {
 
@@ -128,7 +128,8 @@ class assignment_controller extends Controller
         $request['start_time'] = (new Carbon($request['start_time_date'] . ' ' . $request['start_time_time'] . ' ' . Setting::get('timezone')))->setTimezone($zone);
         $request['freeze_time'] = (new Carbon($request['freeze_time_date'] . ' ' . $request['freeze_time_time'] . ' ' . Setting::get('timezone')))->setTimezone($zone);
         $request['finish_time'] = (new Carbon($request['finish_time_date'] . ' ' . $request['finish_time_time'] . ' ' . Setting::get('timezone')))->setTimezone($zone);
-      
+        $request['unfreeze_time'] = (new Carbon($request['unfreeze_time_date'] . ' ' . $request['unfreeze_time_time'] . ' ' . Setting::get('timezone')))->setTimezone($zone);
+
     }
 
     /**
@@ -143,10 +144,44 @@ class assignment_controller extends Controller
         if ( !in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
             abort(403,'You do not have permission to add assignment');
 
+
         $validated = $request->validate([
             'name' => ['required','max:150'],
             'pdf_file' => 'mimes:pdf',
+            'freeze_time_date' => 'nullable|date|before_or_equal:finish_time_date',
+            'freeze_time_time' => [
+                'nullable',
+                'date_format:H:i',
+                function ($attribute, $value, $fail) use ($request) {
+                    if ($request->input('freeze_time_date') === $request->input('finish_time_date')
+                        && $value > $request->input('finish_time_time')
+                    ) {
+                        $fail('ERROR: Freeze time must be less than or equal to finish time');
+                    }
+                },
+            ],
+
+            'unfreeze_time_date' => 'nullable|date|after_or_equal:freeze_time_date',
+            'unfreeze_time_time' => [
+                'nullable',
+                'date_format:H:i',
+                function ($attribute, $value, $fail) use ($request) {
+                    if ($request->input('unfreeze_time_date') === $request->input('freeze_time_date')
+                        && $value <= $request->input('freeze_time_time')
+                    ) {
+                        $fail('ERROR: Unfreeze time must be greater than freeze time');
+                    }
+                },
+            ],
+        ],[
+            'freeze_time_date.before_or_equal' => 'ERROR: Freeze time must be less than finish time',
+            'freeze_time_time.before' => 'ERROR: Freeze time must be less than finish time',
+            'unfreeze_time_date.after_or_equal' => 'ERROR: UnFreeze time must be more than finish time'
         ]);
+        
+            
+
+
         
         $input = $request->input();
         // dd($input);
