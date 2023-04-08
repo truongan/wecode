@@ -168,7 +168,8 @@ class submission_controller extends Controller
 		if ($request->userfile->getSize() > Setting::get("file_size_limit") * 1024 )
 			abort(403, "Your submission is larger than system limited size");
 
-		$file_name = "solution-upload-id".($submission->id);
+		// We use assignments submit count in the name beause newly created submission has not been assigned an id yet.
+		$file_name = "solution-upload-count".($submission->assignment->total_submits);
 		
 		$path = Storage::disk('assignment_root')->path('');
 		$user_dir = substr($user_dir, strlen($path));
@@ -191,7 +192,7 @@ class submission_controller extends Controller
 			abort(403, "Your submission is larger than system limited size");
 
 		$ext = $submission->language->extension;
-		$file_name = "solution-editcode-id" .($submission->id);
+		$file_name = "solution-editcode-count" .($submission->assignment->total_submits);
 		file_put_contents("{$user_dir}/${file_name}"
 							. "." . $ext, $code);
 
@@ -424,12 +425,15 @@ class submission_controller extends Controller
 		elseif ($type == "result")
 			$file_path = $submit_path . "/result-{$submission->id}.html";
 
+
+		$file_content = file_exists($file_path) ? file_get_contents($file_path) : "File not found";
+		$file_content = (mb_convert_encoding($file_content,'UTF-8', 'ISO-8859-1'));
+
 		$result = array(
 				'file_name' => $submission->file_name .'.'. $file_extension,
-				'text' => file_exists($file_path) ? file_get_contents($file_path) : "File not found"
+				'text' => $file_content
 				// 'text' => Storage::disk('my_local')->exists($file_path) ? Storage::disk('my_local')->get($file_path):"File Not Found"
 			);
-		
 		if ($type === 'code') {
 				$result['lang'] = $file_extension;
 				if ($result['lang'] == 'py2' || $result['lang'] == 'py3')
