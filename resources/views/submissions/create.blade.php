@@ -30,7 +30,7 @@
 
 				<select id="problems" name ="problem" class="form-select ">
 					@if($assignment->id == 0)
-						<option value="{{ $problem->id }}" data-statement="{{ route('problems.show', $problem->id) }}">#{{$problem->id}}--{{ $problem->name }}</option>
+						<option value="{{ $problem->id }}" data-statement="{{ route('practices.show', $problem->id) }}">#{{$problem->id}}--{{ $problem->name }}</option>
 					@endif
 
 					@foreach ($assignment->problems as $prob)
