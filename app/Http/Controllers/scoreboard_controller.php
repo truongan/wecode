@@ -41,21 +41,22 @@ class scoreboard_controller extends Controller
 			abort(404, "This assignment does not have scoreboard");
 		}
 		$scoreboard = NULL;
+		$scoreboard_freeze = NULL;
 		if ($assignment)
 		{
-				Scoreboard::update_scoreboard($assignment_id); 
+			Scoreboard::update_scoreboard($assignment_id); 
 
-			if ($assignment->freeze_time && Carbon::now() >= $assignment->freeze_time) {
-				if (Carbon::now() >= $assignment->freeze_time) {
-					$scoreboard = $this->get_scoreboard_freeze($assignment_id);
-				}
-			}
-			else $scoreboard = $this->get_scoreboard($assignment_id);
+			// if ($assignment->freeze_time && Carbon::now() >= $assignment->freeze_time) {
+					$scoreboard_freeze = $this->get_scoreboard_freeze($assignment_id);
+			// }
+			// else 
+			$scoreboard = $this->get_scoreboard($assignment_id);
 
 		return view('scoreboard', ['selected' => 'scoreboard',
 									'place' => 'full',	
 									'assignment' => $assignment,
-									'scoreboard' => $scoreboard,					
+									'scoreboard' => $scoreboard,	
+									'scoreboard_freeze' => $scoreboard_freeze,									
 								]);
 		}
 	}
@@ -112,6 +113,35 @@ class scoreboard_controller extends Controller
 
 		return $dom->saveXML($dom->getElementsByTagName('table')[0]);
 	}
+
+	private function _strip_scoreboard_freeze($assignment_id){
+	
+		$a = $this->get_scoreboard_freeze($assignment_id);
+
+		$dom = new DOMDocument;
+		$dom->loadHTML('<?xml encoding="UTF-8">'. $a);
+		$ps = $dom->getElementsByTagName('p');
+		while($ps->length > 0){
+			$ps[0]->parentNode->removeChild($ps[0]);
+		}
+		//Remove excess info
+		// $a = preg_replace('/[0-9]+:[0-9]+(\*\*)?/', '', $a);
+		// $a = preg_replace('/\B-\B/', '', $a);
+		// $a = preg_replace('/[0-9]+\*/', '0', $a);
+		// $a = preg_replace('/\n+/', "\n", $a);
+		// $a = preg_replace('/<p class="excess">.*<\/p>/', "", $a);
+
+		//Remove the legend
+		// $c = 0;
+		// $i = strlen($a) - 1;
+		// for(; $i > 0; $i--){
+		//     if($a[$i] == "\n") $c++;
+		//     if($c == 3) break;
+		// }
+		// $a = substr($a, 0, $i);
+
+		return $dom->saveXML($dom->getElementsByTagName('table')[0]);
+	}
 	
 	public function plain($assignment_id){
 		$assignment = Assignment::find($assignment_id);
@@ -119,7 +149,8 @@ class scoreboard_controller extends Controller
 		$data = array(
 			'place' => 'plain',
 			'assignment' => $assignment,
-			'scoreboard' => strip_tags( $this->_strip_scoreboard($assignment_id), "<table><thead><th><tbody><tr><td><br>"),
+			'scoreboard' => strip_tags( $this->_strip_scoreboard($assignment_id), "<table><thead><th><tbody><tr><td><br><tfoot>"),
+			'scoreboard_freeze' => strip_tags( $this->_strip_scoreboard_freeze($assignment_id), "<table><thead><th><tbody><tr><td><br><tfoot>"),
 			'selected' => 'scoreboard'
 		);
 		
@@ -133,6 +164,7 @@ class scoreboard_controller extends Controller
 			'place' => 'simplify',
 			'assignment' => $assignment,
 			'scoreboard' => $this->_strip_scoreboard($assignment_id),
+			'scoreboard_freeze' => $this->_strip_scoreboard_freeze($assignment_id),
 			'selected' => 'scoreboard',
 		);
 
