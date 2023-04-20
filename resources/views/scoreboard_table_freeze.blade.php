@@ -1,4 +1,5 @@
 @if ($is_freeze)
+<button>Run</button>
 <table class="wecode_table table table-striped table-bordered table-sm">
     <thead class="thead-old table-dark">
         <tr>
