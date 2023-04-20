@@ -155,8 +155,10 @@ class submission_controller extends Controller
 		]);
 
 		$this->_creation_guard_check($request->input('assignment'), $request->input('problem'));
-		if ($this->upload($request))
+		if ($this->upload($request)) {
+			// Scoreboard::update_scoreboard($request->assignment);
 			return redirect()->route('submissions.index', [$request->assignment, 'all', 'all', 'all']);
+		}
 		else
 			abort(501,'Error Uploading File');
 	}
