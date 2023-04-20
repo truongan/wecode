@@ -103,7 +103,7 @@ class scoreboard_controller extends Controller
 		$a = $this->get_scoreboard($assignment_id);
 
 		$dom = new DOMDocument;
-		$dom->loadHTML('<?xml encoding="UTF-8">'. $a);
+		@$dom->loadHTML('<?xml encoding="UTF-8">'. $a);
 		$ps = $dom->getElementsByTagName('p');
 		while($ps->length > 0){
 			$ps[0]->parentNode->removeChild($ps[0]);

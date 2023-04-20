@@ -53,7 +53,12 @@
                     class = "lead 
                     @if ($scores[$sc_username][$problem->id]['is_freeze'] == 1)
                         text-warning" >
-                            {{(int)$number_of_submissions[$sc_username][$problem->id] - (int)$number_of_submissions_during_freeze[$sc_username][$problem->id]}} + {{$number_of_submissions_during_freeze[$sc_username][$problem->id]}} tries
+                            {{(int)$number_of_submissions[$sc_username][$problem->id] - (int)$number_of_submissions_during_freeze[$sc_username][$problem->id]}} + {{$number_of_submissions_during_freeze[$sc_username][$problem->id]}} 
+                            @if ((int)$number_of_submissions[$sc_username][$problem->id] == 1)
+                                try
+                            @else
+                                tries
+                            @endif
                     @else
                         @if ($scores[$sc_username][$problem->id]['fullmark'] == true)
                             text-success" >
