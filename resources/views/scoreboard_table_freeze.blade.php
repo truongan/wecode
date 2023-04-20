@@ -138,3 +138,17 @@
 @else
     <h1>Freeze time is not occurred.</h1>
 @endif
+@php
+    $last_team = NULL;
+    $array = array_reverse($scoreboard_freeze['username']);
+    foreach($array as $team) {
+        $array_number_of_tries = $number_of_submissions_during_freeze[$team];
+        Log::info($team);
+        // Log::info($number_of_submissions_during_freeze[$team]);
+        if (array_sum($array_number_of_tries)) {
+            $last_team = $team;
+            break;
+        }
+    }
+    Log::info($last_team);
+@endphp
