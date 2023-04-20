@@ -10,6 +10,8 @@ use App\Setting;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use DOMDocument;
+use Carbon\Carbon;
+
 
 // use Illuminate\Database\Eloquent\Collection;
 
@@ -39,20 +41,20 @@ class scoreboard_controller extends Controller
 			abort(404, "This assignment does not have scoreboard");
 		}
 		$scoreboard = NULL;
+		$scoreboard_freeze = NULL;
 		if ($assignment)
 		{
-			// Scoreboard::update_scoreboard($assignment_id); 
-
+			Scoreboard::update_scoreboard($assignment_id); 
 			$scoreboard = $this->get_scoreboard($assignment_id);
-		
-		}
+
 		return view('scoreboard', ['selected' => 'scoreboard',
 									'place' => 'full',	
 									'assignment' => $assignment,
-									'scoreboard' => $scoreboard,					
+									'scoreboard' => $scoreboard,	
 								]);
+		}
 	}
-	
+		
 	public function get_scoreboard($assignment_id)
 	{
 		$query =  DB::table('scoreboards')->where('assignment_id',$assignment_id)->get();
@@ -63,6 +65,37 @@ class scoreboard_controller extends Controller
 		{
 			return $query->first()->scoreboard;
 		}
+	}
+
+	public function get_scoreboard_freeze($assignment_id)
+	{
+		$query =  DB::table('scoreboards')->where('assignment_id',$assignment_id)->get();
+
+		$assignment = Assignment::find($assignment_id);
+		if (in_array( Auth::user()->role->name, ['student']) && $assignment->score_board == false)
+		{
+			//Student can only view scoreboard if allowed
+			abort(404, "This assignment does not have scoreboard");
+		}
+		$scoreboard_freeze = NULL;
+		if ($assignment)
+		{
+			Scoreboard::update_scoreboard($assignment_id); 
+
+			if ($query->count() != 1)
+				$scoreboard_freeze = false;//$message = array('error' => 'Scoreboard not found');
+			else
+			{
+				$scoreboard_freeze = $query->first()->scoreboard_freeze;
+			}
+
+		return view('scoreboard_freeze', ['selected' => 'scoreboard',
+									'place' => 'full',	
+									'assignment' => $assignment,
+									'scoreboard_freeze' => $scoreboard_freeze,									
+								]);
+		}
+
 	}
 
 	private function _strip_scoreboard($assignment_id){
@@ -93,6 +126,7 @@ class scoreboard_controller extends Controller
 
 		return $dom->saveXML($dom->getElementsByTagName('table')[0]);
 	}
+
 	
 	public function plain($assignment_id){
 		$assignment = Assignment::find($assignment_id);
@@ -100,7 +134,7 @@ class scoreboard_controller extends Controller
 		$data = array(
 			'place' => 'plain',
 			'assignment' => $assignment,
-			'scoreboard' => strip_tags( $this->_strip_scoreboard($assignment_id), "<table><thead><th><tbody><tr><td><br>"),
+			'scoreboard' => strip_tags( $this->_strip_scoreboard($assignment_id), "<table><thead><th><tbody><tr><td><br><tfoot>"),
 			'selected' => 'scoreboard'
 		);
 		

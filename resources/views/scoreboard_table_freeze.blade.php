@@ -1,3 +1,5 @@
+@if ($is_freeze)
+<button>Run</button>
 <table class="wecode_table table table-striped table-bordered table-sm">
     <thead class="thead-old table-dark">
         <tr>
@@ -5,9 +7,9 @@
             <th><small>Username</small></th>
             <th>Name</th>
             <th>Class</th>
-            <th>
+                        <th>
                 Total<br>
-                <ssmall>{{ $total_score }}</ssmall>
+                <small>{{ $total_score }}</small>
             </th>
             <th>
                 Total<br>accepted
@@ -24,59 +26,66 @@
         </tr>
     </thead>
    
-    @foreach ($scoreboard['username'] as $i => $sc_username)
+    @foreach ($scoreboard_freeze['username'] as $i => $sc_username)
     <tr>
         <td>{{ $loop->index + 1}}</td>
         <td> <a href="{{ route('submissions.index', ['assignment_id' => $assignment_id, 'problem_id' => 'all', 'user_id' => $scores[$sc_username]['id'] , 'choose' => 'all']) }}" >{{ $sc_username }}</a></td>
         <td>{{ $names[$sc_username] }}</td>
-        <td>{{ $scoreboard['lops'][$sc_username] ?? 'none' }}</td>
+        <td>{{ $scoreboard_freeze['lops'][$sc_username] ?? 'none' }}</td>
         <td>
 
-                <span>{{ $scoreboard['score'][$loop->index] }}</span>
+                <span>{{ $scoreboard_freeze['score'][$loop->index] }}</span>
                 <p class="excess">
-                    <span class="small" title="Total Time + Submit Penalty">{{($scoreboard['submit_penalty'][$loop->index]->cascade()->forHumans(['short' => true]) ) }}</span>
+                    <span class="small" title="Total Time + Submit Penalty">{{($scoreboard_freeze['submit_penalty'][$loop->index]->cascade()->forHumans(['short' => true]) ) }}</span>
                 </p>
+
         </td>
-        <td class="text-dark" >
-        <span class="lead"><strong>{{ $scoreboard['accepted_score'][$loop->index] }}</strong></span>
+        <td class="bg-success text-white" >
+        <span class="lead"><strong>{{ $scoreboard_freeze['accepted_score'][$loop->index] }}</strong></span>
         <p class="excess">
-            <span class="small" title="Solved : Attack ratio">{{ $scoreboard['solved'][$loop->index]}}:{{ $scoreboard['tried_to_solve'][$loop->index]}}</span>
+            <span class="small" title="Solved : Attack ratio">{{ $scoreboard_freeze['solved'][$loop->index]}}:{{ $scoreboard_freeze['tried_to_solve'][$loop->index]}}</span>
         </p>
         </td>
         @foreach ($problems as $problem)
-        @if (isset($scores[$sc_username][$problem->id]['score']))
-            @if ($scores[$sc_username][$problem->id]['score'] == 100)
-                <td class="bg-success">
-            @else
-                <td class="bg-danger">
-            @endif
-                <a href="{{ route('submissions.index', ['assignment_id' => $assignment_id, 'problem_id' => $problem->id, 'user_id' => $scores[$sc_username]['id'] , 'choose' => 'all']) }}" class="lead text-white">
-                    {{ $scores[$sc_username][$problem->id]['score'] }}
-                </a>
-                <p class="excess">
-                    <span class="small text-white" title="Total tries and time to final submit">
-                        {{$number_of_submissions[$sc_username][$problem->id]}}
-                        - 
-                    </span>
-
-                    @if ($scores[$sc_username][$problem->id]['late']->totalSeconds > 0)
-                        <span class="text-warning">{{ $scores[$sc_username][$problem->id]['late']->forHumans(['short' => true]) }}</span>
+        <td>
+            @if (isset($scores[$sc_username][$problem->id]['score']))
+                <a href="{{ route('submissions.index', ['assignment_id' => $assignment_id, 'problem_id' => $problem->id, 'user_id' => $scores[$sc_username]['id'] , 'choose' => 'all']) }}"
+                    class = "lead 
+                    @if ($scores[$sc_username][$problem->id]['is_freeze'] == 1)
+                        text-warning" >
+                            {{(int)$number_of_submissions[$sc_username][$problem->id] - (int)$number_of_submissions_during_freeze[$sc_username][$problem->id]}} + {{$number_of_submissions_during_freeze[$sc_username][$problem->id]}} tries
                     @else
-                        <span class="small text-white">{{ $scores[$sc_username][$problem->id]['time']->forHumans(['short' => true]) }}</span>
+                        @if ($scores[$sc_username][$problem->id]['fullmark'] == true)
+                            text-success" >
+                                {{ $scores[$sc_username][$problem->id]['score'] }}
+                        @else
+                            text-danger" >
+                                {{ $scores[$sc_username][$problem->id]['score'] }}
+                        @endif
                     @endif
-                </p>
-            </td>
-        @else
-            <td>-</td>
-        @endif
+                </a>
+                @if ($scores[$sc_username][$problem->id]['is_freeze'] == 0)
+                    <p class="excess">
+                        <span class="small text-info" title="Total tries and time to final submit">
+                        {{$number_of_submissions[$sc_username][$problem->id]}}
+                            - </span>
+
+                        @if ($scores[$sc_username][$problem->id]['late']->totalSeconds > 0)
+                            <span class="text-warning">{{ $scores[$sc_username][$problem->id]['late']->forHumans(['short' => true]) }}</span>
+                        @else
+                            <span class="small text-info">{{ $scores[$sc_username][$problem->id]['time']->forHumans(['short' => true]) }}</span>
+                        @endif
+                    </p>
+                @endif
+            @else
+                -
+            @endif
+        </td>
         @endforeach
-
-
-
-
+        
     </tr>
     @endforeach
-    
+
     <tfoot class="bg-dark text-light">
         <th colspan="6">Sumarry</th>
         @foreach ($problems as $problem)
@@ -87,7 +96,6 @@
             <a class="text-light" href="{{ route('submissions.index', ['assignment_id' => $assignment_id, 'problem_id' => $problem->id, 'user_id' =>'all' , 'choose' => 'final']) }}">{{ $problem->pivot->score }}</a>
         </th>
         @endforeach
-
         <tr class="bg-dark text-light">
             <td colspan="6">Solved/tries</td>
             @foreach ($problems as $p)
@@ -119,6 +127,9 @@
                 {{$stat_print[$p->id]->average_tries_2_solve}}
             </td>
             @endforeach
-        </tr>   
+        </tr>
     </tfoot>
 </table>
+@else
+    <h1>Freeze time is not occurred.</h1>
+@endif
