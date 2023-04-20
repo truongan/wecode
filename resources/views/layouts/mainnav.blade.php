@@ -71,6 +71,19 @@
                 </a>
             </li>
 
+            <li class="nav-item color-freeze {{ ($selected=="freeze") ? "selected" : ""}}">
+                <a class="nav-link" 
+                @if (isset(Auth::user()->selected_assignment_id))
+                href="{{ route('scoreboards.freeze', (int)Auth::user()->selected_assignment_id) }}"
+                @else
+                href="{{ route('scoreboards.freeze', 0 )}}"
+                @endif
+                >
+                    <i class="fa fa-fw fa-snowflake fa-spin fa-lg"></i>
+                    <span class="nav-link-text">Scoreboard freeze</span>
+                </a>
+            </li>
+
             <div class="p-1 sidenav-bottom nav-item mt-auto">
                 <a target="_blank" href="https://www.uit.edu.vn/"><img src="{{ asset('images/logo_uit.png') }}" height="20px" /></a>
                 <a target="_blank" href="https://cs.uit.edu.vn/"><img src="{{ asset('images/logo_cs.png') }}" height="20px"/></a>
