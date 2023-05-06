@@ -1,5 +1,5 @@
 @if ($is_freeze)
-<button id="magic-btn" class="btn btn-light">Click me!</button>
+<button id="magic-btn" class="btn btn-secondary">Click me! 😢</button>
 <table class="wecode_table table table-striped table-bordered table-sm">
     <thead class="thead-old table-dark">
         <tr>
@@ -135,31 +135,25 @@
         </tr>
     </tfoot>
 </table>
-{{-- <script>
-    $.ajax({
-        url: '/json_get_the_last_team/' + {{ Auth::user()->selected_assignment_id }},
-        type: 'GET',
-        dataType: 'json',
-        success: function(response) {
-            var myVariable = response.myVariable;
-            // Your code here
-        }
+
+@section('script')
+<script type="text/javascript">
+console.log(a);
+    $(document).ready(function() {
+        $('#magic-btn').click(function() {
+            $.ajax({
+            url: '/get_the_last_team/' + {{ Auth::user()->selected_assignment_id }},
+            type: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                var myVariable = response.myVariable;
+                console.log(myVariable);
+            }
+            });
+        });
     });
-</script> --}}
+</script>
+@endsection
 @else
     <h1>Freeze time is not occurred.</h1>
 @endif
-@php
-    $last_team = NULL;
-    $array = array_reverse($scoreboard_freeze['username']);
-    foreach($array as $team) {
-        $array_number_of_tries = $number_of_submissions_during_freeze[$team];
-        Log::info($team);
-        // Log::info($number_of_submissions_during_freeze[$team]);
-        if (array_sum($array_number_of_tries)) {
-            $last_team = $team;
-            break;
-        }
-    }
-    Log::info($last_team);
-@endphp

@@ -97,31 +97,26 @@ class scoreboard_controller extends Controller
 
 	}
 
-	// public function json_get_the_last_team($assignment_id) {
-	// 	$query =  DB::table('scoreboards')->where('assignment_id',$assignment_id)->get();
-	// 	$assignment = Assignment::find($assignment_id);
+	public function json_get_the_last_team($assignment_id) {
+		$scoreboard_of_that_assignment =  Scoreboard::where('assignment_id',$assignment_id)->get();
 
-	// 	if ($assignment)
-	// 	{
-	// 		if ($query->count() != 1)
-	// 			$scoreboard_freeze = false;//$message = array('error' => 'Scoreboard not found');
-	// 		else
-	// 		{
-	// 			$scoreboard_freeze = $query->first()->scoreboard_freeze;
-	// 		}
-
-	// 	}
+		if (!$scoreboard_of_that_assignment->count() != 1) {
+			return abort(404, "This assignment does not have scoreboard");
+		}
+		else {
+			$data = json_decode($scoreboard_of_that_assignment->first()->data);
+			return response()->json(['myVariable' => $data]);
+			// $last_team = NULL;
+			// $array = array_reverse($data[$scoreboard_freeze]['username']);
+			// foreach($array as $team) {
+			// 	$array_number_of_tries = $number_of_submissions_during_freeze[$team];
+			// 	if (array_sum($array_number_of_tries)) {
+			// 		$last_team = $team;
+			// 		break;
+			// 	}
+		}
 		
-	// 	$last_team = NULL;
-	// 	$array = array_reverse($scoreboard_freeze['username']);
-	// 	foreach($array as $team) {
-	// 		$array_number_of_tries = $number_of_submissions_during_freeze[$team];
-	// 		if (array_sum($array_number_of_tries)) {
-	// 			$last_team = $team;
-	// 			break;
-	// 		}
-	// 	}
-	// }
+	}
 
 	private function _strip_scoreboard($assignment_id){
 	

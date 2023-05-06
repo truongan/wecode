@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Log;
 
 class Scoreboard extends Model
 {
-	protected $fillable = ['assignment_id', 'scoreboard','scoreboard_freeze'];
+	protected $fillable = ['assignment_id', 'scoreboard','scoreboard_freeze', 'data'];
 
 	public function assignment(){
         return $this->belongsTo('App\Assignment');
@@ -317,12 +317,17 @@ class Scoreboard extends Model
 		);
 		// dd($data);
 
+		
 		$scoreboard_table = view('scoreboard_table', $data)->render();
 		$scoreboard_table_freeze = view('scoreboard_table_freeze', $data)->render();
+		# Serialize $data to insert it into database
+		$serialized_data = json_encode($data);
+		
 		#Minify the scoreboard's html code
 		// $scoreboard_table = $this->output->minify($scoreboard_table, 'text/html');
 		$this->scoreboard = $scoreboard_table;
 		$this->scoreboard_freeze = $scoreboard_table_freeze;
+		$this->data = $serialized_data;
 
 		$this->save();
 		

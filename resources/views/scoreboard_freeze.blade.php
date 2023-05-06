@@ -52,6 +52,19 @@ $(document).ready(function () {
 		"paging": false,
 		"ordering": true,
 	});
+	if ($("#magic-btn")) {
+		$('#magic-btn').click(function() {
+            $.ajax({
+            url: '/get_the_last_team/' + {{ Auth::user()->selected_assignment_id }},
+            type: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                var myVariable = response.myVariable;
+                console.log(myVariable);
+            }
+            });
+        });
+	}
 });
 
 </script>
