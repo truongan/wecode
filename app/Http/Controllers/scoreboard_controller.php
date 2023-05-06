@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use DOMDocument;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 
 // use Illuminate\Database\Eloquent\Collection;
@@ -100,20 +101,23 @@ class scoreboard_controller extends Controller
 	public function json_get_the_last_team($assignment_id) {
 		$scoreboard_of_that_assignment =  Scoreboard::where('assignment_id',$assignment_id)->get();
 
-		if (!$scoreboard_of_that_assignment->count() != 1) {
+		if ($scoreboard_of_that_assignment->count() != 1) {
 			return abort(404, "This assignment does not have scoreboard");
 		}
 		else {
-			$data = json_decode($scoreboard_of_that_assignment->first()->data);
-			return response()->json(['myVariable' => $data]);
-			// $last_team = NULL;
-			// $array = array_reverse($data[$scoreboard_freeze]['username']);
-			// foreach($array as $team) {
-			// 	$array_number_of_tries = $number_of_submissions_during_freeze[$team];
-			// 	if (array_sum($array_number_of_tries)) {
-			// 		$last_team = $team;
-			// 		break;
-			// 	}
+			$data = json_decode($scoreboard_of_that_assignment->first()->data, true);
+			// return response()->json(['lastTeam' => $data]);
+
+			$last_team = NULL;
+			$all_usernames_desc = array_reverse($data['scoreboard_freeze']['username']);
+			foreach($all_usernames_desc as $username) {
+				$array_number_of_tries = $data['number_of_submissions_during_freeze'][$username];
+				if (array_sum($array_number_of_tries)) {
+					$last_team = $username;
+					break;
+				}
+			}
+			return response()->json(['lastTeam' => $last_team]);
 		}
 		
 	}

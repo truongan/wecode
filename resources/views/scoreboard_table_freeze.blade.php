@@ -135,25 +135,6 @@
         </tr>
     </tfoot>
 </table>
-
-@section('script')
-<script type="text/javascript">
-console.log(a);
-    $(document).ready(function() {
-        $('#magic-btn').click(function() {
-            $.ajax({
-            url: '/get_the_last_team/' + {{ Auth::user()->selected_assignment_id }},
-            type: 'GET',
-            dataType: 'json',
-            success: function(response) {
-                var myVariable = response.myVariable;
-                console.log(myVariable);
-            }
-            });
-        });
-    });
-</script>
-@endsection
 @else
     <h1>Freeze time is not occurred.</h1>
 @endif

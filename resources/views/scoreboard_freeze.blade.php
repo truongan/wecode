@@ -55,17 +55,17 @@ $(document).ready(function () {
 	if ($("#magic-btn")) {
 		$('#magic-btn').click(function() {
             $.ajax({
-            url: '/get_the_last_team/' + {{ Auth::user()->selected_assignment_id }},
+            url: '/scoreboard/get_the_last_team/' + {{ Auth::user()->selected_assignment_id }},
             type: 'GET',
             dataType: 'json',
             success: function(response) {
-                var myVariable = response.myVariable;
-                console.log(myVariable);
+                let lastTeam = response.lastTeam 
+                console.log(lastTeam)
             }
-            });
-        });
+            })
+        })
 	}
-});
+})
 
 </script>
 @endsection
