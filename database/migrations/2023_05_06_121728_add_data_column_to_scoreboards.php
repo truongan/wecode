@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('scoreboards', function (Blueprint $table) {
-            $table->text('data')->nullable();
+            $table->longtext('data')->nullable();
         });
     }
 
