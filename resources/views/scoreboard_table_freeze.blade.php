@@ -1,5 +1,5 @@
 @if ($is_freeze)
-<button>Run</button>
+<button id="magic-btn" class="btn btn-light">Click me!</button>
 <table class="wecode_table table table-striped table-bordered table-sm">
     <thead class="thead-old table-dark">
         <tr>
@@ -135,6 +135,17 @@
         </tr>
     </tfoot>
 </table>
+{{-- <script>
+    $.ajax({
+        url: '/json_get_the_last_team/' + {{ Auth::user()->selected_assignment_id }},
+        type: 'GET',
+        dataType: 'json',
+        success: function(response) {
+            var myVariable = response.myVariable;
+            // Your code here
+        }
+    });
+</script> --}}
 @else
     <h1>Freeze time is not occurred.</h1>
 @endif

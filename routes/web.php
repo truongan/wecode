@@ -71,6 +71,7 @@ Route::get('/practice/show/{problem}', [App\Http\Controllers\practice_controller
 
 Route::get('/scoreboard/full/{id}', [App\Http\Controllers\scoreboard_controller::class, 'index'])->name('scoreboards.index');
 Route::get('/scoreboard/freeze/full/{id}', [App\Http\Controllers\scoreboard_controller::class, 'get_scoreboard_freeze'])->name('scoreboards.freeze');
+// Route::get('/json_get_the_last_team/{id}', [App\Http\Controllers\scoreboard_controller::class, 'json_get_the_last_team'])->name('scoreboards.get_last_team');
 
 Route::get('/assignment/{assignment}/{problem_id}/', [App\Http\Controllers\assignment_controller::class, 'show'])->where(['assignment'=>'[0-9]+','problem_id'=>'[0-9]+'])->name('assignments.show');
 

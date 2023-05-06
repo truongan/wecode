@@ -28,14 +28,11 @@
 <div class="mx-n2">
 	@if (isset($assignment->id) && $assignment->id == 0)
 	<p>No assignment is selected.</p>
-	@elseif (!isset($assignment->score_board) && in_array( Auth::user()->role->name, ['admin', 'head_instructor']))
+	@elseif (!isset($assignment->score_board) || !in_array( Auth::user()->role->name, ['admin', 'head_instructor']))
 	{{-- level<2???? --}}
 	<p>Scoreboard is disabled.</p>
-	@else
+	@elseif (in_array( Auth::user()->role->name, ['admin', 'head_instructor']))
 		<p>Scoreboard of <span> {{ $assignment->name }}</span></p>
-		@if (in_array( Auth::user()->role->name, ['admin', 'head_instructor']))
-		</ul>
-		@endif
 		<div class="table-responsive">{!! $scoreboard_freeze !!}</div>
 		<span class="text-danger">*: Not full mark</span>
 		<br/>
