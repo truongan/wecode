@@ -142,6 +142,7 @@
 			</td>
 			{{-- SHARE, PRACTICE, EDITORIAL --}}
 			<td>  
+				
 				<i  style="cursor:pointer" class="toggle_practice fas fa-dumbbell fa-2x clickable .stretched-link
 					@if( $item->allow_practice)
 						text-success
