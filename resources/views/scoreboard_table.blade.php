@@ -27,7 +27,7 @@
     @foreach ($scoreboard['username'] as $i => $sc_username)
     <tr>
         <td>{{ $loop->index + 1}}</td>
-        <td> <a href="{{ route('submissions.index', ['assignment_id' => $assignment_id, 'problem_id' => 'all', 'user_id' => $scores[$sc_username]['id'] , 'choose' => 'all']) }}" >{{ $sc_username }}</a></td>
+        <td><a href="{{ route('submissions.index', ['assignment_id' => $assignment_id, 'problem_id' => 'all', 'user_id' => $scores[$sc_username]['id'] , 'choose' => 'all']) }}" >{{ $sc_username }}</a></td>
         <td>{{ $names[$sc_username] }}</td>
         <td>{{ $scoreboard['lops'][$sc_username] ?? 'none' }}</td>
         <td>
