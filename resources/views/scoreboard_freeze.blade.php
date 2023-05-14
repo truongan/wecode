@@ -53,15 +53,36 @@ $(document).ready(function () {
 		"ordering": true,
 	});
 	if ($("#magic-btn")) {
-		$('#magic-btn').click(function() {
+		$("#magic-btn").click(function() {
             $.ajax({
-            url: '/scoreboard/get_the_last_team/' + {{ Auth::user()->selected_assignment_id }},
-            type: 'GET',
-            dataType: 'json',
-            success: function(response) {
-                let lastTeam = response.lastTeam 
-                console.log(lastTeam)
-            }
+				url: '/scoreboard/get_the_last_team/' + {{ Auth::user()->selected_assignment_id }},
+				type: 'GET',
+				dataType: 'json',
+				success: function(response) {
+					let lastTeam = response.lastTeam 
+					let lastProb = response.lastProb
+					let cellProb = lastProb + 5
+
+					// create html dom from scoreboard_json
+					let scoreboard_json = response.scoreboard
+					var domParser = new DOMParser()
+					var scoreboard = domParser.parseFromString(scoreboard_json, "text/html")
+
+					// get score in scoreboard and update to scoreboard_freeze
+					var scoreboard_table = scoreboard.getElementsByClassName("table")[0];
+					for (let i = 1; i < scoreboard_table.rows.length - 5; i++)
+					{
+						if (scoreboard_table.rows[i].cells[1].innerText == lastTeam)
+						{
+							score = scoreboard_table.rows[i].cells[cellProb].innerHTML
+							break
+						}
+					}
+					var rowIndex = $('table tr td:contains("' + lastTeam + '")').closest('tr').index() + 1
+					$('table tr:eq("' + rowIndex + '") td:eq("' + cellProb + '")').html(score)
+
+
+				}
             })
         })
 	}

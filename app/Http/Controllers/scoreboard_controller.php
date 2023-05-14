@@ -106,18 +106,25 @@ class scoreboard_controller extends Controller
 		}
 		else {
 			$data = json_decode($scoreboard_of_that_assignment->first()->data, true);
-			// return response()->json(['lastTeam' => $data]);
 
+			$scoreboard = $this->get_scoreboard($assignment_id);
 			$last_team = NULL;
+			$last_prob = NULL;
 			$all_usernames_desc = array_reverse($data['scoreboard_freeze']['username']);
 			foreach($all_usernames_desc as $username) {
 				$array_number_of_tries = $data['number_of_submissions_during_freeze'][$username];
 				if (array_sum($array_number_of_tries)) {
 					$last_team = $username;
+					foreach(array_keys($array_number_of_tries) as $prob) {
+						if ($array_number_of_tries[$prob]) {
+							$last_prob = $prob;
+							$array_number_of_tries[$prob] = 0;
+						}
+					}
 					break;
 				}
 			}
-			return response()->json(['lastTeam' => $last_team]);
+			return response()->json(['lastTeam' => $last_team, 'lastProb' => $last_prob, 'scoreboard' => $scoreboard]);
 		}
 		
 	}
