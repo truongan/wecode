@@ -62,6 +62,8 @@ $(document).ready(function () {
 					let lastTeam = response.lastTeam 
 					let lastProb = response.lastProb
 					let cellProb = lastProb + 5
+					console.log(lastTeam)
+					console.log(lastProb)
 
 					// create html dom from scoreboard_json
 					let scoreboard_json = response.scoreboard

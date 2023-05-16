@@ -112,13 +112,15 @@ class scoreboard_controller extends Controller
 			$last_prob = NULL;
 			$all_usernames_desc = array_reverse($data['scoreboard_freeze']['username']);
 			foreach($all_usernames_desc as $username) {
-				$array_number_of_tries = $data['number_of_submissions_during_freeze'][$username];
-				if (array_sum($array_number_of_tries)) {
+				if (array_sum($data['number_of_submissions_during_freeze'][$username])) {
 					$last_team = $username;
-					foreach(array_keys($array_number_of_tries) as $prob) {
-						if ($array_number_of_tries[$prob]) {
+					foreach(array_keys($data['number_of_submissions_during_freeze'][$username]) as $prob) {
+						if ($data['number_of_submissions_during_freeze'][$username][$prob]) {
 							$last_prob = $prob;
-							$array_number_of_tries[$prob] = 0;
+							$data['number_of_submissions_during_freeze'][$username][$prob] = 0;
+							$serialized_data = json_encode($data);
+							DB::table('scoreboards')->where('assignment_id', $assignment_id)->update(['data' => $serialized_data]);
+							break;
 						}
 					}
 					break;
