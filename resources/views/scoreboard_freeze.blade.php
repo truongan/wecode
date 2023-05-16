@@ -70,23 +70,34 @@ $(document).ready(function () {
 					var scoreboard = domParser.parseFromString(scoreboard_json, "text/html")
 
 					// get score in scoreboard and update to scoreboard_freeze
-					var scoreboard_table = scoreboard.getElementsByClassName("table")[0];
+					// update score of each problem
+					var scoreboard_table = scoreboard.getElementsByClassName("table")[0]
 					for (let i = 1; i < scoreboard_table.rows.length - 5; i++)
 					{
 						if (scoreboard_table.rows[i].cells[1].innerText == lastTeam)
 						{
 							score = scoreboard_table.rows[i].cells[cellProb].innerHTML
 							classBS = scoreboard_table.rows[i].cells[cellProb].className
+							console.log(classBS)
 							break
 						}
 					}
-					var rowIndex = -1;
+					var rowIndex = -1
 					$("table tr").each(function() {
 						if ($(this).find("td:eq(1)").text() == lastTeam) {
 							rowIndex = $(this).index() + 1
 						}
-					});
-					$('table tr:eq("' + rowIndex + '") td:eq("' + cellProb + '")').html(score).addClass(classBS)
+					})
+					$('table tr:eq("' + rowIndex + '") td:eq("' + cellProb + '")').html(score).prop("className", classBS)
+
+					// update total score and total accepted
+					var total_score_prev = parseInt($('table tr:eq("' + rowIndex + '") td:eq(4)').find("span").first().text())
+					var score_int = parseInt($('table tr:eq("' + rowIndex + '") td:eq("' + cellProb + '")').find("a").text())
+					var total_accepted = parseInt($('table tr:eq("' + rowIndex + '") td:eq(5)').find("span").first().text()) + 100
+					var total_score = total_score_prev + score_int
+					$('table tr:eq("' + rowIndex + '") td:eq(4)').find("span").first().text(total_score)
+					if (score_int == 100)
+						$('table tr:eq("' + rowIndex + '") td:eq(5)').find("span").first().text(total_accepted)
 				}
             })
         })
