@@ -108,21 +108,20 @@ class scoreboard_controller extends Controller
 			$data = json_decode($scoreboard_of_that_assignment->first()->data, true);
 
 			$scoreboard = $this->get_scoreboard($assignment_id);
-			$last_team = NULL;
-			$last_prob = NULL;
-			$temp = NULL;
+			$last_team = $last_prob = $ordering = $temp = NULL;
 			$all_usernames_desc = array_reverse($data['scoreboard_freeze']['username']);
 			foreach($all_usernames_desc as $username) {
 				if (array_sum($data['number_of_submissions_during_freeze'][$username])) {
 					$last_team = $username;
 					foreach(array_keys($data['number_of_submissions_during_freeze'][$username]) as $prob) {
 						if ($data['number_of_submissions_during_freeze'][$username][$prob]) {
+							$last_prob = $prob;
 							$temp = DB::table('assignment_problem')
 								->select('ordering')
 								->where('assignment_id', $assignment_id)
 								->where('problem_id', $prob)
 								->get();
-							$last_prob = $temp[0]->ordering + 1;
+							$ordering = $temp[0]->ordering + 1;
 							$data['number_of_submissions_during_freeze'][$username][$prob] = 0;
 							$serialized_data = json_encode($data);
 							DB::table('scoreboards')->where('assignment_id', $assignment_id)->update(['data' => $serialized_data]);
@@ -132,7 +131,7 @@ class scoreboard_controller extends Controller
 					break;
 				}
 			}
-			return response()->json(['lastTeam' => $last_team, 'lastProb' => $last_prob, 'scoreboard' => $scoreboard]);
+			return response()->json(['lastTeam' => $last_team, 'lastProb' => $last_prob, 'ordering' => $ordering,'scoreboard' => $scoreboard]);
 		}
 		
 	}

@@ -61,9 +61,8 @@ $(document).ready(function () {
 				success: function(response) {
 					let lastTeam = response.lastTeam 
 					let lastProb = response.lastProb
-					let cellProb = lastProb + 5
-					console.log(lastTeam)
-					console.log(lastProb)
+					let ordering = response.ordering
+					let cellProb = ordering + 5
 
 					// create html dom from scoreboard_json
 					let scoreboard_json = response.scoreboard
@@ -77,6 +76,7 @@ $(document).ready(function () {
 						if (scoreboard_table.rows[i].cells[1].innerText == lastTeam)
 						{
 							score = scoreboard_table.rows[i].cells[cellProb].innerHTML
+							classBS = scoreboard_table.rows[i].cells[cellProb].className
 							break
 						}
 					}
@@ -86,7 +86,7 @@ $(document).ready(function () {
 							rowIndex = $(this).index() + 1
 						}
 					});
-					$('table tr:eq("' + rowIndex + '") td:eq("' + cellProb + '")').html(score)
+					$('table tr:eq("' + rowIndex + '") td:eq("' + cellProb + '")').html(score).addClass(classBS)
 				}
             })
         })
