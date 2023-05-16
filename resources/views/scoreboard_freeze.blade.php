@@ -55,9 +55,9 @@ $(document).ready(function () {
 	if ($("#magic-btn")) {
 		$("#magic-btn").click(function() {
             $.ajax({
-				url: '/scoreboard/get_the_last_team/' + {{ Auth::user()->selected_assignment_id }},
-				type: 'GET',
-				dataType: 'json',
+				url: "/scoreboard/get_the_last_team/" + {{ Auth::user()->selected_assignment_id }},
+				type: "GET",
+				dataType: "json",
 				success: function(response) {
 					let lastTeam = response.lastTeam 
 					let lastProb = response.lastProb
@@ -80,10 +80,13 @@ $(document).ready(function () {
 							break
 						}
 					}
-					var rowIndex = $('table tr td:contains("' + lastTeam + '")').closest('tr').index() + 1
+					var rowIndex = -1;
+					$("table tr").each(function() {
+						if ($(this).find("td:eq(1)").text() == lastTeam) {
+							rowIndex = $(this).index() + 1
+						}
+					});
 					$('table tr:eq("' + rowIndex + '") td:eq("' + cellProb + '")').html(score)
-
-
 				}
             })
         })
