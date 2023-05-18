@@ -44,7 +44,11 @@
 @endsection
 
 @section('body_end')
-
+<style>
+	td {
+		transition: all 1s linear;
+	}
+</style>
 <script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
 <script>
 $(document).ready(function () {
@@ -78,7 +82,6 @@ $(document).ready(function () {
 						{
 							score = scoreboard_table.rows[i].cells[cellProb].innerHTML
 							classBS = scoreboard_table.rows[i].cells[cellProb].className
-							console.log(classBS)
 							break
 						}
 					}
@@ -101,6 +104,11 @@ $(document).ready(function () {
 				}
             })
         })
+		$("#interval-btn").click(function() {
+			var interval = setInterval(function() {
+				$("#magic-btn").click()
+			}, 1000)
+		})
 	}
 })
 
