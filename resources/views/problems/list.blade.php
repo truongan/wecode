@@ -124,8 +124,8 @@
 			
 			{{-- Date --}}
 			<td>
-				Created: {{ $item->created_at->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('YYYY/MM/DD-HH:mm:ss')  }}
-				Modified: {{ $item->updated_at->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('YYYY/MM/DD-HH:mm:ss')  }}
+				Created: {{ $item->created_at ?  $item->created_at->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('YYYY/MM/DD-HH:mm:ss') : 'Unknown' }}
+				Modified: {{ $item->created_at ?  $item->updated_at->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('YYYY/MM/DD-HH:mm:ss') : 'Unknown' }}
 			</td>
 			{{-- ASSIGNMENTS --}}
 			<td>
