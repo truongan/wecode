@@ -68,6 +68,7 @@
 				<th>owner</th>
 				<th style="width: 15%">Tags</th>
 				<th>Lang</th>
+				<th>Date</th>
 				<th><small>Assignmnet</small></th>
 				<th><small>Submission</small></th>
 				<th>Misc</th>
@@ -119,6 +120,12 @@
 					<span class="btn btn-sm btn-secondary mb-1">{{$language_name->name}} <span class="badge rounded-pill bg-info">{{$language_name->pivot->time_limit/1000}}s</span><span class="badge rounded-pill bg-info">{{$language_name->pivot->memory_limit/1000}}MB</span></span>
 				@endforeach
 				</div>
+			</td>
+			
+			{{-- Date --}}
+			<td>
+				Created: {{ $item->created_at->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('YYYY/MM/DD-HH:mm:ss')  }}
+				Modified: {{ $item->updated_at->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('YYYY/MM/DD-HH:mm:ss')  }}
 			</td>
 			{{-- ASSIGNMENTS --}}
 			<td>
