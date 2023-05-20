@@ -51,6 +51,11 @@
 </style>
 <script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
 <script>
+var array_html = []
+var array_rowIndex = []
+var array_classBS = []
+var array_cellProb = []
+var index = 0
 $(document).ready(function () {
 	$("table").DataTable({
 		"paging": false,
@@ -89,8 +94,12 @@ $(document).ready(function () {
 					$("table tr").each(function() {
 						if ($(this).find("td:eq(1)").text() == lastTeam) {
 							rowIndex = $(this).index() + 1
+							array_rowIndex.push(rowIndex)
 						}
 					})
+					array_html.push($('table tr:eq("' + rowIndex + '") td:eq("' + cellProb + '")').html())
+					array_classBS.push(classBS)
+					array_cellProb.push(cellProb)
 					$('table tr:eq("' + rowIndex + '") td:eq("' + cellProb + '")').html(score).prop("className", classBS)
 
 					// update total score and total accepted
@@ -108,6 +117,9 @@ $(document).ready(function () {
 			var interval = setInterval(function() {
 				$("#magic-btn").click()
 			}, 1000)
+		})
+		$("#reverse-btn").click(function() {
+			$('table tr:eq("' + array_rowIndex[index] + '") td:eq("' + array_cellProb[index] + '")').html(array_html[index]).prop("className", array_classBS[index])
 		})
 	}
 })

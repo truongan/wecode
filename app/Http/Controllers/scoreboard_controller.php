@@ -80,7 +80,7 @@ class scoreboard_controller extends Controller
 		$scoreboard_freeze = NULL;
 		if ($assignment)
 		{
-			Scoreboard::update_scoreboard($assignment_id); 
+			//////////////Scoreboard::update_scoreboard($assignment_id); AN Note: how can you do this, OMG 
 
 			if ($query->count() != 1)
 				$scoreboard_freeze = false;//$message = array('error' => 'Scoreboard not found');
