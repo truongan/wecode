@@ -76,11 +76,6 @@
 
     </tr>
     @endforeach
-<<<<<<< HEAD
-    
-=======
-
->>>>>>> master
     <tfoot class="bg-dark text-light">
         <th colspan="6">Sumarry</th>
         @foreach ($problems as $problem)
@@ -123,11 +118,6 @@
                 {{$stat_print[$p->id]->average_tries_2_solve}}
             </td>
             @endforeach
-<<<<<<< HEAD
-        </tr>   
-    </tfoot>
-=======
         </tr>
     </tfoot>    
->>>>>>> master
 </table>
