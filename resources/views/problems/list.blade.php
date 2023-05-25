@@ -68,6 +68,7 @@
 				<th>owner</th>
 				<th style="width: 15%">Tags</th>
 				<th>Lang</th>
+				<th>Date</th>
 				<th><small>Assignmnet</small></th>
 				<th><small>Submission</small></th>
 				<th>Misc</th>
@@ -120,6 +121,12 @@
 				@endforeach
 				</div>
 			</td>
+			
+			{{-- Date --}}
+			<td>
+				Created: {{ $item->created_at ?  $item->created_at->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('YYYY/MM/DD-HH:mm:ss') : 'Unknown' }}
+				Modified: {{ $item->created_at ?  $item->updated_at->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('YYYY/MM/DD-HH:mm:ss') : 'Unknown' }}
+			</td>
 			{{-- ASSIGNMENTS --}}
 			<td>
 					<a class="btn btn-sm btn-primary" data-bs-toggle="collapse" href="#assignment_list_{{$item->id}}" aria-expanded="false" aria-controls="assignment_list_{{$item->id}}">
@@ -142,6 +149,7 @@
 			</td>
 			{{-- SHARE, PRACTICE, EDITORIAL --}}
 			<td>  
+				
 				<i  style="cursor:pointer" class="toggle_practice fas fa-dumbbell fa-2x clickable .stretched-link
 					@if( $item->allow_practice)
 						text-success

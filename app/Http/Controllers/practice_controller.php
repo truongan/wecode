@@ -65,6 +65,8 @@ class practice_controller extends Controller
         $problem = Problem::find($problem->id);
         $problem['has_pdf'] = $result['has_pdf'];
         $problem['description'] = $result['description'];
+		$problem['has_template'] = $result['has_template'];
+        $problem['error'] = NULL;
         return view('problems.show', ['problem'=>$problem,
                                       'all_problems'=>NULL,
                                       'can_submit'=>TRUE,

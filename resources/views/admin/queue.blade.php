@@ -32,6 +32,7 @@
       <th>Assignment</th>
       <th>Problem</th>
       <th>Type (judge/rejudge)</th>
+      <th>created at</th>
       <th>Process PID</th>
       <th><i class="fas fa-toolbox"></i></th>
     </tr>
@@ -44,6 +45,7 @@
         <td>{{ $item->submission->assignment->id }} (<span>{{ $item->submission->assignment->name }}</span>)</td>
         <td>{{ $item->submission->problem->id }}</td>
         <td>{{ $item->type }}</td>
+        <td>{{ $item->created_at->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('llll') }}</td>
         <td>{{ $item->processid }}</td>
         <td>
           @if ($item->processid)
@@ -52,6 +54,7 @@
               <button href="#" type="submit" class="shj_act btn btn-danger" id="unlock/{{ $item->id }}"  data-bs-toggle="tooltip" data-placement="right" title="Unlock this queue item, allow it to be processed. Should only be used if its processor process has terminated somehow. MUST DOUBLE CHECK BEFORE USE"><i class="fas fa-lock-open"></i></button>
             </form>
           @endif
+          <a class="btn btn-secondary btn-sm " href="{{ route('submissions.index', ['assignment_id' => $item->submission->assignment->id, 'user_id' => $item->submission->user->id, 'problem_id' => $item->submission->problem->id, 'choose' => 'all'] ) }}"   role="button"> jump<i class="fa fa-link" aria-hidden="true"></i> </a>
         </td>
       </tr>
       @endforeach
