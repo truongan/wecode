@@ -517,7 +517,7 @@ class problem_controller extends Controller
 
     public function downloadtestsdesc($problem_id)
     {
-        $a =Problem::find($problem_id); 
+        $a =Problem::with('languages')->find($problem_id); 
         
         if ($a == null) abort(404);
         if ( ! in_array( Auth::user()->role->name, ['admin']) )
@@ -528,8 +528,14 @@ class problem_controller extends Controller
         $assignments_root = Setting::get("assignments_root");
         $zipFile = $assignments_root . "/problem" . (string)$problem_id . "_tests_and_descriptions_" . (string)date('Y-m-d_H-i') . ".zip";
         $pathdir = $assignments_root . '/problems/' . (string)$problem_id . '/';
-        
-        exec("cd $pathdir && zip -r $zipFile *");
+        $metadata_file = $pathdir . 'problem.wecode.metadata.json';
+
+        file_put_contents($metadata_file, $a->toJSON(JSON_PRETTY_PRINT));
+        // dd("cd $pathdir && zip -r $zipFile *");
+        $a = shell_exec("cd $pathdir && zip -r $zipFile *");
+        // dd($a);
+        unlink($metadata_file);
+
         return response()->download($zipFile)->deleteFileAfterSend();
     }
     
