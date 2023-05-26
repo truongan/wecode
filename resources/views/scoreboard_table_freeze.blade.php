@@ -1,7 +1,3 @@
-@if ($is_freeze)
-<button id="reverse-btn" class="btn btn-secondary"> << Go back</button>
-<button id="magic-btn" class="btn btn-secondary">Resolve >> </button>
-<button id="interval-btn" class="btn btn-secondary">Resolve (loop)</button>
 <table class="wecode_table table table-striped table-bordered table-sm">
     <thead class="thead-old table-dark">
         <tr>
@@ -137,6 +133,3 @@
         </tr>
     </tfoot>
 </table>
-@else
-    <h1>Freeze time is not occurred.</h1>
-@endif

@@ -19,6 +19,6 @@ class SubmissionSeeder extends Seeder
         // Create 2 dummy submissions
         Submission::factory(5)->create();
         // Remember to add assignment_id
-        Scoreboard::update_scoreboard(2);
+        Scoreboard::update_scoreboard(7);
     }
 }

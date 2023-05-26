@@ -44,7 +44,7 @@ class scoreboard_controller extends Controller
 		$scoreboard = NULL;
 		if ($assignment)
 		{
-			Scoreboard::update_scoreboard($assignment_id); 
+			// Scoreboard::update_scoreboard($assignment_id);
 			$scoreboard = $this->get_scoreboard($assignment_id);
 
 		return view('scoreboard', ['selected' => 'scoreboard',
@@ -55,10 +55,10 @@ class scoreboard_controller extends Controller
 		}
 	}
 		
-	public function get_scoreboard($assignment_id)
+	public static function get_scoreboard($assignment_id)
 	{
 		$query =  DB::table('scoreboards')->where('assignment_id',$assignment_id)->get();
-
+		
 		if ($query->count() != 1)
 			return false;//$message = array('error' => 'Scoreboard not found');
 		else
@@ -67,7 +67,7 @@ class scoreboard_controller extends Controller
 		}
 	}
 
-	public function get_scoreboard_freeze($assignment_id)
+	public function index_freeze($assignment_id)
 	{
 		$query =  DB::table('scoreboards')->where('assignment_id',$assignment_id)->get();
 
@@ -89,13 +89,25 @@ class scoreboard_controller extends Controller
 				$scoreboard_freeze = $query->first()->scoreboard_freeze;
 			}
 
-		return view('scoreboard_freeze', ['selected' => 'scoreboard',
+		return view('scoreboard_freeze', ['selected' => 'freeze',
 									'place' => 'full',	
 									'assignment' => $assignment,
 									'scoreboard_freeze' => $scoreboard_freeze,									
 								]);
 		}
 
+	}
+
+	public function get_scoreboard_freeze($assignment_id)
+	{
+		$query =  Scoreboard::where('assignment_id',$assignment_id)->get();
+
+		if ($query->count() != 1)
+			return false;
+		else
+		{
+			return $query->first()->scoreboard_freeze;
+		}
 	}
 
 	public function json_get_the_last_team($assignment_id) {
