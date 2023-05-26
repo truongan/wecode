@@ -237,7 +237,7 @@ class resolver_controller extends Controller
                 $data['tries_to_solve'],
             );
 
-            dd($data);
+            // dd($data);
 
             return view('resolver', [
                 'selected' => 'resolver',
@@ -245,7 +245,7 @@ class resolver_controller extends Controller
                 'tries' => $array_of_tries,
                 'accepted_time' => $array_of_accepted_time,
                 'accepted' => $array_of_accepted,
-                // 'problem_id' => $array_of_problems_id,
+                'problem_id' => $array_of_problems_id,
                 // 'scores' => $array_of_score,
                 // 'tries' => $array_of_tries,
                 // 'accepted' => $array_of_accepted,
