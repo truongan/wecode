@@ -196,7 +196,7 @@ class problem_controller extends Controller
                                       'all_languages'=>Language::orderBy('sorting')->get(),
                                       'messages'=>[],  
                                       'languages'=>$lang_of_problems,
-                                      'tree_dump'=>shell_exec("tree -h " . $this->get_directory_path($problem->id)),  
+                                      'tree_dump'=>shell_exec("tree -h " . $this->get_directory_path($problem->id)),
                                       'max_file_uploads'=> ini_get('max_file_uploads'),
                                       'all_tags' => Tag::all(),
                                       'tags' => $tags,
