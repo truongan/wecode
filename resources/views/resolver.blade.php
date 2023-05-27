@@ -11,6 +11,16 @@
             window.location.reload();
         }
     </script>
+    <style>
+        .user_row {
+			transform: translateY(0);
+			transition: transform 1s linear;
+        }
+
+        td {
+            transition: all 1s linear;
+        }
+    </style>
 @endsection
 
 @section('title_menu')
@@ -25,6 +35,10 @@
 @section('content')
     <div class="mx-n2">
         <h1>resolver</h1>
+
+		<button id="reverse-btn" class="btn btn-secondary"> << Go back</button>
+		<button id="resolve-btn" class="btn btn-secondary">Resolve >> </button>
+
         {{-- TABLE --}}
         <table id="wecode_leaderboard" class="wecode_table table table-striped table-bordered table-sm">
             <thead class="thead-old table-dark">
@@ -40,120 +54,6 @@
                 </tr>
             </thead>
 			<tbody></tbody>
-{{-- 
-			@foreach ($data['username'] as $index => $username)
-				<tr>
-					<td>{{}}</td>
-					<td></td>
-					<td></td>
-					<td></td>
-				</tr> --}}
-
-{{-- 
-            @foreach ($scoreboard['username'] as $i => $sc_username)
-                <tr>
-                    <td>{{ $loop->index + 1 }}</td>
-                    <td><a
-                            href="{{ route('submissions.index', ['assignment_id' => $assignment_id, 'problem_id' => 'all', 'user_id' => $scores[$sc_username]['id'], 'choose' => 'all']) }}">{{ $sc_username }}</a>
-                    </td>
-                    <td>{{ $names[$sc_username] }}</td>
-                    <td>{{ $scoreboard['lops'][$sc_username] ?? 'none' }}</td>
-                    <td>
-
-                        <span>{{ $scoreboard['score'][$loop->index] }}</span>
-                        <p class="excess">
-                            <span class="small"
-                                title="Total Time + Submit Penalty">{{ $scoreboard['submit_penalty'][$loop->index]->cascade()->forHumans(['short' => true]) }}</span>
-                        </p>
-                    </td>
-                    <td class="text-dark">
-                        <span class="lead"><strong>{{ $scoreboard['accepted_score'][$loop->index] }}</strong></span>
-                        <p class="excess">
-                            <span class="small"
-                                title="Solved : Attack ratio">{{ $scoreboard['solved'][$loop->index] }}:{{ $scoreboard['tried_to_solve'][$loop->index] }}</span>
-                        </p>
-                    </td>
-                    @foreach ($problems as $problem)
-                        @if (isset($scores[$sc_username][$problem->id]['score']))
-                            @if ($scores[$sc_username][$problem->id]['score'] == 100)
-                                <td class="bg-success">
-                                @else
-                                <td class="bg-danger">
-                            @endif
-                            <a href="{{ route('submissions.index', ['assignment_id' => $assignment_id, 'problem_id' => $problem->id, 'user_id' => $scores[$sc_username]['id'], 'choose' => 'all']) }}"
-                                class="lead text-white">
-                                {{ $scores[$sc_username][$problem->id]['score'] }}
-                            </a>
-                            <p class="excess">
-                                <span class="small text-white" title="Total tries and time to final submit">
-                                    {{ $number_of_submissions[$sc_username][$problem->id] }}
-                                    -
-                                </span>
-
-                                @if ($scores[$sc_username][$problem->id]['late']->totalSeconds > 0)
-                                    <span
-                                        class="text-white">{{ $scores[$sc_username][$problem->id]['late']->forHumans(['short' => true]) }}</span>
-                                @else
-                                    <span
-                                        class="small text-white">{{ $scores[$sc_username][$problem->id]['time']->forHumans(['short' => true]) }}</span>
-                                @endif
-                            </p>
-                            </td>
-                        @else
-                            <td>-</td>
-                        @endif
-                    @endforeach
-
-
-
-
-                </tr>
-            @endforeach
-            <tfoot class="bg-dark text-light">
-                <th colspan="6">Sumarry</th>
-                @foreach ($problems as $problem)
-                    <th>
-                        <a class="small"
-                            href="{{ route('assignments.show', ['assignment' => $assignment_id, 'problem_id' => $problem->id]) }}">{{ $problem->pivot->problem_name }}</a>
-                        <br>
-                        <a class="text-light"
-                            href="{{ route('submissions.index', ['assignment_id' => $assignment_id, 'problem_id' => $problem->id, 'user_id' => 'all', 'choose' => 'final']) }}">{{ $problem->pivot->score }}</a>
-                    </th>
-                @endforeach
-
-                <tr class="bg-dark text-light">
-                    <td colspan="6">Solved/tries</td>
-                    @foreach ($problems as $p)
-                        <td>
-                            {{ $stat_print[$p->id]->solved_tries }}
-                        </td>
-                    @endforeach
-                </tr>
-                <tr class="bg-dark text-light">
-                    <td colspan="6">Solved users/tries users/Total users</td>
-                    @foreach ($problems as $p)
-                        <td>
-                            {{ $stat_print[$p->id]->solved_tries_users }}
-                        </td>
-                    @endforeach
-                </tr>
-                <tr class="bg-dark text-light">
-                    <td colspan="6">Average tries per users</td>
-                    @foreach ($problems as $p)
-                        <td>
-                            {{ $stat_print[$p->id]->average_tries }}
-                        </td>
-                    @endforeach
-                </tr>
-                <tr class="bg-dark text-light">
-                    <td colspan="6">Average tries to solve</td>
-                    @foreach ($problems as $p)
-                        <td>
-                            {{ $stat_print[$p->id]->average_tries_2_solve }}
-                        </td>
-                    @endforeach
-                </tr>
-            </tfoot> --}}
         </table> 
 
         {{-- TABLE --}}
@@ -190,15 +90,15 @@
 
 		users_list.push(user)
 	}
-	console.log(users_list)
+	// console.log(users_list)
 	// console.log(accepted_time)
 	
 
 	// Generate row from user list
 	const generateUserResultCell = (user, php_problem_id) => {
 		return php_problem_id.map((problem_id) => {
-			console.log(user)
-			console.log(user.tries_during)
+			// console.log(user)
+			// console.log(user.tries_during)
 
 			if (user.tries_during[problem_id] > 0) {
 				return ('<td class="bg-warning">' + user.tries_before[problem_id] + '+' + user.tries_during[problem_id] + ' tries' + '</td>')
@@ -223,11 +123,89 @@
 				(generateUserResultCell(users_list[i], php_problem_id)) +
 			'</tr>'
 		)
-		users_list[i].row = row
+		users_list[i].html_row = row
 		$("#wecode_leaderboard > tbody").append(row)
 		
 	}
 	// console.log(users_list)
+
+	function resolve() {
+		// Get last user with tries
+		let last_user = null;
+        let last_user_row_index = 0;
+		for (let i = users_list.length - 1; i >= 0; i--) {
+			const total_tries_during = Object.values(users_list[i].tries_during).reduce((prev, curr) => prev + curr)
+			if (total_tries_during > 0) {
+				last_user = users_list[i];
+                last_user_row_index = i;
+				break;
+			}
+		}
+		// console.log(last_user)
+
+		// Choose a problem to resolve
+		let prob_id = 0;
+		for (let key in last_user.tries_during) {
+			if (last_user.tries_during[key] > 0) {
+				prob_id = key
+				break;
+			}
+		}
+		// console.log(prob_id)
+
+		// Update user
+		const prob_ordering = Number(Object.keys(php_problem_id).find(key => php_problem_id[key] == prob_id)) + 3
+		const score = last_user['accepted_time'][prob_id]
+        // console.log(last_user['accepted_time'][prob_id])
+		// console.log(last_user.html_row.find("td")[prob_ordering])
+
+        users_list[last_user_row_index].tries_during[prob_id] = 0;
+        users_list[last_user_row_index].total_accepted += 1;
+        users_list[last_user_row_index].total_accepted_time += score;
+
+		if (score) {
+			last_user.html_row.find("td")[prob_ordering].textContent = score
+            last_user.html_row.find("td")[prob_ordering].classList.remove("bg-warning")
+            last_user.html_row.find("td")[prob_ordering].classList.add("bg-success")
+
+            last_user.html_row.find("td")[3].textContent = users_list[last_user_row_index].total_accepted_time
+			// last_user.html_row.find("td")[prob_ordering].textContent = score
+
+
+		} else {
+			last_user.html_row.find("td")[prob_ordering].textContent = 0
+            last_user.html_row.find("td")[prob_ordering].classList.remove("bg-warning")
+            last_user.html_row.find("td")[prob_ordering].classList.add("bg-danger")
+
+		}
+
+        console.log(users_list[last_user_row_index])
+
+
+        // Sort the user list
+        users_list.sort(function (prev, curr) {
+            const accepted_order_ASC = Number(prev.total_accepted) - Number(curr.total_accepted)
+            const accepted_time_order_ASC = Number(prev.total_accepted_time) - Number(curr.total_accepted_time)
+            return -accepted_order_ASC || accepted_time_order_ASC
+        })
+
+        // Update rank
+		for(let i = 0; i < users_list.length; i++) {
+			users_list[i].html_row.find(".rank").textContent = i + 1	
+		}
+
+        console.log(users_list)
+
+		// Reposition
+		// const row_height = last_user.html_row.outerHeight()
+		// let row_height = 0
+		// for (let i = 0; i < users_list.length; i++) {
+		// 	users_list[i].html_row.css("top", row_height + "px")
+		// 	row_height += header_height
+		// }
+	}
+
+	$("#resolve-btn").click(resolve)
 
 </script>
 @endsection
