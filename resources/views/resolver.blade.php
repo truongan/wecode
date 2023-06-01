@@ -47,10 +47,18 @@
             width: 100%;
         }
 
-        #scoreboard > thead {
+        #scoreboard thead {
             height: 3rem;
-            background-color: #212529;
-            color: white;
+            border-bottom: 1px solid black;
+            /* z-index: 1; */
+            /* background-color: grey;
+            color: white; */
+            /* border-image: linear-gradient(transparent 10%, blue 10% 90%, transparent 90%) 0 0 0 1 / 3px; */
+            /* border-width: 2px; */
+        }
+
+        th {
+            box-shadow: -1px 0 0 0 silver inset, 0 2px 0 0 black;
         }
 
         .solved {
@@ -63,9 +71,28 @@
             font-size: 1rem;
         }
 
+        .logo {
+            width: 2rem;
+        }
+
         .name {
             width: 30rem;
-            text-align: left;
+            text-align: right;
+        }
+
+        .name > p {
+            margin: 0;
+            margin-top: 4px;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        .name > .school_name {
+            margin: 0;
+            margin-bottom: 4px;
+            font-size: 14px;
+            font-weight: normal;
+            font-style: italic;
         }
 
         .rank {
@@ -75,12 +102,14 @@
         .prob_tries {
             padding: 0;
             margin: 0;
-            font-size: 0.75rem;
+            font-size: 14px;
         }
 
         .user_row {
             /* transform: translateY(0px); */
             transition: transform 1s linear;
+            height: 8px;
+            /* border-bottom: 1px solid black; */
         }
 
     </style>
@@ -105,12 +134,13 @@
         <button id="auto-resolve-btn" class="btn btn-secondary">Auto Resolve >> </button> --}}
 
         <i>Click right arrow to resolve</i><br>
-        <i>Click 1 to resolve</i>
+        <i>Click 1 to auto resolve for users whose rank is below 30</i>
 
         {{-- TABLE --}}
         <table id="scoreboard">
             <colgroup>
                 <col id="score_rank">
+                <col id="score_logo">
                 <col id="score_username">
             </colgroup>
             <colgroup>
@@ -125,7 +155,7 @@
             <thead>
                 <tr>
                     <th scope="col">#</th>
-                    <th scope="col">USER</th>
+                    <th scope="col" colspan="2">USER</th>
                     <th scope="col" colspan="2">SCORE</th>
                     @foreach ($problem_id as $ordering => $id)
                         <th scope="col">
@@ -226,7 +256,8 @@
             const row = $(
                 '<tr class="user_row">' +
                 '<td class="rank">' + (i + 1) + '</td>' +
-                '<td class="name">' + users_list[i].username + '</td>' +
+                '<td class="logo"><img src="http://wecode.test/images/logo_uit.png" height="20px"></td>' +
+                '<td class="name"><p>' + users_list[i].username + '</p><p class="school_name">University of Infomation Technology</p></td>' +
                 '<td class="solved">' + users_list[i].total_accepted + '</td>' +
                 '<td class="total">' + users_list[i].total_accepted_time + '</td>' +
                 (generateUserResultCell(users_list[i], php_problem_id)) +
@@ -265,7 +296,7 @@
             // console.log(prob_id)
 
             // Update user
-            const prob_ordering = Number(Object.keys(php_problem_id).find(key => php_problem_id[key] == prob_id)) + 4
+            const prob_ordering = Number(Object.keys(php_problem_id).find(key => php_problem_id[key] == prob_id)) + 5
             const score = last_user['accepted_time'][prob_id]
             const total_tries_of_prob = Number(last_user['tries_before'][prob_id]) + Number(last_user['tries_during'][prob_id])
             // console.log(total_tries_of_prob)
@@ -322,7 +353,7 @@
 
             // Reposition
             for (let i = 0; i < users_list.length; i++) {
-                const transformY = users_list[i].transformY(i, 42)
+                const transformY = users_list[i].transformY(i, 53)
                 // console.log(transformY)
                 users_list[i].html_row.css('transform', 'translateY(' + transformY + 'px)')
                 // console.log(users_list[i].html_row)
@@ -333,19 +364,22 @@
             // users_list[last_user_row_index].tries_during[prob_id] = 0;
         }
         
-        $("#resolve-btn").click(resolve)
+        // $("#resolve-btn").click(resolve)
 
-        $("#auto-resolve-btn").click(() => {
-            for (let i = 0; i<= num_of_autoclick; i++) {
-                $("#resolve-btn").click()
-            }
-        })
+        // $("#auto-resolve-btn").click(() => {
+        //     for (let i = 0; i<= num_of_autoclick; i++) {
+        //         $("#resolve-btn").click()
+        //     }
+        // })
 
         $(document).on('keydown', function(e){
             if (e.key == "ArrowRight")
-                $("#resolve-btn").click()
-            else if (e.key == "1")
-                $("#auto-resolve-btn").click()
+                resolve()
+            else if (e.key == "1") {
+                for (let i = 0; i<= num_of_autoclick; i++) {
+                    resolve()
+                }
+            }
         })
 
 
