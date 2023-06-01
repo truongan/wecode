@@ -1,6 +1,6 @@
 @php($selected = 'resolver')
-@extends('layouts.app')
-@section('icon', 'fas fa-snowflake')
+@extends('layouts.resolver')
+@section('icon', 'fas fa-trophy')
 @section('head_title', 'Resolver')
 @section('title', 'Resolver')
 
@@ -18,7 +18,7 @@
             box-sizing: border-box;
         }
         td {
-            transition: all 1s linear;
+            transition: all 0.5s linear;
             font-size: 1rem;
             white-space: pre-wrap;
             /* border-bottom: solid 1px #acacac; */
@@ -44,11 +44,13 @@
             margin: 0 auto;
             text-align: center;
             border-collapse: collapse;
+            width: 100%;
         }
 
         #scoreboard > thead {
-            height: 2rem;
-            border-bottom: solid 2px black;
+            height: 3rem;
+            background-color: #212529;
+            color: white;
         }
 
         .solved {
@@ -62,7 +64,7 @@
         }
 
         .name {
-            width: 15rem;
+            width: 30rem;
             text-align: left;
         }
 
@@ -94,44 +96,48 @@
 
 
 @section('content')
-    <div class="mx-n2">
-        <h1>resolver</h1>
+    <div class="mx-n2" style="overflow: auto">
+        <h1 style="text-align: center; margin: 1rem;">THE 2023 UCPC FINALS</h1>
+        <p style="text-align: center; margin-bottom: 1rem">Start: 0h00 - End: 12h00</p>
 
-        <button id="reverse-btn" class="btn btn-secondary">
-            << Go back</button>
-                <button id="resolve-btn" class="btn btn-secondary">Resolve >> </button>
+        {{-- <button id="reverse-btn" class="btn btn-secondary"><< Go back</button>
+        <button id="resolve-btn" class="btn btn-secondary">Resolve >> </button>
+        <button id="auto-resolve-btn" class="btn btn-secondary">Auto Resolve >> </button> --}}
 
-                {{-- TABLE --}}
-                <table id="scoreboard" class="">
-                    <colgroup>
-                        <col id="score_rank">
-                        <col id="score_username">
-                    </colgroup>
-                    <colgroup>
-                        <col id="score_solved">
-                        <col id="score_total">
-                    </colgroup>
-                    <colgroup>
-                        @foreach ($problem_id as $ordering => $id)
-                            <col id="score_prob"></col>
-                        @endforeach
-                    </colgroup>
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">USER</th>
-                            <th scope="col" colspan="2">SCORE</th>
-                            @foreach ($problem_id as $ordering => $id)
-                                <th scope="col">
-                                    {{ chr($ordering + 65) }}
-                                </th>
-                            @endforeach
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+        <i>Click right arrow to resolve</i><br>
+        <i>Click 1 to resolve</i>
 
-                {{-- TABLE --}}
+        {{-- TABLE --}}
+        <table id="scoreboard">
+            <colgroup>
+                <col id="score_rank">
+                <col id="score_username">
+            </colgroup>
+            <colgroup>
+                <col id="score_solved">
+                <col id="score_total">
+            </colgroup>
+            <colgroup>
+                @foreach ($problem_id as $ordering => $id)
+                    <col id="score_prob"></col>
+                @endforeach
+            </colgroup>
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">USER</th>
+                    <th scope="col" colspan="2">SCORE</th>
+                    @foreach ($problem_id as $ordering => $id)
+                        <th scope="col">
+                            {{ chr($ordering + 65) }}
+                        </th>
+                    @endforeach
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        {{-- TABLE --}}
+
     </div>
 @endsection
 
@@ -148,6 +154,9 @@
         // Need to enter here
         const php_data = @json($data)
         // Need to enter here
+
+        const break_rank = 30;
+        let num_of_autoclick = 0;
 
         // Get user list
         let users_list = []
@@ -168,7 +177,15 @@
             }
 
             users_list.push(user)
+            
+            if (i > break_rank-1) {
+            // Count number of click (aka number of tries of all users whose rank is below break_rank)
+            Object.values(php_tries[user.username]['tries_during']).map((tries_of_this_prob) => {
+                if (tries_of_this_prob) num_of_autoclick++
+            })
         }
+    }
+        console.log(num_of_autoclick)
         // console.log(users_list)
         // console.log(accepted_time)
 
@@ -233,7 +250,7 @@
                     break;
                 }
             }
-            console.log(last_user)
+            // console.log(last_user)
 
             if (!last_user) return;
 
@@ -251,7 +268,7 @@
             const prob_ordering = Number(Object.keys(php_problem_id).find(key => php_problem_id[key] == prob_id)) + 4
             const score = last_user['accepted_time'][prob_id]
             const total_tries_of_prob = Number(last_user['tries_before'][prob_id]) + Number(last_user['tries_during'][prob_id])
-            console.log(total_tries_of_prob)
+            // console.log(total_tries_of_prob)
             // console.log(last_user['accepted_time'][prob_id])
             // console.log(last_user.html_row.find("td")[prob_ordering])
 
@@ -269,7 +286,7 @@
 
                 // last_user.html_row.find("td")[prob_ordering].textContent = score
                 const span_tries_display = $('<p class="prob_tries">' + total_tries_of_prob + ' ' + (total_tries_of_prob == 1 ? 'try' : 'tries') + '</p>')
-                console.log(span_tries_display)
+                // console.log(span_tries_display)
                 last_user.html_row.find("td")[prob_ordering].append(span_tries_display[0])
                 
                 
@@ -280,13 +297,12 @@
 
                 
                 const span_tries_display = $('<p class="prob_tries">' + total_tries_of_prob + ' ' + (total_tries_of_prob == 1 ? 'try' : 'tries') + '</p>')
-                console.log(span_tries_display)
+                // console.log(span_tries_display)
                 last_user.html_row.find("td")[prob_ordering].append(span_tries_display[0])
 
             }
             
             // console.log(users_list[last_user_row_index])
-
 
             // Sort the user list
             users_list.sort(function(prev, curr) {
@@ -302,21 +318,36 @@
             
             // console.log(php_data)
             
-            console.log(users_list)
+            // console.log(users_list)
 
             // Reposition
             for (let i = 0; i < users_list.length; i++) {
                 const transformY = users_list[i].transformY(i, 42)
-                console.log(transformY)
+                // console.log(transformY)
                 users_list[i].html_row.css('transform', 'translateY(' + transformY + 'px)')
-                console.log(users_list[i].html_row)
+                // console.log(users_list[i].html_row)
             }
-            
-            console.log(users_list)
+
+            // console.log(users_list)
 
             // users_list[last_user_row_index].tries_during[prob_id] = 0;
         }
-
+        
         $("#resolve-btn").click(resolve)
+
+        $("#auto-resolve-btn").click(() => {
+            for (let i = 0; i<= num_of_autoclick; i++) {
+                $("#resolve-btn").click()
+            }
+        })
+
+        $(document).on('keydown', function(e){
+            if (e.key == "ArrowRight")
+                $("#resolve-btn").click()
+            else if (e.key == "1")
+                $("#auto-resolve-btn").click()
+        })
+
+
         </script>
 @endsection
