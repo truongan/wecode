@@ -162,6 +162,30 @@ class Scoreboard extends Model
 
         }
 
+		$total_accepted_times = array();
+		foreach($users as $user) {
+			$total_accepted_time = 0;
+			foreach($problems as $problem) {
+				$submission_before = Submission::where([
+                    ['assignment_id', $assignment->id], 
+                    ['is_final', 1], 
+                    ['user_id', $user->id],
+					['problem_id', $problem->id],
+					['pre_score', 10000], 
+                    ['created_at', '<', $assignment->freeze_time]])->get();
+				if ($submission_before) {
+                    foreach ($submission_before as $item) {
+                        $time = $assignment->start_time->diffInMinutes($item['created_at'], true);
+
+                        $penalty_score = ($number_of_submissions[$user->username][$problem->id] - $number_of_submissions_during_freeze[$user->username][$problem->id] - 1) * \App\Setting::get('submit_penalty');
+                        $time += $penalty_score;
+
+                        $total_accepted_time += $time;
+                    }
+                }
+			}
+			$total_accepted_times[$user->username] = $total_accepted_time;
+		}
 
         $scoreboard = array(
 			'username' => array(),
@@ -183,6 +207,7 @@ class Scoreboard extends Model
 			'submit_penalty' => array()
 			,'solved' => array()
 			,'tried_to_solve' => array()
+			,'accepted_time' => array()
         );
 		
         $users = array_unique($users);
@@ -214,19 +239,32 @@ class Scoreboard extends Model
 			array_push($scoreboard_freeze['submit_penalty'], $penalty_before_freeze[$user->username]); //
 			array_push($scoreboard_freeze['solved'], $solved_before_freeze[$user->username]); //
 			array_push($scoreboard_freeze['tried_to_solve'], $tried_to_solve[$user->username]);
+			array_push($scoreboard_freeze['accepted_time'], $total_accepted_times[$user->username]);
 		}
 		
 		
-        array_multisort(
-			$scoreboard_freeze['accepted_score'], SORT_NUMERIC, SORT_DESC,
+        // array_multisort(
+		// 	$scoreboard_freeze['accepted_score'], SORT_NUMERIC, SORT_DESC,
+		// 	//$scoreboard_freeze['submit_penalty'], SORT_NATURAL, SORT_ASC,
+		// 	array_map(function($time){return $time->total('seconds');}, $scoreboard_freeze['submit_penalty']),
+		// 	$scoreboard_freeze['solved'], SORT_NUMERIC, SORT_DESC,
+		// 	$scoreboard_freeze['score'], SORT_NUMERIC, SORT_DESC,
+		// 	$scoreboard_freeze['username'],
+		// 	$scoreboard_freeze['tried_to_solve'],
+		// 	$scoreboard_freeze['submit_penalty'], SORT_NATURAL
+        // );
+
+		array_multisort(
+			$scoreboard_freeze['accepted_score'], SORT_NATURAL, SORT_DESC,
+			$scoreboard_freeze['accepted_time'], SORT_NATURAL, SORT_ASC,
 			//$scoreboard_freeze['submit_penalty'], SORT_NATURAL, SORT_ASC,
-			array_map(function($time){return $time->total('seconds');}, $scoreboard_freeze['submit_penalty']),
-			$scoreboard_freeze['solved'], SORT_NUMERIC, SORT_DESC,
-			$scoreboard_freeze['score'], SORT_NUMERIC, SORT_DESC,
 			$scoreboard_freeze['username'],
+			array_map(function($time){return $time->total('seconds');}, $scoreboard_freeze['submit_penalty']),
+			$scoreboard_freeze['solved'],
+			$scoreboard_freeze['score'],
 			$scoreboard_freeze['tried_to_solve'],
-			$scoreboard_freeze['submit_penalty'], SORT_NATURAL
-        );
+			$scoreboard_freeze['submit_penalty'],
+		);
 		// DB::enableQueryLog();
 		$aggr = $assignment->submissions()->groupBy('user_id', 'problem_id')->select(DB::raw('user_id, problem_id, count(*) as submit'))->get();
 		$aggr_ac = $assignment->submissions()->groupBy('user_id', 'problem_id')->where('pre_score', 10000)->select(DB::raw('user_id, problem_id, count(*) as submit'))->get();

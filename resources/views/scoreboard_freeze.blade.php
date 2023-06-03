@@ -34,9 +34,9 @@
 		<p>Scoreboard is disabled.</p>
 		@elseif (in_array( Auth::user()->role->name, ['admin', 'head_instructor']))
 			<p>Scoreboard of <span> {{ $assignment->name }}</span></p>
-			<button id="reverse-btn" class="btn btn-secondary"> << Go back</button>
+			<!-- <button id="reverse-btn" class="btn btn-secondary"> << Go back</button>
 			<button id="magic-btn" class="btn btn-secondary">Resolve >> </button>
-			<button id="interval-btn" class="btn btn-secondary">Resolve (loop)</button>
+			<button id="interval-btn" class="btn btn-secondary">Resolve (loop)</button> -->
 			<div class="table-responsive">{!! $scoreboard_freeze !!}</div>
 			<span class="text-danger">*: Not full mark</span>
 			<br/>
