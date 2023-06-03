@@ -25,7 +25,11 @@ class resolver_controller extends Controller
     public function index($assignment_id)
     {
         $assignment = Assignment::find($assignment_id);
-
+        if (!in_array( Auth::user()->role->name, ['admin']))
+		{
+			//Only admin can view resolver page
+			abort(404, "You do not have permission to view this page");
+		}
         if ($assignment) {
 
             // All final submissions of all users
