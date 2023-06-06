@@ -140,8 +140,23 @@ class resolver_controller extends Controller
             $total_accepted_times = array();
             $total_accepted = array();
             $total_tries = array();
+            $name_schools = array();
+            $images = array();
+
             foreach($array_of_usernames as $id => $username) {
                 array_push($usernames, $username);
+
+                $user = User::where('id', $id)->first(['Name_school']);
+                if ($user) {
+                    $name_school = $user->Name_school;
+                    $name_schools[] = $name_school;
+                }
+
+                $user = User::where('id', $id)->first(['image']);
+                if ($user) {
+                    $image = $user->image;
+                    $images[] = $image;
+                }
 
                 $submission_before = Submission::where([
                     ['assignment_id', $assignment_id], 
@@ -228,6 +243,8 @@ class resolver_controller extends Controller
                 'accepted_time' => $total_accepted_times,
                 'accepted' => $total_accepted,
                 'tries_to_solve' => $total_tries,
+                'school_name' => $name_schools,
+                'image' => $images
             );
 
             array_multisort(
@@ -235,6 +252,8 @@ class resolver_controller extends Controller
                 $data['accepted_time'], SORT_NATURAL, SORT_ASC,
                 $data['username'],
                 $data['tries_to_solve'],
+                $data['school_name'],
+                $data['image']
             );
 
             // dd($data);

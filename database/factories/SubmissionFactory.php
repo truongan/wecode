@@ -30,17 +30,17 @@ class SubmissionFactory extends Factory
         while (Submission::where([
             ['user_id',$rand_user_id],
             ['problem_id', $rand_problem_id],
-            ['assignment_id',7],
+            ['assignment_id',5],
             ['is_final',1],
             ['pre_score', 10000],
         ])->first()) {
-            $rand_assignment_id = 7;
+            $rand_assignment_id = 5;
             $rand_problem_id = Problem::all()->random()->id;
             $rand_user_id = User::all()->random()->id;
         }
 
         return [
-            'assignment_id' => 7,
+            'assignment_id' => 5,
             'problem_id' => $rand_problem_id,
             'user_id' => $rand_user_id,
             'is_final' => 0,

@@ -196,6 +196,9 @@
                 total_accepted: php_data['accepted'][i],
                 total_accepted_time: php_data['accepted_time'][i],
                 init_rank: i,
+                school_name : php_data['school_name'][i],
+                image : php_data['image'][i]
+                // Name_school: php_data['Name_school'][i], // Thêm thuộc tính 'Name_school' vào đối tượng người dùng
             }
 
             user['accepted_time'] = php_accepted_time[user.username]
@@ -256,8 +259,14 @@
             const row = $(
                 '<tr class="user_row">' +
                 '<td class="rank">' + (i + 1) + '</td>' +
-                '<td class="logo"><img src="http://wecode.test/images/logo_uit.png" height="20px"></td>' +
-                '<td class="name"><p>' + users_list[i].username + '</p><p class="school_name">University of Infomation Technology</p></td>' +
+            //    '<td class="logo"><img src="http://wecode.test/images/UCPC_iuh.png" height="20px"></td>' +
+                //  '<td class="logo"><img src="' + users_list[i].image + '" height="20px"></td>' +
+                '<td class="logo"><img src="' + users_list[i].image + '" height="20px"></td>' +
+
+
+
+                '<td class="name"><p>' + users_list[i].username + '</p><p class="school_name">' + users_list[i].school_name + '</p></td>'
+ +
                 '<td class="solved">' + users_list[i].total_accepted + '</td>' +
                 '<td class="total">' + users_list[i].total_accepted_time + '</td>' +
                 (generateUserResultCell(users_list[i], php_problem_id)) +
