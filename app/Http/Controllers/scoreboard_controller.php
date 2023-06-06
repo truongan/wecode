@@ -77,6 +77,7 @@ class scoreboard_controller extends Controller
 			//Student can only view scoreboard if allowed
 			abort(404, "This assignment does not have scoreboard");
 		}
+		$scoreboard = NULL;
 		$scoreboard_freeze = NULL;
 		if ($assignment)
 		{
@@ -86,12 +87,14 @@ class scoreboard_controller extends Controller
 				$scoreboard_freeze = false;//$message = array('error' => 'Scoreboard not found');
 			else
 			{
+				$scoreboard = $query->first()->scoreboard;
 				$scoreboard_freeze = $query->first()->scoreboard_freeze;
 			}
 
 		return view('scoreboard_freeze', ['selected' => 'freeze',
 									'place' => 'full',	
 									'assignment' => $assignment,
+									'scoreboard' => $scoreboard,
 									'scoreboard_freeze' => $scoreboard_freeze,									
 								]);
 		}
