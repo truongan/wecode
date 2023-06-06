@@ -76,6 +76,14 @@
 
     </tr>
     @endforeach
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+    
+=======
+
+>>>>>>> 770132b291cbdabb93e472cdd77a6321d1a6ba6b
+>>>>>>> Stashed changes
     <tfoot class="bg-dark text-light">
         <th colspan="6">Sumarry</th>
         @foreach ($problems as $problem)
@@ -118,6 +126,16 @@
                 {{$stat_print[$p->id]->average_tries_2_solve}}
             </td>
             @endforeach
+<<<<<<< Updated upstream
         </tr>
     </tfoot>    
+=======
+<<<<<<< HEAD
+        </tr>   
+    </tfoot>
+=======
+        </tr>
+    </tfoot>    
+>>>>>>> 770132b291cbdabb93e472cdd77a6321d1a6ba6b
+>>>>>>> Stashed changes
 </table>

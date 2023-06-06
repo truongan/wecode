@@ -146,6 +146,7 @@ class resolver_controller extends Controller
             $total_tries = array();
             $name_schools = array();
             $images = array();
+            $display_names = array();
 
             foreach($array_of_usernames as $id => $username) {
                 array_push($usernames, $username);
@@ -160,6 +161,12 @@ class resolver_controller extends Controller
                 if ($user) {
                     $image = $user->image;
                     $images[] = $image;
+                }
+
+                $user = User::where('id', $id)->first(['display_name']);
+                if ($user) {
+                    $display_name = $user->display_name;
+                    $display_names[] = $display_name;
                 }
 
                 $submission_before = Submission::where([
@@ -248,7 +255,8 @@ class resolver_controller extends Controller
                 'accepted' => $total_accepted,
                 'tries_to_solve' => $total_tries,
                 'school_name' => $name_schools,
-                'image' => $images
+                'image' => $images,
+                'display_name' => $display_names
             );
 
             array_multisort(
@@ -257,7 +265,8 @@ class resolver_controller extends Controller
                 $data['username'],
                 $data['tries_to_solve'],
                 $data['school_name'],
-                $data['image']
+                $data['image'],
+                $data['display_name']
             );
 
             // dd($data);
