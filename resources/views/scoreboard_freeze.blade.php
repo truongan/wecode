@@ -32,12 +32,12 @@
 	{{-- level<2???? --}}
 	<p>Scoreboard is disabled.</p>
 	@else
-		@if (Carbon\Carbon::now() >= $assignment->freeze_time && Carbon\Carbon::now() < $assignment->freeze_time)
+		@if (Carbon\Carbon::now() >= $assignment->freeze_time && Carbon\Carbon::now() < $assignment->unfreeze_time)
 		<p>Scoreboard freeze of <span> {{ $assignment->name }}</span></p>
 		<div class="table-responsive">{!! $scoreboard_freeze !!}</div>
-		@elseif (Carbon\Carbon::now() < $assignment->freeze_time || Carbon\Carbon::now() >= $assignment->unfreeze_time)
+		@else
 		<p>Scoreboard of <span> {{ $assignment->name }}</span></p>
-		<div class="table-responsive">{!! $scoreboard !!}</div>
+		<div class="table-responsive">{!! $scoreboard_freeze !!}</div>
 		@endif
 		<span class="text-danger">*: Not full mark</span>
 		<br/>

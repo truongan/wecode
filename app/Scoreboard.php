@@ -196,6 +196,7 @@ class Scoreboard extends Model
 			'submit_penalty' => array()
 			,'solved' => array()
 			,'tried_to_solve' => array()
+			,'accepted_time' => array()
         );
 
 		$scoreboard_freeze = array(
@@ -221,16 +222,28 @@ class Scoreboard extends Model
 		}
 		
 		
-        array_multisort(
-			$scoreboard['accepted_score'], SORT_NUMERIC, SORT_DESC,
-			//$scoreboard['submit_penalty'], SORT_NATURAL, SORT_ASC,
-			array_map(function($time){return $time->total('seconds');}, $scoreboard['submit_penalty']),
-			$scoreboard['solved'], SORT_NUMERIC, SORT_DESC,
-			$scoreboard['score'], SORT_NUMERIC, SORT_DESC,
-			$scoreboard['username'],
-			$scoreboard['tried_to_solve'],
-			$scoreboard['submit_penalty'], SORT_NATURAL
-        );
+        // array_multisort(
+		// 	$scoreboard['accepted_score'], SORT_NUMERIC, SORT_DESC,
+		// 	//$scoreboard['submit_penalty'], SORT_NATURAL, SORT_ASC,
+		// 	array_map(function($time){return $time->total('seconds');}, $scoreboard['submit_penalty']),
+		// 	$scoreboard['solved'], SORT_NUMERIC, SORT_DESC,
+		// 	$scoreboard['score'], SORT_NUMERIC, SORT_DESC,
+		// 	$scoreboard['username'],
+		// 	$scoreboard['tried_to_solve'],
+		// 	$scoreboard['submit_penalty'], SORT_NATURAL
+        // );
+
+		array_multisort(
+			$scoreboard_freeze['accepted_score'], SORT_NATURAL, SORT_DESC,
+			$scoreboard_freeze['accepted_time'], SORT_NATURAL, SORT_ASC,
+			//$scoreboard_freeze['submit_penalty'], SORT_NATURAL, SORT_ASC,
+			$scoreboard_freeze['username'],
+			array_map(function($time){return $time->total('seconds');}, $scoreboard_freeze['submit_penalty']),
+			$scoreboard_freeze['solved'],
+			$scoreboard_freeze['score'],
+			$scoreboard_freeze['tried_to_solve'],
+			$scoreboard_freeze['submit_penalty'],
+		);
 
 		foreach($users as $user){
 			array_push($scoreboard_freeze['username'], $user->username);
