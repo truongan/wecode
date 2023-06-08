@@ -219,6 +219,7 @@ class Scoreboard extends Model
 			array_push($scoreboard['submit_penalty'], $penalty[$user->username]);
 			array_push($scoreboard['solved'], $solved[$user->username]);
 			array_push($scoreboard['tried_to_solve'], $tried_to_solve[$user->username]);
+			array_push($scoreboard['accepted_time'], $total_accepted_times[$user->username]);
 		}
 		
 		
