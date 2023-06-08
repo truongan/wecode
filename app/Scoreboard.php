@@ -163,28 +163,43 @@ class Scoreboard extends Model
         }
 
 		$total_accepted_times = array();
+		$total_accepted_times_before_freeze = array();
 		foreach($users as $user) {
 			$total_accepted_time = 0;
+			$total_accepted_time_before_freeze = 0;
 			foreach($problems as $problem) {
-				$submission_before = Submission::where([
+				$submission = Submission::where([
                     ['assignment_id', $assignment->id], 
                     ['is_final', 1], 
                     ['user_id', $user->id],
 					['problem_id', $problem->id],
+					['pre_score', 10000]])->get();
+				$submission_before = Submission::where([
+					['assignment_id', $assignment->id], 
+					['is_final', 1], 
+					['user_id', $user->id],
+					['problem_id', $problem->id],
 					['pre_score', 10000], 
-                    ['created_at', '<', $assignment->freeze_time]])->get();
+					['created_at', '<', $assignment->freeze_time]])->get();
+				if ($submission) {
+					$time = $assignment->start_time->diffInMinutes($submission_before['created_at'], true);
+
+					$penalty_score = ($number_of_submissions[$user->username][$problem->id] - 1) * \App\Setting::get('submit_penalty');
+					$time += $penalty_score;
+
+					$total_accepted_time += $time;
+				}
 				if ($submission_before) {
-                    foreach ($submission_before as $item) {
-                        $time = $assignment->start_time->diffInMinutes($item['created_at'], true);
+					$time = $assignment->start_time->diffInMinutes($submission_before['created_at'], true);
 
-                        $penalty_score = ($number_of_submissions[$user->username][$problem->id] - $number_of_submissions_during_freeze[$user->username][$problem->id] - 1) * \App\Setting::get('submit_penalty');
-                        $time += $penalty_score;
+					$penalty_score = ($number_of_submissions[$user->username][$problem->id] - $number_of_submissions_during_freeze[$user->username][$problem->id] - 1) * \App\Setting::get('submit_penalty');
+					$time += $penalty_score;
 
-                        $total_accepted_time += $time;
-                    }
+					$total_accepted_time_before_freeze += $time;
                 }
 			}
 			$total_accepted_times[$user->username] = $total_accepted_time;
+			$total_accepted_times_before_freeze[$user->username] = $total_accepted_time_before_freeze;
 		}
 
         $scoreboard = array(
@@ -237,7 +252,7 @@ class Scoreboard extends Model
 		array_multisort(
 			$scoreboard['accepted_score'], SORT_NATURAL, SORT_DESC,
 			$scoreboard['accepted_time'], SORT_NATURAL, SORT_ASC,
-			//$scoreboard_freeze['submit_penalty'], SORT_NATURAL, SORT_ASC,
+			//$scoreboard['submit_penalty'], SORT_NATURAL, SORT_ASC,
 			$scoreboard['username'],
 			array_map(function($time){return $time->total('seconds');}, $scoreboard['submit_penalty']),
 			$scoreboard['solved'],
@@ -253,7 +268,7 @@ class Scoreboard extends Model
 			array_push($scoreboard_freeze['submit_penalty'], $penalty_before_freeze[$user->username]); //
 			array_push($scoreboard_freeze['solved'], $solved_before_freeze[$user->username]); //
 			array_push($scoreboard_freeze['tried_to_solve'], $tried_to_solve[$user->username]);
-			array_push($scoreboard_freeze['accepted_time'], $total_accepted_times[$user->username]);
+			array_push($scoreboard_freeze['accepted_time'], $total_accepted_times_before_freeze[$user->username]);
 		}
 		
 		
