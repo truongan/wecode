@@ -37,7 +37,7 @@
 		<div class="table-responsive">{!! $scoreboard_freeze !!}</div>
 		@else
 		<p>Scoreboard of <span> {{ $assignment->name }}</span></p>
-		<div class="table-responsive">{!! $scoreboard_freeze !!}</div>
+		<div class="table-responsive">{!! $scoreboard !!}</div>
 		@endif
 		<span class="text-danger">*: Not full mark</span>
 		<br/>
