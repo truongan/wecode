@@ -71,7 +71,7 @@
 					@endforeach
 				</td>
 				<td>
-					<a href="{{ route('assignments.show',['assignment'=>$assignment,'problem_id'=>$assignment->problems->first()->id??0]) }}" title="Click to view problem(s)">
+					<a href="{{ route('assignments.show',['assignment'=>$assignment,'problem_id'=>0]) }}" title="Click to view problem(s)">
 						<strong>{{ $assignment->name }}</strong>
 						<br/> (by:{{$assignment->user->username ?? "no owner"}})
 					</a>
