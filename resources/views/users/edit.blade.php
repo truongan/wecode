@@ -86,12 +86,6 @@ Users - {{$user->username}}
 		</div>
 		@endif
 
-		<div class="col-sm-6 form-floating">
-			<input id="form_Name_school" type="text" name="Name_school" class="form-control" value="{{$user->Name_school}}" />
-			<label for="form_Name_school">School Name:</label>
-			<!-- {{-- {{ form_error('email', '<div class="form-text text-danger">', '</div>') }} --}} -->
-		</div>
-
 		<hr class="col-12 ">
 
 
