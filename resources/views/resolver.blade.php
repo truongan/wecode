@@ -197,8 +197,7 @@
                 total_accepted_time: php_data['accepted_time'][i],
                 init_rank: i,
                 school_name : php_data['school_name'][i],
-                image : php_data['image'][i],
-                display_name : php_data['display_name'][i]
+                image : php_data['image'][i]
                 // Name_school: php_data['Name_school'][i], // Thêm thuộc tính 'Name_school' vào đối tượng người dùng
             }
 
@@ -266,7 +265,7 @@
 
 
 
-                '<td class="name"><p>' + users_list[i].display_name + '</p><p class="school_name">' + users_list[i].school_name + '</p></td>'
+                '<td class="name"><p>' + users_list[i].username + '</p><p class="school_name">' + users_list[i].school_name + '</p></td>'
  +
                 '<td class="solved">' + users_list[i].total_accepted + '</td>' +
                 '<td class="total">' + users_list[i].total_accepted_time + '</td>' +

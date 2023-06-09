@@ -17,11 +17,7 @@ class SubmissionSeeder extends Seeder
     public function run()
     {
         // Create 2 dummy submissions
-<<<<<<< Updated upstream
         Submission::factory(100)->create();
-=======
-        Submission::factory(40)->create();
->>>>>>> Stashed changes
         // Remember to add assignment_id
         Scoreboard::update_scoreboard(5);
     }
