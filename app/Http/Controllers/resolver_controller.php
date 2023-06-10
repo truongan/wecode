@@ -146,7 +146,6 @@ class resolver_controller extends Controller
             $total_tries = array();
             $name_schools = array();
             $images = array();
-            $display_names = array();
 
             foreach($array_of_usernames as $id => $username) {
                 array_push($usernames, $username);

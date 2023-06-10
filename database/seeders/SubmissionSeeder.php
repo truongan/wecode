@@ -21,6 +21,6 @@ class SubmissionSeeder extends Seeder
         Submission::factory(50)->create();
 
         // Remember to add assignment_id
-        Scoreboard::update_scoreboard(2);
+        Scoreboard::update_scoreboard(3);
     }
 }

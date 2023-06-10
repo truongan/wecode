@@ -197,7 +197,7 @@
                 total_accepted_time: php_data['accepted_time'][i],
                 init_rank: i,
                 school_name : php_data['school_name'][i],
-                image : php_data['image'][i]
+                image : php_data['image'][i],
                 display_name : php_data['display_name'][i]
                 // Name_school: php_data['Name_school'][i], // Thêm thuộc tính 'Name_school' vào đối tượng người dùng
             }
