@@ -72,11 +72,11 @@ class scoreboard_controller extends Controller
 		$query =  DB::table('scoreboards')->where('assignment_id',$assignment_id)->get();
 
 		$assignment = Assignment::find($assignment_id);
-		if (in_array( Auth::user()->role->name, ['student']) && $assignment->score_board == false)
-		{
-			//Student can only view scoreboard if allowed
-			abort(404, "This assignment does not have scoreboard");
-		}
+		// if (in_array( Auth::user()->role->name, ['student']) && $assignment->score_board == false)
+		// {
+		// 	//Student can only view scoreboard if allowed
+		// 	abort(404, "This assignment does not have scoreboard");
+		// }
 		$scoreboard = NULL;
 		$scoreboard_freeze = NULL;
 		if ($assignment)

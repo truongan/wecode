@@ -102,13 +102,23 @@ Users - {{$user->username}}
 				disabled />
 		</div>
 	</div>
-	<div class="col-4">
+	<!-- <div class="col-4">
 		<div class="input-group ">
 			<span class="input-group-text" for="form_role">Trial left</span>
 			<input id="form_name" type="text" name="display_name" class="form-control" value="{{ $user->trial_time ? ($user->created_at->addHours($user->trial_time)->diffForHumans()) : "Permanent user" }}"
 				disabled />
 		</div>
+	</div> -->
+
+	<div class="col-4">
+		<div class="input-group ">
+			<span class="input-group-text" for="form_Name_school">School Name</span>
+			<input id="form_Name_school" type="text" name="Name_school" class="form-control" value="{{$user->Name_school}}"
+				disabled />
+		</div>
 	</div>
+
+
 	<div class="col-4">
 		<div class="input-group ">
 			<span class="input-group-text" for="form_role">First login</span>
