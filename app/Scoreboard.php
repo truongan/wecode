@@ -182,20 +182,24 @@ class Scoreboard extends Model
 					['pre_score', 10000], 
 					['created_at', '<', $assignment->freeze_time]])->get();
 				if ($submission) {
-					$time = $assignment->start_time->diffInMinutes($submission_before['created_at'], true);
+					foreach ($submission as $item) {
+						$time = $assignment->start_time->diffInMinutes($item['created_at'], true);
 
-					$penalty_score = ($number_of_submissions[$user->username][$problem->id] - 1) * \App\Setting::get('submit_penalty');
-					$time += $penalty_score;
+						$penalty_score = ($number_of_submissions[$user->username][$problem->id] - 1) * \App\Setting::get('submit_penalty');
+						$time += $penalty_score;
 
-					$total_accepted_time += $time;
+						$total_accepted_time += $time;
+					}
 				}
 				if ($submission_before) {
-					$time = $assignment->start_time->diffInMinutes($submission_before['created_at'], true);
+					foreach ($submission_before as $item) {
+						$time = $assignment->start_time->diffInMinutes($item['created_at'], true);
 
-					$penalty_score = ($number_of_submissions[$user->username][$problem->id] - $number_of_submissions_during_freeze[$user->username][$problem->id] - 1) * \App\Setting::get('submit_penalty');
-					$time += $penalty_score;
+						$penalty_score = ($number_of_submissions[$user->username][$problem->id] - $number_of_submissions_during_freeze[$user->username][$problem->id] - 1) * \App\Setting::get('submit_penalty');
+						$time += $penalty_score;
 
-					$total_accepted_time_before_freeze += $time;
+						$total_accepted_time_before_freeze += $time;
+					}
                 }
 			}
 			$total_accepted_times[$user->username] = $total_accepted_time;
@@ -253,7 +257,7 @@ class Scoreboard extends Model
 			$scoreboard['accepted_score'], SORT_NATURAL, SORT_DESC,
 			$scoreboard['accepted_time'], SORT_NATURAL, SORT_ASC,
 			//$scoreboard['submit_penalty'], SORT_NATURAL, SORT_ASC,
-			$scoreboard['username'],
+			$scoreboard['username'], SORT_NATURAL, SORT_ASC,
 			array_map(function($time){return $time->total('seconds');}, $scoreboard['submit_penalty']),
 			$scoreboard['solved'],
 			$scoreboard['score'],
@@ -287,7 +291,7 @@ class Scoreboard extends Model
 			$scoreboard_freeze['accepted_score'], SORT_NATURAL, SORT_DESC,
 			$scoreboard_freeze['accepted_time'], SORT_NATURAL, SORT_ASC,
 			//$scoreboard_freeze['submit_penalty'], SORT_NATURAL, SORT_ASC,
-			$scoreboard_freeze['username'],
+			$scoreboard_freeze['username'], SORT_NATURAL, SORT_ASC,
 			array_map(function($time){return $time->total('seconds');}, $scoreboard_freeze['submit_penalty']),
 			$scoreboard_freeze['solved'],
 			$scoreboard_freeze['score'],
