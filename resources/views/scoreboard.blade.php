@@ -21,7 +21,7 @@
 @if (isset(Auth::user()->selected_assignment_id))
 	@php($sl = 1)
 @endif
-<ul class="ms-4 fs-6 nav nav-pills">
+{{-- <ul class="ms-4 fs-6 nav nav-pills">
 	<li class="nav-item">
 		<a class="nav-link link-dark {{$place=="full" ? "active" :""}}"
 		@if ($sl)
@@ -52,7 +52,7 @@
 		>
 		<i class="fas fa-star-half-alt color10"></i> Plain text Minimal </a>
 	</li>
-</ul>
+</ul> --}}
 @endsection
 
 

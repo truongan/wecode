@@ -18,7 +18,7 @@
             box-sizing: border-box;
         }
         td {
-            transition: all 0.5s linear;
+            transition: all 2s linear;
             font-size: 1rem;
             white-space: pre-wrap;
             /* border-bottom: solid 1px #acacac; */
@@ -107,7 +107,7 @@
 
         .user_row {
             /* transform: translateY(0px); */
-            transition: transform 1s linear;
+            transition: transform 2s linear;
             height: 8px;
             /* border-bottom: 1px solid black; */
         }

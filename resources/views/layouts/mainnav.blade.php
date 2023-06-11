@@ -57,6 +57,8 @@
                     <span class="nav-link-text">Submissions</span>
                 </a>
             </li>
+
+            @if ( in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
             <li class="nav-item color-scoreboard {{ ($selected=="scoreboard") ? "selected" : ""}}">
                 <a class="nav-link" 
                 @if (isset(Auth::user()->selected_assignment_id))
@@ -70,6 +72,7 @@
                     <span class="nav-link-text">Scoreboard</span>
                 </a>
             </li>
+            @endif
 
             <li class="nav-item color-freeze {{ ($selected=="freeze") ? "selected" : ""}}">
                 <a class="nav-link" 
@@ -80,7 +83,7 @@
                 @endif
                 >
                     <i class="fa fa-fw fa-snowflake fa-spin fa-lg"></i>
-                    <span class="nav-link-text">Scoreboard freeze</span>
+                    <span class="nav-link-text">Scoreboard</span>
                 </a>
             </li>
 
