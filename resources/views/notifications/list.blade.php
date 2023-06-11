@@ -89,7 +89,11 @@ $(document).ready(function () {
 	<div class="">
 		<div class="notif" id="number{{ $notification->id }}" data-id="{{ $notification->id }}"> 
 			<div class="notif_title">
-			<a href="{{ route('notifications.show', $notification->id) }}">{{ $notification->title }} - Author: {{$notification->user->display_name}}</a>
+			<a href="{{ route('notifications.show', $notification->id) }}">{{ $notification->title }} - Author: {{$notification->user->display_name}} 
+				@if ($notification->recipent_id > 0)
+					TO user:id: {{ $notification->recipent_id}}
+				@endif
+			</a>
 				<div class="notif_meta">
 					{{ $notification->created_at }}
 					@if ( in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
