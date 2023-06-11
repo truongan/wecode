@@ -60,7 +60,7 @@
                         @endif
                 </a>
             @else
-                @if ($scores[$sc_username][$problem->id]['fullmark'] == true
+                @if ($scores[$sc_username][$problem->id]['fullmark'] == true)
                     <td class="bg-success">
                 @else
                     <td class="bg-danger">

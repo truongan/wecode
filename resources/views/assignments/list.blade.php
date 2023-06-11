@@ -102,9 +102,10 @@
 					</small>
 				</td>
 				<td><small>{{$assignment->start_time->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('llll (UZZ)') }}</small></td>
-				<td><small>{{$assignment->freeze_time->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('llll (UZZ)') }}</small></td>
+				{{-- {{ dd($assignment->freeze_time) }} --}}
+				<td><small>{{ !isset($assignment->freeze_time) ? "" :  $assignment->freeze_time->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('llll (UZZ)') }}</small></td>
 				<td><small>{{$assignment->finish_time->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('llll (UZZ)') }}</small></td>
-				<td><small>{{$assignment->unfreeze_time->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('llll (UZZ)') }}</small></td>
+				<td><small>{{ !isset($assignment->unfreeze_time) ? "" : $assignment->unfreeze_time->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('llll (UZZ)') }}</small></td>
 				<td>
 					<a href="{{ route('scoreboards.index', $assignment->id)}}" title="Click to viewa assignment's scoreboard">
 						@if ($assignment->score_board)
