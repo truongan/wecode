@@ -45,7 +45,7 @@
         </td>
         @foreach ($problems as $problem)
         @if (isset($scores[$sc_username][$problem->id]['score']))
-            @if ($scores[$sc_username][$problem->id]['score'] == 100)
+            @if ($scores[$sc_username][$problem->id]['fullmark'] == true
                 <td class="bg-success">
             @else
                 <td class="bg-danger">
