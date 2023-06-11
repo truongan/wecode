@@ -5,7 +5,7 @@
 @section('title', 'Resolver')
 
 @section('other_assets')
-    <link rel='stylesheet' type='text/css' href='https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css' />
+    <link rel='stylesheet' type='text/css' href='{{ asset('assets/DataTables/datatables.min.css') }}' />
     <script>
         if (!!window.performance && window.performance.navigation.type === 2) {
             window.location.reload();
