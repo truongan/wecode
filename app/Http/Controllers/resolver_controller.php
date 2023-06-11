@@ -260,6 +260,7 @@ class resolver_controller extends Controller
                 'accepted_time' => $array_of_accepted_time,
                 'accepted' => $array_of_accepted,
                 'problem_id' => $array_of_problems_id,
+                'assignment' => $assignment,
                 // 'scores' => $array_of_score,
                 // 'tries' => $array_of_tries,
                 // 'accepted' => $array_of_accepted,

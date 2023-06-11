@@ -126,8 +126,9 @@
 
 @section('content')
     <div class="mx-n2" style="overflow: auto">
-        <h1 style="text-align: center; margin: 1rem;">THE 2023 UCPC FINALS</h1>
-        <p style="text-align: center; margin-bottom: 1rem">Start: 0h00 - End: 12h00</p>
+        <h1 style="text-align: center; margin: 1rem; font-weight: bold; ">{{ $assignment->name }}</h1>
+        <p style="text-align: center; margin-bottom: 1rem">{{ $assignment->start_time->format('Y-m-d') }}</p>
+        <p style="text-align: center; margin-bottom: 1rem">Start: {{ $assignment->start_time->format('H:i:s') }} - End: {{ $assignment->finish_time->format('H:i:s') }}</p>
 
         {{-- <button id="reverse-btn" class="btn btn-secondary"><< Go back</button>
         <button id="resolve-btn" class="btn btn-secondary">Resolve >> </button>
