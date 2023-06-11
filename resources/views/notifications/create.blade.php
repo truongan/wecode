@@ -16,10 +16,10 @@ $(document).ready(function(){
 
 @section('content')
 <form method="POST"  action="{!! route('notifications.store') !!}">
-	@if ($all_users != null)
+	@if ($all_users ?? false)
 		<label for="form_title" class="tiny">Select recipent:</label>
-		<select class="form-select" aria-label="Default select example" name = "recipent_id">
-			<option value="0"> ALL USERS</option>
+		<select class="form-select" aria-label="Default select example" name="recipent_id">
+			<option value="0" selected="selected"> ALL USERS</option>
 			@foreach ($all_users as $id => $name )
 			<option value="{{$id}}"> {{$name}}</option>
 			@endforeach

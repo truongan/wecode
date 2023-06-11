@@ -32,18 +32,21 @@ class notification_controller extends Controller
 
 
         // $notification = Notification::latest()->paginate(50);
-        $list_ids = [Auth::user()->id, 0];
-        if (in_array( Auth::user()->role->name, ['admin'])){
-            array_push($list_ids, -1);
-        }
-        // dd($list_ids);
-        $notification = Notification::whereIn('recipent_id', $list_ids)
-                            ->orWhere('recipent_id', 0);
+
+        // $list_ids = [Auth::user()->id, 0];
+        // if (in_array( Auth::user()->role->name, ['admin'])){
+        //     array_push($list_ids, -1);
+        // }
+        // // dd($list_ids);
+        // $notification = Notification::whereIn('recipent_id', $list_ids)
+        //                     ->orWhere('recipent_id', 0);
 
 
-        if (in_array( Auth::user()->role->name, ['admin'])){
-            $notificaiton = $notification->orWhereNull('recipent_id');
-        }
+        // if (in_array( Auth::user()->role->name, ['admin'])){
+        //     $notificaiton = $notification->orWhereNull('recipent_id');
+        // }
+
+        $notification = Notification::whereUser(Auth::user());
         $notification = $notification->paginate(200)
                             ;
         return view('notifications.list', ['notifications'=>$notification]);
@@ -59,7 +62,7 @@ class notification_controller extends Controller
         //
         // if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
         //     abort(404);
-        
+        $all_users = null;
         if (  in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
         {
             $all_users = User::pluck('display_name', 'id');
@@ -85,12 +88,15 @@ class notification_controller extends Controller
 		// if($this->form_validation->run()){
             
         $notification = $request->input();
+        // dd($notification);
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) ){
             $notificaiton['recipent_id'] = -1;
         }
         $notification['author'] = Auth::user()->id;
         $notification['last_author'] = $notification['author'];
         $notification['description'] ??= '';
+        $notification['title'] ??= '';
+        $notification['text'] ??= '';
         $notification['recipent_id'] ??= -1;
         Notification::create($notification);
         return redirect('notifications');
