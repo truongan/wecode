@@ -72,16 +72,33 @@ class resolver_controller extends Controller
                 $array_of_tries_during = array();
             
                 foreach ($array_of_problems_id as $problem_id) {
-                    $num_of_sub_before = Submission::where([
+                    $ac_sub_before = Submission::where([
                         ['assignment_id', $assignment_id], 
                         ['user_id', $id], 
                         ['problem_id', $problem_id],
-                        ['created_at', '<', $assignment->freeze_time]])->get()->count();
-                    $num_of_sub_during = Submission::where([
-                        ['assignment_id', $assignment_id], 
-                        ['user_id', $id], 
-                        ['problem_id', $problem_id],
-                        ['created_at', '>=', $assignment->freeze_time]])->get()->count();
+                        ['pre_score', 10000],
+                        ['is_final', 1],
+                        ['created_at', '<', $assignment->freeze_time]])->first();
+
+                    if (!$ac_sub_before) {
+                        $num_of_sub_before = Submission::where([
+                            ['assignment_id', $assignment_id], 
+                            ['user_id', $id], 
+                            ['problem_id', $problem_id],
+                            ['created_at', '<', $assignment->freeze_time]])->get()->count();
+                        $num_of_sub_during = Submission::where([
+                            ['assignment_id', $assignment_id], 
+                            ['user_id', $id], 
+                            ['problem_id', $problem_id],
+                            ['created_at', '>=', $assignment->freeze_time]])->get()->count();
+                    } else {
+                        $num_of_sub_before = Submission::where([
+                            ['assignment_id', $assignment_id], 
+                            ['user_id', $id], 
+                            ['problem_id', $problem_id],
+                            ['created_at', '<=', $ac_sub_before->created_at]])->get()->count();
+                        $num_of_sub_during = 0;
+                    }
 
                     // Log::info($num_of_sub_before);
                     // Log::info($num_of_sub_during);
@@ -95,7 +112,7 @@ class resolver_controller extends Controller
                     'tries_during' => $array_of_tries_during,
                 );
             }
-            // Log::info($array_of_tries);
+            Log::info($array_of_tries);
 
 
             //===========================================================
@@ -119,7 +136,7 @@ class resolver_controller extends Controller
                         $time = $assignment->start_time->diffInMinutes($submission->created_at, true);
 
                         // Penalty
-                        $penalty = ($array_of_tries[$username]['tries_before'][$problem_id] + $array_of_tries[$username]['tries_during'][$problem_id]-1) * \App\Setting::get('submit_penalty');
+                        $penalty = ($array_of_tries[$username]['tries_before'][$problem_id] + $array_of_tries[$username]['tries_during'][$problem_id]-1) * \App\Setting::get('submit_penalty')/60;
                         // Log::info($penalty);
                         $time += $penalty;
 
@@ -192,7 +209,7 @@ class resolver_controller extends Controller
                         // Log::info(($item->pre_score == 10000));
                         // Log::info($array_of_tries[$username]['tries_before'][$item->problem_id]);
 
-                        $penalty = ($array_of_tries[$username]['tries_before'][$item->problem_id]-1) * \App\Setting::get('submit_penalty');
+                        $penalty = ($array_of_tries[$username]['tries_before'][$item->problem_id]-1) * \App\Setting::get('submit_penalty')/60;
                         $time += $penalty;
                         // Log::info($penalty);
                         // Log::info($time);
@@ -213,40 +230,6 @@ class resolver_controller extends Controller
             
             // Log::info($usernames);
             // Log::info($total_scores);
-
-
-
-
-            // $array_of_accepted_scores = array();
-            // $array_of_solved = array();
-            // $array_of_penalty = array();    
-            // foreach ($array_of_usernames as $id => $username) {
-            //         $total_prescore = Submission::where([
-            //             ['assignment_id', $assignment_id], 
-            //             ['is_final', 1], 
-            //             ['user_id', $id], 
-            //             ['created_at', '<', $assignment->freeze_time]])->get()->sum('pre_score');
-
-            //         $total_score = $to
-
-            //         $accepted_score = Submission::where([
-            //             ['assignment_id', $assignment_id], 
-            //             ['user_id', $id], 
-            //             ['problem_id', $problem_id],
-            //             ['created_at', '>=', $assignment->freeze_time]])->get()->count();
-
-            //         // Log::info($num_of_sub_before);
-            //         // Log::info($num_of_sub_during);
-
-            //         array_push($array_of_tries_before, $num_of_sub_before);
-            //         array_push($array_of_tries_during, $num_of_sub_during);
-            //     }
-
-            //     $array_of_tries[$username] = array(
-            //         'tries_before' => $array_of_tries_before,
-            //         'tries_during' => $array_of_tries_during,
-            //     );
-            // }
 
             $data = array(
                 'username' => $usernames,
