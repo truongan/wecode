@@ -16,7 +16,7 @@
             <li class="nav-item color-notifications {{ ($selected=="notifications") ? "selected" : ""}}">
                 <a class="nav-link" href="{{ url('notifications') }}">
                     <i class="fa fa-fw fa-bell fa-lg"></i>
-                    <span class="nav-link-text">Notifications</span>
+                    <span class="nav-link-text">Clarifications</span>
                 </a>
             </li>
             <li class="nav-item color-problem_list {{ ($selected=="problem_list") ? "selected" : ""}}">
@@ -44,7 +44,7 @@
             <li class="nav-item color-assignments {{ ($selected=="assignments") ? "selected" : ""}}">
                 <a class="nav-link" href="{{ url('assignments') }}">
                     <i class="fa fa-fw fa-folder-open fa-lg"></i>
-                    <span class="nav-link-text">Assignments</span>
+                    <span class="nav-link-text">CONTESTS</span>
                 </a>
             </li>
             <li class="nav-item color-all_submissions {{ ($selected=="all_submissions") ? "selected" : ""}}">

@@ -41,6 +41,6 @@ class home_controller extends Controller
         //     $assignment->no_of_problems = $assignment->problems->count();
         // }
         
-        return view('home', ['selected' => 'dashboard', 'notifications'=>Notification::latest()->paginate(3),'all_assignments'=> Assignment::with('lops')->where('id', '>', 0)->get()->filter(function($item){return $item->can_submit(Auth::user());}) ]);
+        return view('home', ['selected' => 'dashboard', 'notifications'=>Notification::whereUser( Auth::user() )->paginate(3),'all_assignments'=> Assignment::with('lops')->where('id', '>', 0)->get()->filter(function($item){return $item->can_submit(Auth::user());}) ]);
     }
 }

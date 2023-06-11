@@ -14,9 +14,9 @@
 @endsection
 
 @section('title_menu')
-@if ( in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
+{{-- @if ( in_array( Auth::user()->role->name, ['admin', 'head_instructor']) ) --}}
     <span class="ms-4 fs-6"><a href="{{ route('notifications.create') }}"><i class="fa fa-plus color10"></i> New</a></span>
-@endif
+{{-- @endif --}}
 @endsection
 
 @section('body_end')
