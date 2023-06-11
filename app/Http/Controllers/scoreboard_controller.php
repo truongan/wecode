@@ -25,7 +25,7 @@ class scoreboard_controller extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        // $this->middleware('auth');
     }
 
     /**
@@ -77,6 +77,8 @@ class scoreboard_controller extends Controller
 		// 	//Student can only view scoreboard if allowed
 		// 	abort(404, "This assignment does not have scoreboard");
 		// }
+
+		// dd($assignment);
 		$scoreboard = NULL;
 		$scoreboard_freeze = NULL;
 		if ($assignment)
