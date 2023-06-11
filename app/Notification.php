@@ -18,4 +18,5 @@ class Notification extends Model
     {
         return $this->belongsTo('App\User', 'last_author');
     }
+    
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Notification;
+use App\User;
 
 class notification_controller extends Controller
 {
@@ -25,8 +26,26 @@ class notification_controller extends Controller
      */
     public function index()
     {
-        //
-        $notification = Notification::latest()->paginate(5);
+        // recipent_id  == 0: SHOW TO ALL SUERS
+        // recipent_id  > 0: SHOW TO THAT USER
+        // recipent_id  == -1 OR NULL: SHOW TO ADMIN ONLY
+
+
+        // $notification = Notification::latest()->paginate(50);
+        $list_ids = [Auth::user()->id, 0];
+        if (in_array( Auth::user()->role->name, ['admin'])){
+            array_push($list_ids, -1);
+        }
+        // dd($list_ids);
+        $notification = Notification::whereIn('recipent_id', $list_ids)
+                            ->orWhere('recipent_id', 0);
+
+
+        if (in_array( Auth::user()->role->name, ['admin'])){
+            $notificaiton = $notification->orWhereNull('recipent_id');
+        }
+        $notification = $notification->paginate(200)
+                            ;
         return view('notifications.list', ['notifications'=>$notification]);
     }
 
@@ -38,9 +57,15 @@ class notification_controller extends Controller
     public function create()
     {
         //
-        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
-            abort(404);
-        return view('notifications.create');
+        // if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
+        //     abort(404);
+        
+        if (  in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
+        {
+            $all_users = User::pluck('display_name', 'id');
+            // $all_users = User::all();
+        }
+        return view('notifications.create', ['all_users' => $all_users]);
     }
 
     /**
@@ -51,19 +76,25 @@ class notification_controller extends Controller
      */
     public function store(Request $request)
     {
-        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
-            abort(404);
-
+        // if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
+        //     abort(404);
+        
 		// $this->form_validation->set_rules('title', 'title', 'trim');
 		// $this->form_validation->set_rules('text', 'text', ''); /* todo: xss clean */
         // var_dump($request['text']);die();
 		// if($this->form_validation->run()){
-            $notification = $request->input();
-            $notification['author'] = Auth::user()->id;
-            $notification['last_author'] = $notification['author'];
-            $notification['description'] ??= '';
-            Notification::create($notification);
-		    return redirect('notifications');
+            
+        $notification = $request->input();
+        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) ){
+            $notificaiton['recipent_id'] = -1;
+        }
+        $notification['author'] = Auth::user()->id;
+        $notification['last_author'] = $notification['author'];
+        $notification['description'] ??= '';
+        $notification['recipent_id'] ??= -1;
+        Notification::create($notification);
+        return redirect('notifications');
+
 		// }        
     }
 
