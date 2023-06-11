@@ -21,15 +21,17 @@ class Notification extends Model
     }
     
     public static function whereUser($user){
-        $list_ids = [$user->id, 0];
         if (in_array( $user->role->name, ['admin'])){
-            array_push($list_ids, -1);
+            $notification = Notification::where('id', '>', -3);
         }
-        // dd($list_ids);
-        $notification = Notification::whereIn('recipent_id', $list_ids)
-                            ->orWhere('recipent_id', 0)
-                            ->orWhere('author', $user->id)
-                            ;
+        else {
+            $list_ids = [$user->id, 0];
+            // dd($list_ids);
+            $notification = Notification::whereIn('recipent_id', $list_ids)
+                                ->orWhere('recipent_id', 0)
+                                ->orWhere('author', $user->id)
+                                ;
+        }
 
 
         if (in_array( $user->role->name, ['admin'])){
