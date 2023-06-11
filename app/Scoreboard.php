@@ -79,7 +79,36 @@ class Scoreboard extends Model
 
 		foreach($assignment->submissions->where('created_at', '>=', $assignment->freeze_time) as $item)
         {
-            $number_of_submissions_during_freeze[$item->user->username][$item->problem_id]+=1;
+			$first_ac_before = Submission::where([
+				['assignment_id', $item->assignment_id], 
+				['user_id', $item->user_id],
+				['problem_id', $item->problem_id],
+				['pre_score', 10000],
+				['is_final', 1],
+				['created_at', '<', $assignment->freeze_time]])->first();
+
+			$first_ac = Submission::where([
+				['assignment_id', $item->assignment_id], 
+				['user_id', $item->user_id],
+				['problem_id', $item->problem_id],
+				['pre_score', 10000],
+				['is_final', 1]])->first();
+
+			if (!$first_ac_before) {
+				if ($first_ac) {
+					if ($item->created_at <= $first_ac->created_at) {
+						$number_of_submissions_during_freeze[$item->user->username][$item->problem_id]+=1;
+						continue;
+					}
+					else if ($item->created_at > $first_ac->created_at) {
+						continue;
+					}
+				}
+				else $number_of_submissions_during_freeze[$item->user->username][$item->problem_id]+=1;
+			}
+			else {
+				continue;
+			}
 		}
 		
 		$statistics = array();
