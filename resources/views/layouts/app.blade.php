@@ -21,11 +21,23 @@
     <link href="{{ asset('assets/fontawesome/css/all.min.css') }}" rel="stylesheet">
     @yield('other_assets')
 </head>
-<body id="body" class="fixed-nav ">
+<body id="body" class="fixed-nav
+    @if (Auth::user() == null)
+    guest
+    @endif
+    ">
+
     @if (Auth::user() != null)
     @yield('mainnav', View::make('layouts.mainnav', ['selected' => $selected ?? '']))
     @endif
-    <div class="content-wrapper"><div class="container-fluid">
+
+    <div class="content-wrapper
+    @if (Auth::user() == null)
+        guest
+    @endif
+    ">
+
+    <div class="container-fluid">
         <div class="row">
             <div id="page_title" class="fs-5 border shadow bg-light text-dark container-fluid py-3 mb-0 col-12 align-items-center d-flex">
                 <i class="@yield('icon') fa-fw fa-lg"></i>
