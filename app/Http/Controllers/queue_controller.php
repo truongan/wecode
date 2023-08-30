@@ -23,7 +23,7 @@ class queue_controller extends Controller
         //
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
             abort(404);
-            return view('admin.queue', ['queue' => Queue_item::latest()->get()] ); 
+            return view('admin.queue', ['queue' => Queue_item::with('submission')->latest()->get()] ); 
         }
     
     public function work(){
