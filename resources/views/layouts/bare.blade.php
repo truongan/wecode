@@ -10,9 +10,6 @@
     {{-- <title>{{ config('app.name', 'Laravel') }}</title> --}}
     <title>Wecode</title>
 
-    <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
     <!-- Styles -->
     <link href="{{ asset('assets/styles/bootstrap/default.min.css') }}" rel="stylesheet">
@@ -59,7 +56,7 @@
 
 
 <!-- Scripts -->
-<script type="text/javascript" src="{{ asset('assets/js/jquery-3.6.0.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/js/jquery-3.6.3.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
 </body>
 </html>
