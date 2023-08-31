@@ -66,7 +66,7 @@ Users - ranking
 @section('body_end')
 
 
-<script type="text/javascript" src="{{ asset('assets/DataTables/datatables.min.css') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/DataTables/datatables.min.js') }}"></script>
 
 <script>
 

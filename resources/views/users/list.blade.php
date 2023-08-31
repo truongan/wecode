@@ -117,7 +117,7 @@ thead tr:after {
 </div>
 </div>
 
-<script type="text/javascript" src="{{ asset('assets/DataTables/datatables.min.css') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/DataTables/datatables.min.js') }}"></script>
 <script>
 document.getElementById('copy_user_list').addEventListener('click', function(){
   cells = document.querySelectorAll('tr > #un');

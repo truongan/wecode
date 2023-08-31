@@ -1,5 +1,5 @@
-@php($selected = 'scoreboard')
 @extends('layouts.app')
+
 @section('icon', 'fas fa-star')
 @section('head_title', 'Scoreboard')
 @section('title', 'Scoreboard')
@@ -21,7 +21,7 @@
 @if (isset(Auth::user()->selected_assignment_id))
 	@php($sl = 1)
 @endif
-{{-- <ul class="ms-4 fs-6 nav nav-pills">
+<ul class="ms-4 fs-6 nav nav-pills">
 	<li class="nav-item">
 		<a class="nav-link link-dark {{$place=="full" ? "active" :""}}"
 		@if ($sl)
@@ -52,7 +52,7 @@
 		>
 		<i class="fas fa-star-half-alt color10"></i> Plain text Minimal </a>
 	</li>
-</ul> --}}
+</ul>
 @endsection
 
 
@@ -65,10 +65,9 @@
 	<p>Scoreboard is disabled.</p>
 	@else
 		<p>Scoreboard of <span> {{ $assignment->name }}</span></p>
-		@if (in_array( Auth::user()->role->name, ['admin', 'head_instructor']))
-		</ul>
-		@endif
-		<div class="table-responsive">{!! $scoreboard !!}</div>
+		<div class="table-responsive">
+			{!! $scoreboard !!}
+		</div>
 		<span class="text-danger">*: Not full mark</span>
 		<br/>
 		<span class="text-info">Number of tries - Submit time</span>
@@ -80,7 +79,7 @@
 
 @section('body_end')
 
-<script type="text/javascript" src="{{ asset('assets/DataTables/datatables.min.css') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/DataTables/datatables.min.js') }}"></script>
 <script>
 $(document).ready(function () {
 	$("table").DataTable({
@@ -88,6 +87,5 @@ $(document).ready(function () {
 		"ordering": true,
 	});
 });
-
 </script>
 @endsection

@@ -54,7 +54,7 @@
 	<script type='text/javascript' src="{{ asset("assets/prismjs/prism.js") }}"></script>
 	<script type='text/javascript' src="{{ asset("assets/js/shj_submissions.js") }}"></script>
 
-	<script type="text/javascript" src="{{ asset('assets/DataTables/datatables.min.css') }}"></script>
+	<script type="text/javascript" src="{{ asset('assets/DataTables/datatables.min.js') }}"></script>
 
 	<script type="text/javascript">$("nav  > ul.pagination a").addClass("page-link");</script>
 @endsection

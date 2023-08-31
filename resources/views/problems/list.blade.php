@@ -209,7 +209,7 @@
 @section('body_end')
 <script type="text/javascript" src="{{ asset('assets/select2/select2.min.js') }}"></script>
 
-<script type="text/javascript" src="{{ asset('assets/DataTables/datatables.min.css') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/DataTables/datatables.min.js') }}"></script>
 <script>
 
 	var all_tags = {!! $all_tags !!};
