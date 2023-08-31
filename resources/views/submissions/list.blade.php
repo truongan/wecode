@@ -5,7 +5,7 @@
 @endsection
 {{-- @inject('submission_controller', 'App\Http\Controllers\submission_controller') --}}
 @section('other_assets')
-	<link rel='stylesheet' type='text/css' href='https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css'/>
+	<link rel='stylesheet' type='text/css' href='{{ asset('assets/DataTables/datatables.min.css') }}'/>
 	<link rel='stylesheet' type='text/css' href='{{ asset("assets/prismjs/prism.css") }}'/>
 	<style type="text/css">
 	.status_button{
@@ -54,7 +54,7 @@
 	<script type='text/javascript' src="{{ asset("assets/prismjs/prism.js") }}"></script>
 	<script type='text/javascript' src="{{ asset("assets/js/shj_submissions.js") }}"></script>
 
-	<script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" src="{{ asset('assets/DataTables/datatables.min.js') }}"></script>
 
 	<script type="text/javascript">$("nav  > ul.pagination a").addClass("page-link");</script>
 @endsection

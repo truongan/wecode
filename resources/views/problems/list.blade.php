@@ -3,7 +3,7 @@
 @section('head_title','Problems')
 @section('icon', 'fas fa-clipboard-list')
 @section('other_assets')
-  <link rel='stylesheet' type='text/css' href='https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css'/>
+  <link rel='stylesheet' type='text/css' href='{{ asset('assets/DataTables/datatables.min.css') }}'/>
   <link rel="stylesheet" type="text/css" href="{{ asset('assets/select2/select2.min.css') }}">
   {{-- <link rel="stylesheet" type="text/css" href="{{ asset('assets/select2/select2-bootstrap-5-theme.min.css') }}"> --}}
 <style>
@@ -209,7 +209,7 @@
 @section('body_end')
 <script type="text/javascript" src="{{ asset('assets/select2/select2.min.js') }}"></script>
 
-<script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="{{ asset('assets/DataTables/datatables.min.js') }}"></script>
 <script>
 
 	var all_tags = {!! $all_tags !!};
