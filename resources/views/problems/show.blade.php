@@ -44,6 +44,9 @@
     {{-- src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"> --}}
 	src="{{ asset('assets/MathJax-2.7.9') }}/MathJax.js?config=TeX-MML-AM_CHTML">
 </script>
+<script type="text/javascript">
+    mathjax_path = "{{ asset('assets/MathJax-2.7.9') }}/MathJax.js?config=TeX-MML-AM_CHTML"
+</script>
 <script src="{{ asset('assets/ckeditor/ckeditor.js') }}" charset="utf-8"></script>
 <script type="text/javascript">
     $(document).ready(function(){
