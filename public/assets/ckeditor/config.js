@@ -30,7 +30,10 @@ CKEDITOR.editorConfig = function( config ) {
 	
 	config.extraPlugins = 'sourcedialog';
 	config.extraPlugins = 'justify,sourcedialog';
-	config.mathJaxLib = '//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-AMS_HTML';
+	// config.mathJaxLib = '//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-AMS_HTML';
+	// config.mathJaxLib = 'https://cs.uit.edu.vn/local/MathJax-2.7.9/MathJax.js?config=TeX-AMS_HTML';
+	// config.mathJaxLib = 'assets/MathJax-2.7.9/MathJax.js?config=TeX-AMS_HTML';
+	config.mathJaxLib = mathjax_path;
 
 	// Set the most common block elements.
 	config.format_tags = 'p;h1;h2;h3;pre';

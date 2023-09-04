@@ -5,6 +5,10 @@
 @section('title', 'Edit by HTML')
 
 @section('body_end')
+<script type="text/javascript">
+    mathjax_path = "{{ asset('assets/MathJax-2.7.9') }}/MathJax.js?config=TeX-MML-AM_CHTML"
+</script>
+
 <script src="{{ asset('assets/ckeditor/ckeditor.js') }}" charset="utf-8"></script>
 <script type="text/javascript">
 function b64EncodeUnicode(str) {

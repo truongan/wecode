@@ -26,7 +26,7 @@ MathJax.Hub.Config({
 });
 </script>
 <script type="text/javascript" async
-  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+  src="{{ asset('MathJax-2.7.9') }}/MathJax.js?config=TeX-MML-AM_CHTML">
 </script>
 <div class="modal fade" id="notification_delete" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
   <div class="modal-dialog" role="document">
