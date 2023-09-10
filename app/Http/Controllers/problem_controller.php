@@ -648,11 +648,24 @@ class problem_controller extends Controller
         DB::commit();
     }
 
-    public function toggle_practice(Request $request, Problem $problem){
+    public function toggle_practice(Request $request, String $query){
+        $a = explode(".", $query);
+        // dd($a);
+        $task = $a[0];
+        $id = $a[1];
+        
+        $problem = Problem::find($id);
         $this->can_edit_or_404($problem);
-        $problem->allow_practice = ! $problem->allow_practice;
-        $problem->save();
-        return $problem->allow_practice;
+        
+        if  ($task == "practice"){
+            $problem->allow_practice = ! $problem->allow_practice;
+            $problem->save();
+            return $problem->allow_practice;
+        } else {
+            $problem->sharable = ! $problem->sharable;
+            $problem->save();
+            return $problem->sharable;
+        }
     }
     public function edit_tags(Request $request, Problem $problem){
         $this->can_edit_or_404($problem);

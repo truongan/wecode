@@ -150,17 +150,26 @@
 			{{-- SHARE, PRACTICE, EDITORIAL --}}
 			<td>  
 				
-				<i  style="cursor:pointer" class="toggle_practice fas fa-dumbbell fa-2x clickable .stretched-link
+				<i  style="cursor:pointer" data-bs-toggle="tooltip" data-id='{{ "toggle." .  $item->id}}'  title='Green icon means this problem is available for practice, Black icon for otherwise' class="toggle_practice-share fas fa-dumbbell fa-2x clickable .stretched-link
 					@if( $item->allow_practice)
 						text-success
+
 					@else
 						text-black-50
+						
 					@endif
-				"  data-bs-toggle="tooltip" data-id='{{$item->id}}'  title='This problem is available for practice'>
+				">
 				</i>
+				<i style="cursor:pointer" data-bs-toggle="tooltip" data-id='{{'share.' . $item->id}}' title='Green icon means this problem is shared among instructors. Black icon means it is only visible  to its author and admins'  class="toggle_practice-share fas fa-share-alt fa-2x clickable .stretched-link
 				@if( $item->sharable)
-					<i class="fas fa-share-alt" data-bs-toggle="tooltip" title='This problem is shared among instructors'></i>
+					text-success  
+					
+				@else
+					text-black-50
 				@endif
+				"">
+				</i>
+
 				@if($item->editorial != '')
 					<a href="{{ $item->editorial }}" data-bs-toggle="tooltip" title='This problem has some linked editorial'><i class="fas fa-lightbulb fa-2x   "></i></a>
 				@endif
@@ -335,7 +344,7 @@
 	document.querySelector('.dataTables_filter > label').childNodes[0].data = "Filter in this page"
   });
 
-	document.querySelectorAll('.toggle_practice').forEach( item => {
+	document.querySelectorAll('.toggle_practice-share').forEach( item => {
 		item.addEventListener('click', (ev) => {
 			var icon = ev.target;
 			console.log(icon);
