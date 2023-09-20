@@ -13,7 +13,7 @@
 
 @section('content')
 <div class="row">
-  <div class="table-respnosive">
+  <div class="table-responsive">
     <table class=" table table-striped table-bordered">
       <thead class="thead-old table-dark">
         <tr>
@@ -62,10 +62,11 @@
     <div class="modal-footer">
         <button type="button" class="btn btn-danger confirm-lop-delete">YES</button>
     <button type="button" class="btn btn-primary" data-bs-dismiss="modal">NO</button>
-      </div>
+      {{-- </div> --}}
     </div>
   </div>
 </div>
+
 @endsection
 
 @section('body_end')

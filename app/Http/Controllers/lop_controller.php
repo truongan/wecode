@@ -34,10 +34,10 @@ class lop_controller extends Controller
         //     abort(403);
         if (Auth::user()->role->name == 'admin'){
 
-            return view('admin.lops.list', ['lops' => Lop::all()]);
+            return view('admin.lops.list', ['lops' => Lop::latest()->get()]);
         } else {
             
-            return view('admin.lops.list', ['lops' => Lop::available(Auth::user()->id)->get()]);
+            return view('admin.lops.list', ['lops' => Lop::available(Auth::user()->id)->latest()-get()]);
         }
     }
 
