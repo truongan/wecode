@@ -37,7 +37,7 @@ class lop_controller extends Controller
             return view('admin.lops.list', ['lops' => Lop::latest()->get()]);
         } else {
             
-            return view('admin.lops.list', ['lops' => Lop::available(Auth::user()->id)->latest()-get()]);
+            return view('admin.lops.list', ['lops' => Lop::available(Auth::user()->id)->latest()->get()]);
         }
     }
 
