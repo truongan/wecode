@@ -14,11 +14,16 @@ return new class extends Migration
     public function up()
     {
         //
-        Schema::table('assignments', function (Blueprint $table) {
-            $table->string('language_ids');
-        });
+        if (!Schema::hasColumn('assignments', 'language_ids')){
+            
+            Schema::table('assignments', function (Blueprint $table) {
+                $table->string('language_ids');
+            });
+            
+            DB::table('assignments')->update(['language_ids' => App\Language::all()->pluck('id')->implode(', ')]);
+        }
     }
-
+    
     /**
      * Reverse the migrations.
      *
@@ -27,5 +32,11 @@ return new class extends Migration
     public function down()
     {
         //
+        if (Schema::hasColumn('assignments', 'language_ids')){
+            Schema::table('assignments', function (Blueprint $table) {
+                $table->dropColumn('language_ids');
+            });
+        }
+
     }
 };

@@ -110,7 +110,7 @@ languages_to_docker["py3"]="python:3"
 languages_to_docker["numpy"]="truongan/wecodejudge:numpy"
 languages_to_docker["java"]="openjdk:8"
 languages_to_docker["pas"]="nacyot/pascal-fp_compiler:apt"
-languages_to_docker["js"]="node:16"
+languages_to_docker["js"]="node:20"
 
 # DIFFOPTION can also be "ignore" or "exact".
 # ignore: In this case, before diff command, all newlines and whitespaces will be removed from both files
