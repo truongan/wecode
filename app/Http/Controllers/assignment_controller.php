@@ -67,8 +67,6 @@ class assignment_controller extends Controller
                 $assignments = $assignments->where(['open' => 1]);
             }
             $assignments = $assignments->latest()->get();
-            // dd(DB::getQueryLog());
-            // dd($assignments->count());
         }
         else $assignments = Assignment::with('problems','lops')->latest()->get();
         foreach ($assignments as &$assignment)

@@ -131,9 +131,9 @@
 						{{-- {{ form_error('extra_time', '<div class="alert alert-danger">', '</div>') }} --}}
 					</div>
 
-					<div class="col-sm-4">
+					<div class="col-sm-4" data-bs-toggle="tooltip" data-bs-placement="top" title="If your classes have to take assignment with different start and/or finish time, please craete different assignments" >
 						<label>Select class(es)<br>
-							<small class="form-text text-muted">Select the classes that are required to take this assignment. If your class have to take assignment with different start and/or finish time, please craete different assignments.</small>
+							<small class="form-text text-muted">Select the classes that are required to take this assignment.</small>
 						</label>
 					</div>
 					<div class="col-sm-8">
@@ -158,17 +158,17 @@
 	
 			<div class="col-sm-6">
 				<label for="form_late_rule">Description</label>
-				<textarea id="form_late_rule" name="description" rows="4" class="form-control add_text">{{ $edit ? $assignment->description : old('description', '') }}</textarea>
+				<textarea id="form_late_rule" name="description" rows="2" class="form-control add_text">{{ $edit ? $assignment->description : old('description', '') }}</textarea>
 				{{-- {{ form_error('late_rule', '<div class="alert alert-danger">', '</div>') }} --}}
 				
-				<div class="form-check form-switch mt-3">
+				<div class="form-check form-switch mt-2">
 					<input id="form_a_open" class="form-check-input" type="checkbox" name="open" value="1" {!! $edit ? ($assignment->open ? 'checked' : '') :'' !!} />
 					<label for="form_a_open" class="form-check-label">Open</label>
 					<small class="form-text text-muted ">Open or close this assignment for submission</small>
 				</div>
 				{{-- {{ form_error('open', '<div class="alert alert-danger">', '</div>') }} --}}
 
-				<div class="form-check form-switch my-3">
+				<div class="form-check form-switch my-2">
 					<input id="form_a_scoreboard" class="form-check-input" type="checkbox" name="scoreboard" value="1" {!! $edit ? ($assignment->score_board ? 'checked' : '') : '' !!} />
 					<label for="form_a_scoreboard" class="form-check-label">Scoreboard</label>
 				<small class="form-text text-muted mb-3 ">Check this to publish scoreboard to student, lecturer can always see scoreboard</small>
@@ -178,8 +178,17 @@
 				<label for="form_late_rule">Coefficient rule (<a target="_blank" href="https://github.com/truongan/wecode-judge/blob/docs/v1.4/add_assignment.md#coefficient-rule">?</a>)
 					<small class="form-text text-muted  ">PHP script without &lt;?php ?&gt; tags. You can use 3 variables: <code>$extra_time</code>, <code>$delay</code>, <code>$submit_time</code></small>
 				</label>
-				<textarea id="form_late_rule" name="late_rule" rows="8" class="form-control add_text">{{ $edit ? $assignment->late_rule : old('late_rule', $settings['default_late_rule'], false) }}</textarea>
+				<textarea id="form_late_rule" name="late_rule" rows="4" class="form-control add_text">{{ $edit ? $assignment->late_rule : old('late_rule', $settings['default_late_rule'], false) }}</textarea>
 				{{-- {{ form_error('late_rule', '<div class="alert alert-danger">', '</div>') }} --}}
+
+				<div class="mt-2">
+					<label>
+						Limit language <small class="form-text text-muted">if your problems support many languages, you can limit the languages that can be used in this assigment to the list below </small>
+					</label>
+					<select name="language_ids" class="form-select" aria-label="Default select example">
+						
+					</select>
+				</div>
 			</div>
 		</div>
 	
