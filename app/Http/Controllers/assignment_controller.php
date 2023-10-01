@@ -102,7 +102,19 @@ class assignment_controller extends Controller
         if(Auth::user()->role->name == 'admin') $allprob = Problem::withCount('assignments')->latest()->get();
         else $allprob = Problem::available(Auth::user()->id)->latest()->withCount('assignments')->get();
 
-        return view('assignments.create',['all_problems' => $allprob, 'all_lops' =>$all_lops, 'extra_time'=>'0*60*60', 'lops' => [], 'messages' => [], 'problems' => $problems, 'selected' => 'assignments']);
+        return view(
+            'assignments.create',
+            [
+                'all_problems' => $allprob,
+                'all_lops' => $all_lops,
+                'extra_time' => '0*60*60',
+                'lops' => [],
+                'messages' => [],
+                'problems' => $problems,
+                'selected' => 'assignments',
+                'all_languages' => Language::all()
+            ]
+        );
     }
 
 
@@ -125,7 +137,8 @@ class assignment_controller extends Controller
 
         $request['start_time'] = (new Carbon($request['start_time_date'] . ' ' . $request['start_time_time'] . ' ' . Setting::get('timezone')))->setTimezone($zone);
         $request['finish_time'] = (new Carbon($request['finish_time_date'] . ' ' . $request['finish_time_time'] . ' ' . Setting::get('timezone')))->setTimezone($zone);
-      
+        
+        $request['language_ids'] = implode(", ", $request['language_ids']);
     }
 
     /**
@@ -344,7 +357,7 @@ class assignment_controller extends Controller
         if(Auth::user()->role->name == 'admin') $allprob = Problem::withCount('assignments')->latest()->get();
         else $allprob = Problem::available(Auth::user()->id)->latest()->withCount('assignments')->get();
 
-        return view('assignments.create',['assignment' => $assignment, 'all_problems' => $allprob, 'messages' => [], 'problems' => $problems, 'all_lops' => $all_lops, 'lops' => $lops, 'selected' => 'assignments']);
+        return view('assignments.create',['assignment' => $assignment, 'all_problems' => $allprob, 'messages' => [], 'problems' => $problems, 'all_lops' => $all_lops, 'lops' => $lops, 'selected' => 'assignments', 'all_languages' => Language::all()]);
     }
 
     /**
@@ -366,6 +379,7 @@ class assignment_controller extends Controller
 
         $input = $request->input();
         $this->_process_form($input);
+        // dd($input);
         $assignment->fill($input);
         
         

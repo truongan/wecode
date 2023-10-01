@@ -181,13 +181,24 @@
 				<textarea id="form_late_rule" name="late_rule" rows="4" class="form-control add_text">{{ $edit ? $assignment->late_rule : old('late_rule', $settings['default_late_rule'], false) }}</textarea>
 				{{-- {{ form_error('late_rule', '<div class="alert alert-danger">', '</div>') }} --}}
 
-				<div class="mt-2">
-					<label>
-						Limit language <small class="form-text text-muted">if your problems support many languages, you can limit the languages that can be used in this assigment to the list below </small>
-					</label>
-					<select name="language_ids" class="form-select" aria-label="Default select example">
-						
-					</select>
+				<div class="mt-2 row">
+					<div class="col-sm-4 ">
+						<label>
+							Limit language <small class="form-text text-muted">if your problems support many languages, you can limit the languages that can be used in this assigment </small>
+						</label>
+					</div>
+					
+					<div class="col-sm-8">
+						<select name="language_ids[]" class="form-select"  multiple aria-label="Further limit allow language for this assignments">
+							@foreach ($all_languages as $lang)
+								<option value="{{ $lang->id }}" 
+									@if (!$edit ||  in_array($lang->id , explode(", ", $assignment->language_ids) ))
+										selected
+									@endif	
+								>{{$lang->name}}</option>
+							@endforeach
+						</select>
+					</div>
 				</div>
 			</div>
 		</div>

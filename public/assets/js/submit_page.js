@@ -86,6 +86,9 @@ $(document).ready(function(){
 
     $("select#problems").change(function(){
         var v = $(this).val();
+        
+        console.log($(this).children('option:selected').first().data('statement'));
+        $("#problem_link").attr('href', $(this).children('option:selected').first().data('statement'));
 
         $('select#languages').empty();
         //$('<option value="0" selected="selected">-- Select Language --</option>').appendTo('select#languages');
@@ -99,8 +102,6 @@ $(document).ready(function(){
 
         for (var i=0;i<problem_languages[v].length;i++)
             $('<option value="'+problem_languages[v][i].id+'">'+problem_languages[v][i].name+'</option>').appendTo('select#languages');
-        // console.log($(this).children('option:selected').first().data('statement'));
-        $("#problem_link").attr('href', $(this).children('option:selected').first().data('statement'));
         
         $("select[name=language]").val(first_lang);
         $("select[name=language]").change();

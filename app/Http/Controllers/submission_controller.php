@@ -100,7 +100,7 @@ class submission_controller extends Controller
 		return view('submissions.list',['submissions' => $submissions, 'assignment' => $assignment, 'user_id' => $user_id, 'problem_id' => $problem_id, 'choose' => $choose, 'all_problems' => $all_problems]); 
 	}
 
-	private function _creation_guard_check($assignment_id, $problem_id){
+	private function _creation_guard_check($assignment_id, $problem_id, $language_id = -1){
 		$assignment = Assignment::find($assignment_id);
 		
 		if ($assignment_id == 0){
@@ -117,7 +117,10 @@ class submission_controller extends Controller
 			if (!$check->can_submit){
 				abort(403, $check->error_message);
 			}
-
+			
+			if ($language_id != -1 && !in_array($language_id, explode(", ", $assignment->language_ids))){
+				abort(403, " This assignment doesn't allow programming language of id " . $language_id) ;
+			}
 		} 
 
 		return $problem;
@@ -153,8 +156,8 @@ class submission_controller extends Controller
 			'assignment' => ['integer', 'gt:-1'],
 			'problem' => ['integer', 'gt:0'],
 		]);
-
-		$this->_creation_guard_check($request->input('assignment'), $request->input('problem'));
+		// dd($request->input('language'));
+		$this->_creation_guard_check($request->input('assignment'), $request->input('problem'), $request->input('language'));
 		if ($this->upload($request))
 			return redirect()->route('submissions.index', [$request->assignment, 'all', 'all', 'all']);
 		else

@@ -1,5 +1,7 @@
 {{--Code editer--}}
-@php($selected = 'assignments')
+@php
+$selected = 'assignments'
+@endphp
 
 @extends('layouts.app')
 @section('head_title','Code editer')
@@ -15,8 +17,8 @@
 	@if (isset($error) && $error != 'none')
 	<p class="text-warning"> {{ $error }}</p>
 	@else
-	{{-- <div class="row"> --}}
 
+	{{-- <div class="row"> --}}
 		<form action="{{ route('submissions.store') }}" method="POST" class = "">
 		@csrf
 			<input type ="hidden" id="assignment_id_input" value="{{$assignment->id}}" name="assignment"/>
@@ -50,7 +52,6 @@
 				@error('language')
 					<div class="alert alert-danger"> {{ $message }}</div>
 				@enderror
-				
 			</div>
 
 			<div class="col form-floating">
@@ -119,9 +120,7 @@
 		<textarea style="display:none;" rows="4" cols="80" name="code" class="sharif_input add_text" >
 		</textarea>
 		</form>
-	{{-- </div> --}}
 	@endif
-{{-- </div> --}}
 
 @endsection
 
@@ -134,9 +133,13 @@
 	@if($assignment->id == 0)
 		problem_languages[{{$problem->id}}] = {!!$problem->languages !!};
 	@endif
-	
+
+
+
+
 	@foreach($assignment->problems as $prob)
-		problem_languages[{{$prob->id}}] = {!!$prob->languages !!};
+
+		problem_languages[{{$prob->id}}] = {!! $prob->languages()->whereIn('language_id', explode(", ", $assignment->language_ids))->get() !!}
 
 	@endforeach
 	
