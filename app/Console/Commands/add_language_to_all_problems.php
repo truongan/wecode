@@ -37,7 +37,13 @@ class add_language_to_all_problems extends Command
             ];
         }
         foreach( Problem::all() as $prob){
-            $prob->languages()->attach($a);
+            $b = [];
+            $ids = $prob->languages->pluck('id');
+            foreach ($a as $lang_id =>  $new_lang){
+                if ($ids->search($lang_id) === false) $b[$lang_id] = $new_lang;
+            }
+            // $prob->languages = [];
+            $prob->languages()->syncWithoutDetaching($b);
             $prob->save();
         }
         return Command::SUCCESS;
