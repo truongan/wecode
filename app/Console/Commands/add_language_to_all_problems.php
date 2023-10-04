@@ -37,7 +37,7 @@ class add_language_to_all_problems extends Command
             ];
         }
         foreach( Problem::all() as $prob){
-            $prob->languages()->sync($a);
+            $prob->languages()->attach($a);
             $prob->save();
         }
         return Command::SUCCESS;

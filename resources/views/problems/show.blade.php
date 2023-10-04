@@ -162,7 +162,7 @@
 				<div class="form-floating">
 					<select id="languages" name="language" class="form-select">
 						@foreach($problem->languages as $l)
-							@if (!$assignment->language_ids || in_array($l->id, explode(", ", $assignment->language_ids)))
+							@if ($assignment == NULL  || in_array($l->id, explode(", ", $assignment->language_ids)))
 								<option value="{{ $l->id }}">{{ $l->name }} ({{$l->pivot->time_limit /1000}}s, {{ $l->pivot->memory_limit / 1000 }}MB )</option>
 							@endif
 						@endforeach
