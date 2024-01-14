@@ -15,9 +15,15 @@ return new class extends Migration
     {
         //
         Schema::table('submissions', function ( $table) { 
-            $table->dropIndex('submissions_problem_id_index');
+            try { 
+                $table->dropIndex('submissions_problem_id_index');
+                $table->dropIndex('submissions_user_id_index');
+            } catch (Exception $ed){
+
+            }
+            
+            
             $table->index('problem_id'); 
-            $table->dropIndex('submissions_user_id_index');
             $table->index('user_id'); 
         } );
     }
