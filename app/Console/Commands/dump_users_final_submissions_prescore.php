@@ -37,7 +37,7 @@ class dump_users_final_submissions_prescore extends Command
         $output_users = [];
         foreach ($users as $u){
             $output_users[$u->id]['username'] = $u->username;
-            $output_users[$u->id]['lop'] = $u->lops()->first()->name;
+            $output_users[$u->id]['lop'] = $u->lops()->first()->name ?? "--Leave lop sau khi thi??--";
 
             foreach ($u->submissions as $sub){
                 if ($sub->is_final == 0) continue;
