@@ -275,6 +275,9 @@ class UserController extends Controller
 			if ($user->submissions()->count() > 0){
 				$json_result = array('done' => 0, 'message' => "You must delete users' submission before you can delete user.");
 			}
+			elseif (Auth::user()->id == $user_id) {
+				$json_result = array('done' => 0, 'message' => 'You cannot delete yourself!');
+			}
 			elseif (User::destroy($user_id))
 				$json_result = array('done' => 1);
 			else
