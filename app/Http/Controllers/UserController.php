@@ -305,6 +305,13 @@ class UserController extends Controller
 		return $json_result;
 	}
 
+	public function delete_multiple() {
+		if( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor'])){
+			abort(403);
+		}
+		return view('users.delete');
+	}
+
 	public function add_multiple()
 	{
 		if( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor'])){
