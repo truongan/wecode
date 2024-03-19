@@ -178,11 +178,13 @@ Users - {{$user->username}}
         @foreach ($as->ass->lops as $lop)
             <a href="{{ route('lops.show', $lop->id) }}">{{$lop->name}}</a></br>
         @endforeach
+      </td>
 			<td>
-          <button class="btn btn-info " disabled> {{ $as->total }} </button>
-        @if ($as->ass->scoreboard)
+        <button class="btn btn-info " disabled> {{ $as->total }} </button>
+        {{-- ONE !! ONE fucking typo turn a useless if check into a massive query with zero usefuless --}}
+        {{-- @if ($as->ass->score_board) --}}
           <a href="{{ route('scoreboards.index', $as->ass->id) }} "><i class="fas fa-external-link-alt"></i></a>
-        @endif
+        {{-- @endif --}}
       </td>
 			<td>{{$as->accept}} ({{ round($as->accept / $as->total * 100, 2) }}%)</td>
 			<td> 
