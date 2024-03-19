@@ -3,7 +3,9 @@
 @section('head_title','View Problem')
 @section('icon', 'fas fa-puzzle-piece')
 
-@section('title',isset($problem->name) ? $problem->name : 'Problem ...')
+@section('title')
+{{ isset($all_problems) ? $all_problems->find($problem->id)->pivot->problem_name : $problem->name }}
+@endsection
 
 @section('other_assets')
 <style media="screen">
