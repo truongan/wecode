@@ -17,7 +17,7 @@ return new class extends Migration
         if (!Schema::hasColumn('assignments', 'language_ids')){
             
             Schema::table('assignments', function (Blueprint $table) {
-                $table->string('language_ids');
+                $table->string('language_ids')->nullable();
             });
             
             DB::table('assignments')->update(['language_ids' => App\Language::all()->pluck('id')->implode(', ')]);
