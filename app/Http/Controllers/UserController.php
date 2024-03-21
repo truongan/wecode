@@ -295,7 +295,7 @@ class UserController extends Controller
 		$json_result = array('done'=>0 , 'count' => 0);
 		foreach ($subs as $sub) {
 			var_dump($sub->directory());
-			shell_exec("rm -rf " . $sub->directory());
+			shell_exec("rm -rf " . $sub->directory(). '> /dev/null 2>&1'); # "> /dev/null 2>&1" hide the output of any command
 			$sub->delete();
 			$i++;
 		}
@@ -303,13 +303,6 @@ class UserController extends Controller
 		$json_result['count'] = $i;
 		header('Content-Type: application/json; charset=utf-8');
 		return $json_result;
-	}
-
-	public function delete_multiple() {
-		if( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor'])){
-			abort(403);
-		}
-		return view('users.delete');
 	}
 
 	public function add_multiple()
@@ -509,6 +502,95 @@ class UserController extends Controller
 		// dd($count);
 		return back()->with(['success' => $count ])->withInput()
 		;
+	}
+
+	public function delete_multiple() {
+		if( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor'])){
+			abort(403);
+		}
+		return view('users.delete');
+	}
+
+	public function delete(Request $request) {
+		if( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor'])){
+			abort(403);
+		}
+		if ($request->has(['usernames'])) {
+			$all = $this->delete_users($request['usernames']);
+			$ok = $all['users_ok'];
+			$error = $all['users_error'];
+			return view('users.delete_result', ['ok' => $ok,'error' => $error]);
+		}
+		else
+			return view('users.delete');
+	}
+
+	public function delete_user($username) {
+		if( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor'])){
+			abort(403);
+		}
+
+		$user = User::where('username', $username)->first();
+
+		if ($user == NULL)
+			return 'User not found';
+
+		if (Auth::user()->role->name == 'admin') {
+
+		}
+		elseif (Auth::user()->role->name == 'head_instructor'){
+			if (!in_array($user->role->name, ['instructor', 'student']))
+			{
+				return 'You can delete user with role "instructor" or "student" only';
+			}
+		}
+		elseif (Auth::user()->role->name == 'instructor'){
+			
+			if (!in_array($user->role->name, [ 'student']))
+			{
+				return 'You can delete user with role "student" only';
+			}
+		}
+		elseif (Auth::user()->id == $user->id) {
+			return 'You cannot delete yourself!';
+		}
+		else {
+			return 'You do not have permission to delete user';
+		}
+
+		// Delete submissions before delete user
+		if ($user->submissions()->count() > 0){
+			$this->delete_submissions($user);
+		}
+
+		$user->delete();
+	
+		return TRUE;
+	}
+
+	public function delete_users($usernames) {
+		if( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor'])){
+			abort(403);
+		}
+
+		$usernames = preg_split('/\s+/', $usernames);
+		
+		$users_ok = [];
+		$users_error = [];
+
+		foreach ($usernames as $username)
+		{
+			$result = $this->delete_user($username);
+			
+			if ($result === TRUE)
+				array_push($users_ok, $username);
+			else
+			{
+				array_push($users_error,[$username, array($result)]);
+			}
+		}
+		
+		return ['users_ok'=>$users_ok,'users_error'=>$users_error];
 	}
 	
 }

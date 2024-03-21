@@ -42,6 +42,8 @@ Route::get('users/ranking', [App\Http\Controllers\UserController::class, 'rank']
 Route::view('users/set_trial', 'users.set_trial')->name('users.set_trial')->middleware('auth');
 Route::post('users/set_trial', [App\Http\Controllers\UserController::class, 'set_trial'])->name('users.set_trial_post');
 Route::get('/users/delete_multiple', [App\Http\Controllers\UserController::class, 'delete_multiple']);
+Route::post('/users/delete', [App\Http\Controllers\UserController::class, 'delete'])->name('users.delete');
+
 
 Route::get('/problems/downloadtestsdesc/{id}', [App\Http\Controllers\problem_controller::class, 'downloadtestsdesc'])->name('problems.downloadtestsdesc');
 Route::get('/problems/downloadpdf/{id}', [App\Http\Controllers\problem_controller::class, 'pdf'])->name('problems.pdf');
