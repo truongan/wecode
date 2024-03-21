@@ -507,7 +507,10 @@ class UserController extends Controller
 		if( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor'])){
 			abort(403);
 		}
-		return view('users.delete');
+
+		$users = User::all();
+
+		return view('users.delete', ['users' => $users]);
 	}
 
 	public function delete(Request $request) {
@@ -569,8 +572,6 @@ class UserController extends Controller
 		if( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor'])){
 			abort(403);
 		}
-
-		$usernames = preg_split('/\s+/', $usernames);
 		
 		$users_ok = [];
 		$users_error = [];
