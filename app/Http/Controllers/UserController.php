@@ -364,8 +364,8 @@ class UserController extends Controller
 			'display_name' => $display_name
 		];
 		$validator = Validator::make($user, [
-			'username' => ['required', 'string', 'max:50', 'unique:users'],
-			'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+			'username' => ['required', 'string', 'max:50', 'unique:users', 'regex:/^\S*$/'],
+			'email' => ['required', 'string', 'email', 'max:255', 'unique:users', 'regex:/^\S*$/'],
 			'display_name' => ['nullable', 'string', 'max:255'],
 			'password' => ['required', 'string', 'min:8'],
 		]);
