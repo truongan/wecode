@@ -500,8 +500,7 @@ class UserController extends Controller
 			$count = $where_clause->update(['trial_time' => DB::Raw(" TIMESTAMPDIFF(HOUR, `created_at`, '$end_time' )") ,'role_id' => 4 ]  );
 		}
 		// dd($count);
-		return back()->with(['success' => $count ])->withInput()
-		;
+		return back()->with(['success' => $count ])->withInput();
 	}
 
 	public function delete_multiple() {
@@ -532,8 +531,9 @@ class UserController extends Controller
 
 		$user = User::where('username', $username)->first();
 
-		if ($user == NULL)
-			return 'User not found';
+		if ($user == NULL) return 'User not found';
+		if (Auth::user()->id == $user->id) return 'You cannot delete yourself!';
+
 
 		if (Auth::user()->role->name == 'admin') {
 
@@ -550,9 +550,6 @@ class UserController extends Controller
 			{
 				return 'You can delete user with role "student" only';
 			}
-		}
-		elseif (Auth::user()->id == $user->id) {
-			return 'You cannot delete yourself!';
 		}
 		else {
 			return 'You do not have permission to delete user';
