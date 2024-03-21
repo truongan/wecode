@@ -294,8 +294,8 @@ class UserController extends Controller
 		$i = 0;
 		$json_result = array('done'=>0 , 'count' => 0);
 		foreach ($subs as $sub) {
-			var_dump($sub->directory());
-			shell_exec("rm -rf " . $sub->directory(). '> /dev/null 2>&1'); # "> /dev/null 2>&1" hide the output of any command
+			// var_dump($sub->directory());
+			shell_exec("rm -rf " . $sub->directory());
 			$sub->delete();
 			$i++;
 		}
