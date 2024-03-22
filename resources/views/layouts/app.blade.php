@@ -10,11 +10,6 @@
     <title>@yield('head_title') - {{ $settings['site_name'] }} - wecode judge</title>
 
     <!-- Fonts -->
-<<<<<<< HEAD
-    <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    {{-- <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet"> --}}
-=======
->>>>>>> master
 	<link rel="icon" href="{{ asset('assets/images/favicon.ico') }}">
 
     <!-- Styles -->
