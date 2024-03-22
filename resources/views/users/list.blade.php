@@ -41,18 +41,19 @@ thead tr:after {
   <a class="ms-4 fs-6 link-dark" href="{{ url('users/add_multiple') }}"><i class="fa fa-user-plus text-success"></i> Add Users</a>
   <a class="ms-4 fs-6 link-dark" href="{{ 'mailto:' .  App\User::pluck('email')->join(',') }}"><i class="fas fa-mail-bulk    "></i> Email all users</a>
   <a class="ms-4 fs-6 link-dark" href="{{route('users.set_trial') }}"><i class="fas fa-highlighter    "></i>Update multiple users trial time</a>
-  <a class="ms-4 fs-6 link-dark" href="{{url('users/delete_multiple') }}"><i class="fas fa-trash text-danger"></i>Delete users</a>
 
 	{{-- <span class="ms-4 fs-6"><a href="{{ url('users/list_excel') }}"><i class="fa fa-download color9"></i> Excel</a></span> --}}
 @endsection
 
 @section('content')
 <a name="" id="copy_user_list" class="btn btn-primary my-2" href="#" role="button"><i class="fas fa-copy    "></i> copy user name list</a>
+<button id="delete_selected" class="btn btn-danger my-2"><i class="fas fa-trash"></i> Delete selected users</button>
 <div class="row">
   <div class="table-responsive">
     <table class="table table-striped table-bordered">
       <thead class="thead-old table-dark">
         <tr>
+          <th></th>
           <th>#</th>
           {{-- <th>User ID</th> --}}
           <th>Username</th>
@@ -66,6 +67,9 @@ thead tr:after {
       </thead>
       @foreach ($users as $user)
       <tr data-id="{{$user->id}}">
+        <td>
+          <i class="checkbox pointer far fa-circle fa-2x"></i>
+        </td>
         <td> {{$loop->iteration}} </td>
         {{-- <td> {{$user->id}} </td> --}}
         <td id="un"> {{$user->username}} </td>
@@ -178,10 +182,95 @@ $(document).ready(function(){
 		$("#user_delete").modal("show");
 	});
 
+  let selected_users = [];
+
+  $('.checkbox').click(function() {
+    let username = $(this).parents('tr').find('#un').text().trim();
+    let id = $(this).parents('tr').data('id');
+
+    if ($(this).hasClass('fa-check-circle')) {
+        $(this).removeClass('fa-check-circle').addClass('fa-circle');
+        this.classList.add('fa-circle');
+        selected_users = selected_users.filter(user => user.id !== id && user.username !== username);
+    } else {
+        $(this).removeClass('fa-circle').addClass('fa-check-circle');
+        selected_users.push({
+          id: id,
+          username: username,
+        });
+    }
+    console.log(selected_users)
+  });
+
+  $("#delete_selected").click(function(e) {
+    e.preventDefault();
+    console.log(selected_users)
+
+    if (selected_users.length === 0) return;
+
+    // Show popup
+		let row = $(this).parents('tr');
+		let user_ids = row.data('id');
+		let usernames = row.children('#un').html();
+
+		$(".modal-title").html("Are you sure you want to DELETE these users and their submissions?");
+    $(".modal-body").html('')
+    selected_users.forEach(user => {
+      $(".modal-body").append('User ID: <code>'+user.id+'</code><br>Username: <code>'+user.username+'</code><br><br>');
+    });
+		$("#user_delete").modal("show");
+
+		$(".confirm-user-delete").click(function() {
+      $("#user_delete").modal("hide");
+      selected_users.forEach(async user => {
+
+        // Delete submissions
+        await $.ajax({
+          url: 'users/delete_submissions/'+user.id,
+          type: 'POST',
+          data: {
+            user_id: user.id,
+            "_token": "{{ csrf_token() }}",
+          },
+          error: shj.loading_error,
+          success: function (response){
+              if (response.done) {
+                $.notify('All ' + parseInt(response.count) +' submission(s) ' + 'of User '+user.username +' has been deleted.', {position: 'bottom right', className: 'success', autoHideDelay: 5000});
+              }
+              else {
+                shj.loading_failed(response.message);
+              }
+          }
+        });
+        
+        // Delete user
+        await $.ajax({
+          url: '{{ route('users.index') }}/'+user.id,
+          type: 'DELETE',
+          data: {
+            user_id: user.id,
+            "_token": "{{ csrf_token() }}",
+          },
+          error: shj.loading_error,
+          success: function (response){
+              if (response.done) {
+                row.animate({backgroundColor: '#FF7676'},100, function(){row.remove();});
+                $.notify('User '+user.username+' deleted.', {position: 'bottom right', className: 'success', autoHideDelay: 5000});
+              }
+              else {
+                shj.loading_failed(response.message);
+              }
+          }
+        });
+
+      });
+		});
+  });
+
   $("table").DataTable({
-		"pageLength": 50,
-		"lengthMenu": [ [20, 50, 100, 200, -1], [20, 50, 100, 200, "All"] ]
-	});
+    "pageLength": 50,
+    "lengthMenu": [ [20, 50, 100, 200, -1], [20, 50, 100, 200, "All"] ]
+  });
 });
 
 </script>
