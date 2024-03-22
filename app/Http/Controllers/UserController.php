@@ -287,6 +287,9 @@ class UserController extends Controller
 	}
 
 	public function delete_submissions(User $user){
+		if(Auth::user()->role->name != 'admin'){
+			abort(403);
+		}
 		$subs = $user->submissions;
 		$i = 0;
 		$json_result = array('done'=>0 , 'count' => 0);
