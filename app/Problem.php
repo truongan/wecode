@@ -9,8 +9,14 @@ use Illuminate\Support\Facades\DB;
 
 class Problem extends Model
 {
-    protected $fillable = ['id','name','diff_cmd','diff_arg','allow_practice','admin_note','difficult','user_id', 'sharable','author','editorial'];
+    protected $fillable = ['id','name','diff_cmd','diff_arg','allow_practice','admin_note','difficult','user_id', 'sharable','author','editorial', 'allow_input_download', 'allow_output_download'];
 
+    protected $casts = [
+        'allow_practice' => 'boolean',
+        'sharable' => 'boolean',
+        'allow_input_download' => 'boolean',
+        'allow_output_download' => 'boolean',
+    ];
     public function get_directory_path(){
 		$assignments_root = Setting::get("assignments_root");
         $problem_dir = $assignments_root . "/problems/".$this->id;

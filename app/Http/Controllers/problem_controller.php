@@ -154,22 +154,24 @@ class problem_controller extends Controller
         $problem = $request->input();
         // $problem['id'] = $the_id;
         $problem['user_id'] = Auth::user()->id;
-        $problem["allow_practice"] = isset($request["allow_practice"]) ? 1 : 0;
-        $problem["sharable"] = isset($request["sharable"]) ? 1 : 0;
+        $problem["allow_practice"] = $request->has("allow_practice");
+        $problem["sharable"] = $request->has("sharable");
+        $problem["allow_input_download"] = $request->has("allow_input_download");
+        $problem["allow_output_download"] = $request->has("allow_output_download");
         $p = Problem::create($problem);
         if ($tags != null)
         {
             $p->tags()->sync($tags);
         }
-
+        
         $p->languages()->sync($langs);
-
+        
         // Processing file 
         $this->_take_test_file_upload($request, $p->id, $messages);  
-
+        
         return redirect()->route('problems.index')->withInput()->withErrors(["messages"=>$messages]);
     }
-
+    
     /**
      * Display the specified resource.
      *
@@ -177,7 +179,7 @@ class problem_controller extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id){
-       abort(404, 'Problem can be view through assignment or practice only'); 
+        abort(404, 'Problem can be view through assignment or practice only'); 
     }
 
     /**
@@ -190,20 +192,20 @@ class problem_controller extends Controller
     {
         $this->can_edit_or_404($problem);
         $lang_of_problems = $problem->languages->keyBy('id');
-
+        
         $tags = $problem->tags->keyBy('id');
         return view('problems.create', ['problem'=>$problem,
-                                      'all_languages'=>Language::orderBy('sorting')->get(),
-                                      'messages'=>[],  
-                                      'languages'=>$lang_of_problems,
-                                      'tree_dump'=>shell_exec("tree -h " . $this->get_directory_path($problem->id)),
-                                      'max_file_uploads'=> ini_get('max_file_uploads'),
-                                      'all_tags' => Tag::all(),
-                                      'tags' => $tags,
-                                  ]);
-    }
+        'all_languages'=>Language::orderBy('sorting')->get(),
+        'messages'=>[],  
+        'languages'=>$lang_of_problems,
+        'tree_dump'=>shell_exec("tree -h " . $this->get_directory_path($problem->id)),
+        'max_file_uploads'=> ini_get('max_file_uploads'),
+        'all_tags' => Tag::all(),
+        'tags' => $tags,
+    ]);
+}
 
-    /**
+/**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -213,15 +215,17 @@ class problem_controller extends Controller
     public function update(Request $request, Problem $problem)
     {
         $this->can_edit_or_404($problem);
-
+        
         $validatedData = $request->validate([
             'name' => ['required','max:255'],
             'editorial' => 'nullable|url'
-            ]);
+        ]);
         
         $req = $request->input();
-        $req["allow_practice"] = isset($request["allow_practice"]) ? 1 : 0;
-        $req["sharable"] = isset($request["sharable"]) ? 1 : 0;
+        $req["allow_practice"] = $request->has("allow_practice");
+        $req["sharable"] = $request->has("sharable");
+        $problem["allow_input_download"] = $request->has("allow_input_download");
+        $problem["allow_output_download"] = $request->has("allow_output_download");
 
         $problem->update($req); 
 

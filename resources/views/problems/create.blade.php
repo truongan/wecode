@@ -211,42 +211,63 @@
 			<div class="form-floating mb-3">
 				<textarea id="admin_note" name="admin_note" rows="4" class="form-control add_text" style="height: 10em" >{{ $edit ? $problem->admin_note : old('admin_note', "", false) }}</textarea>
 				<label for="admin_note">Admin's note</label>
-					{{-- {{ form_error('admin_note', '<div class="alert alert-danger">', '</div>') }} --}}
+				{{-- {{ form_error('admin_note', '<div class="alert alert-danger">', '</div>') }} --}}
 			</div>
 			
-			<div class="form-check-inline  form-check form-switch">
-				<input type="checkbox" class="form-check-input" id="customSwitch2" name = "allow_practice" {{ ($edit ? $problem->allow_practice : old('allow_practice', 0)) ? 'checked' : '' }} >
-				<label class="form-check-label" for="customSwitch2">
-					Allow practice <small class="text-secondary">Allow other users to see this problem in practice view</small>
-				</label>
+			<div class="row g-3 mt-4">
+				<div class="form-check-inline  form-check form-switch col">
+					<input type="checkbox" class="form-check-input" id="customSwitch2" name = "allow_practice" {{ ($edit ? $problem->allow_practice : old('allow_practice', 0)) ? 'checked' : '' }} >
+					<label class="form-check-label" for="customSwitch2">
+						Allow practice <small class="text-secondary">Allow other users to see this problem in practice view</small>
+					</label>
+				</div>
+				<div class="form-check-inline form-check form-switch col">
+					
+					<input type="checkbox" class="form-check-input" id="sharable_switch" name = "sharable"  {{ ($edit ? $problem->sharable : old('sharable', 0)) ? 'checked' : '' }} >
+					<label class="form-check-label" for="sharable_switch">
+						Sharable <small class="text-secondary">Allow other head_instructor to view this problem and use it in theirs assignments</small>
+					</label>
+				</div>
 			</div>
-			<div class="form-check-inline form-check form-switch">
-				
-				<input type="checkbox" class="form-check-input" id="sharable_switch" name = "sharable"  {{ ($edit ? $problem->sharable : old('sharable', 0)) ? 'checked' : '' }} >
-				<label class="form-check-label" for="sharable_switch">
-					Sharable <small class="text-secondary">Allow other head_instructor to view this problem and use it in theirs assignments</small>
-				</label>
+			<div class="row g-3 mt-2">
+				<div class="form-check-inline form-check form-switch col">
+					
+					<input value="1" type="checkbox" class="form-check-input" id="allow_input_download_switch" name = "allow_input_download"  {{ ($edit ? $problem->allow_input_download : old('allow_input_download', 0)) ? 'checked' : '' }} >
+					<label class="form-check-label" for="allow_input_download_switch">
+						Alow input download <small class="text-secondary">Allow anyone that can submit to the problems to be able to download the input from testcases as well</small>
+					</label>
+				</div>
+				<div class="form-check-inline form-check form-switch col">
+					
+					<input value="1" type="checkbox" class="form-check-input" id="allow_output_download_switch" name = "allow_output_download"  {{ ($edit ? $problem->allow_output_download : old('allow_output_download', 0)) ? 'checked' : '' }} >
+					<label class="form-check-label" for="allow_output_download_switch">
+						Allow output download <small class="text-secondary">Allow anyone that can submit to the problems to be able to download the output from testcases as well</small>
+					</label>
+				</div>
 			</div>
-			<div class="form-check-inline  form-check form-switch">
-				<input type="checkbox" class="form-check-input" id="customSwitch1" name="rename_zip">
-				<label class="form-check-label" for="customSwitch1">Re-order files in <strong>in</strong> and <strong>out</strong> folder after upload<br/><small>This could useful when importing dataset from another format but should be use with care </small>
-				</label>
-			</div>
-			<div class="my-4">
-				<label for="form_tests_zip"><i class="far fa-lg fa-file-archive"></i>Tests and Descriptions (zip file)</label>
-				<input id="form_tests_zip" type="file" name="tests_zip" class="form-control" />
-				<small class="text-secondary">Folder upload will always take precedent, if you want to upload zip file, leave upload folder field blank. </small>
-			</div>
-			<p>
-				<a class="btn btn-primary btn-small" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-					Show current problem directory structure
-				</a>
-			</p>
-			<div class="collapse" id="collapseExample">
-				<div class="card card-body">
-					<pre>
-						{{ $tree_dump }}
-					</pre>
+			<div class="row mt-4">
+
+				<div class="form-check-inline  form-check form-switch m-t-3">
+					<input type="checkbox" class="form-check-input" id="customSwitch1" name="rename_zip">
+					<label class="form-check-label" for="customSwitch1">Re-order files in <strong>in</strong> and <strong>out</strong> folder after upload<br/><small>This could useful when importing dataset from another format but should be use with care </small>
+					</label>
+				</div>
+				<div class="my-4">
+					<label for="form_tests_zip"><i class="far fa-lg fa-file-archive"></i>Tests and Descriptions (zip file)</label>
+					<input id="form_tests_zip" type="file" name="tests_zip" class="form-control" />
+					<small class="text-secondary">Folder upload will always take precedent, if you want to upload zip file, leave upload folder field blank. </small>
+				</div>
+				<p>
+					<a class="btn btn-primary btn-small" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+						Show current problem directory structure
+					</a>
+				</p>
+				<div class="collapse" id="collapseExample">
+					<div class="card card-body">
+						<pre>
+							{{ $tree_dump }}
+						</pre>
+					</div>
 				</div>
 			</div>
 		</div>
