@@ -500,20 +500,21 @@ class problem_controller extends Controller
 
     }
 
-    public function template($problem_id, $assignment_id)
-    {
-        if ($assignment_id == 'null')
-            $assignment_id = NULL;
-        if ($assignment_id == NULL && !in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']))
-            abort(403, "Only admin can view template without assignment");
-        if ($assignment_id != NULL && Assignment::find($assignment_id)->problems->find($problem_id) == null)
-            abort(404);
-        if ($assignment_id == NULL && Problem::find($problem_id) == null)
-            abort(404); 
+    public function download_testcasess(Problem $problem, Assignment $assignment){
 
-        $template_file = $this->get_template_path($problem_id);
+    }
+    public function template(Problem $problem, Assignment $assignment)
+    {
+        // dd($problem);
+        $check = $assignment->can_submit(Auth::user(), $problem);
+		if (!$check->can_submit){
+			// dd($problem);
+			abort(403, $check->error_message);
+		}
+
+        $template_file = $this->__get_template_path($problem->id);
         if(!$template_file)
-            abort(404, "File note found");
+            abort(404, "Template file note found");
 
         // Download the file to browser
         return response()->download($template_file[0]);
@@ -543,7 +544,7 @@ class problem_controller extends Controller
         return response()->download($zipFile)->deleteFileAfterSend();
     }
     
-    public function get_template_path($problem_id = NULL){
+    protected function __get_template_path($problem_id = NULL){
         $pattern1 = rtrim($this->get_directory_path($problem_id)
         ."/template.public.cpp");
 

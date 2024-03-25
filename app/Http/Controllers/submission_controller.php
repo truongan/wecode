@@ -102,26 +102,19 @@ class submission_controller extends Controller
 
 	private function _creation_guard_check($assignment_id, $problem_id, $language_id = -1){
 		$assignment = Assignment::find($assignment_id);
+		$problem = Problem::find($problem_id);
 		
-		if ($assignment_id == 0){
-			$problem = Problem::find($problem_id);
-			if ($problem->can_practice(Auth::user()) == false ){
-				abort(404);
-			}
-		}
-		else {
-			$problem = $assignment->problems->find($problem_id);
-			if ($problem == NULL) abort(404);
+		if ( $assignment_id != 0 && $assignment->problems->find($problem_id) == NULL) abort(404);
 
-			$check = $assignment->can_submit(Auth::user());
-			if (!$check->can_submit){
-				abort(403, $check->error_message);
-			}
-			
-			if ($language_id != -1 && !in_array($language_id, explode(", ", $assignment->language_ids))){
-				abort(403, " This assignment doesn't allow programming language of id " . $language_id) ;
-			}
-		} 
+		$check = $assignment->can_submit(Auth::user(), $problem);
+		if (!$check->can_submit){
+			dd($problem);
+			abort(403, $check->error_message);
+		}
+		
+		if ($language_id != -1 && !in_array($language_id, explode(", ", $assignment->language_ids))){
+			abort(403, " This assignment doesn't allow programming language of id " . $language_id) ;
+		}
 
 		return $problem;
 

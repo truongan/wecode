@@ -44,7 +44,8 @@ Route::post('users/set_trial', [App\Http\Controllers\UserController::class, 'set
 
 Route::get('/problems/downloadtestsdesc/{id}', [App\Http\Controllers\problem_controller::class, 'downloadtestsdesc'])->name('problems.downloadtestsdesc');
 Route::get('/problems/downloadpdf/{id}', [App\Http\Controllers\problem_controller::class, 'pdf'])->name('problems.pdf');
-Route::get('/problems/downloadtemplate/{problem_id}/{assignment_id}', [App\Http\Controllers\problem_controller::class, 'template'])->name('problems.template');
+Route::get('/problems/downloadtemplate/{problem}/{assignment}', [App\Http\Controllers\problem_controller::class, 'template'])->name('problems.template');
+Route::get('/problems/downloadtestcases/{problem}/{assignment}', [App\Http\Controllers\problem_controller::class, 'template'])->name('problems.download_testcases');
 Route::post('/problems/edit_description/{problem_id}', [App\Http\Controllers\problem_controller::class, 'edit_description'])->name('problems.edit_description');
 Route::post('/problems/toggle_practice/{query?}', [App\Http\Controllers\problem_controller::class, 'toggle_practice'])->name('problems.toggle_practice');
 Route::post('/problems/edit_tags/{problem?}', [App\Http\Controllers\problem_controller::class, 'edit_tags'])->name('problems.edit_tags');

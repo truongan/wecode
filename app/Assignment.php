@@ -53,7 +53,7 @@ class Assignment extends Model
         else return('You do not have permission to edit assignment');
     }
 
-    public function can_submit(User $user)
+    public function can_submit(User $user, Problem $problem = null )
     {   
         $result = new class{};
         $result->error_message = 'Unknown error';
@@ -68,10 +68,17 @@ class Assignment extends Model
             $user->role_id = 5; //Hopefully 5 mean guest.
             $user->save();
         }
-        
 
         if (in_array( $user->role->name, ['guest']) ){
             $result->error_message = ' Guest can not make submissions. Contact site admin to upgrade your account ';
+        }
+        else if ( 
+                $this->id == 0 
+                && !in_array( $user->role->name, ['admin']) // Admin can submit to practice assignment on any problem
+                && ($problem == null || $problem->can_practice($user) == false ) 
+            ){        
+            $result->error_message = "You don't have permission to practice with this problem";
+            
         }
         elseif (in_array( $user->role->name, ['student']) && $this->open == 0){
             // if assignment is closed, non-student users (admin, instructors) still can submit
