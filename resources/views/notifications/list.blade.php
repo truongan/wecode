@@ -14,9 +14,9 @@
 @endsection
 
 @section('title_menu')
-@if ( in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
+{{-- @if ( in_array( Auth::user()->role->name, ['admin', 'head_instructor']) ) --}}
     <span class="ms-4 fs-6"><a href="{{ route('notifications.create') }}"><i class="fa fa-plus color10"></i> New</a></span>
-@endif
+{{-- @endif --}}
 @endsection
 
 @section('body_end')
@@ -89,13 +89,17 @@ $(document).ready(function () {
 	<div class="">
 		<div class="notif" id="number{{ $notification->id }}" data-id="{{ $notification->id }}"> 
 			<div class="notif_title">
-			<a href="{{ route('notifications.show', $notification->id) }}">{{ $notification->title }} - Author: {{$notification->user->username}}</a>
+			<a href="{{ route('notifications.show', $notification->id) }}">{{ $notification->title }} - Author: {{$notification->user->display_name}} 
+				@if ($notification->recipent_id > 0)
+					TO user:id: {{ $notification->recipent_id}}
+				@endif
+			</a>
 				<div class="notif_meta">
 					{{ $notification->created_at }}
 					@if ( in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
 						<a href="notifications/{{ $notification->id }}/edit">Edit</a>
 						<span class="pointer del_n text-danger">Delete</span>
-						<p>Chỉnh sửa lần cuối bởi: {{$notification->last_user->username}}</p>
+						<p>Chỉnh sửa lần cuối bởi: {{$notification->last_user->display_name}}</p>
 					@endif
 				</div>
 			</div>

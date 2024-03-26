@@ -101,7 +101,30 @@
 						</div>
 						{{-- {{ form_error('start_time', '<div class="alert alert-danger">', '</div>') }} --}}
 					</div>
-	
+
+					<div class="col-sm-4">
+						<label for="freeze_time">Freeze Time
+						<small class="form-text text-muted">Set finish time before start time will set the deadline to <strong>FOREVER</strong></small>
+						</label>
+					</div>
+					<div class="col-sm-8">
+						<input id="freeze_time" type="hidden" name="_time" class="form-control" value="" />
+						<div class="form-old-row row">
+							<div class="col-xl-7">
+								<input id="freeze_time_date" type="date" name="freeze_time_date" class="form-control" value="{{ $edit ? $assignment->freeze_time->setTimezone($settings['timezone'])->isoFormat('Y-MM-DD') : old('freeze_time_date') }}" />
+							</div>
+							<div class="col-xl-5">
+								<input id="freeze_time_time" type="time" name="freeze_time_time" class="form-control" value="{{ $edit ? $assignment->freeze_time->setTimezone($settings['timezone'])->isoFormat('HH:mm') : old('freeze_time_time') }}" />
+							</div>
+						</div>
+							@error('freeze_time_date')
+								<div class="alert alert-danger">{{ $message }}</div>
+							@enderror
+							@error('freeze_time_time')
+								<div class="alert alert-danger">{{ $message }}</div>
+							@enderror
+					</div>					
+
 					<div class="col-sm-4">
 						<label for="finish_time">Finish Time
 						<small class="form-text text-muted">Set finish time before start time will set the deadline to <strong>FOREVER</strong></small>
@@ -119,6 +142,29 @@
 						</div>
 						{{-- {{ form_error('finish_time', '<div class="alert alert-danger">', '</div>') }} --}}
 					</div>
+
+					<div class="col-sm-4">
+						<label for="unfreeze_time">UnFreeze Time
+						<small class="form-text text-muted">Time when the final scoreboard is revealed. Usually this is a few hours after the contest ends and the award ceremony is over.</small>
+						</label>
+					</div>
+					<div class="col-sm-8">
+						<input id="unfreeze_time" type="hidden" name="unfreeze_time" class="form-control" value="" />
+						<div class="form-old-row row">
+							<div class="col-xl-7">
+								<input id="unfreeze_time_date" type="date" name="unfreeze_time_date" class="form-control" value="{{ $edit ? $assignment->unfreeze_time->setTimezone($settings['timezone'])->isoFormat('Y-MM-DD') : old('unfreeze_time_date') }}" />
+							</div>
+							<div class="col-xl-5">
+								<input id="unfreeze_time_time" type="time" name="unfreeze_time_time" class="form-control" value="{{ $edit ? $assignment->unfreeze_time->setTimezone($settings['timezone'])->isoFormat('HH:mm') : old('unfreeze_time_time') }}" />
+							</div>
+						</div>
+							@error('unfreeze_time_date')
+								<div class="alert alert-danger">{{ $message }}</div>
+							@enderror
+							@error('unfreeze_time_time')
+								<div class="alert alert-danger">{{ $message }}</div>
+							@enderror
+					</div>	
 	
 					<div class="col-sm-4">
 						<label for="form_extra_time">

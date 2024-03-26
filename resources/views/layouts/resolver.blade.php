@@ -10,6 +10,8 @@
     <title>@yield('head_title') - {{ $settings['site_name'] }} - wecode judge</title>
 
     <!-- Fonts -->
+    <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 	<link rel="icon" href="{{ asset('assets/images/favicon.ico') }}">
 
     <!-- Styles -->
@@ -19,23 +21,8 @@
     <link href="{{ asset('assets/fontawesome/css/all.min.css') }}" rel="stylesheet">
     @yield('other_assets')
 </head>
-<body id="body" class="fixed-nav
-    @if (Auth::user() == null)
-    guest
-    @endif
-    ">
-
-    @if (Auth::user() != null)
-    @yield('mainnav', View::make('layouts.mainnav', ['selected' => $selected ?? '']))
-    @endif
-
-    <div class="content-wrapper
-    @if (Auth::user() == null)
-        guest
-    @endif
-    ">
-
-    <div class="container-fluid">
+<body id="body">
+    <div class="content-wrapper" style="margin: 0; margin-bottom: 3rem;"><div class="container-fluid">
         <div class="row">
             <div id="page_title" class="fs-5 border shadow bg-light text-dark container-fluid py-3 mb-0 col-12 align-items-center d-flex">
                 <i class="@yield('icon') fa-fw fa-lg"></i>

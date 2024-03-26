@@ -71,6 +71,9 @@ Route::get('/practice', [App\Http\Controllers\practice_controller::class, 'index
 Route::get('/practice/show/{problem}', [App\Http\Controllers\practice_controller::class, 'show'])->name('practices.show');
 
 Route::get('/scoreboard/full/{id}', [App\Http\Controllers\scoreboard_controller::class, 'index'])->name('scoreboards.index');
+Route::get('/scoreboard/freeze/full/{id}', [App\Http\Controllers\scoreboard_controller::class, 'index_freeze'])->name('scoreboards.freeze');
+
+Route::get('/resolver/{id}', [App\Http\Controllers\resolver_controller::class, 'index'])->name('resolver.index');
 
 Route::get('/assignment/{assignment}/{problem_id}/', [App\Http\Controllers\assignment_controller::class, 'show'])->where(['assignment'=>'[0-9]+','problem_id'=>'[0-9]+'])->name('assignments.show');
 
@@ -84,8 +87,8 @@ Route::get('/assignment/scores/sum/', [App\Http\Controllers\assignment_controlle
 Route::post('/assignment/check_open/', [App\Http\Controllers\assignment_controller::class, 'check_open'])->name('assignments.check_open');
 Route::get('/assignment/duplicate/{assignment}', [App\Http\Controllers\assignment_controller::class, 'duplicate'])->name('assignments.duplicate');
 
-Route::get('/scoreboard/simplify/{id}', [App\Http\Controllers\scoreboard_controller::class, 'simplify'])->name('scoreboards.simplify');
-Route::get('/scoreboard/plain/{id}', [App\Http\Controllers\scoreboard_controller::class, 'plain'])->name('scoreboards.plain');
+// Route::get('/scoreboard/simplify/{id}', [App\Http\Controllers\scoreboard_controller::class, 'simplify'])->name('scoreboards.simplify');
+// Route::get('/scoreboard/plain/{id}', [App\Http\Controllers\scoreboard_controller::class, 'plain'])->name('scoreboards.plain');
 
 Route::get('/server_time', function(){echo  date(DATE_ISO8601);});
 Route::get('/lop/scoreboard/{lop}', [App\Http\Controllers\lop_controller::class, 'scoreboard'])->name('lop.scoreboard');

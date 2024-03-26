@@ -113,7 +113,7 @@ class Assignment extends Model
     }
 
     public function started(){
-        return strtotime(date("Y-m-d H:i:s")) >= strtotime($this->start_time) ; //now should be larger than start time
+        return strtotime(date("Y-m-d H:i:s")) >= strtotime($this->start_time)  ; //now should be larger than start time
     }
 
     public function update_submissions_coefficient(){
@@ -170,6 +170,8 @@ class Assignment extends Model
                 'id' => 0,
                 'name' => "instructors'submit",
                 'finish_time' => 0,
+                'freeze_time' => 0,
+                'unfreeze_time' => 0,
                 'extra_time' => 0,
                 'problems' => 0,
                 'open' => 0,

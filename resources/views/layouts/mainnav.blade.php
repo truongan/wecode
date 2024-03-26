@@ -16,7 +16,7 @@
             <li class="nav-item color-notifications {{ ($selected=="notifications") ? "selected" : ""}}">
                 <a class="nav-link" href="{{ url('notifications') }}">
                     <i class="fa fa-fw fa-bell fa-lg"></i>
-                    <span class="nav-link-text">Notifications</span>
+                    <span class="nav-link-text">Clarifications</span>
                 </a>
             </li>
             <li class="nav-item color-problem_list {{ ($selected=="problem_list") ? "selected" : ""}}">
@@ -31,8 +31,8 @@
                     <span class="nav-link-text">Practice</span>
                 </a>
             </li>
-            
-            @if ( in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
+            {{-- {{ dd(Auth::user())}} --}}
+            @if (   Auth::user() != null && in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
                 <li class="nav-item color-instructor_panel {{ ($selected=="instructor_panel") ? "selected" : ""}}" >
                     <a class="nav-link" href="{{ route('problems.index') }}">
                         <i class="fa fa-fw fa-sliders-h fa-lg"></i>
@@ -44,19 +44,23 @@
             <li class="nav-item color-assignments {{ ($selected=="assignments") ? "selected" : ""}}">
                 <a class="nav-link" href="{{ url('assignments') }}">
                     <i class="fa fa-fw fa-folder-open fa-lg"></i>
-                    <span class="nav-link-text">Assignments</span>
+                    <span class="nav-link-text">CONTESTS</span>
                 </a>
             </li>
             <li class="nav-item color-all_submissions {{ ($selected=="all_submissions") ? "selected" : ""}}">
-                @if ( in_array( Auth::user()->role->name, ['student', 'guest']) ) 
+                @if ( Auth::user() != null )
+                    @if ( in_array( Auth::user()->role->name, ['student', 'guest']) ) 
                     <a class="nav-link" href="{{ route('submissions.index', [(int)Auth::user()->selected_assignment_id, Auth::user()->id, 'all', 'all'])}}">
-                @else
-                    <a class="nav-link" href="{{ route('submissions.index', [(int)Auth::user()->selected_assignment_id, 'all', 'all', 'all'])}}">
-                @endif
+                    @else
+                        <a class="nav-link" href="{{ route('submissions.index', [(int)Auth::user()->selected_assignment_id, 'all', 'all', 'all'])}}">
+                    @endif
                     <i class="fa fa-fw fa-bars fa-lg"></i>
                     <span class="nav-link-text">Submissions</span>
+                @endif 
                 </a>
             </li>
+
+            @if ( Auth::user() != null && in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
             <li class="nav-item color-scoreboard {{ ($selected=="scoreboard") ? "selected" : ""}}">
                 <a class="nav-link" 
                 @if (isset(Auth::user()->selected_assignment_id))
@@ -67,6 +71,20 @@
 
                 >
                     <i class="fa fa-fw fa-star fa-lg"></i>
+                    <span class="nav-link-text">Scoreboard</span>
+                </a>
+            </li>
+            @endif
+
+            <li class="nav-item color-freeze {{ ($selected=="freeze") ? "selected" : ""}}">
+                <a class="nav-link" 
+                @if (isset(Auth::user()->selected_assignment_id))
+                href="{{ route('scoreboards.freeze', (int)Auth::user()->selected_assignment_id) }}"
+                @else
+                href="{{ route('scoreboards.freeze', 0 )}}"
+                @endif
+                >
+                    <i class="fa fa-fw fa-snowflake fa-spin fa-lg"></i>
                     <span class="nav-link-text">Scoreboard</span>
                 </a>
             </li>
@@ -103,7 +121,7 @@
 
         <ul class="nav navbar-nav navbar-right">
             <li class="nav-item dropdown">
-                <a class="dropdown-toggle nav-link" data-bs-toggle="dropdown" href="#" id="profile_link" rol="button" aria-expandd="false"><i class="fa fa-fw fa-user"></i>{{Auth::user()->username}}</a>
+                <a class="dropdown-toggle nav-link" data-bs-toggle="dropdown" href="#" id="profile_link" rol="button" aria-expandd="false"><i class="fa fa-fw fa-user"></i>{{ Auth::user()->username ?? " " }}</a>
                 <div class="dropdown-menu dropdown-menu-end ">
                     <div class="d-flex pe-3 ps-3">
                         <div class="">
@@ -112,7 +130,7 @@
                                 @csrf
                                 <button type="submit" class="btn btn-danger me-2 text-nowrap"><i class="fas fa-fw fa-sign-out-alt"></i>Sign out</button>
                                 </form>
-                                <a href="{{ route("users.show", Auth::user()->id) }}" class="btn btn-info text-nowrap"><i class="fas fa-fw fa-wrench"></i>Profile</a>
+                                <a href="{{ route("users.show", Auth::user()->id ?? 0) }}" class="btn btn-info text-nowrap"><i class="fas fa-fw fa-wrench"></i>Profile</a>
                             </div>
                         </div>
                     </div>

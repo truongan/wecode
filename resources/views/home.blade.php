@@ -212,7 +212,7 @@ js') }}"></script>
                 @foreach ($notifications as $notification)
                 <div class="notif" id="number{{ $notification->id }}" data-id="{{ $notification->id }}">
                     <div class="notif_title">
-                        <span class="anchor ttl_n">{{ $notification->title }} - {{$notification->user->username}}</span>
+                        <span class="anchor ttl_n">{{ $notification->title }} - {{$notification->user->display_name}}</span>
                         <span class="notif_meta" dir="ltr">
                             {{ $notification->created_at }}
                         </span>

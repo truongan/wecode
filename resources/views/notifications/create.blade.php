@@ -1,9 +1,9 @@
 @php($selected = 'notifications')
 @extends('layouts.app')
-@section('head_title','New Notification')
+@section('head_title','New Clarification request')
 @section('icon', 'fas fa-plus')
 
-@section('title', 'New Notification')
+@section('title', 'New Clarification request')
 
 @section('body_end')
 <script type="text/javascript">
@@ -19,6 +19,17 @@ $(document).ready(function(){
 
 @section('content')
 <form method="POST"  action="{!! route('notifications.store') !!}">
+	@if ($all_users ?? false)
+		<label for="form_title" class="tiny">Select recipent:</label>
+		<select class="form-select" aria-label="Default select example" name="recipent_id">
+			<option value="0" selected="selected"> ALL USERS</option>
+			@foreach ($all_users as $id => $name )
+			<option value="{{$id}}"> {{$name}}</option>
+			@endforeach
+
+		</select>
+	
+	@endif 
 	<input type="hidden"  name ="_token" value="{!! csrf_token() !!}"/>
 	<p class="input_p">
 		<label for="form_title" class="tiny">Title:</label>
@@ -28,6 +39,7 @@ $(document).ready(function(){
 		<label for="notif_text" class="tiny">Description:</label>
 		<input type="text" name="description"></>
 	</p>
+	
 	<p class="input_p">
 		<label for="notif_text" class="tiny">Text:</label>
 		<textarea id="notif_text" name="text"></textarea>
