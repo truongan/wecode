@@ -500,7 +500,31 @@ class problem_controller extends Controller
 
     }
 
-    public function download_testcasess(Problem $problem, Assignment $assignment){
+    public function download_testcases(Problem $problem, Assignment $assignment, $type = null){
+        $check = $assignment->can_submit(Auth::user(), $problem);
+		if (!$check->can_submit){
+            // dd($problem);
+			abort(403, $check->error_message);
+		}
+        
+        if ($type != 'in' && $type != 'out'){
+            abort(404, "What are you trying to download");
+        }
+        if ($type == 'in' && $problem->allow_input_download == false){
+            abort(403, "This problem does not allow input donwload");
+        } 
+        if ($type == 'out' && $problem->allow_output_download == false){
+            abort(403, "This problem does not allow output donwload");
+        }
+
+        $assignments_root = Setting::get("assignments_root");
+        $zipFile = $assignments_root . "/problem" . (string)$problem->id . "_" . $type  . (string)date('Y-m-d_H-i') . ".zip";
+        $pathdir = $assignments_root . '/problems/' . (string)$problem->id . '/' . $type . '/';
+
+        // dd("cd $pathdir && zip -r $zipFile *");
+        $a = shell_exec("cd $pathdir && zip -r $zipFile *");
+        // dd($a);
+        return response()->download($zipFile)->deleteFileAfterSend();
 
     }
     public function template(Problem $problem, Assignment $assignment)
