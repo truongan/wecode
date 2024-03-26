@@ -47,7 +47,9 @@ thead tr:after {
 
 @section('content')
 <a name="" id="copy_user_list" class="btn btn-primary my-2" href="#" role="button"><i class="fas fa-copy    "></i> copy user name list</a>
-<button id="delete_selected" class="btn btn-danger my-2"><i class="fas fa-trash"></i> Delete selected users</button>
+@if (Auth::user()->role->name == 'admin')
+  <button id="delete_selected" class="btn btn-danger my-2"><i class="fas fa-trash"></i> Delete selected users</button>
+@endif
 <div class="row">
   <div class="table-responsive">
     <table class="table table-striped table-bordered">
@@ -209,18 +211,18 @@ $(document).ready(function(){
     if (selected_users.length === 0) return;
 
     // Show popup
-		let row = $(this).parents('tr');
-		let user_ids = row.data('id');
-		let usernames = row.children('#un').html();
+    let row = $(this).parents('tr');
+    let user_ids = row.data('id');
+    let usernames = row.children('#un').html();
 
-		$(".modal-title").html("Are you sure you want to DELETE these users and their submissions?");
+    $(".modal-title").html("Are you sure you want to DELETE these users and their submissions?");
     $(".modal-body").html('')
     selected_users.forEach(user => {
       $(".modal-body").append('User ID: <code>'+user.id+'</code><br>Username: <code>'+user.username+'</code><br><br>');
     });
-		$("#user_delete").modal("show");
+    $("#user_delete").modal("show");
 
-		$(".confirm-user-delete").click(function() {
+    $(".confirm-user-delete").click(function() {
       $("#user_delete").modal("hide");
       selected_users.forEach(async user => {
 
@@ -264,7 +266,7 @@ $(document).ready(function(){
         });
 
       });
-		});
+    });
   });
 
   $("table").DataTable({
