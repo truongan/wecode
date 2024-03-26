@@ -70,8 +70,8 @@
         @endforeach
     </tr>
     @endforeach
-    <tfoot class="bg-dark text-light">
-        <th colspan="5">Sumarry</th>
+    <tfoot class="table-dark">
+        <th colspan="5">Summary</th>
         @foreach ($problems as $problem)
         <th>
             <a class="small" href="{{ route('assignments.show', ['assignment'=>$assignment_id, 'problem_id'=> $problem->id]) }}">{{ $problem->pivot->problem_name }}</a>
