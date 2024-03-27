@@ -4,6 +4,21 @@
 @section('head_title', 'Resolver')
 @section('title', 'Resolver')
 
+@section('title_menu')
+<nav>
+    <a class="text-secondary" href="{{ route('assignments.show', [$assignment->id, 0]) }}" style="text-decoration: none;"><i class="fas fa-clipboard-list fa-fw"></i>
+        <small> Problemset</small>
+    </a>
+</nav>
+@endsection
+
+@section('contest_time')
+<i class="fas fa-clock fa-fw fa-spin text-secondary"></i>
+<small>
+    <span class="text-secondary">{{ $assignment->start_time->format('d-m-Y') }} | Start: {{ $assignment->start_time->format('H:i:s') }} - End: {{ $assignment->finish_time->format('H:i:s') }}</span>
+</small>
+@endsection
+
 @section('other_assets')
     <link rel='stylesheet' type='text/css' href='{{ asset('assets/DataTables/datatables.min.css') }}' />
     <script>
@@ -34,9 +49,10 @@
             box-shadow: -1px 0 0 0 silver inset, 0 1px 0 0 black;
             border: none;
             position: sticky;
-            top: 56px;
-            z-index: 1;
+            top: 0px;
+            z-index: 1000;
             font-size: small;
+            background-color: white;
         }
 
         #scoreboard tr {
@@ -151,55 +167,41 @@
 
 
 @section('content')
-    <div class="mx-n2" style="overflow: auto">
-        <h1 style="text-align: center; margin: 1rem; font-weight: bold; ">{{ $assignment->name }}</h1>
-        <p style="text-align: center; margin-bottom: 1rem">{{ $assignment->start_time->format('Y-m-d') }}</p>
-        <p style="text-align: center; margin-bottom: 1rem">Start: {{ $assignment->start_time->format('H:i:s') }} - End: {{ $assignment->finish_time->format('H:i:s') }}</p>
-
-        {{-- <button id="reverse-btn" class="btn btn-secondary"><< Go back</button>
-        <button id="resolve-btn" class="btn btn-secondary">Resolve >> </button>
-        <button id="auto-resolve-btn" class="btn btn-secondary">Auto Resolve >> </button> --}}
-
-        {{-- <i>Click right arrow to resolve</i><br>
-        <i>Click 1 to auto resolve for users whose rank is below 30</i> --}}
-
-        {{-- TABLE --}}
-        <table id="scoreboard">
-            <colgroup>
-                <col id="score_rank">
-                <col id="score_logo">
-                <col id="score_username">
-            </colgroup>
-            <colgroup>
-                <col id="score_solved">
-                <col id="score_total">
-            </colgroup>
-            <colgroup>
+    {{-- TABLE --}}
+    <table id="scoreboard">
+        <colgroup>
+            <col id="score_rank">
+            <col id="score_logo">
+            <col id="score_username">
+        </colgroup>
+        <colgroup>
+            <col id="score_solved">
+            <col id="score_total">
+        </colgroup>
+        <colgroup>
+            @foreach ($problem_id as $ordering => $id)
+                <col id="score_prob"></col>
+            @endforeach
+        </colgroup>
+        <thead>
+            <tr class="scoreheader">
+                <th title="rank" scope="col">RANK</th>
+                <th title="team name" scope="col" colspan="2">TEAM</th>
+                <th title="solved / penalty time" scope="col" colspan="2">SCORE</th>
                 @foreach ($problem_id as $ordering => $id)
-                    <col id="score_prob"></col>
+                    <th scope="col">
+                        <a href="{{ route('problems.show', ['problem' => $id]) }}" target="_blank">
+                            <span class="badge problem-badge">
+                                {{ chr($ordering + 65) }}
+                            </span>
+                        </a>
+                    </th>
                 @endforeach
-            </colgroup>
-            <thead>
-                <tr class="scoreheader">
-                    <th title="rank" scope="col">RANK</th>
-                    <th title="team name" scope="col" colspan="2">TEAM</th>
-                    <th title="solved / penalty time" scope="col" colspan="2">SCORE</th>
-                    @foreach ($problem_id as $ordering => $id)
-                        <th scope="col">
-                            <a href="{{ route('problems.show', ['problem' => $id]) }}" target="_blank">
-                                <span class="badge problem-badge">
-                                    {{ chr($ordering + 65) }}
-                                </span>
-                            </a>
-                        </th>
-                    @endforeach
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-        {{-- TABLE --}}
-
-    </div>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    {{-- TABLE --}}
 @endsection
 
 @section('body_end')
