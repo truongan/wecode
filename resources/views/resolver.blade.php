@@ -17,99 +17,125 @@
             padding: 0px;
             box-sizing: border-box;
         }
-        td {
-            transition: all 1.5s linear;
-            font-size: 1rem;
-            white-space: pre-wrap;
-            /* border-bottom: solid 1px #acacac; */
-        }
-
-        .score {
-            width: 4rem;
-        }
-
-        .score.wrong {
-            background: #e87272;
-        }
-
-        .score.correct {
-            background: #60e760;
-        }
-
-        .score.pending {
-            background: #6666FF;
-        }
 
         #scoreboard {
             margin: 0 auto;
             text-align: center;
             border-collapse: collapse;
-            width: 100%;
         }
 
-        #scoreboard thead {
-            height: 3rem;
+        .scoreheader {
+            font-variant: small-caps;
+            white-space: nowrap;
+        }
+
+        .scoreheader th {
+            text-align: center;
+            box-shadow: -1px 0 0 0 silver inset, 0 1px 0 0 black;
+            border: none;
+            position: sticky;
+            top: 56px;
+            z-index: 1;
+            font-size: small;
+        }
+
+        #scoreboard tr {
             border-bottom: 1px solid black;
-            /* z-index: 1; */
-            /* background-color: grey;
-            color: white; */
-            /* border-image: linear-gradient(transparent 10%, blue 10% 90%, transparent 90%) 0 0 0 1 / 3px; */
-            /* border-width: 2px; */
+            height: 42px;
         }
 
-        th {
-            box-shadow: -1px 0 0 0 silver inset, 0 2px 0 0 black;
+        #scoreboard tbody {
+            border-top: 2px solid black;
         }
 
-        .solved {
-            width: 3rem;
-            font-weight: bold;
-        }
-
-        .total {
-            width: 4rem;
-            font-size: 1rem;
-        }
-
-        .logo {
-            width: 2rem;
-        }
-
-        .name {
-            width: 30rem;
-            text-align: right;
-        }
-
-        .name > p {
-            margin: 0;
-            margin-top: 4px;
-            font-size: 1rem;
-            font-weight: bold;
-        }
-
-        .name > .school_name {
-            margin: 0;
-            margin-bottom: 4px;
-            font-size: 14px;
-            font-weight: normal;
-            font-style: italic;
-        }
-
-        .rank {
-            width: 3rem;
-        }
-
-        .prob_tries {
-            padding: 0;
-            margin: 0;
-            font-size: 12px;
-        }
-
-        .user_row {
-            /* transform: translateY(0px); */
+        #scoreboard .user_row {
             transition: transform 1.5s linear;
-            height: 8px;
-            /* border-bottom: 1px solid black; */
+        }
+
+        #scoreboard td {
+            border-right: 1px solid silver;
+            padding: 0px;
+            font-size: small;
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        #scoreboard .logo {
+            white-space: nowrap;
+            border: 0;
+            text-align: center;
+        }
+
+        #scoreboard .logo_img {
+            vertical-align: middle;
+            width: 40px;
+            padding: 5px;
+        }
+
+        #scoreboard .name {
+            padding: 0px 5px 0px;
+            text-align: right;
+            font-weight: bold;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        #scoreboard p {
+            margin: 0;
+        }
+
+        #scoreboard div {
+            margin: 0px 1px 0px 1px;
+        }
+
+        #scoreboard .name .school_name {
+            font-size: 80%;
+            font-weight: normal;
+            color: dimgrey;
+        }
+
+        #scoreboard .solved {
+            border-right: 0;
+            font-weight: bold;
+        }
+
+        #scoreboard .solved div, #scoreboard .total div {
+            padding: 0px 5px 0px 5px;
+        }
+        
+        #scoreboard td.score_cell {
+            min-width: 4.4em;
+            border-right: none;
+            white-space: pre-wrap;
+        }
+
+        #scoreboard .score {
+            width: 4.2em;
+            font-size: 120%;
+            transition: all 1s linear;
+        }
+
+        #scoreboard .prob_tries {
+            font-weight: normal;
+            font-size: 70%;
+        }
+
+        #scoreboard .problem-badge {
+            background: #0a58ca;
+            font-size: 100%;
+        }
+
+        #scoreboard .score_wrong {
+            background: #e87272;
+        }
+
+        #scoreboard .score_correct {
+            background: #60e760;
+        }
+
+        #scoreboard .score_pending {
+            background: #6666FF;
         }
 
     </style>
@@ -134,8 +160,8 @@
         <button id="resolve-btn" class="btn btn-secondary">Resolve >> </button>
         <button id="auto-resolve-btn" class="btn btn-secondary">Auto Resolve >> </button> --}}
 
-        <i>Click right arrow to resolve</i><br>
-        <i>Click 1 to auto resolve for users whose rank is below 30</i>
+        {{-- <i>Click right arrow to resolve</i><br>
+        <i>Click 1 to auto resolve for users whose rank is below 30</i> --}}
 
         {{-- TABLE --}}
         <table id="scoreboard">
@@ -154,13 +180,17 @@
                 @endforeach
             </colgroup>
             <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col" colspan="2">USER</th>
-                    <th scope="col" colspan="2">SCORE</th>
+                <tr class="scoreheader">
+                    <th title="rank" scope="col">RANK</th>
+                    <th title="team name" scope="col" colspan="2">TEAM</th>
+                    <th title="solved / penalty time" scope="col" colspan="2">SCORE</th>
                     @foreach ($problem_id as $ordering => $id)
                         <th scope="col">
-                            {{ chr($ordering + 65) }}
+                            <a href="{{ route('problems.show', ['problem' => $id]) }}" target="_blank">
+                                <span class="badge problem-badge">
+                                    {{ chr($ordering + 65) }}
+                                </span>
+                            </a>
                         </th>
                     @endforeach
                 </tr>
@@ -214,13 +244,13 @@
             users_list.push(user)
             
             if (i > break_rank-1) {
-            // Count number of click (aka number of tries of all users whose rank is below break_rank)
-            Object.values(php_tries[user.username]['tries_during']).map((tries_of_this_prob) => {
-                if (tries_of_this_prob) num_of_autoclick++
-            })
+                // Count number of click (est from the initial rank, not exactly resolve whose rank is below 30)
+                Object.values(php_tries[user.username]['tries_during']).map((tries_of_this_prob) => {
+                    if (tries_of_this_prob) num_of_autoclick++
+                })
+            }
         }
-    }
-        console.log(num_of_autoclick)
+        // console.log(num_of_autoclick)
         // console.log(users_list)
         // console.log(accepted_time)
 
@@ -233,25 +263,25 @@
 
                 const total_tries_of_prob = Number(user.tries_before[problem_id]) + Number(user.tries_during[problem_id]);
                 if (user.tries_during[problem_id] > 0) {
-                    return ('<td class="score pending"> <p class="prob_tries">' + 
+                    return ('<td class="score_cell"><div class="score score_pending">&nbsp;<p class="prob_tries">' + 
                         user.tries_before[problem_id] + '+' + user.tries_during[problem_id] + 
-                        (total_tries_of_prob == 1 ? ' try' : ' tries') + '</p></td>')
+                        (total_tries_of_prob == 1 ? ' try' : ' tries') + '</p></div></td>')
 
                 } else {
                     if (user.tries_before[problem_id] == 0) {
-                        return ('"<td class="score"></td>')
+                        return ('"<td class="score_cell"><div class="score"></div></td>')
 
                     } else if (user.accepted_time[problem_id] == 0) {
-                        return ('<td class="score wrong"> <p class="prob_tries">' + 
+                        return ('<td class="score_cell"><div class="score score_wrong">&nbsp;<p class="prob_tries">' + 
                             user.tries_before[problem_id] + 
-                            (total_tries_of_prob == 1 ? ' try' : ' tries') + '</p></td>')
+                            (total_tries_of_prob == 1 ? ' try' : ' tries') + '</p></div></td>')
 
                     } else {
-                        return ('<td class="score correct">' +
+                        return ('<td class="score_cell"><div class="score score_correct">' +
                             user.accepted_time[problem_id] + 
                             '<p class="prob_tries">' + 
                             user.tries_before[problem_id] + 
-                            (total_tries_of_prob == 1 ? ' try' : ' tries') + '</p></td>')
+                            (total_tries_of_prob == 1 ? ' try' : ' tries') + '</p></div></td>')
                     }
                 }
             })
@@ -261,16 +291,11 @@
             const row = $(
                 '<tr class="user_row">' +
                 '<td class="rank">' + (i + 1) + '</td>' +
-            //    '<td class="logo"><img src="http://wecode.test/images/UCPC_iuh.png" height="20px"></td>' +
-                //  '<td class="logo"><img src="' + users_list[i].image + '" height="20px"></td>' +
-                '<td class="logo"><img src="' + users_list[i].image + '" height="20px"></td>' +
-
-
-
-                '<td class="name"><p>' + users_list[i].display_name + '</p><p class="school_name">' + users_list[i].school_name + '</p></td>'
- +
-                '<td class="solved">' + users_list[i].total_accepted + '</td>' +
-                '<td class="total">' + users_list[i].total_accepted_time + '</td>' +
+                '<td class="logo"><img class="logo_img" src="http://wecode.test/images/logo_uit.png"></td>' +
+                // '<td class="logo"><img class="logo_img" src="' + users_list[i].image + '"></td>' +
+                '<td class="name"><div><p class="display_name">' + users_list[i].display_name + '</p><p class="school_name">' + users_list[i].school_name + '</p></div></td>' +
+                '<td class="solved"><div>' + users_list[i].total_accepted + '</div></td>' +
+                '<td class="total"><div>' + users_list[i].total_accepted_time + '</div></td>' +
                 (generateUserResultCell(users_list[i], php_problem_id)) +
                 '</tr>'
             )
@@ -307,40 +332,40 @@
             // console.log(prob_id)
 
             // Update user
-            const prob_ordering = Number(Object.keys(php_problem_id).find(key => php_problem_id[key] == prob_id)) + 5
+            const prob_ordering = Number(Object.keys(php_problem_id).find(key => php_problem_id[key] == prob_id))
             const score = last_user['accepted_time'][prob_id]
             const total_tries_of_prob = Number(last_user['tries_before'][prob_id]) + Number(last_user['tries_during'][prob_id])
             // console.log(total_tries_of_prob)
             // console.log(last_user['accepted_time'][prob_id])
-            // console.log(last_user.html_row.find("td")[prob_ordering])
+            // console.log(last_user.html_row.find(".score")[prob_ordering])
 
             users_list[last_user_row_index].tries_during[prob_id] = 0;
             
             if (score) {
                 users_list[last_user_row_index].total_accepted += 1;
                 users_list[last_user_row_index].total_accepted_time += score;
-                last_user.html_row.find("td")[prob_ordering].textContent = score
-                last_user.html_row.find("td")[prob_ordering].classList.remove("pending")
-                last_user.html_row.find("td")[prob_ordering].classList.add("correct")
+                last_user.html_row.find(".score")[prob_ordering].textContent = score
+                last_user.html_row.find(".score")[prob_ordering].classList.remove("score_pending")
+                last_user.html_row.find(".score")[prob_ordering].classList.add("score_correct")
                 
                 last_user.html_row.find(".solved")[0].textContent = users_list[last_user_row_index].total_accepted
                 last_user.html_row.find(".total")[0].textContent = users_list[last_user_row_index].total_accepted_time
 
-                // last_user.html_row.find("td")[prob_ordering].textContent = score
+                // last_user.html_row.find(".score")[prob_ordering].textContent = score
                 const span_tries_display = $('<p class="prob_tries">' + total_tries_of_prob + ' ' + (total_tries_of_prob == 1 ? 'try' : 'tries') + '</p>')
                 // console.log(span_tries_display)
-                last_user.html_row.find("td")[prob_ordering].append(span_tries_display[0])
+                last_user.html_row.find(".score")[prob_ordering].append(span_tries_display[0])
                 
                 
             } else {
-                last_user.html_row.find("td")[prob_ordering].textContent = ' '
-                last_user.html_row.find("td")[prob_ordering].classList.remove("pending")
-                last_user.html_row.find("td")[prob_ordering].classList.add("wrong")
+                last_user.html_row.find(".score")[prob_ordering].textContent = ' '
+                last_user.html_row.find(".score")[prob_ordering].classList.remove("score_pending")
+                last_user.html_row.find(".score")[prob_ordering].classList.add("score_wrong")
 
                 
                 const span_tries_display = $('<p class="prob_tries">' + total_tries_of_prob + ' ' + (total_tries_of_prob == 1 ? 'try' : 'tries') + '</p>')
                 // console.log(span_tries_display)
-                last_user.html_row.find("td")[prob_ordering].append(span_tries_display[0])
+                last_user.html_row.find(".score")[prob_ordering].append(span_tries_display[0])
 
             }
             
@@ -364,7 +389,7 @@
 
             // Reposition
             for (let i = 0; i < users_list.length; i++) {
-                const transformY = users_list[i].transformY(i, 53)
+                const transformY = users_list[i].transformY(i, 42)
                 // console.log(transformY)
                 users_list[i].html_row.css('transform', 'translateY(' + transformY + 'px)')
                 // console.log(users_list[i].html_row)
@@ -387,7 +412,7 @@
             if (e.key == "ArrowRight")
                 resolve()
             else if (e.key == "1") {
-                for (let i = 0; i<= num_of_autoclick; i++) {
+                for (let i = 0; i <= num_of_autoclick; i++) {
                     resolve()
                 }
             }
