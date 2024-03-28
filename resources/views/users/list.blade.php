@@ -48,7 +48,8 @@ thead tr:after {
 @section('content')
 <a name="" id="copy_user_list" class="btn btn-primary my-2" href="#" role="button"><i class="fas fa-copy    "></i> copy user name list</a>
 @if (Auth::user()->role->name == 'admin')
-  <button id="delete_selected" class="btn btn-danger my-2"><i class="fas fa-trash"></i> Delete selected users</button>
+<button id="select_all" class="btn btn-secondary my-2"><i class="fas fa-check"></i> Select all users</button>
+<button id="delete_selected" class="btn btn-danger my-2"><i class="fas fa-trash"></i> Delete selected users</button>
 @endif
 <div class="row">
   <div class="table-responsive">
@@ -154,7 +155,6 @@ $(document).ready(function(){
 		$(".modal-body").html('User ID: '+user_id+'<br>Username: '+username+'<br><i class="splashy-warning_triangle"></i> All submissions of this user will be deleted.');
 		$(".confirm-user-delete").off();
 		$(".confirm-user-delete").click(function(){
-      console.log(del_submssion);
 			$.ajax({
 				url: (del_submssion ? ('users/delete_submissions/'+user_id) : ('{{ route('users.index') }}/'+user_id)),
         type: (del_submssion ? 'POST' : 'DELETE'),
@@ -201,12 +201,10 @@ $(document).ready(function(){
           username: username,
         });
     }
-    console.log(selected_users)
   });
 
   $("#delete_selected").click(function(e) {
     e.preventDefault();
-    console.log(selected_users)
 
     if (selected_users.length === 0) return;
 
@@ -273,6 +271,27 @@ $(document).ready(function(){
     "pageLength": 50,
     "lengthMenu": [ [20, 50, 100, 200, -1], [20, 50, 100, 200, "All"] ]
   });
+
+  $("#select_all").click(function(e) {
+    e.preventDefault();
+    const table = $('table').DataTable();
+    // Show all rows
+    table.page.len(-1).draw();
+    
+    $('.checkbox').each(function() {
+      let username = $(this).parents('tr').find('#un').text().trim();
+      let id = $(this).parents('tr').data('id');
+
+      if (!$(this).hasClass('fa-check-circle')) {
+        $(this).removeClass('fa-circle').addClass('fa-check-circle');
+        selected_users.push({
+          id: id,
+          username: username,
+        });
+      }
+    });
+  });
+
 });
 
 </script>
