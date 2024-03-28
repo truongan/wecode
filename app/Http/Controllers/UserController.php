@@ -275,6 +275,9 @@ class UserController extends Controller
 			if ($user->submissions()->count() > 0){
 				$json_result = array('done' => 0, 'message' => "You must delete users' submission before you can delete user.");
 			}
+			elseif (Auth::user()->id == $user_id) {
+				$json_result = array('done' => 0, 'message' => 'You cannot delete yourself!');
+			}
 			elseif (User::destroy($user_id))
 				$json_result = array('done' => 1);
 			else
@@ -294,7 +297,7 @@ class UserController extends Controller
 		$i = 0;
 		$json_result = array('done'=>0 , 'count' => 0);
 		foreach ($subs as $sub) {
-			var_dump($sub->directory());
+			// var_dump($sub->directory());
 			shell_exec("rm -rf " . $sub->directory());
 			$sub->delete();
 			$i++;
@@ -364,8 +367,8 @@ class UserController extends Controller
 			'display_name' => $display_name
 		];
 		$validator = Validator::make($user, [
-			'username' => ['required', 'string', 'max:50', 'unique:users'],
-			'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+			'username' => ['required', 'string', 'max:50', 'unique:users', 'regex:/^\S*$/'],
+			'email' => ['required', 'string', 'email', 'max:255', 'unique:users', 'regex:/^\S*$/'],
 			'display_name' => ['nullable', 'string', 'max:255'],
 			'password' => ['required', 'string', 'min:8'],
 		]);
@@ -500,8 +503,6 @@ class UserController extends Controller
 			$count = $where_clause->update(['trial_time' => DB::Raw(" TIMESTAMPDIFF(HOUR, `created_at`, '$end_time' )") ,'role_id' => 4 ]  );
 		}
 		// dd($count);
-		return back()->with(['success' => $count ])->withInput()
-		;
+		return back()->with(['success' => $count ])->withInput();
 	}
-	
 }
