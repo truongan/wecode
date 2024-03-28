@@ -134,9 +134,12 @@ class resolver_controller extends Controller
                     if ($submission && $submission->pre_score == 10000) {
                         // $score = ceil($submission->pre_score/$submission->coefficient);
                         $time = $assignment->start_time->diffInMinutes($submission->created_at, true);
-
+                        $compilation_error = $assignment->submissions
+                            ->where('problem_id', $problem_id)
+                            ->where('user_id', $id)
+                            ->where('status', 'Compilation Error')->count();
                         // Penalty
-                        $penalty = ($array_of_tries[$username]['tries_before'][$problem_id] + $array_of_tries[$username]['tries_during'][$problem_id]-1) * \App\Setting::get('submit_penalty')/60;
+                        $penalty = ($array_of_tries[$username]['tries_before'][$problem_id] + $array_of_tries[$username]['tries_during'][$problem_id]- $compilation_error - 1) * \App\Setting::get('submit_penalty')/60;
                         // Log::info($penalty);
                         $time += $penalty;
 
@@ -204,12 +207,17 @@ class resolver_controller extends Controller
                         }
                         $time = $assignment->start_time->diffInMinutes($item['created_at'], true);
                         
+                        $compilation_error = $assignment->submissions
+                            ->where('created_at', '<', $assignment->freeze_time)
+                            ->where('problem_id', $problem_id)
+                            ->where('user_id', $id)
+                            ->where('status', 'Compilation Error')->count();
                         // Log::info($username);
                         // Log::info($item->problem_id);
                         // Log::info(($item->pre_score == 10000));
                         // Log::info($array_of_tries[$username]['tries_before'][$item->problem_id]);
 
-                        $penalty = ($array_of_tries[$username]['tries_before'][$item->problem_id]-1) * \App\Setting::get('submit_penalty')/60;
+                        $penalty = ($array_of_tries[$username]['tries_before'][$item->problem_id] - $compilation_error - 1) * \App\Setting::get('submit_penalty')/60;
                         $time += $penalty;
                         // Log::info($penalty);
                         // Log::info($time);
