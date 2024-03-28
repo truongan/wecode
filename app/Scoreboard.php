@@ -163,10 +163,14 @@ class Scoreboard extends Model
 			if($fullmark
 				&& $final_score > 0 //Only count problem with larger than 0 score
 			) {
-
+				$compilation_error = $assignment->submissions
+					->where('problem_id', $submission->problem_id)
+					->where('user_id', $submission->user->id)
+					->where('status', 'Compilation Error')->count();
 				$penalty[$username]->add($time->totalSeconds
-					+ ($number_of_submissions[$submission->user->username][$submission->problem_id]-1)
+					+ ($number_of_submissions[$submission->user->username][$submission->problem_id]-$compilation_error-1)
 						* Setting::get('submit_penalty'), 'seconds');
+
 			}
 
 			// Log::info($submissions);
@@ -188,11 +192,16 @@ class Scoreboard extends Model
 				if($fullmark
 					&& $final_score > 0 //Only count problem with larger than 0 score
 				) {
+					$compilation_error = $assignment->submissions
+						->where('created_at', '<', $assignment->freeze_time)
+						->where('problem_id', $submission->problem_id)
+						->where('user_id', $submission->user->id)
+						->where('status', 'Compilation Error')->count();
 					$penalty_before_freeze[$username]->add($time->totalSeconds
-						+ ((int)$number_of_submissions[$submission->user->username][$submission->problem_id] - (int)$number_of_submissions_during_freeze[$submission->user->username][$submission->problem_id] -1)
+						+ ((int)$number_of_submissions[$submission->user->username][$submission->problem_id] - (int)$number_of_submissions_during_freeze[$submission->user->username][$submission->problem_id] - $compilation_error -1)
 							* Setting::get('submit_penalty'), 'seconds');
-						}
 				}
+			}
 			else {
 				$solved_before_freeze[$username] += $fullmark;
 				$total_score_before_freeze[$username] += $final_score;
@@ -200,11 +209,15 @@ class Scoreboard extends Model
 				if($fullmark
 					&& $final_score > 0 //Only count problem with larger than 0 score
 				) {
+					$compilation_error = $assignment->submissions
+						->where('problem_id', $submission->problem_id)
+						->where('user_id', $submission->user->id)
+						->where('status', 'Compilation Error')->count();
 					$penalty_before_freeze[$username]->add($time->totalSeconds
-						+ ((int)$number_of_submissions[$submission->user->username][$submission->problem_id] - (int)$number_of_submissions_during_freeze[$submission->user->username][$submission->problem_id] -1)
+						+ ((int)$number_of_submissions[$submission->user->username][$submission->problem_id] - (int)$number_of_submissions_during_freeze[$submission->user->username][$submission->problem_id] - $compilation_error - 1)
 							* Setting::get('submit_penalty'), 'seconds');
-						}
-			}
+					}
+				}
 
 			$users[] = $submission->user;
 			// Log::info($total_score_before_freeze);
