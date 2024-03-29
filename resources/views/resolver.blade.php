@@ -293,8 +293,7 @@
             const row = $(
                 '<tr class="user_row">' +
                 '<td class="rank">' + (i + 1) + '</td>' +
-                '<td class="logo"><img class="logo_img" src="http://wecode.test/images/logo_uit.png"></td>' +
-                // '<td class="logo"><img class="logo_img" src="' + users_list[i].image + '"></td>' +
+                '<td class="logo"><img class="logo_img" src="' + window.location.origin + '/' + users_list[i].image + '"></td>' +
                 '<td class="name"><div><p class="display_name">' + users_list[i].display_name + '</p><p class="school_name">' + users_list[i].school_name + '</p></div></td>' +
                 '<td class="solved"><div>' + users_list[i].total_accepted + '</div></td>' +
                 '<td class="total"><div>' + users_list[i].total_accepted_time + '</div></td>' +
