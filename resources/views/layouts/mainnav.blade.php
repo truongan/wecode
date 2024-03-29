@@ -60,22 +60,6 @@
                 </a>
             </li>
 
-            @if ( Auth::user() != null && in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
-            <li class="nav-item color-scoreboard {{ ($selected=="scoreboard") ? "selected" : ""}}">
-                <a class="nav-link" 
-                @if (isset(Auth::user()->selected_assignment_id))
-                href="{{ route('scoreboards.index', (int)Auth::user()->selected_assignment_id) }}"
-                @else
-                href="{{ route('scoreboards.index', 0 )}}"
-                @endif
-
-                >
-                    <i class="fa fa-fw fa-star fa-lg"></i>
-                    <span class="nav-link-text">Scoreboard</span>
-                </a>
-            </li>
-            @endif
-
             <li class="nav-item color-freeze {{ ($selected=="freeze") ? "selected" : ""}}">
                 <a class="nav-link" 
                 @if (isset(Auth::user()->selected_assignment_id))
@@ -88,6 +72,38 @@
                     <span class="nav-link-text">Scoreboard</span>
                 </a>
             </li>
+
+            @if ( Auth::user() != null && in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
+            <li class="nav-item color-scoreboard {{ ($selected=="scoreboard") ? "selected" : ""}}">
+                <a class="nav-link" 
+                @if (isset(Auth::user()->selected_assignment_id))
+                href="{{ route('scoreboards.index', (int)Auth::user()->selected_assignment_id) }}"
+                @else
+                href="{{ route('scoreboards.index', 0 )}}"
+                @endif
+
+                >
+                    <i class="fa fa-fw fa-star fa-lg"></i>
+                    <span class="nav-link-text">FINAL SCOREBOARD</span>
+                </a>
+            </li>
+            @endif
+
+            @if ( Auth::user() != null && in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
+            <li class="nav-item color-resolver {{ ($selected=="resolver") ? "selected" : ""}}">
+                <a class="nav-link" 
+                @if (isset(Auth::user()->selected_assignment_id))
+                href="{{ route('resolver.index', (int)Auth::user()->selected_assignment_id) }}"
+                @else
+                href="{{ route('resolver.index', 0 )}}"
+                @endif
+    
+                >
+                    <i class="fa fa-fw fa-trophy fa-lg"></i>
+                    <span class="nav-link-text">RESOLVER</span>
+                </a>
+            </li>
+            @endif
 
             <div class="p-1 sidenav-bottom nav-item mt-auto">
                 <a target="_blank" href="https://www.uit.edu.vn/"><img src="{{ asset('images/logo_uit.png') }}" height="20px" /></a>

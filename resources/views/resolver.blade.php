@@ -409,6 +409,11 @@
         //     }
         // })
 
+        (function() {
+        @if (Auth::user() == null || in_array(Auth::user()->role->name, ['instructor', 'student', 'guest']))
+            return;
+        @endif
+
         $(document).on('keydown', function(e){
             if (e.key == "ArrowRight")
                 resolve()
@@ -418,7 +423,6 @@
                 }
             }
         })
-
-
+        })()
         </script>
 @endsection

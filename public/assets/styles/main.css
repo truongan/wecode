@@ -74,6 +74,7 @@ div#extra_time i {
 	.color-all_submissions {border-color: #543680!important;}
 	.color-scoreboard {border-color: #991B4A!important;}
 	.color-freeze {border-color: #3f78ba!important;}
+	.color-resolver {border-color: #22478A!important;}
 
 
 	.color-dashboard.selected  {background-color: #C52E26!important;border-color: #C52E26!important;}
@@ -88,6 +89,7 @@ div#extra_time i {
 	.color-all_submissions.selected  {background-color: #543680!important;border-color: #543680!important;}
 	.color-scoreboard.selected  {background-color: #991B4A!important;border-color: #991B4A!important;}
 	.color-freeze.selected  {background-color: #3f78ba!important;border-color: #3f78ba!important;}
+	.color-resolver.selected  {background-color: #22478A!important;border-color: #22478A!important;}
 
 	#mainNav{
 		/*fix some theme add border to navbar*/
