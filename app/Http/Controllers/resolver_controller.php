@@ -24,12 +24,14 @@ class resolver_controller extends Controller
      */
     public function index($assignment_id)
     {
+        // set_time_limit(8000000);
+
         $assignment = Assignment::find($assignment_id);
-        if (!in_array( Auth::user()->role->name, ['admin']))
-		{
-			//Only admin can view resolver page
-			abort(404, "You do not have permission to view this page");
-		}
+        // if (!in_array( Auth::user()->role->name, ['admin', 'head_instructor']))
+		// {
+		// 	//Only admin can view resolver page
+		// 	abort(404, "You do not have permission to view this page");
+		// }
         if ($assignment) {
 
             // All final submissions of all users
@@ -112,7 +114,7 @@ class resolver_controller extends Controller
                     'tries_during' => $array_of_tries_during,
                 );
             }
-            Log::info($array_of_tries);
+            // Log::info($array_of_tries);
 
 
             //===========================================================
@@ -138,6 +140,8 @@ class resolver_controller extends Controller
                             ->where('problem_id', $problem_id)
                             ->where('user_id', $id)
                             ->where('status', 'Compilation Error')->count();
+                        // Log::info($assignment->submissions->count());
+
                         // Penalty
                         $penalty = ($array_of_tries[$username]['tries_before'][$problem_id] + $array_of_tries[$username]['tries_during'][$problem_id]- $compilation_error - 1) * \App\Setting::get('submit_penalty')/60;
                         // Log::info($penalty);
@@ -206,13 +210,21 @@ class resolver_controller extends Controller
                             continue;
                         }
                         $time = $assignment->start_time->diffInMinutes($item['created_at'], true);
-                        
+                        // Log::info($item);
                         $compilation_error = $assignment->submissions
-                            ->where('created_at', '<', $assignment->freeze_time)
-                            ->where('problem_id', $problem_id)
-                            ->where('user_id', $id)
-                            ->where('status', 'Compilation Error')->count();
-                        // Log::info($username);
+                            ->where('created_at', '<=', $item->created_at)
+                            ->where('problem_id', $item->problem_id)
+                            ->where('user_id', $item->user_id)
+                            ->where('status', 'Compilation Error')
+                            ->count();
+                        // $compilation_error = Submission::where([
+                        //     ['assignment_id', $assignment_id], 
+                        //     ['created_at', '<=', $item->created_at],
+                        //     ['user_id', $item->user_id],
+                        //     ['problem_id', $item->problem_id],
+                        //     ['status', 'Compilation Error']
+                        // ])->count();
+                        // Log::info($assignment->submissions->count());
                         // Log::info($item->problem_id);
                         // Log::info(($item->pre_score == 10000));
                         // Log::info($array_of_tries[$username]['tries_before'][$item->problem_id]);
