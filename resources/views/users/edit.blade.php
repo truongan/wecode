@@ -91,6 +91,12 @@ Users - {{$user->username}}
 			<label for="form_Name_school">School Name:</label>
 			<!-- {{-- {{ form_error('email', '<div class="form-text text-danger">', '</div>') }} --}} -->
 		</div>
+
+		<div class="col-sm-6 form-floating">
+			<input id="form_image" type="text" name="image" class="form-control" value="{{$user->image}}" />
+			<label for="form_image">Logo path:</label>
+			<!-- {{-- {{ form_error('email', '<div class="form-text text-danger">', '</div>') }} --}} -->
+		</div>
 		
 		<hr class="col-12 ">
 
