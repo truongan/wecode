@@ -27,7 +27,7 @@
     @foreach ($scoreboard_freeze['username'] as $i => $sc_username)
     <tr>
         <td>{{ $loop->index + 1}}</td>
-        <td style="text-align: center;"><img src="{{ url(\App\User::where('username', $sc_username)->first()->image) }}" height="20px"></td>
+        <td style="text-align: center;"><img src="{{ asset(\App\User::where('username', $sc_username)->first()->image) }}" height="20px"></td>
         <td><p><strong>{{ $names[$sc_username] }}</strong></p><p>{{ \App\User::where('username', $sc_username)->first()->Name_school }}</p></td>
         <td>
 
