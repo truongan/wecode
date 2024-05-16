@@ -174,6 +174,20 @@ elif [[ $EXT = "java" ]]; then
 	shj_log "DISPLAY_JAVA_EXCEPTION_ON: $DISPLAY_JAVA_EXCEPTION_ON"
 fi
 
+
+
+#################### We got judger script, hand over everything
+if [ -f "$PROBLEMPATH/judger.executable"]
+	cp $PROBLEMPATH/* . 
+	chmod +x judger.executable
+
+	./judger.executable $PROBLEMPATH $USERDIR $RESULTFILE $LOGFILE $FILENAME $EXT $TIMELIMIT $TIMELIMITINT $MEMLIMIT $OUTLIMIT $DIFFTOOL $DIFFOPTION 
+
+	rm -r $JAIL >/dev/null 2>/dev/null
+	exit 
+fi
+
+
 ########################################################################################################
 ################################################ COMPILING #############################################
 ########################################################################################################
@@ -421,8 +435,6 @@ done
 	#	echo -e "\n<span class=\"text-primary\">Last Java Exception:</span>" >>$RESULTFILE
 	#	echo -e "$javaexceptionname\n$javaexceptionplace" >>$RESULTFILE
 	#fi
-
-
 
 cd ..
 # cp -r $JAIL "debug-jail-backup"
