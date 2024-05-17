@@ -177,11 +177,11 @@ fi
 
 
 #################### We got judger script, hand over everything
-if [ -f "$PROBLEMPATH/judger.executable"]
-	cp $PROBLEMPATH/* . 
-	chmod +x judger.executable
+if [ -f "$PROBLEMPATH/judger.executable" ]; then
+	cp -r $PROBLEMPATH/* . 
+	chmod +x $PROBLEMPATH/judger.executable
 
-	./judger.executable $PROBLEMPATH $USERDIR $RESULTFILE $LOGFILE $FILENAME $EXT $TIMELIMIT $TIMELIMITINT $MEMLIMIT $OUTLIMIT $DIFFTOOL $DIFFOPTION 
+	$PROBLEMPATH/judger.executable $PROBLEMPATH $USERDIR $RESULTFILE $LOGFILE $FILENAME $EXT $TIMELIMIT $TIMELIMITINT $MEMLIMIT $OUTLIMIT $DIFFTOOL $DIFFOPTION 
 
 	rm -r $JAIL >/dev/null 2>/dev/null
 	exit 
