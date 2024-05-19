@@ -189,11 +189,30 @@ if [ -f "$PROBLEMPATH/judger.executable" ]; then
 	touch $RANDOM_RESULT_FILE  $RANDOM_LOG_FILE
 
 
-	$PROBLEMPATH/judger.executable $PROBLEMPATH $USERDIR $RANDOM_RESULT_FILE $RANDOM_LOG_FILE $FILENAME $EXT $TIMELIMIT $TIMELIMITINT $MEMLIMIT $OUTLIMIT $DIFFTOOL $DIFFOPTION 
-	cp $RANDOM_RESULT_FILE $RESULTFILE
-	cat $RANDOM_LOG_FILE >> $LOGFILE
+	$PROBLEMPATH/judger.executable $PROBLEMPATH $USERDIR $RANDOM_RESULT_FILE $RANDOM_LOG_FILE $FILENAME $EXT $TIMELIMIT $TIMELIMITINT $MEMLIMIT $OUTLIMIT $DIFFTOOL $DIFFOPTION  2> err
 
-	rm -r $JAIL >/dev/null 2>/dev/null
+	EXITCODE=$?
+	if [ $EXITCODE -ne 0 ]; then
+		shj_log "Judger runtime Error"
+		shj_log `cat err`
+		echo "" > $RESULTFILE
+		echo "<span class=\"text-primary\">The only test</span>\n">>$RESULTFILE
+		# echo "<span class=\"text-muted\"><small>00 s and 00 KiB</small></span>\n" > $RESULTFILE
+		echo "<span class=\"text-warning\">Submission format error, ask problem's creator for more details</span>" >>$RESULTFILE
+
+		shj_finish 0
+		shj_log "\nScore from 10000: 0"
+
+	else
+		cp $RANDOM_RESULT_FILE $RESULTFILE
+		cat $RANDOM_LOG_FILE >> $LOGFILE
+	fi 
+	
+	# echo "PREAPRE TO REMOVE JAIL $JAIL"
+	# rm -r $JAIL  # removing files
+	cd ..
+	rm -r $JAIL >/dev/null 2>/dev/null # removing files
+
 	exit 
 fi
 
