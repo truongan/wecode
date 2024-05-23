@@ -287,7 +287,7 @@ languages_to_comm["pas"]="./$EXEFILE"
 languages_to_comm["py2"]="python2 -O $FILENAME.py2"
 languages_to_comm["py3"]="python3 -O $FILENAME.py3"
 languages_to_comm["numpy"]="python3 -O $FILENAME.numpy"
-languages_to_comm["java"]="java -mx${MEMLIMIT}k solution"
+languages_to_comm["java"]="java -Xmx${MEMLIMIT}k -Xms${MEMLIMIT}k solution"
 languages_to_comm["js"]="node $FILENAME.js"
 declare -A errors
 errors["SHJ_TIME"]="Time Limit Exceeded"
@@ -319,7 +319,8 @@ for((i=1;i<=TST;i++)); do
 
 	runcode=""
 	if $PERL_EXISTS; then
-		runcode="./runcode.sh $EXT $MEMLIMIT $TIMELIMIT $TIMELIMITINT ./input$i.txt ./timeout --just-kill -nosandbox -l $OUTLIMIT -t $TIMELIMIT -m $MEMLIMIT $command"
+		# runcode="./runcode.sh $EXT $MEMLIMIT $TIMELIMIT $TIMELIMITINT ./input$i.txt ./timeout --just-kill  -l $OUTLIMIT -t $TIMELIMIT -m $MEMLIMIT -s $MEMLIMIT  $command"
+		runcode="./runcode.sh $EXT $MEMLIMIT $TIMELIMIT $TIMELIMITINT ./input$i.txt ./timeout --just-kill  -l $OUTLIMIT -t $TIMELIMIT -s $MEMLIMIT  $command"
 	else
 		runcode="./runcode.sh $EXT $MEMLIMIT $TIMELIMIT $TIMELIMITINT ./input$i.txt $command"
 	fi
