@@ -349,7 +349,7 @@ class assignment_controller extends Controller
 
         $e = $assignment->extra_time;
         if ($e % 3600 == 0) $assignment->extra_time = intval($e/3600) . "*60*60";
-        else if ($e % 60 == 0) $assignment->extra_time = intval($e/36) . "*60";
+        else if ($e % 60 == 0) $assignment->extra_time = intval($e/60) . "*60";
 
         $lops = $assignment->lops->keyBy('id');
 
