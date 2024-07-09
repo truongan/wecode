@@ -4,12 +4,54 @@
 
 @section('title', 'Edit by HTML')
 
+@section('other_assets')
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+@media print {
+	body {
+		margin: 0 !important;
+	}
+}
+
+.main-container {
+	font-family: 'Lato';
+	width: fit-content;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.ck-content {
+	font-family: 'Lato';
+	line-height: 1.6;
+	word-break: break-word;
+}
+
+.editor-container_classic-editor .editor-container__editor {
+	min-width: 795px;
+	max-width: 795px;
+}
+
+</style>
+@endsection
+
 @section('body_end')
 <script type="text/javascript">
     mathjax_path = "{{ asset('assets/MathJax-2.7.9') }}/MathJax.js?config=TeX-MML-AM_CHTML"
 </script>
 
-<script src="{{ asset('assets/ckeditor/ckeditor.js') }}" charset="utf-8"></script>
+
+<script type="importmap">
+    {
+        "imports": {
+            "ckeditor5": "{{ asset('assets/ckeditor5-42.0.0/./ckeditor5/ckeditor5.js') }}",
+            "ckeditor5/": "{{ asset('assets/ckeditor5-42.0.0/./ckeditor5') }}/"
+        }
+    }
+</script>
+<script type="module" src="{{ asset('assets/ckeditor5-42.0.0/main.js') }}" charset="utf-8"></script>
+
 <script type="text/javascript">
 function b64EncodeUnicode(str) {
 	//this function is shamelessly copied from: https://developer.mozilla.org/en/docs/Web/API/WindowBase64/Base64_encoding_and_decoding
@@ -20,7 +62,7 @@ function b64EncodeUnicode(str) {
 $(document).ready(function(){
 	var file_name ="";
 
-	
+
 	$("#opendialog").bind("change",function(e){
 		console.log(this.files);
 
@@ -74,9 +116,7 @@ $(document).ready(function(){
 
 @section('content')
 <div class="d-flex flex-column">
-    {{-- {% for error in errors %}
-        <p class="text-danger">{{ error|raw }}</p>
-    {% endfor %} --}}
+
     <div class="row justify-content-center">
         <input type="file" style="display: none;" id="opendialog">
 
@@ -96,7 +136,7 @@ $(document).ready(function(){
     </div>
 
     <div class="row">
-        <div class="edit_wrapper" id="editor" contenteditable="true">
+        <div class="edit_wrapper" id="editor" >
             {!! $content !!}
         </div>
     </div>
