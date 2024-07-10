@@ -5,7 +5,7 @@
 @section('title', 'Edit by HTML')
 
 @section('other_assets')
-
+<link rel="stylesheet"  href= {{ asset('assets/ckeditor5-42.0.0/ckeditor5/ckeditor5.css') }} />
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
@@ -15,12 +15,6 @@
 	}
 }
 
-.main-container {
-	font-family: 'Lato';
-	width: fit-content;
-	margin-left: auto;
-	margin-right: auto;
-}
 
 .ck-content {
 	font-family: 'Lato';
@@ -30,7 +24,7 @@
 
 .editor-container_classic-editor .editor-container__editor {
 	min-width: 795px;
-	max-width: 795px;
+	/* max-width: 795px; */
 }
 
 </style>
