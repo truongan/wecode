@@ -263,4 +263,12 @@ const editorConfig = {
 	}
 };
 
-ClassicEditor.create(document.querySelector('#editor'), editorConfig);
+let ckeditor;
+ClassicEditor
+	.create(document.querySelector('#editor'), editorConfig)
+	.then( ed => {
+		ckeditor = ed;
+	})
+;
+
+export {ckeditor as default};

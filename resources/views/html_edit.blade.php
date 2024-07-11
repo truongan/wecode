@@ -7,26 +7,9 @@
 @section('other_assets')
 <link rel="stylesheet"  href= {{ asset('assets/ckeditor5-42.0.0/ckeditor5/ckeditor5.css') }} />
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400;1,700&display=swap');
-
-@media print {
-	body {
-		margin: 0 !important;
-	}
-}
-
-
-.ck-content {
-	font-family: 'Lato';
-	line-height: 1.6;
-	word-break: break-word;
-}
-
-.editor-container_classic-editor .editor-container__editor {
-	min-width: 795px;
-	/* max-width: 795px; */
-}
-
+    .ck-editor{
+        width: 100% !important;
+    }
 </style>
 @endsection
 
@@ -40,13 +23,18 @@
     {
         "imports": {
             "ckeditor5": "{{ asset('assets/ckeditor5-42.0.0/./ckeditor5/ckeditor5.js') }}",
-            "ckeditor5/": "{{ asset('assets/ckeditor5-42.0.0/./ckeditor5') }}/"
+            "ckeditor5/": "{{ asset('assets/ckeditor5-42.0.0/./ckeditor5') }}/",
+            "main.js" : "{{ asset('assets/ckeditor5-42.0.0/main.js') }}"
         }
     }
 </script>
 <script type="module" src="{{ asset('assets/ckeditor5-42.0.0/main.js') }}" charset="utf-8"></script>
 
-<script type="text/javascript">
+{{-- <script type="text/javascript"> --}}
+<script type="module">
+
+import ckeditor from "main.js";
+
 function b64EncodeUnicode(str) {
 	//this function is shamelessly copied from: https://developer.mozilla.org/en/docs/Web/API/WindowBase64/Base64_encoding_and_decoding
 	return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
@@ -56,8 +44,10 @@ function b64EncodeUnicode(str) {
 $(document).ready(function(){
 	var file_name ="";
 
+    let is_dirty = false;
 
-	$("#opendialog").bind("change",function(e){
+    // document.querySelector
+	document.querySelector("#opendialog").addEventListener("change",function(e){
 		console.log(this.files);
 
 		file_name = this.files[0].name
@@ -66,43 +56,103 @@ $(document).ready(function(){
 			var reader = new FileReader();
 
 			reader.onload = function (e) {
-				$('#editor').html(e.target.result);
+                console.log(e.target);
+				ckeditor.setData(e.target.result);
 			}
 			
 			reader.readAsText(this.files[0]);
 		}
 	});
 	
-	$("#open").click(function(){
-		$("#opendialog").click();
-	});
+	document.querySelector("#open").onclick = function(){
+		document.querySelector("#opendialog").click();
+	};
+
+    //FOR AUTOSAVING
+
+    const pendingActions = ckeditor.plugins.get( 'PendingActions' );
+
+
+    // Listen to new changes (to enable the "Save" button) and to
+    // pending actions (to show the spinner animation when the editor is busy).
+    // function handleStatusChanges( editor ) {
+    ckeditor.plugins.get( 'PendingActions' ).on( 'change:hasAny', () => updateStatus( ckeditor ) );
+
+    ckeditor.model.document.on( 'change:data', () => {
+        is_dirty = true;
+
+        updateStatus( ckeditor );
+    } );
+    // }
+
+    // If the user tries to leave the page before the data is saved, ask
+    // them whether they are sure they want to proceed.
+    // function handleBeforeunload( editor ) {
+    //     const pendingActions = editor.plugins.get( 'PendingActions' );
+
+    window.addEventListener( 'beforeunload', evt => {
+        if ( pendingActions.hasAny ) {
+            evt.preventDefault();
+        }
+    } );
+    // }
+
+    function updateStatus( editor ) {
+        const saveButton = document.querySelector( '.save-button' );
+
+        // Disables the "Save" button when the data on the server is up to date.
+        if ( is_dirty ) {
+            saveButton.classList.remove( 'disabled' );
+        } else {
+            saveButton.classList.add( 'disabled' );
+        }
+
+        // Shows the spinner animation.
+        if ( editor.plugins.get( 'PendingActions' ).hasAny ) {
+            saveButton.classList.add( 'btn-lg' );
+        } else {
+            saveButton.classList.remove( 'btn-lg' );
+        }
+    }
+
 	
-	$("#save").mouseover(function(){
-		$("#save > a").attr("href", "data:text/html;base64," + b64EncodeUnicode( CKEDITOR.instances.editor.getData() )) ;
-		$("#save > a").attr("download", file_name) ;
-		console.log($("#save > a"));
+	document.querySelector("#save").onmouseover = (function(){
+		document.querySelector("#save > a").href = "data:text/html;base64," + b64EncodeUnicode( ckeditor.getData() ) ;
+		document.querySelector("#save > a").download =  file_name ;
 	});
-    $('.save-button').click(function(){
-            $.ajax({
-                type: 'POST',
-                url: '{{ route('htmleditor.autosave') }}',
-                data: {
-                    '_token': "{{ csrf_token() }}",
-                    'content' : CKEDITOR.instances.editor.getData()
-                },
-                success: function (response) {
-                    if (response == "success"){
-                        $.notify('Change sucessfully saved'
-                            , {position: 'bottom right', className: 'success', autoHideDelay: 3500});
-                        $('.save-button').removeClass('btn-info').addClass('btn-secondary');
-                    }
-                },
-                error: function(response){
-                    $.notify('Error while saving'
-                        , {position: 'bottom right', className: 'error', autoHideDelay: 3500});
+    document.querySelector('.save-button').onclick = (function(){
+        const action = pendingActions.add( 'Saving changes' );
+        const data = ckeditor.getData();
+        $.ajax({
+            type: 'POST',
+            url: '{{ route('htmleditor.autosave') }}',
+            data: {
+                '_token': "{{ csrf_token() }}",
+                'content' : data
+            },
+            success: function (response) {
+                if (response == "success"){
+                    $.notify('Change sucessfully saved'
+                        , {position: 'bottom right', className: 'success', autoHideDelay: 3500});
+                    $('.save-button').removeClass('btn-info').addClass('btn-secondary');
                 }
-            });
-        }); 
+                pendingActions.remove( action );
+                if ( data == ckeditor.getData() ) {
+                    is_dirty = false;
+                }
+                updateStatus( ckeditor );
+            
+            },
+            error: function(response){
+                $.notify('Error while saving'
+                    , {position: 'bottom right', className: 'error', autoHideDelay: 3500});
+            }
+        });
+    }); 
+
+    setInterval(() => {
+        document.querySelector('.save-button').click();
+    }, 1000*60*3);
 });
 
 </script>
@@ -129,7 +179,7 @@ $(document).ready(function(){
         </div>
     </div>
 
-    <div class="row">
+    <div class="row mt-3">
         <div class="edit_wrapper" id="editor" >
             {!! $content !!}
         </div>
