@@ -77,5 +77,6 @@ class installation_seeding extends Seeder
             'extra_time' => 0,
         ]);
         DB::table('assignments')->update(['id' => 0]);
+        DB::table('assignments')->update(['language_ids' => App\Language::all()->pluck('id')->implode(', ')]);
     }
 }
