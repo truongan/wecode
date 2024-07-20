@@ -108,7 +108,7 @@ class submission_controller extends Controller
 
 		$check = $assignment->can_submit(Auth::user(), $problem);
 		if (!$check->can_submit){
-			dd($problem);
+			// dd($problem);
 			abort(403, $check->error_message);
 		}
 		
