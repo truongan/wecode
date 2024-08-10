@@ -60,6 +60,9 @@ import {
 	Undo
 } from 'ckeditor5';
 
+import Math from 'ckeditor5-math-math';
+import AutoformatMath from 'ckeditor5-math-autoformatmath';
+
 const editorConfig = {
 	toolbar: {
 		items: [
@@ -86,6 +89,7 @@ const editorConfig = {
 			'code',
 			'removeFormat',
 			'|',
+			'math',
 			'specialCharacters',
 			'link',
 			'insertImage',

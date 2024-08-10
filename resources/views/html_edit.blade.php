@@ -24,7 +24,9 @@
         "imports": {
             "ckeditor5": "{{ asset('assets/ckeditor5-42.0.0/./ckeditor5/ckeditor5.js') }}",
             "ckeditor5/": "{{ asset('assets/ckeditor5-42.0.0/./ckeditor5') }}/",
-            "main.js" : "{{ asset('assets/ckeditor5-42.0.0/main.js') }}"
+            "main.js" : "{{ asset('assets/ckeditor5-42.0.0/main.js') }}",
+            "ckeditor5-math-math" : "{{ asset('assets/ckeditor5-42.0.0/ckeditor5-math-41.4.2/src/math.ts') }}",
+            "ckeditor5-math-autoformatmath" : "{{ asset('assets/ckeditor5-42.0.0/ckeditor5-math-41.4.2/src/autoformatmath.ts') }}"
         }
     }
 </script>
