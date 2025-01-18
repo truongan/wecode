@@ -24,32 +24,17 @@
 <ul class="ms-4 fs-6 nav nav-pills">
 	<li class="nav-item">
 		<a class="nav-link link-dark {{$place=="full" ? "active" :""}}"
-		@if ($sl)
-			href="{{ route('scoreboards.index', Auth::user()->selected_assignment_id) }}"
-		@else
-			href="{{ route('scoreboards.index', 0 )}}"
-		@endif
-		>
+			href="{{ route('scoreboards.index', $assignment->id) }}">
 		<i class="fas fa-star color10"></i> Full information </a>
 	</li>
 	<li class="nav-item">
 		<a class="nav-link link-dark {{$place=="simplify" ? "active" :""}}" 
-		@if ($sl)
-			href="{{ route('scoreboards.simplify', Auth::user()->selected_assignment_id) }}"
-		@else
-			href="{{ route('scoreboards.simplify', 0 )}}"
-		@endif
-		>
+			href="{{ route('scoreboards.simplify', $assignment->id) }}">
 		<i class="fas fa-star-half-alt color10"></i> Minimal information </a>
 	</li>
 	<li class="nav-item">
 		<a class="nav-link link-dark {{$place=="plain" ? "active" :""}}" 
-		@if ($sl)
-			href="{{ route('scoreboards.plain', Auth::user()->selected_assignment_id) }}"
-		@else
-			href="{{ route('scoreboards.plain', 0 )}}"
-		@endif
-		>
+			href="{{ route('scoreboards.plain', $assignment->id) }}">
 		<i class="fas fa-star-half-alt color10"></i> Plain text Minimal </a>
 	</li>
 </ul>
