@@ -43,7 +43,6 @@ Route::view('users/set_trial', 'users.set_trial')->name('users.set_trial')->midd
 Route::post('users/set_trial', [App\Http\Controllers\UserController::class, 'set_trial'])->name('users.set_trial_post');
 
 Route::get('/problems/downloadtestsdesc/{id}', [App\Http\Controllers\problem_controller::class, 'downloadtestsdesc'])->name('problems.downloadtestsdesc');
-Route::get('/problems/downloadtemplate/{problem}/{assignment}', [App\Http\Controllers\problem_controller::class, 'template'])->name('problems.template');
 Route::get('/problems/downloadtestcases/{problem}/{assignment}/{type}', [App\Http\Controllers\problem_controller::class, 'download_testcases'])->name('problems.download_testcases');
 Route::post('/problems/edit_description/{problem_id}', [App\Http\Controllers\problem_controller::class, 'edit_description'])->name('problems.edit_description');
 Route::post('/problems/toggle_practice/{query?}', [App\Http\Controllers\problem_controller::class, 'toggle_practice'])->name('problems.toggle_practice');

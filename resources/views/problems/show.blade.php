@@ -32,9 +32,7 @@
 @if($problem->has_pdf)
 	<a href="{{ $pdf_route }}" class="link-dark"><span class="ms-4 fs-6"><i class="fas fa-file-pdf text-danger"></i> PDF</span></a>
 @endif
-@if ($problem->has_template)
-	<span class="ms-4 fs-6"><a href="{{ route('problems.template', ['problem' => $problem->id, 'assignment' => ($all_problems != NULL ? $assignment->id : 0)] ) }}" class="link-dark"><i class="fa fa-download text-danger"></i> Download the code template</a></span>
-@endif
+
 @if ($problem->allow_input_download)
 	<span class="ms-4 fs-6"><a href="{{ route('problems.download_testcases', ['problem' => $problem->id, 'assignment' => ($all_problems != NULL ? $assignment->id : 0), 'type' => 'in'] ) }}" class="link-dark"><i class="fa fa-download text-success"></i> Download testcases' input</a></span>
 @endif

@@ -319,9 +319,6 @@ class assignment_controller extends Controller
        
         return $problem_dir;
     }
-    
-
-    
 
     public function duplicate(Assignment $assignment){
         if (($t = $assignment->cannot_edit(Auth::user())) !== false){
@@ -472,7 +469,6 @@ class assignment_controller extends Controller
                     Assignment::destroy($id);
                     $json_result = array('done' => 1);
                 }
-
             }
         }
         
@@ -557,7 +553,6 @@ class assignment_controller extends Controller
     
     public function reload_scoreboard($assignment_id)
     {
-		// DB::enableQueryLog();
 
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
             abort(403);
@@ -568,10 +563,7 @@ class assignment_controller extends Controller
 
         // Reset all final submission choice to the best score
         $assignment->reset_final_submission_choices();
-
-        // dd(DB::getQueryLog());
-
-        // DB::disableQueryLo();
+        
         if (Scoreboard::update_scoreboard($assignment_id)){     
             return redirect()->back()->with('success', 'Reload Scoreboard sucecss');   
         }
