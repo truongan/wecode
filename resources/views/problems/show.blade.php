@@ -1,5 +1,10 @@
 @extends('layouts.app')
 @php ($selected ?? $selected="assignments")
+@if ($all_problems != NULL)
+	@php ($pdf_route = route('assignments.show_pdf',['assignment' => $assignment,  'problem' => $problem]))
+@else
+	@php ($pdf_route = route('practices.show_pdf', $problem))
+@endif 
 @section('head_title','View Problem')
 @section('icon', 'fas fa-puzzle-piece')
 
@@ -25,7 +30,7 @@
 @section('title_menu')
 
 @if($problem->has_pdf)
-	<a href="{{ route('problems.pdf',$problem->id) }}" class="link-dark"><span class="ms-4 fs-6"><i class="fas fa-file-pdf text-danger"></i> PDF</span></a>
+	<a href="{{ $pdf_route }}" class="link-dark"><span class="ms-4 fs-6"><i class="fas fa-file-pdf text-danger"></i> PDF</span></a>
 @endif
 @if ($problem->has_template)
 	<span class="ms-4 fs-6"><a href="{{ route('problems.template', ['problem' => $problem->id, 'assignment' => ($all_problems != NULL ? $assignment->id : 0)] ) }}" class="link-dark"><i class="fa fa-download text-danger"></i> Download the code template</a></span>
@@ -85,9 +90,6 @@
     });
 </script>
 
-{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.2.5/pdfobject.min.js" integrity="sha512-K4UtqDEi6MR5oZo0YJieEqqsPMsrWa9rGDWMK2ygySdRQ+DtwmuBXAllehaopjKpbxrmXmeBo77vjA2ylTYhRA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script>PDFObject.embed("{{ route('problems.pdf',$problem->id) }}", "#problem_pdf_embed");</script> --}}
-
 @endsection
 @endif
 @section('content')
@@ -98,9 +100,9 @@
 	<div class="col-md-7 col-lg-8 col-sm-12">
 		@if($problem->has_pdf)
 			<div class="problem_description" id="problem_pdf_embed">
-				<object data="{{ route('problems.pdf',$problem->id) }}" type="application/pdf" width="100%" height="100%">
+				<object data="{{ $pdf_route }}" type="application/pdf" width="100%" height="100%">
 					<p>If this browser does not support PDFs. Please download the PDF to view it: 
-					<a href="{{ route('problems.pdf',$problem->id) }}">Download PDF</a>.</p>
+					<a href="{{ $pdf_route }}">Download PDF</a>.</p>
 				</object>
 			</div>
 		@endif

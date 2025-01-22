@@ -158,7 +158,7 @@ class problem_controller extends Controller
         $p->languages()->sync($langs);
         
         // Processing file 
-        $this->_take_test_file_upload($request, $p->id, $messages);  
+        $this->_take_test_file_upload($request, $p, $messages);  
         
         return redirect()->route('problems.index')->withInput()->withErrors(["messages"=>$messages]);
     }
@@ -307,7 +307,7 @@ class problem_controller extends Controller
             }
             else
             {
-                $this->delete_problem($id);
+                $this->delete_problem($problem);
                 $json_result = array('done' => 1);
             }
 
@@ -466,27 +466,6 @@ class problem_controller extends Controller
         // Delete assignment's folder (all test cases and submitted codes)
         
         shell_exec($cmd);
-
-    }
-
-    /** Dowload file pdf  */
-    public function pdf(Problem $p)
-    {
-        // Find pdf file
-        $pattern = $p->get_directory_path()."/*.pdf";
-            
-        $pdf_files = glob($pattern);
-        $pdf_files = implode("|",$pdf_files);
-        
-        if ( ! $pdf_files )
-            abort(404,"File not found");
-
-        // Download the file to browser
-        $headers = [
-            'Content-Description' => 'File Transfer',
-            'Content-Type' => 'application/pdf',
-        ];
-        return response()->file($pdf_files, $headers);
 
     }
 

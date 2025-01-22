@@ -192,13 +192,8 @@ class assignment_controller extends Controller
         return redirect('assignments');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Assignment $assignment, $problem_id ){
+
+    private function collect_problem_data_to_show(Assignment $assignment, $problem_id){
         $assignment_id = $assignment->id;
 
         if ($assignment->id == 0){
@@ -286,10 +281,33 @@ class assignment_controller extends Controller
             break;
         }
 
-        Auth::user()->selected_assignment_id = $assignment_id;
+        return $data;
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Assignment $assignment, $problem_id ){
+        $data = $this->collect_problem_data_to_show($assignment, $problem_id);
+
+        Auth::user()->selected_assignment_id = $assignment->id;
         Auth::user()->save(); 
 
         return view('problems.show',$data);
+    }
+    
+    public function show_pdf(Assignment $assignment,Problem  $problem ){
+
+        $data = $this->collect_problem_data_to_show($assignment, $problem->id);
+        // dd($data);
+        if ($data['error'] != NULL){
+            abort(403, $data['error']);
+        }
+
+        return $problem->pdf();
     }
 
     public function get_directory_path($id = NULL){

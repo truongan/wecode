@@ -43,7 +43,6 @@ Route::view('users/set_trial', 'users.set_trial')->name('users.set_trial')->midd
 Route::post('users/set_trial', [App\Http\Controllers\UserController::class, 'set_trial'])->name('users.set_trial_post');
 
 Route::get('/problems/downloadtestsdesc/{id}', [App\Http\Controllers\problem_controller::class, 'downloadtestsdesc'])->name('problems.downloadtestsdesc');
-Route::get('/problems/downloadpdf/{id}', [App\Http\Controllers\problem_controller::class, 'pdf'])->name('problems.pdf');
 Route::get('/problems/downloadtemplate/{problem}/{assignment}', [App\Http\Controllers\problem_controller::class, 'template'])->name('problems.template');
 Route::get('/problems/downloadtestcases/{problem}/{assignment}/{type}', [App\Http\Controllers\problem_controller::class, 'download_testcases'])->name('problems.download_testcases');
 Route::post('/problems/edit_description/{problem_id}', [App\Http\Controllers\problem_controller::class, 'edit_description'])->name('problems.edit_description');
@@ -69,10 +68,12 @@ Route::post('/queue/empty', [App\Http\Controllers\queue_controller::class, 'empt
 
 Route::get('/practice', [App\Http\Controllers\practice_controller::class, 'index'])->name('practice');
 Route::get('/practice/show/{problem}', [App\Http\Controllers\practice_controller::class, 'show'])->name('practices.show');
+Route::get('/practice/show/{problem}/pdf', [App\Http\Controllers\practice_controller::class, 'show_pdf'])->name('practices.show_pdf');
 
 Route::get('/scoreboard/full/{id}', [App\Http\Controllers\scoreboard_controller::class, 'index'])->name('scoreboards.index');
 
 Route::get('/assignment/{assignment}/{problem_id}/', [App\Http\Controllers\assignment_controller::class, 'show'])->where(['assignment'=>'[0-9]+','problem_id'=>'[0-9]+'])->name('assignments.show');
+Route::get('/assignment/{assignment}/{problem}/pdf', [App\Http\Controllers\assignment_controller::class, 'show_pdf'])->where(['assignment'=>'[0-9]+','problem'=>'[0-9]+'])->name('assignments.show_pdf');
 
 Route::get('/assignment/download_submissions/{type}/{assignment_id}/', [App\Http\Controllers\assignment_controller::class, 'download_submissions'])->name('assignments.download_submissions');
 Route::get('/assignment/download_all_submissions/{assignment_id}/', [App\Http\Controllers\assignment_controller::class, 'download_all_submissions'])->name('assignments.download_all_submissions');

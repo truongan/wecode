@@ -75,6 +75,13 @@ class practice_controller extends Controller
                                       ]);    
 	}
 
+	public function show_pdf(Problem $problem){
+		if (! $problem->can_practice(Auth::user()) )  {
+			abort(403, 'This problem is not available for practice to you');
+		}
+		return $problem->pdf();
+	}
+
 	public function get_directory_path($id = NULL){
         if ($id === NULL) return NULL;
         

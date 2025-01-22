@@ -43,6 +43,26 @@ class Problem extends Model
         return true;
     }
 
+    /** Dowload file pdf  */
+    public function pdf()
+    {
+        // Find pdf file
+        $pattern = $this->get_directory_path()."/*.pdf";
+            
+        $pdf_files = glob($pattern);
+        $pdf_files = implode("|",$pdf_files);
+        if ( ! $pdf_files )
+            abort(404,"File not found");
+
+        // Download the file to browser
+        $headers = [
+            'Content-Description' => 'File Transfer',
+            'Content-Type' => 'application/pdf',
+        ];
+        return response()->file($pdf_files, $headers);
+
+    }
+
     public function template_path($language_extension = 'cpp'){
         $pattern1 = rtrim($this->get_directory_path()
 		."/template.public." . $language_extension);
