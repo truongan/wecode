@@ -5,7 +5,7 @@
 @section('title', 'Edit by HTML')
 
 @section('other_assets')
-<link rel="stylesheet"  href= {{ asset('assets/ckeditor5-42.0.0/ckeditor5/ckeditor5.css') }} />
+{{-- <link rel="stylesheet"  href= {{ asset('assets/ckeditor5-42.0.0/ckeditor5/ckeditor5.css') }} /> --}}
 <style>
     .ck-editor{
         width: 100% !important;
@@ -18,24 +18,10 @@
     mathjax_path = "{{ asset('assets/MathJax-2.7.9') }}/MathJax.js?config=TeX-MML-AM_CHTML"
 </script>
 
+<script src = "{{ asset('assets/quill/quill2.0.3.js')}}" ></script>
+<link href="{{ asset('assets/quill/quill2.0.3.snow.css')}}" rel="stylesheet">
 
-<script type="importmap">
-    {
-        "imports": {
-            "ckeditor5": "{{ asset('assets/ckeditor5-42.0.0/./ckeditor5/ckeditor5.js') }}",
-            "ckeditor5/": "{{ asset('assets/ckeditor5-42.0.0/./ckeditor5') }}/",
-            "main.js" : "{{ asset('assets/ckeditor5-42.0.0/main.js') }}",
-            "ckeditor5-math-math" : "{{ asset('assets/ckeditor5-42.0.0/ckeditor5-math-41.4.2/src/math.ts') }}",
-            "ckeditor5-math-autoformatmath" : "{{ asset('assets/ckeditor5-42.0.0/ckeditor5-math-41.4.2/src/autoformatmath.ts') }}"
-        }
-    }
-</script>
-<script type="module" src="{{ asset('assets/ckeditor5-42.0.0/main.js') }}" charset="utf-8"></script>
-
-{{-- <script type="text/javascript"> --}}
 <script type="module">
-
-import ckeditor from "main.js";
 
 function b64EncodeUnicode(str) {
 	//this function is shamelessly copied from: https://developer.mozilla.org/en/docs/Web/API/WindowBase64/Base64_encoding_and_decoding
@@ -47,6 +33,34 @@ $(document).ready(function(){
 	var file_name ="";
 
     let is_dirty = false;
+
+
+    const quill = new Quill('#editor', {
+        modules: {
+            // syntax: true,
+            table: true,
+            toolbar: [
+  ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+  ['blockquote', 'code-block'],
+  ['link', 'image', 'video', 'formula'],
+  ['table'],
+  [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'list': 'check' }],
+  [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
+  [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
+//   [{ 'direction': 'rtl' }],                         // text direction
+
+  [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+  [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+
+  [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+  [{ 'font': [] }],
+  [{ 'align': [] }],
+
+  ['clean']                                         // remove formatting button
+],
+        },
+        theme: 'snow'
+    });
 
     // document.querySelector
 	document.querySelector("#opendialog").addEventListener("change",function(e){
@@ -182,6 +196,11 @@ $(document).ready(function(){
     </div>
 
     <div class="row mt-3">
+        <div class="toolbar_wrapper" id="toolbar" >
+           
+        </div>
+    </div>
+    <div class="row">
         <div class="edit_wrapper" id="editor" >
             {!! $content !!}
         </div>

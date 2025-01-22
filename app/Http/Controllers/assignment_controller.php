@@ -205,10 +205,6 @@ class assignment_controller extends Controller
             return redirect()->route('practice');
         }
         
-        // if ($assignment_id === NULL){
-        //     redirect(view('problems.show'));
-        // }
-        
         $data=array(
             'can_submit' => TRUE,
             'problem_status' => NULL,

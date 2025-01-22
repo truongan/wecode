@@ -31,15 +31,6 @@ class problem_controller extends Controller
         if ($problem->can_edit(Auth::user())){
             return true;
         } else abort(404);
-        // if ( ! in_array( Auth::user()->role->name, ['admin']) )
-        // {
-        //     //Admin can always edit
-        //     if ($problem->user->id != Auth::user()->id){
-        //         //Others can only edit problems they own
-        //         abort(404); 
-        //     } 
-        // }
-        // return true;
     }
 
     public function index(Request $request)
@@ -211,7 +202,9 @@ class problem_controller extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Problem  $problem
      * @return \Illuminate\Http\Response
-     */
+     *
+**/
+
     public function update(Request $request, Problem $problem)
     {
         $this->can_edit_or_404($problem);
@@ -244,7 +237,7 @@ class problem_controller extends Controller
         return redirect()->route('problems.index')->withInput()->withErrors(["messages"=>$messages]);
     }
 
-    private function _take_test_file_upload(Request $request, $the_id,  &$messages){
+    private function _take_test_file_upload(Request $request, Problem $problem,  &$messages){
         $up_dir = $request->tests_dir;
         $up_zip = $request->tests_zip;
         if (!$up_dir && !$up_zip){
@@ -252,7 +245,7 @@ class problem_controller extends Controller
             return ;
         }       
         $assignments_root = Setting::get("assignments_root");
-        $problem_dir = $this->get_directory_path($the_id);
+        $problem_dir = $problem->get_directory_path();
      
         if ( ! file_exists($problem_dir) ){
             mkdir($problem_dir, 0700, TRUE); 
@@ -324,19 +317,19 @@ class problem_controller extends Controller
         return ($json_result);
     }
 
-    private function save_problem_description($problem_id, $text, $type = 'html')
+    private function save_problem_description(Problem $problem, $text, $type = 'html')
     {
-        $problem_dir = $this->get_directory_path($problem_id);
+        $problem_dir = $problem->get_directory_path();
         if (file_put_contents("$problem_dir/desc.html", $text) ) 
             return true;
         else return false;
     }
     
-    public function edit_description(Request $request, $id){
+    public function edit_description(Request $request, Problem $p){
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
             abort(404);
 
-        if ($this->save_problem_description($id, $request->content)){
+        if ($this->save_problem_description($p, $request->content)){
             echo "success";
                 return;
         }
@@ -447,18 +440,18 @@ class problem_controller extends Controller
             
     }
     
-    public function delete_problem($id){
+    public function delete_problem(Problem $p){
         
-        $cmd = 'rm -rf '.$this->get_directory_path($id);
+        $cmd = 'rm -rf '. $p->get_directory_path();
       
          // If you want to set transaction time, you can append the new argument in the transaction function
         DB::beginTransaction();  
 
-        Submission::where('problem_id', $id)->delete();
+        Submission::where('problem_id', $p->id)->delete();
 
 
-        $problem = Problem::find($id);
-        Problem::destroy($id);  
+        $problem = Problem::find($p->id);
+        Problem::destroy($p->id);  
         
         $problem->languages()->detach();
         $problem->assignments()->detach();
@@ -468,7 +461,7 @@ class problem_controller extends Controller
         DB::commit();
         
         // Make the path to prepare to delete problem
-        $cmd = 'rm -rf '.$this->get_directory_path($id);
+        $cmd = 'rm -rf '. $p->get_directory_path();
         
         // Delete assignment's folder (all test cases and submitted codes)
         
@@ -477,13 +470,10 @@ class problem_controller extends Controller
     }
 
     /** Dowload file pdf  */
-    public function pdf($problem_id)
+    public function pdf(Problem $p)
     {
         // Find pdf file
-        if ($problem_id === NULL)
-            abort(404);
-        else
-            $pattern = $this->get_directory_path($problem_id)."/*.pdf";
+        $pattern = $p->get_directory_path()."/*.pdf";
             
         $pdf_files = glob($pattern);
         $pdf_files = implode("|",$pdf_files);

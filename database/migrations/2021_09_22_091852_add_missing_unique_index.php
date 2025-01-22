@@ -48,6 +48,16 @@ class AddMissingUniqueIndex extends Migration
      */
     public function down()
     {
+        Schema::table('assignment_problem', function(Blueprint $table){
+            try{
+                $table->dropIndex('assignment_problem_assignment_id_index');
+                $table->dropIndex('assignment_problem_problem_id_index');
+                $table->dropColumn('id');
+            }
+            catch (Exection $e){
+                
+            }
+        });
         // Schema::table('assignment_lop', function(Blueprint $table){
         //     $table->dropUnique('assignment_lop_assignment_id_lop_id_unique');
         // });
