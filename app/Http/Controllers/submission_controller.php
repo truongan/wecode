@@ -299,7 +299,7 @@ class submission_controller extends Controller
 		$template = $problem->template_content($request->input('language_id'));
 		
 		if ($template == NULL)
-			$result = array('banned' => '', 'before'  => '', 'after' => '');
+			$result = array('banned' => '', 'before'  => '', 'after' => '', 'full' => '');
 
 		preg_match("/(\/\*###Begin banned.*\n)((.*\n)*)(###End banned keyword\*\/)/"
 			, $template, $matches
@@ -319,7 +319,7 @@ class submission_controller extends Controller
 		$before = $set_or_empty($matches, 2);
 		$after = $set_or_empty($matches, 4);
 
-		$result = array('banned' => $banned, 'before'  => $before, 'after' => $after);
+		$result = array('banned' => $banned, 'before'  => $before, 'after' => $after, 'full' => $template);
 
 		return response()->json($result);
 

@@ -19,7 +19,7 @@ function update_problem_count(){
 	$('.count_problems').html($('.list-group-item').length - 1);
 }
 
-$(document).ready(function(){
+document.addEventListener("DOMContentLoaded", function(){
 
 	var a = Sortable.create(problem_list, {
 		handle : '.list_handle',

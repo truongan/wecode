@@ -77,7 +77,7 @@
 /**
 * Notifications
 */
-$(document).ready(function () {
+document.addEventListener("DOMContentLoaded", function () {
 $('.del_n').click(function () {
   var row = $(this).parents('tr');
 	var id = row.data('id');

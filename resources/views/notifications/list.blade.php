@@ -47,7 +47,7 @@ MathJax.Hub.Config({
 /**
  * Notifications
  */
-$(document).ready(function () {
+document.addEventListener("DOMContentLoaded", function () {
 	$('.del_n').click(function () {
 		var notif = $(this).parents('.notif');
 		var id = $(notif).data('id');

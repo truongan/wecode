@@ -29,7 +29,7 @@ function b64EncodeUnicode(str) {
 		return String.fromCharCode('0x' + p1);
 	}));
 }
-$(document).ready(function(){
+document.addEventListener("DOMContentLoaded", function(){
 	var file_name ="";
 
     let is_dirty = false;

@@ -109,7 +109,7 @@ shj.setup_save = function(save_button, post_url, ckeditor_instance){
 /**
  * Sidebar
  */
-$(document).ready(function () {
+document.addEventListener("DOMContentLoaded", function () {
 	// update the clock and countdown timer every 1 second
 	shj.sync_server_time();
 	shj.update_clock();
@@ -120,7 +120,7 @@ $(document).ready(function () {
 /**
  * Set for all input elements
  */
-$(document).ready(function(){
+document.addEventListener("DOMContentLoaded", function(){
 	$('input').attr('dir', 'auto');
 	$('.custom-file-input').change(function(){
 		if ($(this).prop("files").length == 0)

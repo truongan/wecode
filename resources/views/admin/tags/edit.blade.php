@@ -74,7 +74,7 @@
 <script type="text/javascript" src="{{ asset('assets/DataTables/datatables.min.js') }}"></script>
 <script>
 
-$(document).ready(function(){
+document.addEventListener("DOMContentLoaded", function(){
   $("table").DataTable({
 		"pageLength": 50,
 		"lengthMenu": [ [20, 50, 100, 200, -1], [20, 50, 100, 200, "All"] ]

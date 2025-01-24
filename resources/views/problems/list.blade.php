@@ -230,7 +230,7 @@
 		$(".search-by-tags").val( {!! json_encode(Request::get('tag_id')) !!} ).trigger('change');
 	}
 
-  $(document).ready(function () {
+  document.addEventListener("DOMContentLoaded", function () {
 
 	$(".search-by-tags").select2({
 		closeOnSelect: false

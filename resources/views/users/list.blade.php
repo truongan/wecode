@@ -133,7 +133,7 @@ document.getElementById('copy_user_list').addEventListener('click', function(){
 /**
  * "Users" page
  */
-$(document).ready(function(){
+document.addEventListener("DOMContentLoaded", function(){
 	$('.delete-btn').click(function(){
 		var row = $(this).parents('tr');
 		var user_id = row.data('id');

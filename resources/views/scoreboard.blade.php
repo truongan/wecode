@@ -66,7 +66,7 @@
 
 <script type="text/javascript" src="{{ asset('assets/DataTables/datatables.min.js') }}"></script>
 <script>
-$(document).ready(function () {
+document.addEventListener("DOMContentLoaded", function () {
 	$("table").DataTable({
 		"paging": false,
 		"ordering": true,

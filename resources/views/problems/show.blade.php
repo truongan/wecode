@@ -63,7 +63,7 @@
 </script>
 <script src="{{ asset('assets/ckeditor/ckeditor.js') }}" charset="utf-8"></script>
 <script type="text/javascript">
-    $(document).ready(function(){
+    document.addEventListener("DOMContentLoaded", function(){
 		$('.save-button').click(function(){
             $.ajax({
                 type: 'POST',

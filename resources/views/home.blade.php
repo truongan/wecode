@@ -20,7 +20,7 @@ js') }}"></script>
 
 {{-- Dưới đây là thẻ script tạm thời --}}
 <script>
-    $(document).ready(function () {
+    document.addEventListener("DOMContentLoaded", function () {
         var all_assignments = @json($all_assignments);
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {

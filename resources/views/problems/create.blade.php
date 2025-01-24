@@ -56,7 +56,7 @@
 		$('.add_language_' + lang).toggleClass('d-none');
 	});
 
-	$(document).ready(function(){
+	document.addEventListener("DOMContentLoaded", function(){
 		tabOverride.set(document.getElementsByTagName('textarea'));
 		$('.js-example-basic-multiple').select2();
 		@if (!$edit)

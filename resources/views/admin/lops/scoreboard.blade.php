@@ -85,7 +85,7 @@ Class scores
 
 <script>
 
-$(document).ready(function(){
+document.addEventListener("DOMContentLoaded", function(){
    	var t =  $("table").DataTable({
 	  	"paging" : false,
 		'ordering': true,

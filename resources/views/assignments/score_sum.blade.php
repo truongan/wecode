@@ -25,7 +25,7 @@ biết chi mô
 
 <script type="text/javascript" src="{{ asset('assets/DataTables/datatables.min.js') }}"></script>
 <script>
-$(document).ready(function () {
+document.addEventListener("DOMContentLoaded", function () {
     $("table").DataTable({
 		"pageLength": 10,
 		"lengthMenu": [ [10, 20, 30, 50, -1], [10, 20, 30, 50, "All"] ]
