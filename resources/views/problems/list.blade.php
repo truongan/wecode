@@ -20,8 +20,7 @@
 @section('title_menu')
 {{-- {% if user.level >= 2 %} --}}
 <a href="{{ route('problems.create') }}"><span class="ms-4 fs-6 text-dark"><i class="fas fa-plus fa-lg color8"></i> Add</span></a>
-<a href="{{ route('submissions.index',[0, Auth::user()->id, 'all', 'all'] ) }}"><span class="ms-4 fs-6 text-dark"><i class="fas fa-list-ul fa-lg color8"></i>Review test submissions for problems</span></a>
-{{-- <span class="ms-4 fs-6"><a href="{{ url('problems/download_all') }}"><i class="fas fa-download fa-lg color8"></i>Download all problem's test and description</a></span> --}}
+<a href="{{ route('submissions.index',[0, Auth::user()->id, 'all', 'all'] ) }}"><span class="ms-4 fs-6 text-dark"><i class="fas fa-list-ul fa-lg color8"></i>Review practice submissions</span></a>
 @endsection
 
 @section('content')
@@ -50,6 +49,11 @@
 			<button type="submit" class="btn btn-primary form-control">Search</button>
 		</div>
 	</form>
+	<div class="row">
+		<div class="col-md"><a href=""><i class="fas fa-download fa-lg text-info"></i>Download selected problem's test and description</a></div>
+		<div class="col-md"><a href=""><i class="fas fa-check-square fa-lg text-info"></i>Select all problems</a></div>
+		<div class="col-md"><a href=""><i class="far fa-square fa-lg text-info"></i>Deselect all problems</a></div>
+	</div>
 	<div class="table-responsive">
 	@error('messages')
 		@php( $msgclasses = array('text-success'=> 'text-success', 'text-info'=> 'text-warning', 'text-danger'=> 'text-danger') )
@@ -180,9 +184,16 @@
 			</td>
 			{{-- DOWNLOAD, EDIT, DELETE --}}
 			<td>
-				<a href="{{ route('problems.downloadtestsdesc',$item->id) }}">
+				<div class="form-check">
+					<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+					<label class="form-check-label" for="flexCheckDefault">
+						<i title="Select for download" class="fa fa-cloud-download-alt fa-lg text-success"></i>
+					</label>
+				  </div>
+				  
+				{{-- <a href="{{ route('problems.downloadtestsdesc',$item->id) }}">
 					<i title="Download Tests and Descriptions" class="fa fa-cloud-download-alt fa-lg text-success"></i>
-				</a>
+				</a> --}}
 				@if($item->can_edit(Auth::user()))
 					<a href="{{ route('problems.edit', $item) }}"> <i title="Edit" class="far fa-edit fa-lg color3"> </i> </a>
 					<span title="Delete problem" class="del_n delete_tag pointer">

@@ -27,7 +27,7 @@ class problem_controller extends Controller
 		$this->middleware('auth'); // phải login
 	}
 	
-	private function can_edit_or_404($problem){
+	private function _can_edit_or_404($problem){
 		if ($problem->can_edit(Auth::user())){
 			return true;
 		} else abort(404);
@@ -92,7 +92,6 @@ class problem_controller extends Controller
 	private function add_missing_tags($tags){
 		foreach ($tags as $i => $tag) 
 		{
-			
 			if (Tag::find($tag) == null){
 				$tag  = substr($tag, 1);  // Remove the first character (which should be '#') from new tag
 				
@@ -181,33 +180,34 @@ class problem_controller extends Controller
 	 */
 	public function edit(Problem $problem)
 	{
-		$this->can_edit_or_404($problem);
+		$this->_can_edit_or_404($problem);
 		$lang_of_problems = $problem->languages->keyBy('id');
 		
 		$tags = $problem->tags->keyBy('id');
-		return view('problems.create', ['problem'=>$problem,
-		'all_languages'=>Language::orderBy('sorting')->get(),
-		'messages'=>[],  
-		'languages'=>$lang_of_problems,
-		'tree_dump'=>shell_exec("tree -h " . $this->get_directory_path($problem->id)),
-		'max_file_uploads'=> ini_get('max_file_uploads'),
-		'all_tags' => Tag::all(),
-		'tags' => $tags,
-	]);
-}
+		return view('problems.create'
+			, ['problem'=>$problem,
+				'all_languages'=>Language::orderBy('sorting')->get(),
+				'messages'=>[],  
+				'languages'=>$lang_of_problems,
+				'tree_dump'=>shell_exec("tree -h " . $problem->get_directory_path()),
+				'max_file_uploads'=> ini_get('max_file_uploads'),
+				'all_tags' => Tag::all(),
+				'tags' => $tags,
+			]
+		);
+	}
 
-/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @param  \App\Problem  $problem
-	 * @return \Illuminate\Http\Response
-	 *
-**/
-
+	/**
+		 * Update the specified resource in storage.
+		 *
+		 * @param  \Illuminate\Http\Request  $request
+		 * @param  \App\Problem  $problem
+		 * @return \Illuminate\Http\Response
+		 *
+	**/
 	public function update(Request $request, Problem $problem)
 	{
-		$this->can_edit_or_404($problem);
+		$this->_can_edit_or_404($problem);
 		
 		$validatedData = $request->validate([
 			'name' => ['required','max:255'],
@@ -278,22 +278,18 @@ class problem_controller extends Controller
 	 */
 	public function destroy($id = NULL)
 	{
-		
-
 		if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
 			abort(404);
 			
-		
 		elseif ($id === NULL)
 		{
 			$json_result = array('done' => 0, 'message' => 'Input Error');
 		}
 		else
 		{
-		   
 			$problem = Problem::find($id);
 
-			$this->can_edit_or_404($problem);
+			$this->_can_edit_or_404($problem);
 			
 			$result['no_of_ass'] = $problem->assignments->count();
 			$result['no_of_sub'] = $problem->submissions->count();
@@ -307,7 +303,7 @@ class problem_controller extends Controller
 			}
 			else
 			{
-				$this->delete_problem($problem);
+				$problem->delete();
 				$json_result = array('done' => 1);
 			}
 
@@ -415,15 +411,6 @@ class problem_controller extends Controller
 		// Remove temp directory
 		shell_exec("rm -rf $tmp_dir");
 	}
-	public function get_directory_path($id = NULL){
-		if ($id === NULL) return NULL;
-		
-		$assignments_root = Setting::get("assignments_root");
-		
-		$problem_dir = $assignments_root . "/problems/".$id;
-	   
-		return $problem_dir;
-	}
 
 	private function clean_up_old_problem_dir($problem_dir){
 		$remove = 
@@ -438,35 +425,6 @@ class problem_controller extends Controller
 		mkdir("$problem_dir/in", 0700, TRUE);
 		mkdir("$problem_dir/out", 0700, TRUE);
 			
-	}
-	
-	public function delete_problem(Problem $p){
-		
-		$cmd = 'rm -rf '. $p->get_directory_path();
-	  
-		 // If you want to set transaction time, you can append the new argument in the transaction function
-		DB::beginTransaction();  
-
-		Submission::where('problem_id', $p->id)->delete();
-
-
-		$problem = Problem::find($p->id);
-		Problem::destroy($p->id);  
-		
-		$problem->languages()->detach();
-		$problem->assignments()->detach();
-
-		$problem->tags()->detach();
-			
-		DB::commit();
-		
-		// Make the path to prepare to delete problem
-		$cmd = 'rm -rf '. $p->get_directory_path();
-		
-		// Delete assignment's folder (all test cases and submitted codes)
-		
-		shell_exec($cmd);
-
 	}
 
 	public function download_testcases(Problem $problem, Assignment $assignment, $type = null){
@@ -498,6 +456,10 @@ class problem_controller extends Controller
 	}
 
 
+	public function export($id_list){
+
+	}
+	
 	public function downloadtestsdesc($problem_id)
 	{
 		$a =Problem::with('languages')->find($problem_id); 
@@ -515,7 +477,7 @@ class problem_controller extends Controller
 
 		file_put_contents($metadata_file, $a->toJSON(JSON_PRETTY_PRINT));
 		// dd("cd $pathdir && zip -r $zipFile *");
-		$a = shell_exec("cd $pathdir && zip -r $zipFile *");
+		$a = shell_exec("cd $pathdir/.. && zip -r $zipFile  ".  (string)$problem_id . "/*");
 		// dd($a);
 		unlink($metadata_file);
 
@@ -528,8 +490,6 @@ class problem_controller extends Controller
 		$tmp_dir_name = "shj_tmp_directory";
 		$tmp_dir = "$assignments_root/$tmp_dir_name";
 		shell_exec("rm -rf $tmp_dir; mkdir $tmp_dir;");
-		// dd("rm -rf $tmp_dir; mkdir $tmp_dir;");
-		
 		
 		foreach($request->tests_dir as $item)
 		{
@@ -545,7 +505,7 @@ class problem_controller extends Controller
 			$messages[] = "Your test folder doesn't have desc.html file for problem description";
 		}
 		$in = $out = $files = array();
-		// dd($data);
+		
 		for($i = 0; $i<count($data);$i++)
 		{
 			// var_dump($data[$i]);
@@ -592,7 +552,7 @@ class problem_controller extends Controller
 			rename($tmp_name, "$problem_dir/$name");
 		}
 	} 
-	
+
 	private function replace_problem(Request $request, $id , Problem $problem)
 	{
 		DB::beginTransaction(); 
@@ -624,7 +584,7 @@ class problem_controller extends Controller
 		$id = $a[1];
 		
 		$problem = Problem::find($id);
-		$this->can_edit_or_404($problem);
+		$this->_can_edit_or_404($problem);
 		
 		if  ($task == "practice"){
 			$problem->allow_practice = ! $problem->allow_practice;
@@ -637,7 +597,7 @@ class problem_controller extends Controller
 		}
 	}
 	public function edit_tags(Request $request, Problem $problem){
-		$this->can_edit_or_404($problem);
+		$this->_can_edit_or_404($problem);
 		$tags = $this->add_missing_tags($request->input('tag_id'));
 		$problem->tags()->sync($tags);
 		return json_encode(['all_tags' => Tag::all(), 'new_tags' => $problem->tags]);

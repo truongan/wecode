@@ -23,6 +23,31 @@ class Problem extends Model
         return $problem_dir;
     }
 
+
+    public function delete(){
+        // If you want to set transaction time, you can append the new argument in the transaction function
+		DB::beginTransaction();  
+        
+		Submission::where('problem_id', $this->id)->delete();
+        
+		
+		$this->languages()->detach();
+		$this->assignments()->detach();
+        
+		$this->tags()->detach();
+        
+		parent::delete();
+		DB::commit();
+		
+		
+		// Delete assignment's folder (all test cases and submitted codes)
+		$cmd = 'rm -rf '. $this->get_directory_path();
+
+		shell_exec($cmd);
+
+    }
+
+
     public function can_practice(User $user){
         if ($user->role->name == 'admin') return true;
         if ($user->id == $this->user->id) return true;
