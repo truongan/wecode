@@ -456,8 +456,34 @@ class problem_controller extends Controller
 	}
 
 
-	public function export($id_list){
+	public function export(Request $request){
+		$ids = explode(',',($request->input('ids')));
+		
+		$probs = Problem::whereIn('id', $ids)->get()->load('user');
 
+		if ( ! in_array( Auth::user()->role->name, ['admin']) ) {
+			$probs->reject(function (Problem $prob){
+				return 
+					!( $prob->sharable && Auth::user()->role->name != 'student')
+					&& $prob->user->id != Auth::user()->id;
+			});
+		}
+
+		$assignments_root = Setting::get("assignments_root");
+		$zipFile = $assignments_root . "/problem-" . $probs->pluck('id')->implode('-'). "_tests_and_descriptions_" . (string)date('Y-m-d_H-i') . ".zip";
+		
+		foreach($probs as $prob){
+			$pathdir = $prob->get_directory_path();
+			$metadata_file = $pathdir . 'problem.wecode.metadata.json';
+	
+			file_put_contents($metadata_file, $prob->toJSON(JSON_PRETTY_PRINT));
+			// dd("cd $pathdir && zip -r $zipFile *");
+			$a = shell_exec("cd $pathdir/.. && zip -r $zipFile  ".  (string)$prob->id . "/*");
+			// dd($a);
+			unlink($metadata_file);
+		}
+
+		return response()->download($zipFile)->deleteFileAfterSend();
 	}
 	
 	public function downloadtestsdesc($problem_id)

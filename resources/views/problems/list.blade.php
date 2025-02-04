@@ -50,9 +50,9 @@
 		</div>
 	</form>
 	<div class="row">
-		<div class="col-md"><a href=""><i class="fas fa-download fa-lg text-info"></i>Download selected problem's test and description</a></div>
-		<div class="col-md"><a href=""><i class="fas fa-check-square fa-lg text-info"></i>Select all problems</a></div>
-		<div class="col-md"><a href=""><i class="far fa-square fa-lg text-info"></i>Deselect all problems</a></div>
+		<div class="col-md"><a href="" download id = "download_all_selected"><i class="fas fa-download fa-lg text-info"></i>Download selected problem's test and description</a></div>
+		<div class="col-md"><a href="" id="select_all_for_download"><i class="fas fa-check-square fa-lg text-info"></i>Select all problems</a></div>
+		<div class="col-md"><a href="" id="deselect_all_for_download"><i class="far fa-square fa-lg text-info"></i>Deselect all problems</a></div>
 	</div>
 	<div class="table-responsive">
 	@error('messages')
@@ -185,8 +185,8 @@
 			{{-- DOWNLOAD, EDIT, DELETE --}}
 			<td>
 				<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-					<label class="form-check-label" for="flexCheckDefault">
+					<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault-{{$item->id}}" data-id="{{$item->id}}">
+					<label class="form-check-label" for="flexCheckDefault-{{$item->id}}"
 						<i title="Select for download" class="fa fa-cloud-download-alt fa-lg text-success"></i>
 					</label>
 				  </div>
@@ -296,8 +296,7 @@
 	document.querySelectorAll('.edit-tag-form').forEach(
 		i => i.addEventListener('submit', (event)=>{
 			event.preventDefault();
-			// console.log('outside', event);
-			// console.log('outside', event.currentTarget);
+
 			var select_obj = $(event.currentTarget.querySelector('select'));
 			fetch(event.currentTarget.action, {
 				method: 'POST',
@@ -319,6 +318,44 @@
 
 		})
 	);	
+	
+	document.querySelectorAll('#select_all_for_download')[0].onclick = (event) => {
+		event.preventDefault();
+		document.querySelectorAll('.form-check-input').forEach(select => select.checked = true);
+	};
+	
+	document.querySelectorAll('#deselect_all_for_download')[0].onclick = (event) => {
+		event.preventDefault();
+		document.querySelectorAll('.form-check-input').forEach(select => select.checked = false);
+	};
+
+	document.querySelectorAll('#download_all_selected')[0].onclick = (event) => {
+		// event.preventDefault();
+		// fetch(
+		// 	'{{ route("problems.export") }}',
+		// 	{	
+		// 		method: 'POST',
+		// 		headers: {
+		// 			'Content-Type': 'application/json',
+		// 			'X-CSRF-TOKEN' : document.querySelector('meta[name="csrf-token"]').getAttribute('content') 
+		// 		},
+		// 		body: JSON.stringify({
+		// 			'ids' : [...document.querySelectorAll('.form-check-input:checked')].map(i => i.dataset['id']),
+		// 		}),
+		// 	}
+		// )
+		// .then(response => response.blob())
+		// .then(blob => {
+
+		// });
+
+		event.target.href = '{{ route('problems.export') }}?'
+			+ new URLSearchParams(
+				{
+					'ids' : [...document.querySelectorAll('.form-check-input:checked')].map(i => i.dataset['id'])
+				}
+			).toString();
+	};
 
 	$('.del_n').click(function () {
 	  var row = $(this).parents('tr');
