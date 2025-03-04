@@ -231,8 +231,8 @@ class problem_controller extends Controller
 
 		$problem->tags()->sync($tags);
 
-		$this->replace_problem($request,$problem->id,$problem);
-		$this->_take_test_file_upload($request, $problem->id, $messages);  
+		$this->_replace_problem($request, $problem);
+		$this->_take_test_file_upload($request, $problem, $messages);  
 		
 		return redirect()->route('problems.index')->withInput()->withErrors(["messages"=>$messages]);
 	}
@@ -579,7 +579,7 @@ class problem_controller extends Controller
 		}
 	} 
 
-	private function replace_problem(Request $request, $id , Problem $problem)
+	private function _replace_problem(Request $request, Problem $problem)
 	{
 		DB::beginTransaction(); 
 
