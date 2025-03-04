@@ -25,6 +25,37 @@
 
 @section('content')
 <div class="row">
+		
+	<div class="accordion  accordion-flus" id="accordionExample">
+		<div class="accordion-item">
+		  <h2 class="accordion-header">
+			<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+			  Import/Export problems
+			</button>
+		  </h2>
+		  <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+			<div class="accordion-body">
+				<div class="row mb-2">
+					<div class="col-md"><a href="" download id = "download_all_selected"><i class="fas fa-download fa-lg text-info"></i>Export selected problem (zip)</a></div>
+					<div class="col-md"><a href="" id="select_all_for_download"><i class="fas fa-check-square fa-lg text-info"></i>Select all problems</a></div>
+					<div class="col-md"><a href="" id="deselect_all_for_download"><i class="far fa-square fa-lg text-info"></i>Deselect all problems</a></div>
+					<div class="col-md-6">
+						<form 		enctype="multipart/form-data"			action="{{ route('problems.import') }}"  method="post"  class="row g-3 needs-validation" novalidate>
+						  <div class="col-md-10">
+							<label for="validationCustom05" class="form-label">Import multiple (zipped) problems</label>
+							<input name="zip_upload" type="file" class="form-control-sm" id="validationCustom05" required>
+						  </div>
+						  <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+						  <div class="col-2">
+							<button class="btn btn-primary" type="submit">Import</button>
+						  </div>
+						</form>
+					</div>
+				</div>
+			</div>
+		  </div>
+		</div>
+	  
 	<form class="row mb-3 gx-3  align-items-center" method="get" action="{{ route('problems.index') }}">
 		<div class=" col-5">
 			<div class="input-group">
@@ -37,11 +68,6 @@
 			<div class="input-group  top-search-bar">
 				<label class="input-group-text"> and by tag(s)</label>
 				<select class="search-by-tags form-control"multiple="multiple" name="tag_id[]">
-					{{-- @foreach( $all_tags as $t)
-					<option value="{{ $t->id }}" data-text="{{$t->text}}" data-id="{{$t->id}}" 
-						{{ isset($tags[$t->id]) ? 'selected="selected"' : ''  }}
-						>{{$t->text}}</option>
-					@endforeach --}}
 				</select>
 			</div>
 		</div>
@@ -49,11 +75,9 @@
 			<button type="submit" class="btn btn-primary form-control">Search</button>
 		</div>
 	</form>
-	<div class="row">
-		<div class="col-md"><a href="" download id = "download_all_selected"><i class="fas fa-download fa-lg text-info"></i>Download selected problem's test and description</a></div>
-		<div class="col-md"><a href="" id="select_all_for_download"><i class="fas fa-check-square fa-lg text-info"></i>Select all problems</a></div>
-		<div class="col-md"><a href="" id="deselect_all_for_download"><i class="far fa-square fa-lg text-info"></i>Deselect all problems</a></div>
-	</div>
+
+
+
 	<div class="table-responsive">
 	@error('messages')
 		@php( $msgclasses = array('text-success'=> 'text-success', 'text-info'=> 'text-warning', 'text-danger'=> 'text-danger') )
@@ -190,10 +214,6 @@
 						<i title="Select for download" class="fa fa-cloud-download-alt fa-lg text-success"></i>
 					</label>
 				  </div>
-				  
-				{{-- <a href="{{ route('problems.downloadtestsdesc',$item->id) }}">
-					<i title="Download Tests and Descriptions" class="fa fa-cloud-download-alt fa-lg text-success"></i>
-				</a> --}}
 				@if($item->can_edit(Auth::user()))
 					<a href="{{ route('problems.edit', $item) }}"> <i title="Edit" class="far fa-edit fa-lg color3"> </i> </a>
 					<span title="Delete problem" class="del_n delete_tag pointer">

@@ -231,8 +231,8 @@ class problem_controller extends Controller
 
 		$problem->tags()->sync($tags);
 
-		$this->replace_problem($request,$problem->id,$problem);
-		$this->_take_test_file_upload($request, $problem->id, $messages);  
+		$this->_replace_problem($request,$problem);
+		$this->_take_test_file_upload($request, $problem, $messages);  
 		
 		return redirect()->route('problems.index')->withInput()->withErrors(["messages"=>$messages]);
 	}
@@ -256,8 +256,6 @@ class problem_controller extends Controller
 			shell_exec('rm -f '.$assignments_root.'/*.zip');
 			
 			$name_zip = ($request->tests_zip->getClientOriginalName());
-
-
 			$path_zip = $request->tests_zip->storeAs('',$name_zip,'assignment_root');
 			
 			$this->unload_zip_test_file($request , $assignments_root, $problem_dir, $messages, $name_zip);
@@ -335,17 +333,14 @@ class problem_controller extends Controller
 	
 	private function unload_zip_test_file(Request $request, $assignments_root, $problem_dir, &$messages, $name_zip){
 		
-		// Create a temp directory
 		$tmp_dir_name = "shj_tmp_directory";
 		$tmp_dir = "$assignments_root/$tmp_dir_name";
-		// dd("rm -rf $tmp_dir; mkdir $tmp_dir;");
 		shell_exec("rm -rf $tmp_dir; mkdir $tmp_dir;");
 	   
 		// get new name
 		$rename_inputoutput = $request->rename_zip;
 
 		// extract file 
-		
 		shell_exec("cd $assignments_root; unzip ". escapeshellarg($name_zip) . " -d $tmp_dir");
 
 		// Remove the zip file
@@ -415,11 +410,6 @@ class problem_controller extends Controller
 	private function clean_up_old_problem_dir($problem_dir){
 		$remove = 
 		" rm -rf $problem_dir/*";
-		// " rm -rf $problem_dir/in $problem_dir/out $problem_dir/tester*"
-		//     ."  $problem_dir/template.* "
-		//     ."  $problem_dir/desc.*  $problem_dir/*.pdf; done";
-		//echo "cp -R $tmp_dir/* $problem_dir;";            
-		//echo $remove; die();          
 		shell_exec($remove); 
 
 		mkdir("$problem_dir/in", 0700, TRUE);
@@ -455,7 +445,6 @@ class problem_controller extends Controller
 
 	}
 
-
 	public function export(Request $request){
 		$ids = explode(',',($request->input('ids')));
 		
@@ -468,14 +457,15 @@ class problem_controller extends Controller
 					&& $prob->user->id != Auth::user()->id;
 			});
 		}
+		$probs->load('languages');
 
 		$assignments_root = Setting::get("assignments_root");
 		$zipFile = $assignments_root . "/problem-" . $probs->pluck('id')->implode('-'). "_tests_and_descriptions_" . (string)date('Y-m-d_H-i') . ".zip";
 		
 		foreach($probs as $prob){
 			$pathdir = $prob->get_directory_path();
-			$metadata_file = $pathdir . 'problem.wecode.metadata.json';
-	
+			$metadata_file = $pathdir . '/problem.wecode.metadata.json';
+			// dd($metadata_file);
 			file_put_contents($metadata_file, $prob->toJSON(JSON_PRETTY_PRINT));
 			// dd("cd $pathdir && zip -r $zipFile *");
 			$a = shell_exec("cd $pathdir/.. && zip -r $zipFile  ".  (string)$prob->id . "/*");
@@ -486,28 +476,49 @@ class problem_controller extends Controller
 		return response()->download($zipFile)->deleteFileAfterSend();
 	}
 	
-	public function downloadtestsdesc($problem_id)
-	{
-		$a =Problem::with('languages')->find($problem_id); 
-		
-		if ($a == null) abort(404);
-		if ( ! in_array( Auth::user()->role->name, ['admin']) )
-		{   
-			if (! $a->sharable && $a->user->id != Auth::user()->id) abort(403, 'you can only download sharable problems and problems that you upload');
-		}
-		
+	public function import(Request $request){
+		$request->validate([
+			'zip_upload' => ['required']
+		]);
+
 		$assignments_root = Setting::get("assignments_root");
-		$zipFile = $assignments_root . "/problem" . (string)$problem_id . "_tests_and_descriptions_" . (string)date('Y-m-d_H-i') . ".zip";
-		$pathdir = $assignments_root . '/problems/' . (string)$problem_id . '/';
-		$metadata_file = $pathdir . 'problem.wecode.metadata.json';
+		$file_path = $assignments_root . "/" .  $request->zip_upload->store('', 'assignment_root');
+		echo ($file_path);
+		
+		$tmp_dir = "$assignments_root/import_tmp_directory";
+		shell_exec("rm -rf $tmp_dir; mkdir $tmp_dir;");
+		
+		$a = shell_exec("unzip ". escapeshellarg($file_path) . " -d $tmp_dir");
+		shell_exec("rm $file_path");
+		
+		
+		$lang_to_id = Language::all()->pluck('id', 'name');
+		foreach (scandir($tmp_dir) as $prob_folder){
+			if ($prob_folder == '.' or $prob_folder == '..') continue;
 
-		file_put_contents($metadata_file, $a->toJSON(JSON_PRETTY_PRINT));
-		// dd("cd $pathdir && zip -r $zipFile *");
-		$a = shell_exec("cd $pathdir/.. && zip -r $zipFile  ".  (string)$problem_id . "/*");
-		// dd($a);
-		unlink($metadata_file);
-
-		return response()->download($zipFile)->deleteFileAfterSend();
+			$metadata = json_decode(file_get_contents("$tmp_dir/$prob_folder/problem.wecode.metadata.json"));
+			// var_dump($metadata);
+			
+			$problem = new Problem((array)$metadata);
+			$problem->id = NULL;
+			$problem->user_id = Auth::user()->id;
+			$problem->save();
+			
+			$langs = [];
+			foreach($metadata->languages as $lang){
+				$langs[ $lang_to_id[$lang->name] ] = [
+					'time_limit' => $lang->pivot->time_limit,
+					'memory_limit' => $lang->pivot->memory_limit
+				];
+			}
+			// var_dump($langs);
+			$problem->languages()->sync($langs);
+			
+			shell_exec("mkdir -p " . $problem->get_directory_path() );
+			shell_exec("cp -r $tmp_dir/$prob_folder/* " . $problem->get_directory_path());
+		}
+		shell_exec("rm -rf $tmp_dir");
+		return redirect()->route('problems.index')->withInput()->withErrors(["messages"=>"to do"]);
 	}
 
 	private function handle_test_dir_upload(Request $request,$assignments_root,$up_dir, $problem_dir, &$messages)
@@ -579,7 +590,7 @@ class problem_controller extends Controller
 		}
 	} 
 
-	private function replace_problem(Request $request, $id , Problem $problem)
+	private function _replace_problem(Request $request , Problem $problem)
 	{
 		DB::beginTransaction(); 
 
