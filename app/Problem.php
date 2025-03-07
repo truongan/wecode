@@ -19,7 +19,7 @@ class Problem extends Model
     ];
     public function get_directory_path(){
 		$assignments_root = Setting::get("assignments_root");
-        $problem_dir = $assignments_root . "/problems/".$this->id;
+        $problem_dir = $assignments_root . "/problems/".$this->id."/";
         return $problem_dir;
     }
 

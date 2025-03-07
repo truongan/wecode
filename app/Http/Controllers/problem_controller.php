@@ -319,11 +319,10 @@ class problem_controller extends Controller
 		else return false;
 	}
 	
-	public function edit_description(Request $request, Problem $p){
+	public function edit_description(Request $request, Problem $problem){
 		if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
 			abort(404);
-
-		if ($this->save_problem_description($p, $request->content)){
+		if ($this->save_problem_description($problem, $request->content)){
 			echo "success";
 				return;
 		}
