@@ -338,7 +338,6 @@ class problem_controller extends Controller
 	   
 		// get new name
 		$rename_inputoutput = $request->rename_zip;
-
 		// extract file 
 		shell_exec("cd $assignments_root; unzip ". escapeshellarg($name_zip) . " -d $tmp_dir");
 
@@ -361,6 +360,7 @@ class problem_controller extends Controller
 			if ($in){
 				//rename input and output file base on file name order
 				if ($rename_inputoutput){
+					// dd($rename_inputoutput);
 					if (count($in) != count($out)){
 						$messages[] = 'The zip contain mismatch number of input and output files: ' . count($in) . ' input files vs ' . count($out) . ' output files';                  }
 					else {
@@ -446,11 +446,10 @@ class problem_controller extends Controller
 
 	public function export(Request $request){
 		$ids = explode(',',($request->input('ids')));
-		
 		$probs = Problem::whereIn('id', $ids)->get()->load('user');
 
 		if ( ! in_array( Auth::user()->role->name, ['admin']) ) {
-			$probs->reject(function (Problem $prob){
+			$probs = $probs->reject(function (Problem $prob, int $key){
 				return 
 					!( $prob->sharable && Auth::user()->role->name != 'student')
 					&& $prob->user->id != Auth::user()->id;
@@ -468,7 +467,6 @@ class problem_controller extends Controller
 			file_put_contents($metadata_file, $prob->toJSON(JSON_PRETTY_PRINT));
 			// dd("cd $pathdir && zip -r $zipFile *");
 			$a = shell_exec("cd $pathdir/.. && zip -r $zipFile  ".  (string)$prob->id . "/*");
-			// dd($a);
 			unlink($metadata_file);
 		}
 
