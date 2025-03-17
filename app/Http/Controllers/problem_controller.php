@@ -503,6 +503,7 @@ class problem_controller extends Controller
 			
 			$langs = [];
 			foreach($metadata->languages as $lang){
+				if (!isset($lang_to_id[$lang->name])) continue;
 				$langs[ $lang_to_id[$lang->name] ] = [
 					'time_limit' => $lang->pivot->time_limit,
 					'memory_limit' => $lang->pivot->memory_limit

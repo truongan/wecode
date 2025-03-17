@@ -80,18 +80,16 @@ document.addEventListener("DOMContentLoaded", function(){
 									+ '</h6>');
 					banned.classList.remove('d-none');
 				} else banned.classList.add('d-none');
-		
 				if (data.before != ""){
 					ace.edit("before").setValue(data.before);
-					$("#before-grp").show();
-				} else $("#before-grp").hide();
+					document.querySelector('#before-grp').classList.remove('d-none')
+				} else document.querySelector('#before-grp').classList.add('d-none')
 		
-				// $("#editor_grp").show();
 				if (data.after != ""){
 					ace.edit("after").setValue(data.after);
-					$("#after-grp").show();
+					document.querySelector("#after-grp").classList.remove('d-none');
 				} 
-				else $("#after-grp").hide();
+				else document.querySelector("#after-grp").classList.add('d-none');
 		
 				all_ace_s.map(function(editor){
 					// console.log(editor)

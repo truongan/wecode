@@ -298,28 +298,29 @@ class submission_controller extends Controller
 
 		$template = $problem->template_content($request->input('language_id'));
 		
-		if ($template == NULL)
+		if ($template === NULL){
 			$result = array('banned' => '', 'before'  => '', 'after' => '', 'full' => '');
-
-		preg_match("/(\/\*###Begin banned.*\n)((.*\n)*)(###End banned keyword\*\/)/"
-			, $template, $matches
-		);
+		} else {
+			preg_match("/(\/\*###Begin banned.*\n)((.*\n)*)(###End banned keyword\*\/)/"
+				, $template, $matches
+			);
+		
+			$set_or_empty = function($arr, $key){
+				if(isset($arr[$key])) return $arr[$key];
+				return "";
+			};
 	
-		$set_or_empty = function($arr, $key){
-			if(isset($arr[$key])) return $arr[$key];
-			return "";
-		};
-
-		$banned = $set_or_empty($matches, 2);
-
-		preg_match("/(###End banned keyword\*\/\n)((.*\n)*)\/\/###INSERT CODE HERE -\n?((.*\n?)*)/"
-			, $template, $matches
-		);
-
-		$before = $set_or_empty($matches, 2);
-		$after = $set_or_empty($matches, 4);
-
-		$result = array('banned' => $banned, 'before'  => $before, 'after' => $after, 'full' => $template);
+			$banned = $set_or_empty($matches, 2);
+	
+			preg_match("/(###End banned keyword\*\/\n)((.*\n)*)\/\/###INSERT CODE HERE -\n?((.*\n?)*)/"
+				, $template, $matches
+			);
+	
+			$before = $set_or_empty($matches, 2);
+			$after = $set_or_empty($matches, 4);
+	
+			$result = array('banned' => $banned, 'before'  => $before, 'after' => $after, 'full' => $template);
+		}
 
 		return response()->json($result);
 
