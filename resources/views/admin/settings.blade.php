@@ -53,6 +53,7 @@
 			<label for="theme">Theme</label>
 			<select id="theme" name="theme" class="form-select">
 				<optgroup label="light">
+					<option value="brite" {{ $theme == 'brite' ? 'selected="selected"' : '' }} >brite</option>
 					<option value="cerulean" {{ $theme == 'cerulean' ? 'selected="selected"' : '' }} >cerulean</option>
 					<option value="cosmo" {{ $theme == 'cosmo' ? 'selected="selected"' : '' }} >cosmo</option>
 					<option value="flatly" {{ $theme == 'flatly' ? 'selected="selected"' : '' }} >flatly</option>

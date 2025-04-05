@@ -470,7 +470,8 @@ class problem_controller extends Controller
 			unlink($metadata_file);
 		}
 
-		return response()->download($zipFile)->deleteFileAfterSend();
+		if (file_exists($zipFile)) 		return response()->download($zipFile)->deleteFileAfterSend();
+		else abort(403, "You don't have permissions to any of those problems");
 	}
 	
 	public function import(Request $request){
