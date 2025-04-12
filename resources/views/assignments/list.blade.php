@@ -168,7 +168,7 @@
 
 <script type='text/javascript' src="{{ asset('assets/DataTables/datatables.min.js') }}"></script>
 <script>
-$(document).ready(function () {
+document.addEventListener("DOMContentLoaded", function () {
 	$('.del_n').click(function () {
 	var row = $(this).parents('tr');
 		var id = row.data('id');

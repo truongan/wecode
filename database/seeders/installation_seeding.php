@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Assignment;
+use App\Language;
 use Illuminate\Support\Facades\DB;
 class installation_seeding extends Seeder
 {
@@ -77,5 +78,6 @@ class installation_seeding extends Seeder
             'extra_time' => 0,
         ]);
         DB::table('assignments')->update(['id' => 0]);
+        DB::table('assignments')->update(['language_ids' => "1, 2, 3, 4, 5, 6, 7"]);
     }
 }

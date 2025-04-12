@@ -52,7 +52,7 @@ shj.html_encode = function(value) {
 	return $('<div/>').text(value).html();
 }
 
-$(document).ready(function () {
+document.addEventListener("DOMContentLoaded", function () {
 	$(document).on('click', '#select_all', function (e) {
 		e.preventDefault();
 		$('.code-column').selectText();

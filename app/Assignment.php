@@ -82,21 +82,21 @@ class Assignment extends Model
         }
         elseif (in_array( $user->role->name, ['student']) && $this->open == 0){
             // if assignment is closed, non-student users (admin, instructors) still can submit
-            $result->error_message = 'Selected assignment is closed.';
+            $result->error_message = ' You cannot submit, selected assignment is closed.';
         }
         elseif (!$this->started() && in_array( $user->role->name, ['student']) ){
             // non-student users can submit to not started assignments
-            $result->error_message = 'Selected assignment has not started.';
+            $result->error_message = 'You cannot submit, Selected assignment has not started.';
         }
         elseif ($this->start_time < $this->finish_time
                 && Carbon::now() > $this->finish_time->addSeconds( $this->extra_time))
         {
             // deadline = finish_time + extra_time
             // but if start time is before finish time, the deadline is NEVER
-            $result->error_message =  'Selected assignment has finished.';
+            $result->error_message =  'You cannot submit, Selected assignment has finished.';
         }
         elseif ( !$this->is_participant($user) )
-            $result->error_message = 'You are not registered for submitting.';
+            $result->error_message = 'You cannot submit, You are not registered for submitting.';
         else
         {
             $result->error_message = 'none';

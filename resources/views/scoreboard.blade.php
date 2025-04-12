@@ -21,6 +21,23 @@
 @if (isset(Auth::user()->selected_assignment_id))
 	@php($sl = 1)
 @endif
+<ul class="ms-4 fs-6 nav nav-pills">
+	<li class="nav-item">
+		<a class="nav-link link-dark {{$place=="full" ? "active" :""}}"
+			href="{{ route('scoreboards.index', $assignment->id) }}">
+		<i class="fas fa-star color10"></i> Full information </a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link link-dark {{$place=="simplify" ? "active" :""}}" 
+			href="{{ route('scoreboards.simplify', $assignment->id) }}">
+		<i class="fas fa-star-half-alt color10"></i> Minimal information </a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link link-dark {{$place=="plain" ? "active" :""}}" 
+			href="{{ route('scoreboards.plain', $assignment->id) }}">
+		<i class="fas fa-star-half-alt color10"></i> Plain text Minimal </a>
+	</li>
+</ul>
 @endsection
 
 
@@ -49,7 +66,7 @@
 
 <script type="text/javascript" src="{{ asset('assets/DataTables/datatables.min.js') }}"></script>
 <script>
-$(document).ready(function () {
+document.addEventListener("DOMContentLoaded", function () {
 	$("table").DataTable({
 		"paging": false,
 		"ordering": true,

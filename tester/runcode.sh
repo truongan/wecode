@@ -37,8 +37,8 @@ fi
 
 # Imposing memory limit with ulimit
 # if [ "$EXT" != "java" ]; then
-	ulimit -v $((MEMLIMIT+34500))
-	ulimit -m $((MEMLIMIT+34500))
+	# ulimit -v $((MEMLIMIT+34500))
+	# ulimit -m $((MEMLIMIT+34500))
 	#ulimit -s $((MEMLIMIT+34500))
 # fi
 

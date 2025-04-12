@@ -99,19 +99,20 @@ $selected = 'assignments'
 		</div>
 
 		<div class="row editor-row mt-3">
-			<div class="" id="banned" style="display: none;"></div>
+			<div class="d-none " id="download_full" ></div>
+			<div class="d-none " id="banned" ></div>
 
-			<div class="template-grp" id="before-grp" style="display: none;">
+			<div class="d-none template-grp" id="before-grp" >
 				<label for="">Template's header, <small>these lines will goes before your code</small></label>
 				<div class="template" id="before" >abc</div>
 			</div>
 
-			<div class="editor-grp" id="editor_grp" style="display: none;">
+			<div class="editor-grp" id="editor_grp" >
 				<label for="">Your code</label>
 				<div id="editor">{{ $last_code ?? "Write your code here"}}</div>
 			</div>
 
-			<div class="template-grp" id="after-grp" style="display: none;">
+			<div class="d-none template-grp" id="after-grp" >
 				<label for="">Template's footer, <small>These lines will goes after your code</small></label>
 				<div class="template" id="after" >def</div>
 			</div>
@@ -145,7 +146,7 @@ $selected = 'assignments'
 	
 	get_template_route = '{{ route('submissions.get_template') }}';
 
-	$(document).ready(function(){
+	document.addEventListener("DOMContentLoaded", function(){
 		///Select the problem from referring page
 
 		$("select#problems").val({{ $problem->id }});

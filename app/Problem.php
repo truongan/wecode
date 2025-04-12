@@ -19,9 +19,34 @@ class Problem extends Model
     ];
     public function get_directory_path(){
 		$assignments_root = Setting::get("assignments_root");
-        $problem_dir = $assignments_root . "/problems/".$this->id;
+        $problem_dir = $assignments_root . "/problems/".$this->id."/";
         return $problem_dir;
     }
+
+
+    public function delete(){
+        // If you want to set transaction time, you can append the new argument in the transaction function
+		DB::beginTransaction();  
+        
+		Submission::where('problem_id', $this->id)->delete();
+        
+		
+		$this->languages()->detach();
+		$this->assignments()->detach();
+        
+		$this->tags()->detach();
+        
+		parent::delete();
+		DB::commit();
+		
+		
+		// Delete assignment's folder (all test cases and submitted codes)
+		$cmd = 'rm -rf '. $this->get_directory_path();
+
+		shell_exec($cmd);
+
+    }
+
 
     public function can_practice(User $user){
         if ($user->role->name == 'admin') return true;
@@ -41,6 +66,26 @@ class Problem extends Model
             } 
         }
         return true;
+    }
+
+    /** Dowload file pdf  */
+    public function pdf()
+    {
+        // Find pdf file
+        $pattern = $this->get_directory_path()."/*.pdf";
+            
+        $pdf_files = glob($pattern);
+        $pdf_files = implode("|",$pdf_files);
+        if ( ! $pdf_files )
+            abort(404,"File not found");
+
+        // Download the file to browser
+        $headers = [
+            'Content-Description' => 'File Transfer',
+            'Content-Type' => 'application/pdf',
+        ];
+        return response()->file($pdf_files, $headers);
+
     }
 
     public function template_path($language_extension = 'cpp'){

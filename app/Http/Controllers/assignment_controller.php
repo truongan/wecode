@@ -228,22 +228,13 @@ class assignment_controller extends Controller
         return redirect('assignments');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Assignment $assignment, $problem_id ){
+
+    private function collect_problem_data_to_show(Assignment $assignment, $problem_id){
         $assignment_id = $assignment->id;
 
         if ($assignment->id == 0){
             return redirect()->route('practice');
         }
-        
-        // if ($assignment_id === NULL){
-        //     redirect(view('problems.show'));
-        // }
         
         $data=array(
             'can_submit' => TRUE,
@@ -326,10 +317,33 @@ class assignment_controller extends Controller
             break;
         }
 
-        Auth::user()->selected_assignment_id = $assignment_id;
+        return $data;
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Assignment $assignment, $problem_id ){
+        $data = $this->collect_problem_data_to_show($assignment, $problem_id);
+
+        Auth::user()->selected_assignment_id = $assignment->id;
         Auth::user()->save(); 
 
         return view('problems.show',$data);
+    }
+    
+    public function show_pdf(Assignment $assignment,Problem  $problem ){
+
+        $data = $this->collect_problem_data_to_show($assignment, $problem->id);
+        // dd($data);
+        if ($data['error'] != NULL){
+            abort(403, $data['error']);
+        }
+
+        return $problem->pdf();
     }
 
     public function get_directory_path($id = NULL){
@@ -341,9 +355,6 @@ class assignment_controller extends Controller
        
         return $problem_dir;
     }
-    
-
-    
 
     public function duplicate(Assignment $assignment){
         if (($t = $assignment->cannot_edit(Auth::user())) !== false){
@@ -385,7 +396,7 @@ class assignment_controller extends Controller
 
         $e = $assignment->extra_time;
         if ($e % 3600 == 0) $assignment->extra_time = intval($e/3600) . "*60*60";
-        else if ($e % 60 == 0) $assignment->extra_time = intval($e/36) . "*60";
+        else if ($e % 60 == 0) $assignment->extra_time = intval($e/60) . "*60";
 
         $lops = $assignment->lops->keyBy('id');
 
@@ -494,7 +505,6 @@ class assignment_controller extends Controller
                     Assignment::destroy($id);
                     $json_result = array('done' => 1);
                 }
-
             }
         }
         
@@ -579,7 +589,6 @@ class assignment_controller extends Controller
     
     public function reload_scoreboard($assignment_id)
     {
-		// DB::enableQueryLog();
 
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
             abort(403);
@@ -590,10 +599,7 @@ class assignment_controller extends Controller
 
         // Reset all final submission choice to the best score
         $assignment->reset_final_submission_choices();
-
-        // dd(DB::getQueryLog());
-
-        // DB::disableQueryLo();
+        
         if (Scoreboard::update_scoreboard($assignment_id)){     
             return redirect()->back()->with('success', 'Reload Scoreboard sucecss');   
         }

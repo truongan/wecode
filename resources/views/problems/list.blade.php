@@ -20,12 +20,42 @@
 @section('title_menu')
 {{-- {% if user.level >= 2 %} --}}
 <a href="{{ route('problems.create') }}"><span class="ms-4 fs-6 text-dark"><i class="fas fa-plus fa-lg color8"></i> Add</span></a>
-<a href="{{ route('submissions.index',[0, Auth::user()->id, 'all', 'all'] ) }}"><span class="ms-4 fs-6 text-dark"><i class="fas fa-list-ul fa-lg color8"></i>Review test submissions for problems</span></a>
-{{-- <span class="ms-4 fs-6"><a href="{{ url('problems/download_all') }}"><i class="fas fa-download fa-lg color8"></i>Download all problem's test and description</a></span> --}}
+<a href="{{ route('submissions.index',[0, Auth::user()->id, 'all', 'all'] ) }}"><span class="ms-4 fs-6 text-dark"><i class="fas fa-list-ul fa-lg color8"></i>Review practice submissions</span></a>
 @endsection
 
 @section('content')
 <div class="row">
+		
+	<div class="accordion  accordion-flus" id="accordionExample">
+		<div class="accordion-item">
+		  <h2 class="accordion-header">
+			<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+			  Import/Export problems
+			</button>
+		  </h2>
+		  <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+			<div class="accordion-body">
+				<div class="row mb-2">
+					<div class="col-md"><a href="" download id = "download_all_selected"><i class="fas fa-download fa-lg text-info"></i>Export selected problem (zip)</a></div>
+					<div class="col-md"><a href="" id="select_all_for_download"><i class="fas fa-check-square fa-lg text-info"></i>Select all problems</a></div>
+					<div class="col-md"><a href="" id="deselect_all_for_download"><i class="far fa-square fa-lg text-info"></i>Deselect all problems</a></div>
+					<div class="col-md-6">
+						<form 		enctype="multipart/form-data"			action="{{ route('problems.import') }}"  method="post"  class="row g-3 needs-validation" novalidate>
+						  <div class="col-md-10">
+							<label for="validationCustom05" class="form-label">Import multiple (zipped) problems</label>
+							<input name="zip_upload" type="file" class="form-control-sm" id="validationCustom05" required>
+						  </div>
+						  <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+						  <div class="col-2">
+							<button class="btn btn-primary" type="submit">Import</button>
+						  </div>
+						</form>
+					</div>
+				</div>
+			</div>
+		  </div>
+		</div>
+	  
 	<form class="row mb-3 gx-3  align-items-center" method="get" action="{{ route('problems.index') }}">
 		<div class=" col-5">
 			<div class="input-group">
@@ -38,11 +68,6 @@
 			<div class="input-group  top-search-bar">
 				<label class="input-group-text"> and by tag(s)</label>
 				<select class="search-by-tags form-control"multiple="multiple" name="tag_id[]">
-					{{-- @foreach( $all_tags as $t)
-					<option value="{{ $t->id }}" data-text="{{$t->text}}" data-id="{{$t->id}}" 
-						{{ isset($tags[$t->id]) ? 'selected="selected"' : ''  }}
-						>{{$t->text}}</option>
-					@endforeach --}}
 				</select>
 			</div>
 		</div>
@@ -50,6 +75,9 @@
 			<button type="submit" class="btn btn-primary form-control">Search</button>
 		</div>
 	</form>
+
+
+
 	<div class="table-responsive">
 	@error('messages')
 		@php( $msgclasses = array('text-success'=> 'text-success', 'text-info'=> 'text-warning', 'text-danger'=> 'text-danger') )
@@ -180,9 +208,12 @@
 			</td>
 			{{-- DOWNLOAD, EDIT, DELETE --}}
 			<td>
-				<a href="{{ route('problems.downloadtestsdesc',$item->id) }}">
-					<i title="Download Tests and Descriptions" class="fa fa-cloud-download-alt fa-lg text-success"></i>
-				</a>
+				<div class="form-check">
+					<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault-{{$item->id}}" data-id="{{$item->id}}">
+					<label class="form-check-label" for="flexCheckDefault-{{$item->id}}"
+						<i title="Select for download" class="fa fa-cloud-download-alt fa-lg text-success"></i>
+					</label>
+				  </div>
 				@if($item->can_edit(Auth::user()))
 					<a href="{{ route('problems.edit', $item) }}"> <i title="Edit" class="far fa-edit fa-lg color3"> </i> </a>
 					<span title="Delete problem" class="del_n delete_tag pointer">
@@ -230,7 +261,7 @@
 		$(".search-by-tags").val( {!! json_encode(Request::get('tag_id')) !!} ).trigger('change');
 	}
 
-  $(document).ready(function () {
+  document.addEventListener("DOMContentLoaded", function () {
 
 	$(".search-by-tags").select2({
 		closeOnSelect: false
@@ -285,8 +316,7 @@
 	document.querySelectorAll('.edit-tag-form').forEach(
 		i => i.addEventListener('submit', (event)=>{
 			event.preventDefault();
-			// console.log('outside', event);
-			// console.log('outside', event.currentTarget);
+
 			var select_obj = $(event.currentTarget.querySelector('select'));
 			fetch(event.currentTarget.action, {
 				method: 'POST',
@@ -308,6 +338,44 @@
 
 		})
 	);	
+	
+	document.querySelectorAll('#select_all_for_download')[0].onclick = (event) => {
+		event.preventDefault();
+		document.querySelectorAll('.form-check-input').forEach(select => select.checked = true);
+	};
+	
+	document.querySelectorAll('#deselect_all_for_download')[0].onclick = (event) => {
+		event.preventDefault();
+		document.querySelectorAll('.form-check-input').forEach(select => select.checked = false);
+	};
+
+	document.querySelectorAll('#download_all_selected')[0].onclick = (event) => {
+		// event.preventDefault();
+		// fetch(
+		// 	'{{ route("problems.export") }}',
+		// 	{	
+		// 		method: 'POST',
+		// 		headers: {
+		// 			'Content-Type': 'application/json',
+		// 			'X-CSRF-TOKEN' : document.querySelector('meta[name="csrf-token"]').getAttribute('content') 
+		// 		},
+		// 		body: JSON.stringify({
+		// 			'ids' : [...document.querySelectorAll('.form-check-input:checked')].map(i => i.dataset['id']),
+		// 		}),
+		// 	}
+		// )
+		// .then(response => response.blob())
+		// .then(blob => {
+
+		// });
+
+		event.target.href = '{{ route('problems.export') }}?'
+			+ new URLSearchParams(
+				{
+					'ids' : [...document.querySelectorAll('.form-check-input:checked')].map(i => i.dataset['id'])
+				}
+			).toString();
+	};
 
 	$('.del_n').click(function () {
 	  var row = $(this).parents('tr');

@@ -174,6 +174,49 @@ elif [[ $EXT = "java" ]]; then
 	shj_log "DISPLAY_JAVA_EXCEPTION_ON: $DISPLAY_JAVA_EXCEPTION_ON"
 fi
 
+
+
+#################### We got judger script, hand over everything
+if [ -f "$PROBLEMPATH/judger.executable" ]; then
+	cp -r $PROBLEMPATH/* . 
+	chmod +x $PROBLEMPATH/judger.executable
+
+	cp $USERDIR/$FILENAME.$EXT $FILENAME.user
+
+	RANDOM_RESULT_FILE="result_$(basename $(mktemp --dry-run))"
+	RANDOM_LOG_FILE="log_$(basename $(mktemp --dry-run))"
+
+	touch $RANDOM_RESULT_FILE  $RANDOM_LOG_FILE
+
+
+	$PROBLEMPATH/judger.executable $PROBLEMPATH $USERDIR $RANDOM_RESULT_FILE $RANDOM_LOG_FILE $FILENAME $EXT $TIMELIMIT $TIMELIMITINT $MEMLIMIT $OUTLIMIT $DIFFTOOL $DIFFOPTION  2> err
+
+	EXITCODE=$?
+	if [ $EXITCODE -ne 0 ]; then
+		shj_log "Judger runtime Error"
+		shj_log `cat err`
+		echo "" > $RESULTFILE
+		echo "<span class=\"text-primary\">The only test</span>\n">>$RESULTFILE
+		# echo "<span class=\"text-muted\"><small>00 s and 00 KiB</small></span>\n" > $RESULTFILE
+		echo "<span class=\"text-warning\">Submission format error, ask problem's creator for more details</span>" >>$RESULTFILE
+
+		shj_finish 0
+		shj_log "\nScore from 10000: 0"
+
+	else
+		cp $RANDOM_RESULT_FILE $RESULTFILE
+		cat $RANDOM_LOG_FILE >> $LOGFILE
+	fi 
+	
+	# echo "PREAPRE TO REMOVE JAIL $JAIL"
+	# rm -r $JAIL  # removing files
+	cd ..
+	rm -r $JAIL >/dev/null 2>/dev/null # removing files
+
+	exit 
+fi
+
+
 ########################################################################################################
 ################################################ COMPILING #############################################
 ########################################################################################################
@@ -244,7 +287,7 @@ languages_to_comm["pas"]="./$EXEFILE"
 languages_to_comm["py2"]="python2 -O $FILENAME.py2"
 languages_to_comm["py3"]="python3 -O $FILENAME.py3"
 languages_to_comm["numpy"]="python3 -O $FILENAME.numpy"
-languages_to_comm["java"]="java -mx${MEMLIMIT}k solution"
+languages_to_comm["java"]="java -Xmx${MEMLIMIT}k -Xms${MEMLIMIT}k solution"
 languages_to_comm["js"]="node $FILENAME.js"
 declare -A errors
 errors["SHJ_TIME"]="Time Limit Exceeded"
@@ -276,7 +319,8 @@ for((i=1;i<=TST;i++)); do
 
 	runcode=""
 	if $PERL_EXISTS; then
-		runcode="./runcode.sh $EXT $MEMLIMIT $TIMELIMIT $TIMELIMITINT ./input$i.txt ./timeout --just-kill -nosandbox -l $OUTLIMIT -t $TIMELIMIT -m $MEMLIMIT $command"
+		# runcode="./runcode.sh $EXT $MEMLIMIT $TIMELIMIT $TIMELIMITINT ./input$i.txt ./timeout --just-kill  -l $OUTLIMIT -t $TIMELIMIT -m $MEMLIMIT -s $MEMLIMIT  $command"
+		runcode="./runcode.sh $EXT $MEMLIMIT $TIMELIMIT $TIMELIMITINT ./input$i.txt ./timeout --just-kill  -l $OUTLIMIT -t $TIMELIMIT -s $MEMLIMIT  $command"
 	else
 		runcode="./runcode.sh $EXT $MEMLIMIT $TIMELIMIT $TIMELIMITINT ./input$i.txt $command"
 	fi
@@ -421,8 +465,6 @@ done
 	#	echo -e "\n<span class=\"text-primary\">Last Java Exception:</span>" >>$RESULTFILE
 	#	echo -e "$javaexceptionname\n$javaexceptionplace" >>$RESULTFILE
 	#fi
-
-
 
 cd ..
 # cp -r $JAIL "debug-jail-backup"

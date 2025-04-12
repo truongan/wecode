@@ -34,7 +34,7 @@
 <script type="text/javascript" src="{{ asset('assets/js/add_assignments.js') }}"></script>
 <script type='text/javascript' src="{{ asset('assets/js/taboverride.min.js') }}"></script>
 <script>
-	$(document).ready(function(){
+	document.addEventListener("DOMContentLoaded", function(){
 		tabOverride.set(document.getElementsByTagName('textarea'));
 		$('.js-example-basic-multiple').select2();
 	});

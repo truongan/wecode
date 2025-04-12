@@ -11,7 +11,7 @@
 </script>
 <script src="{{ asset('assets/ckeditor/ckeditor.js') }}" charset="utf-8"></script>
 <script>
-$(document).ready(function(){
+document.addEventListener("DOMContentLoaded", function(){
 	CKEDITOR.replace("notif_text");
 });
 </script>

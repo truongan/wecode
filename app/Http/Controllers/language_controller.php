@@ -49,6 +49,7 @@ class language_controller extends Controller
         if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
             abort(404);
         Language::create($request->input());
+        DB::table('assignments')->where('id', 0)->update(['language_ids' => Language::all()->pluck('id')->implode(', ')]);
         return redirect('languages'); 
     }
 

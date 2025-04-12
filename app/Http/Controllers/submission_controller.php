@@ -108,7 +108,7 @@ class submission_controller extends Controller
 
 		$check = $assignment->can_submit(Auth::user(), $problem);
 		if (!$check->can_submit){
-			dd($problem);
+			// dd($problem);
 			abort(403, $check->error_message);
 		}
 		
@@ -298,28 +298,29 @@ class submission_controller extends Controller
 
 		$template = $problem->template_content($request->input('language_id'));
 		
-		if ($template == NULL)
-			$result = array('banned' => '', 'before'  => '', 'after' => '');
-
-		preg_match("/(\/\*###Begin banned.*\n)((.*\n)*)(###End banned keyword\*\/)/"
-			, $template, $matches
-		);
+		if ($template === NULL){
+			$result = array('banned' => '', 'before'  => '', 'after' => '', 'full' => '');
+		} else {
+			preg_match("/(\/\*###Begin banned.*\n)((.*\n)*)(###End banned keyword\*\/)/"
+				, $template, $matches
+			);
+		
+			$set_or_empty = function($arr, $key){
+				if(isset($arr[$key])) return $arr[$key];
+				return "";
+			};
 	
-		$set_or_empty = function($arr, $key){
-			if(isset($arr[$key])) return $arr[$key];
-			return "";
-		};
-
-		$banned = $set_or_empty($matches, 2);
-
-		preg_match("/(###End banned keyword\*\/\n)((.*\n)*)\/\/###INSERT CODE HERE -\n?((.*\n?)*)/"
-			, $template, $matches
-		);
-
-		$before = $set_or_empty($matches, 2);
-		$after = $set_or_empty($matches, 4);
-
-		$result = array('banned' => $banned, 'before'  => $before, 'after' => $after);
+			$banned = $set_or_empty($matches, 2);
+	
+			preg_match("/(###End banned keyword\*\/\n)((.*\n)*)\/\/###INSERT CODE HERE -\n?((.*\n?)*)/"
+				, $template, $matches
+			);
+	
+			$before = $set_or_empty($matches, 2);
+			$after = $set_or_empty($matches, 4);
+	
+			$result = array('banned' => $banned, 'before'  => $before, 'after' => $after, 'full' => $template);
+		}
 
 		return response()->json($result);
 
@@ -446,13 +447,13 @@ class submission_controller extends Controller
 	{
 		if ($all_problems == null) $all_problems = $submission->assignment->problems->keyBy('id');
 //If we can't find the assignment's score for problem (in case of practice), default to 100
-		$score = ceil($submission->pre_score*
+		$score = ($submission->pre_score*
 							($all_problems[$submission->problem_id]->pivot->score??100)
 							/10000);
 		if ($submission->coefficient == 'error')
 			$submission->final_score = $score;
 		else
-			$submission->final_score = ceil($score*$submission->coefficient/100);
+			$submission->final_score = round($score*$submission->coefficient/100,0);
 	}
 
 	public function view_status(){

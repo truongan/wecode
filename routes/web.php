@@ -44,10 +44,10 @@ Route::post('users/set_trial', [App\Http\Controllers\UserController::class, 'set
 
 
 Route::get('/problems/downloadtestsdesc/{id}', [App\Http\Controllers\problem_controller::class, 'downloadtestsdesc'])->name('problems.downloadtestsdesc');
-Route::get('/problems/downloadpdf/{id}', [App\Http\Controllers\problem_controller::class, 'pdf'])->name('problems.pdf');
-Route::get('/problems/downloadtemplate/{problem}/{assignment}', [App\Http\Controllers\problem_controller::class, 'template'])->name('problems.template');
 Route::get('/problems/downloadtestcases/{problem}/{assignment}/{type}', [App\Http\Controllers\problem_controller::class, 'download_testcases'])->name('problems.download_testcases');
-Route::post('/problems/edit_description/{problem_id}', [App\Http\Controllers\problem_controller::class, 'edit_description'])->name('problems.edit_description');
+Route::get('/problems/export', [App\Http\Controllers\problem_controller::class, 'export'])->name('problems.export');
+Route::post('/problems/import', [App\Http\Controllers\problem_controller::class, 'import'])->name('problems.import');
+Route::post('/problems/edit_description/{problem}', [App\Http\Controllers\problem_controller::class, 'edit_description'])->name('problems.edit_description');
 Route::post('/problems/toggle_practice/{query?}', [App\Http\Controllers\problem_controller::class, 'toggle_practice'])->name('problems.toggle_practice');
 Route::post('/problems/edit_tags/{problem?}', [App\Http\Controllers\problem_controller::class, 'edit_tags'])->name('problems.edit_tags');
 
@@ -70,6 +70,7 @@ Route::post('/queue/empty', [App\Http\Controllers\queue_controller::class, 'empt
 
 Route::get('/practice', [App\Http\Controllers\practice_controller::class, 'index'])->name('practice');
 Route::get('/practice/show/{problem}', [App\Http\Controllers\practice_controller::class, 'show'])->name('practices.show');
+Route::get('/practice/show/{problem}/pdf', [App\Http\Controllers\practice_controller::class, 'show_pdf'])->name('practices.show_pdf');
 
 Route::get('/scoreboard/full/{id}', [App\Http\Controllers\scoreboard_controller::class, 'index'])->name('scoreboards.index');
 Route::get('/scoreboard/freeze/full/{id}', [App\Http\Controllers\scoreboard_controller::class, 'index_freeze'])->name('scoreboards.freeze');
@@ -77,6 +78,7 @@ Route::get('/scoreboard/freeze/full/{id}', [App\Http\Controllers\scoreboard_cont
 Route::get('/resolver/{id}', [App\Http\Controllers\resolver_controller::class, 'index'])->name('resolver.index');
 
 Route::get('/assignment/{assignment}/{problem_id}/', [App\Http\Controllers\assignment_controller::class, 'show'])->where(['assignment'=>'[0-9]+','problem_id'=>'[0-9]+'])->name('assignments.show');
+Route::get('/assignment/{assignment}/{problem}/pdf', [App\Http\Controllers\assignment_controller::class, 'show_pdf'])->where(['assignment'=>'[0-9]+','problem'=>'[0-9]+'])->name('assignments.show_pdf');
 
 Route::get('/assignment/download_submissions/{type}/{assignment_id}/', [App\Http\Controllers\assignment_controller::class, 'download_submissions'])->name('assignments.download_submissions');
 Route::get('/assignment/download_all_submissions/{assignment_id}/', [App\Http\Controllers\assignment_controller::class, 'download_all_submissions'])->name('assignments.download_all_submissions');
