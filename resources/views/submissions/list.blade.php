@@ -158,12 +158,12 @@
 					<x-submission.verdict :submission=$submission/>
 				</td>
 				<td class="js-time">
-					@if ((count($submission->judgement->mems ?? []) > 0 and $submission->pre_score == 10000)) 
+					@if ((count($submission->judgement->mems ?? []) > 0 && $submission->pre_score == 10000)) 
 						{{max($submission->judgement->times) }}
 					@endif
 				</td>
 				<td class = "js-mem">
-					@if ((count($submission->judgement->mems ?? []) > 0 and $submission->pre_score == 10000))
+					@if ((count($submission->judgement->mems ?? []) > 0 && $submission->pre_score == 10000))
 						{{max($submission->judgement->mems) }}
 					@endif
 				</td>
