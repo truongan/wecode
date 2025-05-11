@@ -367,8 +367,8 @@ for((i=1;i<=TST;i++)); do
 	m=`grep "SHJ_" err|cut -d" " -f5`
 	m2=`grep "SHJ_" err|cut -d" " -f7`
 	m=$((m>m2?m:m2))
-	echo "<span class=\"text-muted\"><small>$t s and $m KiB</small></span>" >>$RESULTFILE
-	# echo "<span class=\"text-secondary\">Used $m KiB</span>" >>$RESULTFILE
+	
+	
 	found_error=0
 
 	if ! grep -q "FINISHED" err; then
@@ -445,6 +445,7 @@ for((i=1;i<=TST;i++)); do
 		fi
 	fi
 
+	echo "<span class=\"text-muted\"><small>$t s and $m KiB</small></span>" >>$RESULTFILE
 	if $ACCEPTED; then
 		shj_log "ACCEPTED"
 		echo "<span class=\"text-success\">ACCEPT</span>" >>$RESULTFILE
@@ -454,17 +455,6 @@ for((i=1;i<=TST;i++)); do
 		echo "<span class=\"text-danger\">WRONG</span>" >>$RESULTFILE
 	fi
 done
-
-
-# After I added the feature for showing java exception name and exception place,
-# I found that the way I am doing it is a security risk. So I added the file "tester/java_exceptions_list"
-# and now it is safe to show the exception name (if it is in file java_exceptions_list), but we should not
-# show place of exception. So I commented following lines:
-	## Print last java exception (if enabled)
-	#if $DISPLAY_JAVA_EXCEPTION_ON && [ "$javaexceptionname" != "" ]; then
-	#	echo -e "\n<span class=\"text-primary\">Last Java Exception:</span>" >>$RESULTFILE
-	#	echo -e "$javaexceptionname\n$javaexceptionplace" >>$RESULTFILE
-	#fi
 
 cd ..
 # cp -r $JAIL "debug-jail-backup"
