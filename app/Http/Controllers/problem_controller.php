@@ -35,6 +35,9 @@ class problem_controller extends Controller
 
 	public function index(Request $request)
 	{
+		if (in_array(Auth::user()->role->name, ['student'])){
+			// abort(403, 'No access');
+		}
 		if (Auth::user()->role->name == 'admin') $all_problem = Problem::latest();
 		else $all_problem = Problem::available(Auth::user()->id)->latest();
 
@@ -478,6 +481,9 @@ class problem_controller extends Controller
 		$request->validate([
 			'zip_upload' => ['required']
 		]);
+		if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) ) {
+			abort(403, "This feature is reserved for higher up only");
+		}
 
 		$assignments_root = Setting::get("assignments_root");
 		$file_path = $assignments_root . "/" .  $request->zip_upload->store('', 'assignment_root');
@@ -487,7 +493,7 @@ class problem_controller extends Controller
 		shell_exec("rm -rf $tmp_dir; mkdir $tmp_dir;");
 		
 		$a = shell_exec("unzip ". escapeshellarg($file_path) . " -d $tmp_dir");
-		shell_exec("rm $file_path");
+		shell_exec("rm " . escapeshellarg($file_path));
 		
 		
 		$lang_to_id = Language::all()->pluck('id', 'name');
@@ -513,8 +519,11 @@ class problem_controller extends Controller
 			// var_dump($langs);
 			$problem->languages()->sync($langs);
 			
-			shell_exec("mkdir -p " . $problem->get_directory_path() );
-			shell_exec("cp -r $tmp_dir/$prob_folder/* " . $problem->get_directory_path());
+			shell_exec("mkdir -p " . $problem->get_directory_path())  ;
+			shell_exec("cp -r " 
+				. escapeshellarg("$tmp_dir/$prob_folder/")   
+				. "/* " 
+				.  $problem->get_directory_path());
 		}
 		shell_exec("rm -rf $tmp_dir");
 		return redirect()->route('problems.index')->withInput()->withErrors(["messages"=>"to do"]);
