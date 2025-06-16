@@ -45,13 +45,14 @@ if [ "$password" = "" ]; then
 	usage; exit 1
 fi
 echo $site_url
-#php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-# wget -O composer-setup.php https://getcomposer.org/installer
-#php -r "if (hash_file('sha384', 'composer-setup.php') === 'c31c1e292ad7be5f49291169c0ac8f683499edddcfd4e42232982d0fd193004208a58ff6f353fde0012d35fdd72bc394') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
-# php composer-setup.php
-# php -r "unlink('composer-setup.php');"
 
-wget https://github.com/composer/composer/releases/download/2.1.9/composer.phar
+
+php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+php -r "if (hash_file('sha384', 'composer-setup.php') === 'dac665fdc30fdd8ec78b38b9800061b4150413ff2e3b6f88543c636f7cd84f6db9189d43a81e5503cda447da73c7e5b6') { echo 'Installer verified'.PHP_EOL; } else { echo 'Installer corrupt'.PHP_EOL; unlink('composer-setup.php'); exit(1); }"
+php composer-setup.php
+php -r "unlink('composer-setup.php');"
+
+# wget https://github.com/composer/composer/releases/download/2.1.9/composer.phar
 
 php composer.phar install
 cp .env.example .env
