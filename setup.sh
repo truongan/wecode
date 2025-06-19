@@ -99,14 +99,17 @@ cd $public
 if cmp -s $install $public; then
 	echo "Installation directory and public directoy are the same; that may pose security risk"
 else
-	read -p "$public/index.php $public/assets $public/.htaccess will be delete permenantly. Continue?" -n 1 -r REPLY
+	# read -p "$public/index.php $public/assets $public/.htaccess will be delete permenantly. Continue?" -n 1 -r REPLY
+	read -p "$public/public will be delete permenantly. Continue?" -n 1 -r REPLY
 	echo
 	if [[ $REPLY =~ ^[Yy]$ ]]
 	then
-	  	rm index.html index.php .htaccess
-	  	rm -rf ./assets
-		ln -s $install/public/* . 
-		ln -s $install/public/.* . 
+	  	# rm index.html index.php .htaccess
+	  	# rm -rf ./assets
+		# ln -s $install/public/* . 
+		# ln -s $install/public/.* . 
+		rm -rf public
+		ln -s $install/public .
 	else
 		echo "Abort"
 		exit 0
