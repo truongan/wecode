@@ -3,8 +3,8 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Lop;
-use App\User;
+use App\Models\Lop;
+use App\Models\User;
 class create_classes_for_user_list extends Command
 {
     /**

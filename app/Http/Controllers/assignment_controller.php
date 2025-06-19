@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
-use App\Assignment;
-use App\Setting;
-use App\Problem;
-use App\Lop;
-use App\Language;
-use App\Submission;
-use App\Scoreboard;
+use App\Models\Assignment;
+use App\Models\Setting;
+use App\Models\Problem;
+use App\Models\Lop;
+use App\Models\Language;
+use App\Models\Submission;
+use App\Models\Scoreboard;
 use ZipArchive;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

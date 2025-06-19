@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-use App\Submission;
+use App\Models\Submission;
 use Illuminate\Support\Str;
 class SaveJudgement extends Migration
 {

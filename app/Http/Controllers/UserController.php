@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
-use App\User;
-use App\Role;
-use App\Submission;
-use App\Setting;
+use App\Models\User;
+use App\Models\Role;
+use App\Models\Submission;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;

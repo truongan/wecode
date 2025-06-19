@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Submission;
-use App\Assignment;
+use App\Models\Submission;
+use App\Models\Assignment;
 use \Illuminate\Support\Carbon;
 use Illuminate\Console\Command;
 

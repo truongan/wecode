@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Submission;
-use App\Assignment;
-use App\Problem;
-use App\Queue_item;
-use App\Language;
-use App\Scoreboard;
-use App\Setting;
+use App\Models\Submission;
+use App\Models\Assignment;
+use App\Models\Problem;
+use App\Models\Queue_item;
+use App\Models\Language;
+use App\Models\Scoreboard;
+use App\Models\Setting;
 use Redirect;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
-use App\View\Components\submission\verdict;
+use App\Models\View\Components\submission\verdict;
 
 class submission_controller extends Controller
 {
