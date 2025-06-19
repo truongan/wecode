@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Setting;
-use App\User;
+use App\Models\Setting;
+use App\Models\User;
 use Carbon;
-use App\Http\Controllers\Controller;
+use App\Models\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
