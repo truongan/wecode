@@ -1,6 +1,7 @@
 <?php
 
-namespace App;
+namespace App\Models;
+
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Prunable;
@@ -29,22 +30,22 @@ class Submission extends Model
     ];
     public function problem()
     {
-        return $this->belongsTo('App\Problem');
+        return $this->belongsTo('App\Models\Problem');
     }
 
     public function language()
     {
-        return $this->belongsTo('App\Language');
+        return $this->belongsTo('App\Models\Language');
     }
 
     public function assignment()
     {
-        return $this->belongsTo('App\Assignment');
+        return $this->belongsTo('App\Models\Assignment');
     }
     
     public function user()
     {
-    	return $this->belongsTo('App\User');
+    	return $this->belongsTo('App\Models\User');
     }
     
 	public static function get_path($username, $assignment_id, $problem_id)
