@@ -1,6 +1,7 @@
 <?php
 
-namespace App;
+namespace App\Models;
+
 
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
@@ -12,7 +13,7 @@ class Scoreboard extends Model
 	protected $fillable = ['assignment_id', 'scoreboard'];
 
 	public function assignment(){
-        return $this->belongsTo('App\Assignment');
+        return $this->belongsTo('App\Models\Assignment');
 	}
 
 	private function _generate_scoreboard()
