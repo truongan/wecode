@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Queue_item;
+use App\Queue_item;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 

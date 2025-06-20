@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Submission;
+use App\Submission;
 use Illuminate\Support\Facades\DB;
 
 use Illuminate\Console\Command;

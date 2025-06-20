@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Problem;
-use App\Models\Language;
+use App\Problem;
+use App\Language;
 use Illuminate\Console\Command;
 
 class add_language_to_all_problems extends Command

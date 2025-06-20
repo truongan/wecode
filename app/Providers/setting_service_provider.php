@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Providers;
-use App\Models\Setting;
+use App\Setting;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;

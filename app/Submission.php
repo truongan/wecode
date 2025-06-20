@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Prunable;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Setting;
+use App\Setting;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;

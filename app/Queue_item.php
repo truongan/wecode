@@ -1,8 +1,8 @@
 <?php
 
 namespace App;
-use App\Models\Submission;
-use App\Models\Scoreboard;
+use App\Submission;
+use App\Scoreboard;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 

@@ -3,8 +3,8 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Models\User;
-use App\Models\Problem;
+use App\User;
+use App\Problem;
 
 class dump_users_final_submissions_prescore extends Command
 {

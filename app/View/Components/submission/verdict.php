@@ -3,7 +3,7 @@
 namespace App\View\Components\submission;
 
 use Illuminate\View\Component;
-use App\Models\Submission;
+use App\Submission;
 
 class verdict extends Component
 {

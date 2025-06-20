@@ -2,8 +2,8 @@
 
 namespace App;
 
-use App\Models\Setting;
-use App\Models\User;
+use App\Setting;
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 

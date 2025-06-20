@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Lop;
-use App\Models\User;
+use App\Lop;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 

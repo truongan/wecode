@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Assignment;
-use App\Models\Setting;
-use App\Models\Submission;
-use App\Models\Language;
+use App\Assignment;
+use App\Setting;
+use App\Submission;
+use App\Language;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;

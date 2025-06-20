@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Scoreboard;
-use App\Models\Assignment;
-use App\Models\User;
-use App\Models\Setting;
+use App\Scoreboard;
+use App\Assignment;
+use App\User;
+use App\Setting;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use DOMDocument;
