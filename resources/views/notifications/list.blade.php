@@ -86,25 +86,22 @@ document.addEventListener("DOMContentLoaded", function () {
 <p></p>
 @endif
 	@foreach ($notifications as $notification)
-	<div class="">
-		<div class="notif" id="number{{ $notification->id }}" data-id="{{ $notification->id }}"> 
-			<div class="notif_title">
-			<a href="{{ route('notifications.show', $notification->id) }}">{{ $notification->title }} - Author: {{$notification->user->username}}</a>
-				<div class="notif_meta">
+		<div class="notif border shadow rounded-5 p-2 mb-2" id="number{{ $notification->id }}" data-id="{{ $notification->id }}"> 
+			<div class="border-bottom">
+			<a class='lead' href="{{ route('notifications.show', $notification->id) }}">{{ $notification->title }} - Author: {{$notification->user->username}}</a>
+				<div class="notif_meta text-muted">
 					{{ $notification->created_at }}
 					@if ( in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
 						<a href="notifications/{{ $notification->id }}/edit">Edit</a>
 						<span class="pointer del_n text-danger">Delete</span>
-						<p>Chỉnh sửa lần cuối bởi: {{$notification->last_user->username}}</p>
 					@endif
 				</div>
 			</div>
-			<div class="notif_text">
-				{{ $notification->description }}
+			<div class="p-2">
+				{!! $notification->text !!}
 			</div>
 		</div>
 		
-	</div>
 	@endforeach
 	{!! $notifications->render()!!}
 @endsection

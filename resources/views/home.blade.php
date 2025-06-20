@@ -194,15 +194,15 @@ js') }}"></script>
 
 <div class="row">
     <div class="col-md-6">
-        <div class="shj_widget">
-            <div class="widget_title"><i class="fa fa-calendar-o fa-lg color10"></i> Calendar</div>
-            <div class="widget_contents_container" id='calendar'></div>
+        <div class="border shadow mb-2 rounded-2">
+            <div class="border-bottom p-2 lead text-center"> <i class="fa fa-calendar" aria-hidden="true"></i>  Calendar</div>
+            <div class="p-1 widget_contents_container" id='calendar'></div>
         </div>
     </div>
 
     <div class="col-md-6">
-        <div class="shj_widget">
-            <div class="widget_title"><i class="fa fa-bell-o fa-lg color2"></i>
+        <div class="border shadow  rounded-2">
+            <div class="border-bottom p-2 lead text-center"><i class="fa fa-bell-o fa-lg color2"></i>
                 Latest Notifications
             </div>
             <div class="widget_contents_container">
