@@ -1,7 +1,6 @@
 <?php
 
-namespace App\Models;
-
+namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -12,11 +11,11 @@ class Notification extends Model
 
     public function user()
     {
-        return $this->belongsTo('App\Models\User', 'author');
+        return $this->belongsTo('App\User', 'author');
     }
     
     public function last_user()
     {
-        return $this->belongsTo('App\Models\User', 'last_author');
+        return $this->belongsTo('App\User', 'last_author');
     }
 }

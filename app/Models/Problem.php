@@ -1,7 +1,6 @@
 <?php
 
-namespace App\Models;
-
+namespace App;
 
 use App\Models\Setting;
 use App\Models\User;
@@ -132,10 +131,10 @@ class Problem extends Model
     }
 
     function user(){
-        return $this->belongsTo('App\Models\User');
+        return $this->belongsTo('App\User');
     }
     function owner(){
-        return $this->belongsTo('App\Models\User');
+        return $this->belongsTo('App\User');
     }
 
     public static function available($user_id){
@@ -144,21 +143,21 @@ class Problem extends Model
     
     public function languages()
     {
-        return $this->belongsToMany('App\Models\Language')->withTimestamps()->withPivot('time_limit','memory_limit');
+        return $this->belongsToMany('App\Language')->withTimestamps()->withPivot('time_limit','memory_limit');
     }
 
     public function assignments()
     {
-        return $this->belongsToMany('App\Models\Assignment');
+        return $this->belongsToMany('App\Assignment');
     }
 
     public function submissions()
     {
-        return $this->hasMany('App\Models\Submission');
+        return $this->hasMany('App\Submission');
     }
 
     public function tags()
     {
-        return $this->belongsToMany('App\Models\Tag');
+        return $this->belongsToMany('App\Tag');
     }
 }

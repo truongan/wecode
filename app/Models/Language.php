@@ -1,7 +1,6 @@
 <?php
 
-namespace App\Models;
-
+namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -20,6 +19,6 @@ class Language extends Model
 
     public function get_id()
     {
-        return $this->belongsToMany('App\Models\Problem');
+        return $this->belongsToMany('App\Problem');
     }
 }

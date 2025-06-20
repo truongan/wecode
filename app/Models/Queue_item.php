@@ -1,7 +1,6 @@
 <?php
 
-namespace App\Models;
-
+namespace App;
 use App\Models\Submission;
 use App\Models\Scoreboard;
 use Illuminate\Database\Eloquent\Model;
@@ -14,7 +13,7 @@ class Queue_item extends Model
 
     public function submission()
     {
-        return $this->belongsTo('App\Models\Submission');
+        return $this->belongsTo('App\Submission');
     }
 
 

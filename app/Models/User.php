@@ -1,7 +1,6 @@
 <?php
 
-namespace App\Models;
-
+namespace App;
 
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -53,20 +52,20 @@ class User extends Authenticatable
     // protected $dateFormat = 'Y-m-d\TH:i:sP';
 
     public function role(){
-        return $this->belongsTo('App\Models\Role');
+        return $this->belongsTo('App\Role');
 	}
 	
     function submissions()
     {
-        return $this->hasMany('App\Models\Submission');
+        return $this->hasMany('App\Submission');
     }
 
 	function lops(){
-		return $this->belongsToMany('App\Models\Lop');
+		return $this->belongsToMany('App\Lop');
     }
     
     function selected_assignment(){
-        return $this->belongsTo('App\Models\Assignment', 'selected_assignment_id');
+        return $this->belongsTo('App\Assignment', 'selected_assignment_id');
     }
 }
 

@@ -1,7 +1,6 @@
 <?php
 
-namespace App\Models;
-
+namespace App;
 
 use App\Models\User;
 use Carbon\Carbon;
@@ -17,26 +16,26 @@ class Assignment extends Model
 
     public function problems()
     {
-        return $this->belongsToMany('App\Models\Problem')->withPivot('score','ordering','problem_name')->withTimestamps();
+        return $this->belongsToMany('App\Problem')->withPivot('score','ordering','problem_name')->withTimestamps();
     }
     public function user()
     {
-        return $this->belongsTo('App\Models\User');
+        return $this->belongsTo('App\User');
     }
 
     public function submissions()
     {
-        return $this->hasMany('App\Models\Submission');
+        return $this->hasMany('App\Submission');
     }
 
     public function lops()
     {
-        return $this->belongsToMany('App\Models\Lop');
+        return $this->belongsToMany('App\Lop');
     }
 
     public function scoreboard()
     {
-        return $this->hasOne('App\Models\Scoreboard');
+        return $this->hasOne('App\Scoreboard');
     }
 
     public function cannot_edit(User $actor){
