@@ -15,6 +15,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use DateTimeZone;
 
+use App\Http\Middleware\read_only_archive;
+
+
 class UserController extends Controller
 {
 
@@ -26,6 +29,7 @@ class UserController extends Controller
 	public function __construct()
 	{
 		$this->middleware('auth'); // phải login
+        $this->middleware(read_only_archive::class); // Make this controller read only when app is in archived mode.
 	}
 
 

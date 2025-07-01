@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Support\Facades\DB;
+use App\Http\Middleware\read_only_archive;
 
 class lop_controller extends Controller
 {
@@ -19,6 +20,8 @@ class lop_controller extends Controller
     public function __construct()
     {
         $this->middleware('auth'); // phải login
+        $this->middleware(read_only_archive::class); // Make this controller read only when app is in archived mode.
+
     }
 
 

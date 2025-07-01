@@ -15,6 +15,9 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Database\Eloquent\Builder;
 
+use App\Http\Middleware\read_only_archive;
+
+
 class problem_controller extends Controller
 {
 	/**
@@ -25,6 +28,7 @@ class problem_controller extends Controller
 	public function __construct()
 	{
 		$this->middleware('auth'); // phải login
+        $this->middleware(read_only_archive::class); // Make this controller read only when app is in archived mode.
 	}
 	
 	private function _can_edit_or_404($problem){

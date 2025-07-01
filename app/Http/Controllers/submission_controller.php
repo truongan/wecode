@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 use App\View\Components\submission\verdict;
+use App\Http\Middleware\read_only_archive;
 
 class submission_controller extends Controller
 {
@@ -23,7 +24,7 @@ class submission_controller extends Controller
 	{
 		$this->middleware('auth'); // phải login
 
-
+        $this->middleware(read_only_archive::class); // Make this controller read only when app is in archived mode.
 	}
 
 	private function _do_access_check($submission){
