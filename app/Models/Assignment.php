@@ -124,7 +124,7 @@ class Assignment extends Model
             ob_start();
             try 
             {
-                $delay = $this->finish_time->diffInSeconds($sub->created_at,false);
+                $delay = $this->finish_time->diffInSeconds($sub->created_at);
                 $extra_time = $this->extra_time;
                 eval($this->late_rule);
             }
@@ -143,14 +143,14 @@ class Assignment extends Model
     }
 
     public function is_finished(){
-        $delay = $this->finish_time->diffInSeconds(Carbon::now(), false);
+        $delay = $this->finish_time->diffInSeconds(Carbon::now());
         return ($this->start_time < $this->finish_time &&  $delay > $this->extra_time);
     }
     public function eval_coefficient(){
         ob_start();
 		try 
 		{
-            $delay = $this->finish_time->diffInSeconds(Carbon::now(), false);
+            $delay = $this->finish_time->diffInSeconds(Carbon::now());
             $extra_time = $this->extra_time;
 			eval($this->late_rule);
 		}
