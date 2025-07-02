@@ -27,7 +27,11 @@ CREATE TABLE `assignment_problem` (
   `ordering` int NOT NULL,
   `problem_name` char(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`),
+  KEY `assignment_problem_assignment_id_index` (`assignment_id`),
+  KEY `assignment_problem_problem_id_index` (`problem_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `assignments`;
@@ -48,6 +52,7 @@ CREATE TABLE `assignments` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `user_id` bigint DEFAULT NULL,
+  `language_ids` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -130,6 +135,25 @@ CREATE TABLE `notifications` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `personal_access_tokens`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `personal_access_tokens` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `tokenable_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tokenable_id` bigint unsigned NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `abilities` text COLLATE utf8mb4_unicode_ci,
+  `last_used_at` timestamp NULL DEFAULT NULL,
+  `expires_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `personal_access_tokens_token_unique` (`token`),
+  KEY `personal_access_tokens_tokenable_type_tokenable_id_index` (`tokenable_type`,`tokenable_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `problem_tag`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
@@ -159,8 +183,10 @@ CREATE TABLE `problems` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `user_id` bigint DEFAULT NULL,
   `sharable` tinyint(1) DEFAULT '1',
-  `author` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `editorial` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `author` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `editorial` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `allow_input_download` tinyint(1) DEFAULT '0',
+  `allow_output_download` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -227,8 +253,11 @@ CREATE TABLE `submissions` (
   `language_id` bigint unsigned NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
+  `judgement` json NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `submissions_assignment_id_index` (`assignment_id`)
+  KEY `submissions_assignment_id_index` (`assignment_id`),
+  KEY `submissions_problem_id_index` (`problem_id`),
+  KEY `submissions_user_id_index` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `tags`;
@@ -247,7 +276,7 @@ DROP TABLE IF EXISTS `users`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `users` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `username` char(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `username` char(150) COLLATE utf8mb4_unicode_ci NOT NULL,
   `password` char(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `display_name` char(240) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `email` char(240) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -272,13 +301,20 @@ CREATE TABLE `users` (
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
-INSERT INTO `migrations` VALUES (1,'2020_01_12_165649_create_all_table',1);
-INSERT INTO `migrations` VALUES (2,'2020_01_15_190447_create_tag_and_class_table',1);
-INSERT INTO `migrations` VALUES (3,'2020_10_31_070914_user-problem-permssion',2);
-INSERT INTO `migrations` VALUES (4,'2020_11_01_083749_assignment_ownership',3);
-INSERT INTO `migrations` VALUES (5,'2021_01_01_083857_create_index_for_some_tables',4);
-INSERT INTO `migrations` VALUES (6,'2021_03_26_203806_add_js_to_languages',5);
-INSERT INTO `migrations` VALUES (7,'2021_04_10_195540_add_elo',5);
-INSERT INTO `migrations` VALUES (8,'2021_04_29_174742_add_author_editoral_to_problem',5);
-INSERT INTO `migrations` VALUES (9,'2021_07_29_233209_add_trial_time',5);
-INSERT INTO `migrations` VALUES (10,'2021_08_01_042317_trial_settings',5);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (1,'2020_01_12_165649_create_all_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (2,'2020_01_15_190447_create_tag_and_class_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (3,'2020_10_31_070914_user-problem-permssion',2);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (4,'2020_11_01_083749_assignment_ownership',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (5,'2021_01_01_083857_create_index_for_some_tables',4);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (6,'2021_03_26_203806_add_js_to_languages',5);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (7,'2021_04_10_195540_add_elo',5);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (8,'2021_04_29_174742_add_author_editoral_to_problem',5);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (9,'2021_07_29_233209_add_trial_time',5);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (10,'2021_08_01_042317_trial_settings',5);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (11,'2019_12_14_000001_create_personal_access_tokens_table',6);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (12,'2021_09_22_091852_add_missing_unique_index',6);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (13,'2022_09_24_200437_save_judgement',6);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (14,'2022_09_30_044931_increase_username_length',6);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (15,'2023_09_23_140145_add_per_assignment_language_list',6);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (16,'2024_01_11_220048_add_submission_index',6);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (17,'2024_03_24_062240_add_testcase_download_option',6);
