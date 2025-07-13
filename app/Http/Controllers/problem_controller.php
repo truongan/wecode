@@ -508,8 +508,10 @@ class problem_controller extends Controller
 			// var_dump($metadata);
 			
 			$problem = new Problem((array)$metadata);
-			$problem->id = NULL;
-			$problem->user_id = Auth::user()->id;
+			$problem->id = NULL;			$problem->user_id = Auth::user()->id;
+			$problem->admin_note 
+				.= sprintf("\nIMPORTED: orignal user %s (%s), original updated at %s"
+					, $metadata->user->username, $metadata->user->email, $metadata->updated_at);
 			$problem->save();
 			
 			$langs = [];

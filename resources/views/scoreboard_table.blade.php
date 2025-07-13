@@ -77,7 +77,7 @@
     </tr>
     @endforeach
 
-    <tfoot class="bg-dark text-light">
+    <tfoot class="table-dark text-light">
         <th colspan="6">Sumarry</th>
         @foreach ($problems as $problem)
         <th>
@@ -88,7 +88,7 @@
         </th>
         @endforeach
 
-        <tr class="bg-dark text-light">
+        <tr>
             <td colspan="6">Solved/tries</td>
             @foreach ($problems as $p)
             <td>
@@ -96,7 +96,7 @@
             </td>
             @endforeach
         </tr>
-        <tr class="bg-dark text-light">
+        <tr>
             <td colspan="6">Solved users/tries users/Total users</td>
             @foreach ($problems as $p)
             <td>
@@ -104,7 +104,7 @@
             </td>
             @endforeach
         </tr>
-        <tr class="bg-dark text-light">
+        <tr>
             <td colspan="6">Average tries per users</td>
             @foreach ($problems as $p)
             <td>
@@ -112,7 +112,7 @@
             </td>
             @endforeach
         </tr>
-        <tr class="bg-dark text-light">
+        <tr>
             <td colspan="6">Average tries to solve</td>
             @foreach ($problems as $p)
             <td>

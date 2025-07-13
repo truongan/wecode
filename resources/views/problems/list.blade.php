@@ -109,7 +109,7 @@
 			{{-- NAME --}}
 			<td><a href="{{ route( 'practices.show' ,$item->id) }}">{{ $item->name }}</a></td>
 			{{-- NOTE --}}
-			<td>{{$item->admin_note}}</td>
+			<td class="fs-6 text-break"> {{$item->admin_note}}</td>
 			{{-- OWNER --}}
 			<td> 
 				<span data-bs-toggle="tooltip"  
