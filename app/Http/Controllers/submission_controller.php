@@ -20,11 +20,15 @@ use App\Http\Middleware\read_only_archive;
 
 class submission_controller extends Controller
 {
+	private $storage;
 	public function __construct()
 	{
+		$this->storage  = Storage::disk('assignment_root');
 		$this->middleware('auth'); // phải login
 
-        $this->middleware(read_only_archive::class); // Make this controller read only when app is in archived mode.
+		$this->middleware(read_only_archive::class); // Make this controller read only 
+		// 
+		// when app is in archived mode.
 	}
 
 	private function _do_access_check($submission){
@@ -56,18 +60,18 @@ class submission_controller extends Controller
 		$assignment = Assignment::with('lops.users')//This is to display lop info for each submissions
 						->find($assignment_id);
 
-        if (Auth::user()->role->name == 'admin'){
-            // Admin can view anything
+		if (Auth::user()->role->name == 'admin'){
+			// Admin can view anything
 		} 
 		else if (  in_array( Auth::user()->role->name, ['head_instructor', 'instructor']) 
 					&& $assignment->id != 0 //Allow instructors to view any practice submissions
 		){
-            if ($assignment->user != Auth::user() 
-                && !Auth::user()->lops()->with('assignments')->get()->pluck('assignments')->collapse()->pluck('id')->contains($assignment->id)
-            ){
-                abort(403, 'You can only view submissions for assignment you created or assignment belongs to one of your classes');
-            }
-        }
+			if ($assignment->user != Auth::user() 
+				&& !Auth::user()->lops()->with('assignments')->get()->pluck('assignments')->collapse()->pluck('id')->contains($assignment->id)
+			){
+				abort(403, 'You can only view submissions for assignment you created or assignment belongs to one of your classes');
+			}
+		}
 
 		Auth::user()->selected_assignment_id = $assignment_id;
 		Auth::user()->save(); 
@@ -167,35 +171,24 @@ class submission_controller extends Controller
 
 		// We use assignments submit count in the name beause newly created submission has not been assigned an id yet.
 		$file_name = "solution-upload-count".($submission->assignment->total_submits);
-		
-		$path = Storage::disk('assignment_root')->path('');
-		$user_dir = substr($user_dir, strlen($path));
 
 		$path = $request->userfile->storeAs($user_dir, $file_name.".".$submission->language->extension, 'assignment_root');
-		// dd($path);
-		if ($path)
-		{      
-			$this->add_to_queue($submission, $submission->assignment, $file_name);   
-			return TRUE;
-		}
+			
+		$this->add_to_queue($submission, $submission->assignment, $file_name);   
+		return TRUE;
 		
-		return FALSE;
 	}
 
 	public function upload_post_code($code, $user_dir, $submission)
 	{
 		if (strlen($code) > Setting::get("file_size_limit") * 1024 )
-			//string length larger tan file size limit
 			abort(403, "Your submission is larger than system limited size");
 
 		$ext = $submission->language->extension;
 		$file_name = "solution-editcode-count" .($submission->assignment->total_submits);
-		file_put_contents("{$user_dir}/${file_name}"
-							. "." . $ext, $code);
-
+		$this->storage->put("{$user_dir}/{$file_name}.{$ext}", $code);
 		
-		$this->add_to_queue($submission, $submission->assignment
-								, "{$file_name}");
+		$this->add_to_queue($submission, $submission->assignment, "{$file_name}");
 		return TRUE;
 	}
 
@@ -368,11 +361,9 @@ class submission_controller extends Controller
 			'language_id' => $language->id,
 		]);
 
-		$user_dir = Submission::get_path(Auth::user()->username, $assignment->id, $problem->id);
+		$user_dir = Submission::get_relative_path(Auth::user()->username, $assignment->id, $problem->id);
 
-		if (!file_exists($user_dir)){
-			mkdir($user_dir, 0700, TRUE);
-		}
+		$this->storage->makeDirectory($user_dir);
 
 		$code = $request->code;
 		if ($code != NULL)
