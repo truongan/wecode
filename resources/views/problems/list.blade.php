@@ -81,8 +81,6 @@
 	<div class="table-responsive">
 	@error('messages')
 		@php( $msgclasses = array('text-success'=> 'text-success', 'text-info'=> 'text-warning', 'text-danger'=> 'text-danger') )
-		{{-- @php(dd($errors->get('messages'))) --}}
-		{{-- @php(dd($message['type'])) --}}
 		@foreach ($errors->get('messages') as $msg)
 			<p class="text-danger">{{ $msg }}</p>
 		@endforeach

@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use ZipArchive;
 use App\Problem;
 use App\Setting;
 use App\Language;
@@ -11,7 +11,9 @@ use App\Assignment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Response;
+
 use Illuminate\Http\UploadedFile;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -482,6 +484,10 @@ class problem_controller extends Controller
 	}
 	
 	public function import(Request $request){
+
+
+		$storage = Storage::disk('assignment_root');
+
 		$request->validate([
 			'zip_upload' => ['required']
 		]);
@@ -489,50 +495,65 @@ class problem_controller extends Controller
 			abort(403, "This feature is reserved for higher up only");
 		}
 
-		$assignments_root = Setting::get("assignments_root");
-		$file_path = $assignments_root . "/" .  $request->zip_upload->store('', 'assignment_root');
-		echo ($file_path);
+		$zip_file_name =  $request->zip_upload->store('', 'assignment_root');
+
 		
-		$tmp_dir = "$assignments_root/import_tmp_directory";
-		shell_exec("rm -rf $tmp_dir; mkdir $tmp_dir;");
+		$tmp_dir = uniqid('import_tmpdir_');
+		$storage->makeDirectory($tmp_dir);
 		
-		$a = shell_exec("unzip ". escapeshellarg($file_path) . " -d $tmp_dir");
-		shell_exec("rm " . escapeshellarg($file_path));
-		
+		try{
+			$zip = new ZipArchive;
+			$zip->open($storage->path($zip_file_name));
+			$zip->extractTo($storage->path($tmp_dir));
+		} catch (\Exection $ex){
+			$storage->delete($zip_file_name);
+			$storage->deleteDirectory($tmp_dir);
+			abort(403, $ex->getMessage());
+		} finally {
+			$storage->delete($zip_file_name);
+		}
 		
 		$lang_to_id = Language::all()->pluck('id', 'name');
-		foreach (scandir($tmp_dir) as $prob_folder){
-			if ($prob_folder == '.' or $prob_folder == '..') continue;
-
-			$metadata = json_decode(file_get_contents("$tmp_dir/$prob_folder/problem.wecode.metadata.json"));
-			// var_dump($metadata);
-			
-			$problem = new Problem((array)$metadata);
-			$problem->id = NULL;			$problem->user_id = Auth::user()->id;
-			$problem->admin_note 
-				.= sprintf("\nIMPORTED: orignal user %s (%s), original updated at %s"
-					, $metadata->user->username, $metadata->user->email, $metadata->updated_at);
-			$problem->save();
-			
-			$langs = [];
-			foreach($metadata->languages as $lang){
-				if (!isset($lang_to_id[$lang->name])) continue;
-				$langs[ $lang_to_id[$lang->name] ] = [
-					'time_limit' => $lang->pivot->time_limit,
-					'memory_limit' => $lang->pivot->memory_limit
-				];
+		$error_message = [];
+		foreach ($storage->directories($tmp_dir) as $prob_folder){
+			try{
+				$metadata = json_decode($storage->get("$prob_folder/problem.wecode.metadata.json"));
+				
+				$problem = new Problem((array)$metadata);
+				$problem->id = NULL;			$problem->user_id = Auth::user()->id;
+				$problem->admin_note 
+					.= sprintf("\nIMPORTED: orignal user %s (%s), original updated at %s"
+						, $metadata->user->username, $metadata->user->email, $metadata->updated_at);
+				$problem->save();
+				
+				$langs = [];
+				foreach($metadata->languages as $lang){
+					if (!isset($lang_to_id[$lang->name])) continue;
+					$langs[ $lang_to_id[$lang->name] ] = [
+						'time_limit' => $lang->pivot->time_limit,
+						'memory_limit' => $lang->pivot->memory_limit
+					];
+				}
+				// var_dump($langs);
+				$problem->languages()->sync($langs);
+				
+				shell_exec("mkdir -p " . $problem->get_directory_path())  ;
+				shell_exec("cp -r " 
+					. escapeshellarg("$tmp_dir/$prob_folder/")   
+					. "/* " 
+					.  $problem->get_directory_path());
+			} catch (\Exception $e){
+				$error_message[] 
+					= "Error importing problem " 
+						. basename($prob_folder)
+						. " ==> "
+						. $e->getMessage() 
+						. "\n";
 			}
-			// var_dump($langs);
-			$problem->languages()->sync($langs);
-			
-			shell_exec("mkdir -p " . $problem->get_directory_path())  ;
-			shell_exec("cp -r " 
-				. escapeshellarg("$tmp_dir/$prob_folder/")   
-				. "/* " 
-				.  $problem->get_directory_path());
 		}
-		shell_exec("rm -rf $tmp_dir");
-		return redirect()->route('problems.index')->withInput()->withErrors(["messages"=>"to do"]);
+		$storage->deleteDirectory($tmp_dir);
+		// shell_exec("rm -rf $tmp_dir");
+		return redirect()->route('problems.index')->withInput()->withErrors(["messages"=> $error_message]);
 	}
 
 	private function handle_test_dir_upload(Request $request,$assignments_root,$up_dir, $problem_dir, &$messages)
