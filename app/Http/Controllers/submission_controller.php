@@ -404,7 +404,7 @@ class submission_controller extends Controller
 		if (!$submission) abort(403,"Submission not found");
 		$this->_do_access_check($submission);
 
-		$submit_path = Submission::get_path($submission->user->username, $submission->assignment_id, $submission->problem_id);
+		$submit_path = Submission::get_relative_path($submission->user->username, $submission->assignment_id, $submission->problem_id);
 		$file_extension = $submission->language->extension;
 
 		if ($type == "code")
@@ -415,21 +415,20 @@ class submission_controller extends Controller
 			$file_path = $submit_path . "/result-{$submission->id}.html";
 
 
-		$file_content = file_exists($file_path) ? file_get_contents($file_path) : "File not found";
-		$file_content = (mb_convert_encoding($file_content,'UTF-8', 'ISO-8859-1'));
+		$file_content = $this->storage->exists($file_path) ? $this->storage->get($file_path) : "File not found";
+		// $file_content = (mb_convert_encoding($file_content,'UTF-8', 'ISO-8859-1'));
 
 		$result = array(
 				'file_name' => $submission->file_name .'.'. $file_extension,
 				'text' => $file_content
-				// 'text' => Storage::disk('my_local')->exists($file_path) ? Storage::disk('my_local')->get($file_path):"File Not Found"
 			);
 		if ($type === 'code') {
-				$result['lang'] = $file_extension;
-				if ($result['lang'] == 'py2' || $result['lang'] == 'py3')
-					$result['lang'] = 'python';
-				else if ($result['lang'] == 'pas')
-					$result['lang'] = 'pascal';
-			}
+			$result['lang'] = $file_extension;
+			if (in_array($result['lang'],  ['py2', 'py3']))
+				$result['lang'] = 'python';
+			else if ($result['lang'] == 'pas')
+				$result['lang'] = 'pascal';
+		}
 			
 		return $result;
 	}
