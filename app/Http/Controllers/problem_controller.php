@@ -534,14 +534,18 @@ class problem_controller extends Controller
 						'memory_limit' => $lang->pivot->memory_limit
 					];
 				}
-				// var_dump($langs);
 				$problem->languages()->sync($langs);
 				
-				shell_exec("mkdir -p " . $problem->get_directory_path())  ;
+				$storage->makeDirectory("problems/{$problem->id}/" );
+				
 				shell_exec("cp -r " 
-					. escapeshellarg("$tmp_dir/$prob_folder/")   
+					. escapeshellarg($storage->path( $prob_folder))   
 					. "/* " 
-					.  $problem->get_directory_path());
+					. $storage->path("problems/{$problem->id}/")   
+				)
+				;
+
+				
 			} catch (\Exception $e){
 				$error_message[] 
 					= "Error importing problem " 
