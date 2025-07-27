@@ -99,8 +99,8 @@ class moss_controller extends Controller
 			}
 			// echo "list='$list'; cd $assignment_path; $tester_path/moss \$list > problem_{$problem_id}/moss_link.txt  2>&1 &"; 			die();
 
-			exec("list='$list'; cd $assignment_path; $tester_path/moss \$list > problem_{$problem_id}/moss_link.txt  2>&1 &");
-			exec("cd $assignment_path/problem_{$problem_id}; touch moss_running");
+			shell_exec("list='$list'; cd $assignment_path; $tester_path/moss \$list > problem_{$problem_id}/moss_link.txt  2>&1 &");
+			shell_exec("cd $assignment_path/problem_{$problem_id}; touch moss_running");
 
 		}
 		

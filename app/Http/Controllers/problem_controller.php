@@ -680,23 +680,25 @@ class problem_controller extends Controller
 						"memory_limit" => $lang->pivot->memory_limit,
 					];
 				}
-				// var_dump($langs);
 				$problem->languages()->sync($langs);
+				
+				$storage->makeDirectory("problems/{$problem->id}/" );
+				
+				shell_exec("cp -r " 
+					. escapeshellarg($storage->path( $prob_folder))   
+					. "/* " 
+					. $storage->path("problems/{$problem->id}/")   
+				)
+				;
 
-				shell_exec("mkdir -p " . $problem->get_directory_path());
-				shell_exec(
-					"cp -r " .
-						escapeshellarg("$tmp_dir/$prob_folder/") .
-						"/* " .
-						$problem->get_directory_path(),
-				);
-			} catch (\Exception $e) {
-				$error_message[] =
-					"Error importing problem " .
-					basename($prob_folder) .
-					" ==> " .
-					$e->getMessage() .
-					"\n";
+				
+			} catch (\Exception $e){
+				$error_message[] 
+					= "Error importing problem " 
+						. basename($prob_folder)
+						. " ==> "
+						. $e->getMessage() 
+						. "\n";
 			}
 		}
 		$storage->deleteDirectory($tmp_dir);
