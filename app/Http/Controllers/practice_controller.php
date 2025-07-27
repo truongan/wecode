@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Problem;
-use App\Setting;
-use App\Submission;
+use App\Models\Problem;
+use App\Models\Setting;
+use App\Models\Submission;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

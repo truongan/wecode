@@ -1,14 +1,14 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Tag;
-use App\Problem;
-use App\Lop;
-use App\Assignment;
-use App\User;
-use App\Queue_item;
-use App\Submission;
-use App\Setting;
+use App\Models\Tag;
+use App\Models\Problem;
+use App\Models\Lop;
+use App\Models\Assignment;
+use App\Models\User;
+use App\Models\Queue_item;
+use App\Models\Submission;
+use App\Models\Setting;
 class dummy_data extends Seeder
 {
     /**

@@ -1,6 +1,7 @@
 <?php
 
-namespace App;
+namespace App\Models;
+
 
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
@@ -12,7 +13,7 @@ class Scoreboard extends Model
 	protected $fillable = ['assignment_id', 'scoreboard'];
 
 	public function assignment(){
-        return $this->belongsTo('App\Assignment');
+        return $this->belongsTo('App\Models\Assignment');
 	}
 
 	private function _generate_scoreboard()
@@ -64,7 +65,7 @@ class Scoreboard extends Model
 			// dd($submission['created_at']);
 			$fullmark = ($submission->pre_score == 10000);
 			$time = CarbonInterval::seconds( $assignment->start_time->diffInSeconds($submission->created_at, true))->cascade(); // time is absolute different
-			$late = CarbonInterval::seconds( $assignment->finish_time->diffInSeconds($submission->created_at, false))->cascade(); //late can either be negative (submit in time) or positive (submit late)
+			$late = CarbonInterval::seconds( $assignment->finish_time->diffInSeconds($submission->created_at))->cascade(); //late can either be negative (submit in time) or positive (submit late)
 			// dd($late);
             $username = $submission->user->username;
 			$scores[$username][$submission->problem_id]['score'] = $final_score;

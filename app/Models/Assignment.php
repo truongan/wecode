@@ -1,8 +1,9 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
-use App\User;
+
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
@@ -16,26 +17,26 @@ class Assignment extends Model
 
     public function problems()
     {
-        return $this->belongsToMany('App\Problem')->withPivot('score','ordering','problem_name')->withTimestamps();
+        return $this->belongsToMany('App\Models\Problem')->withPivot('score','ordering','problem_name')->withTimestamps();
     }
     public function user()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\Models\User');
     }
 
     public function submissions()
     {
-        return $this->hasMany('App\Submission');
+        return $this->hasMany('App\Models\Submission');
     }
 
     public function lops()
     {
-        return $this->belongsToMany('App\Lop');
+        return $this->belongsToMany('App\Models\Lop');
     }
 
     public function scoreboard()
     {
-        return $this->hasOne('App\Scoreboard');
+        return $this->hasOne('App\Models\Scoreboard');
     }
 
     public function cannot_edit(User $actor){
@@ -123,7 +124,7 @@ class Assignment extends Model
             ob_start();
             try 
             {
-                $delay = $this->finish_time->diffInSeconds($sub->created_at,false);
+                $delay = $this->finish_time->diffInSeconds($sub->created_at);
                 $extra_time = $this->extra_time;
                 eval($this->late_rule);
             }
@@ -142,14 +143,14 @@ class Assignment extends Model
     }
 
     public function is_finished(){
-        $delay = $this->finish_time->diffInSeconds(Carbon::now(), false);
+        $delay = $this->finish_time->diffInSeconds(Carbon::now());
         return ($this->start_time < $this->finish_time &&  $delay > $this->extra_time);
     }
     public function eval_coefficient(){
         ob_start();
 		try 
 		{
-            $delay = $this->finish_time->diffInSeconds(Carbon::now(), false);
+            $delay = $this->finish_time->diffInSeconds(Carbon::now());
             $extra_time = $this->extra_time;
 			eval($this->late_rule);
 		}

@@ -1,6 +1,7 @@
 <?php
 
-namespace App;
+namespace App\Models;
+
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -9,10 +10,10 @@ class Lop extends Model
     //
     protected $fillable = ['name', 'open'];
     function users(){
-        return $this->belongsToMany('App\User');
+        return $this->belongsToMany('App\Models\User');
     }
     function assignments(){
-        return $this->belongsToMany('App\Assignment');
+        return $this->belongsToMany('App\Models\Assignment');
     }
 
     static function available($user_id){

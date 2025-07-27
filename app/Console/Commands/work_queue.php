@@ -2,11 +2,11 @@
 
 namespace App\Console\Commands;
 
-use App\Submission;
-use App\Assignment;
-use App\Problem;
-use App\Queue_item;
-use App\Setting;
+use App\Models\Submission;
+use App\Models\Assignment;
+use App\Models\Problem;
+use App\Models\Queue_item;
+use App\Models\Setting;
 
 use Illuminate\Console\Command;
 

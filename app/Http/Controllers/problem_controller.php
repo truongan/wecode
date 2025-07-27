@@ -1,13 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
-use ZipArchive;
-use App\Problem;
-use App\Setting;
-use App\Language;
-use App\Tag;
-use App\Submission;
-use App\Assignment;
+
+use App\Models\Problem;
+use App\Models\Setting;
+use App\Models\Language;
+use App\Models\Tag;
+use App\Models\Submission;
+use App\Models\Assignment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
