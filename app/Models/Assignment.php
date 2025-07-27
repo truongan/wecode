@@ -7,6 +7,18 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
+use Symfony\Component\ExpressionLanguage\ExpressionFunction;
+use Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface;
+class my_expression_language_provider implements ExpressionFunctionProviderInterface
+{
+	public function getFunctions(): array
+	{
+		$func_list = ['abs', 'acos', 'acosh', 'asin', 'asinh', 'atan', 'atan2', 'atanh', 'base_convert', 'bindec', 'ceil', 'cos', 'cosh', 'decbin', 'dechex', 'decoct', 'deg2rad', 'exp', 'expm1', 'fdiv', 'floor', 'fmod', 'hexdec', 'hypot', 'intdiv', 'is_finite', 'is_infinite', 'is_nan', 'log', 'log10', 'log1p', 'max', 'min', 'octdec', 'pi', 'pow', 'rad2deg', 'round', 'sin', 'sinh', 'sqrt', 'tan', 'tanh'] ;
+
+		
+		return array_map(array('Symfony\Component\ExpressionLanguage\ExpressionFunction','fromPhp'), $func_list);
+	}
+}
 
 class Assignment extends Model
 {
@@ -166,15 +178,16 @@ class Assignment extends Model
 		return strtotime(date("Y-m-d H:i:s")) >= strtotime($this->start_time); //now should be larger than start time
 	}
 
-	private function _eval_coefficient($delay){
+	private function _eval_coefficient($delay)
+	{
 		try {
 			$extra_time = $this->extra_time;
 			$expressionLanguage = new ExpressionLanguage();
+			$expressionLanguage->registerProvider(new my_expression_language_provider());
 
 			$coefficient = $expressionLanguage->evaluate($this->late_rule, [
-				'$delay' => $delay,
-				'$extra_time' => $extra_time,
-				// '$submit_time' => $submit_time,
+				'delay' => $delay,
+				'extra_time' => $extra_time,
 			]);
 		} catch (\Throwable $e) {
 			// dd($e);
