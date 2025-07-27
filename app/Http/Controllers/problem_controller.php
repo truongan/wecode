@@ -681,24 +681,22 @@ class problem_controller extends Controller
 					];
 				}
 				$problem->languages()->sync($langs);
-				
-				$storage->makeDirectory("problems/{$problem->id}/" );
-				
-				shell_exec("cp -r " 
-					. escapeshellarg($storage->path( $prob_folder))   
-					. "/* " 
-					. $storage->path("problems/{$problem->id}/")   
-				)
-				;
 
-				
-			} catch (\Exception $e){
-				$error_message[] 
-					= "Error importing problem " 
-						. basename($prob_folder)
-						. " ==> "
-						. $e->getMessage() 
-						. "\n";
+				$storage->makeDirectory("problems/{$problem->id}/");
+
+				shell_exec(
+					"cp -r " .
+						escapeshellarg($storage->path($prob_folder)) .
+						"/* " .
+						$storage->path("problems/{$problem->id}/"),
+				);
+			} catch (\Exception $e) {
+				$error_message[] =
+					"Error importing problem " .
+					basename($prob_folder) .
+					" ==> " .
+					$e->getMessage() .
+					"\n";
 			}
 		}
 		$storage->deleteDirectory($tmp_dir);
@@ -832,7 +830,7 @@ class problem_controller extends Controller
 		$tags = $this->add_missing_tags($request->input("tag_id"));
 		$problem->tags()->sync($tags);
 		return json_encode([
-			"all_tags" => Tag::all(),1
+			"all_tags" => Tag::all(),
 			"new_tags" => $problem->tags,
 		]);
 	}
