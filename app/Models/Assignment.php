@@ -15,7 +15,7 @@ class my_expression_language_provider implements ExpressionFunctionProviderInter
 	{
 		$func_list = ['abs', 'acos', 'acosh', 'asin', 'asinh', 'atan', 'atan2', 'atanh', 'base_convert', 'bindec', 'ceil', 'cos', 'cosh', 'decbin', 'dechex', 'decoct', 'deg2rad', 'exp', 'expm1', 'fdiv', 'floor', 'fmod', 'hexdec', 'hypot', 'intdiv', 'is_finite', 'is_infinite', 'is_nan', 'log', 'log10', 'log1p', 'max', 'min', 'octdec', 'pi', 'pow', 'rad2deg', 'round', 'sin', 'sinh', 'sqrt', 'tan', 'tanh'] ;
 
-		
+
 		return array_map(array('Symfony\Component\ExpressionLanguage\ExpressionFunction','fromPhp'), $func_list);
 	}
 }
@@ -178,7 +178,7 @@ class Assignment extends Model
 		return strtotime(date("Y-m-d H:i:s")) >= strtotime($this->start_time); //now should be larger than start time
 	}
 
-	private function _eval_coefficient($delay)
+	private function _eval_coefficient($delay = 0, $submit_time = 0)
 	{
 		try {
 			$extra_time = $this->extra_time;
@@ -189,6 +189,13 @@ class Assignment extends Model
 				'delay' => $delay,
 				'extra_time' => $extra_time,
 			]);
+
+			$coefficient = round($coefficient, 1);
+			if ($coefficient < 0)
+				$coefficient = max(-10000, $coefficient);
+			else
+				$coefficient = min(10000, $coefficient);
+
 		} catch (\Throwable $e) {
 			// dd($e);
 			$coefficient = "error";
@@ -203,15 +210,17 @@ class Assignment extends Model
 	{
 		foreach ($this->submissions as $sub) {
 			$delay = $this->finish_time->diffInSeconds($sub->created_at);
+			$submit_time = $this->start_time->diffInSeconds($sub->created_at);
 
-			$sub->coefficient = $this->_eval_coefficient($delay);
+			$sub->coefficient = $this->_eval_coefficient($delay, $submit_time);
 			$sub->save();
 		}
 	}
 	public function eval_coefficient()
 	{
 		$delay = $this->finish_time->diffInSeconds(Carbon::now());
-		return $this->_eval_coefficient($delay);
+		$submit_time = $this->start_time->diffInSeconds(Carbon::now());
+		return $this->_eval_coefficient($delay, $submit_time);
 	}
 
 	public function is_finished()

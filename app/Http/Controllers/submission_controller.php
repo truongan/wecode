@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 use App\Http\Middleware\read_only_archive;
-use App\Models\View\Components\submission\verdict;
+use App\View\Components\submission\verdict;
 
 class submission_controller extends Controller
 {
@@ -26,8 +26,8 @@ class submission_controller extends Controller
 		$this->storage  = Storage::disk('assignment_root');
 		$this->middleware('auth'); // phải login
 
-		$this->middleware(read_only_archive::class); // Make this controller read only 
-		// 
+		$this->middleware(read_only_archive::class); // Make this controller read only
+		//
 		// when app is in archived mode.
 	}
 
@@ -37,7 +37,7 @@ class submission_controller extends Controller
 				abort(403,"You don't have permission to view another user's submissions");
 			if (!$submission->assignment->open)
 				abort(403,"This assignment has been close for students");
-		}  
+		}
 	}
 
 	//abort on invalid creation
@@ -51,7 +51,7 @@ class submission_controller extends Controller
 	{
 		// if ($assignment_id == 0)
 		//     abort(403,'You have not selected assignment');
-		
+
 		if (Assignment::find($assignment_id) == null)
 		{
 			return redirect()->route('submissions.index', [0, 'all', 'all', 'all']);
@@ -62,11 +62,11 @@ class submission_controller extends Controller
 
 		if (Auth::user()->role->name == 'admin'){
 			// Admin can view anything
-		} 
-		else if (  in_array( Auth::user()->role->name, ['head_instructor', 'instructor']) 
+		}
+		else if (  in_array( Auth::user()->role->name, ['head_instructor', 'instructor'])
 					&& $assignment->id != 0 //Allow instructors to view any practice submissions
 		){
-			if ($assignment->user != Auth::user() 
+			if ($assignment->user != Auth::user()
 				&& !Auth::user()->lops()->with('assignments')->get()->pluck('assignments')->collapse()->pluck('id')->contains($assignment->id)
 			){
 				abort(403, 'You can only view submissions for assignment you created or assignment belongs to one of your classes');
@@ -74,7 +74,7 @@ class submission_controller extends Controller
 		}
 
 		Auth::user()->selected_assignment_id = $assignment_id;
-		Auth::user()->save(); 
+		Auth::user()->save();
 
 		$submissions =$assignment->submissions();;
 		if ( in_array( Auth::user()->role->name, ['student', 'guest']) )
@@ -85,7 +85,7 @@ class submission_controller extends Controller
 		else if ($user_id != 'all'){
 			$submissions = $submissions->where('user_id',intval($user_id));
 		}
-		
+
 
 		if ($choose == 'final'){
 			$submissions = $submissions->where('is_final',1);
@@ -93,7 +93,7 @@ class submission_controller extends Controller
 		if ($problem_id != 'all'){
 			$submissions = $submissions->where('problem_id',intval($problem_id));
 		}
-		
+
 		$submissions = $submissions->with(['language','user'])->latest()->paginate(Setting::get('results_per_page_all'));
 		$all_problems = Assignment::find($assignment_id)->problems->keyBy('id');
 		foreach ($submissions as &$submission){
@@ -102,13 +102,13 @@ class submission_controller extends Controller
 		}
 
 
-		return view('submissions.list',['submissions' => $submissions, 'assignment' => $assignment, 'user_id' => $user_id, 'problem_id' => $problem_id, 'choose' => $choose, 'all_problems' => $all_problems]); 
+		return view('submissions.list',['submissions' => $submissions, 'assignment' => $assignment, 'user_id' => $user_id, 'problem_id' => $problem_id, 'choose' => $choose, 'all_problems' => $all_problems]);
 	}
 
 	private function _creation_guard_check($assignment_id, $problem_id, $language_id = -1){
 		$assignment = Assignment::find($assignment_id);
 		$problem = Problem::find($problem_id);
-		
+
 		if ( $assignment_id != 0 && $assignment->problems->find($problem_id) == NULL) abort(404);
 
 		$check = $assignment->can_submit(Auth::user(), $problem);
@@ -116,7 +116,7 @@ class submission_controller extends Controller
 			// dd($problem);
 			abort(403, $check->error_message);
 		}
-		
+
 		if ($language_id != -1 && !in_array($language_id, explode(", ", $assignment->language_ids))){
 			abort(403, " This assignment doesn't allow programming language of id " . $language_id) ;
 		}
@@ -127,20 +127,20 @@ class submission_controller extends Controller
 
 	public function create($assignment_id, $problem_id, $old_sub = -1){
 		$assignment = Assignment::find($assignment_id);
-		
+
 		$problem = $this->_creation_guard_check($assignment_id, $problem_id);
 
 		$last = Submission::where(['assignment_id' => $assignment_id, 'problem_id' => $problem_id, 'user_id' => Auth::user()->id]);
 		if ($old_sub != -1) $last = $last->where(['id'=> $old_sub]);
 
 		$last = $last->get()->last();
-		
+
 
 		$last_code = null;
 		if ($last != null){
 			$submit_path = Submission::get_path($last->user->username, $last->assignment_id, $last->problem_id);
 			$file_extension = $last->language->extension;
-	
+
 			$file_path = $submit_path . "/{$last->file_name}.". $file_extension;
 			$last_code = file_exists($file_path)? file_get_contents($file_path): null;
 		}
@@ -161,9 +161,9 @@ class submission_controller extends Controller
 		else
 			abort(501,'Error Uploading File');
 	}
-	
 
- 
+
+
 	public function upload_file_code($request, $user_dir, $submission)
 	{
 		if ($request->userfile->getSize() > Setting::get("file_size_limit") * 1024 )
@@ -173,10 +173,10 @@ class submission_controller extends Controller
 		$file_name = "solution-upload-count".($submission->assignment->total_submits);
 
 		$path = $request->userfile->storeAs($user_dir, $file_name.".".$submission->language->extension, 'assignment_root');
-			
-		$this->add_to_queue($submission, $submission->assignment, $file_name);   
+
+		$this->add_to_queue($submission, $submission->assignment, $file_name);
 		return TRUE;
-		
+
 	}
 
 	public function upload_post_code($code, $user_dir, $submission)
@@ -187,7 +187,7 @@ class submission_controller extends Controller
 		$ext = $submission->language->extension;
 		$file_name = "solution-editcode-count" .($submission->assignment->total_submits);
 		$this->storage->put("{$user_dir}/{$file_name}.{$ext}", $code);
-		
+
 		$this->add_to_queue($submission, $submission->assignment, "{$file_name}");
 		return TRUE;
 	}
@@ -205,7 +205,7 @@ class submission_controller extends Controller
 		$submission->save();
 
 		Queue_item::add_and_process($submission->id, 'judge');
-		
+
 	}
 
 	private function get_path($username, $assignment_id, $problem_id)
@@ -234,13 +234,13 @@ class submission_controller extends Controller
 		else {
 			abort(404, 'Need assignment to do rejudge all');
 		}
-			
+
 
 		if ($request->problem_id == 'all')
 			$submissions = Submission::where('assignment_id',$assignment->id)->get();
 		else
 			$submissions = Submission::where('assignment_id',$assignment->id)->where('problem_id', $request->problem_id)->get();
-		
+
 		if ($submissions->count() == 0){
 			abort(404, 'invalid assignment_id and problem_id combo');
 		}
@@ -251,22 +251,22 @@ class submission_controller extends Controller
 			$submission->status = 'PENDING';
 			$submission->save();
 		}
-		for ($i=0; $i < Setting::get('concurent_queue_process', 2); $i++) { 
+		for ($i=0; $i < Setting::get('concurent_queue_process', 2); $i++) {
 			Queue_item::work();
 		}
-		return redirect()->back()->with('status', 'Rejudge in progress');   
+		return redirect()->back()->with('status', 'Rejudge in progress');
 	}
 
 	public function rejudge(Request $request){
 		if (!in_array( Auth::user()->role->name, ['student', 'guest'])){
 			$validated = $request->validate([
 				'submission_id' => ['integer'],
-			]);	
-			
+			]);
+
 			$sub = Submission::find($request->submission_id);
-			
+
 			if ($sub == NULL) abort(404);
-			
+
 			if (Queue_item::where('submission_id', $sub->id)->count() > 0){
 				return response()->json(['done' => 0, 'message' => 'Submission is already in queue for judging']);
 			}
@@ -274,7 +274,7 @@ class submission_controller extends Controller
 			$a = Queue_item::add_and_process($sub->id, 'rejudge');
 			$sub->status = 'PENDING';
 			$sub->save();
-			
+
 			return response()->json(
 				['done' => 1]
 			);
@@ -287,32 +287,32 @@ class submission_controller extends Controller
 			'problem_id' => 'integer',
 			'language_id' => 'integer'
 		]);
-		
+
 		$problem = $this->_creation_guard_check($request->input('assignment_id'), $request->input('problem_id'));
 
 		$template = $problem->template_content($request->input('language_id'));
-		
+
 		if ($template === NULL){
 			$result = array('banned' => '', 'before'  => '', 'after' => '', 'full' => '');
 		} else {
 			preg_match("/(\/\*###Begin banned.*\n)((.*\n)*)(###End banned keyword\*\/)/"
 				, $template, $matches
 			);
-		
+
 			$set_or_empty = function($arr, $key){
 				if(isset($arr[$key])) return $arr[$key];
 				return "";
 			};
-	
+
 			$banned = $set_or_empty($matches, 2);
-	
+
 			preg_match("/(###End banned keyword\*\/\n)((.*\n)*)\/\/###INSERT CODE HERE -\n?((.*\n?)*)/"
 				, $template, $matches
 			);
-	
+
 			$before = $set_or_empty($matches, 2);
 			$after = $set_or_empty($matches, 4);
-	
+
 			$result = array('banned' => $banned, 'before'  => $before, 'after' => $after, 'full' => $template);
 		}
 
@@ -328,15 +328,13 @@ class submission_controller extends Controller
 
 		$coefficient = 100;
 		if ($assignment->id == 0) {
-			//Practice 
+			//Practice
 			if (!in_array( Auth::user()->role->name, ['admin', 'head_instructor']) && $problem->allow_practice!=1)
 				abort(403,'This problem is not open for practice');
 		}
 		else
 		{
-
 			$coefficient = $assignment->eval_coefficient();
-
 
 			$a = $assignment->can_submit(Auth::user());
 			if(!$a->can_submit) abort(403, $a->error_message);
@@ -368,9 +366,9 @@ class submission_controller extends Controller
 		$code = $request->code;
 		if ($code != NULL)
 			return $this->upload_post_code($code, $user_dir, $submission);
-		else 
+		else
 		{
-			if ($request->hasFile('userfile')) 
+			if ($request->hasFile('userfile'))
 			{
 				return $this->upload_file_code($request, $user_dir, $submission);
 			}
@@ -429,7 +427,7 @@ class submission_controller extends Controller
 			else if ($result['lang'] == 'pas')
 				$result['lang'] = 'pascal';
 		}
-			
+
 		return $result;
 	}
 
@@ -448,7 +446,7 @@ class submission_controller extends Controller
 	}
 
 	public function view_status(){
-		
+
 		$submit_id = $_POST['submit_id'];
 
 		$submission = Submission::with('assignment')->find($submit_id);
@@ -462,6 +460,6 @@ class submission_controller extends Controller
 
 		$submission->rendered_verdict = $a->resolveView()->with($a->data())->render();
 		echo json_encode($submission);
-		
+
 	}
 }

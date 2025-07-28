@@ -53,7 +53,7 @@
 	{{-- {% for message in messages %}
 		<p class="{{ msgclasses[message.type] }}">{{ message.text }}</p>
 	{% endfor %} --}}
-	
+
 	{{-- {% if edit %}
 	<p>
 		<i class="fa fa-info-circle fa-lg color8"></i> If you don't want to change tests or pdf file, just do not upload its file.
@@ -63,7 +63,7 @@
 	<form method="POST" class = "gy-5"
 		@if (Route::currentRouteName() == 'assignments.edit')
 			action="{{ route('assignments.update', $assignment) }}"
-		@else  
+		@else
 			action="{{ route('assignments.store') }}"
 		@endif
 	enctype="multipart/form-data"
@@ -101,7 +101,7 @@
 						</div>
 						{{-- {{ form_error('start_time', '<div class="alert alert-danger">', '</div>') }} --}}
 					</div>
-	
+
 					<div class="col-sm-4">
 						<label for="finish_time">Finish Time
 						<small class="form-text text-muted">Set finish time before start time will set the deadline to <strong>FOREVER</strong></small>
@@ -119,7 +119,7 @@
 						</div>
 						{{-- {{ form_error('finish_time', '<div class="alert alert-danger">', '</div>') }} --}}
 					</div>
-	
+
 					<div class="col-sm-4">
 						<label for="form_extra_time">
 						Extra Time (seconds)
@@ -155,12 +155,12 @@
 					</div>
 				</div>
 			</div>
-	
+
 			<div class="col-sm-6">
-				<label for="form_late_rule">Description</label>
-				<textarea id="form_late_rule" name="description" rows="2" class="form-control add_text">{{ $edit ? $assignment->description : old('description', '') }}</textarea>
+				<label for="form_description">Description</label>
+				<textarea id="form_description" name="description" rows="2" class="form-control add_text">{{ $edit ? $assignment->description : old('description', '') }}</textarea>
 				{{-- {{ form_error('late_rule', '<div class="alert alert-danger">', '</div>') }} --}}
-				
+
 				<div class="form-check form-switch mt-2">
 					<input id="form_a_open" class="form-check-input" type="checkbox" name="open" value="1" {!! $edit ? ($assignment->open ? 'checked' : '') :'' !!} />
 					<label for="form_a_open" class="form-check-label">Open</label>
@@ -175,10 +175,10 @@
 				</div>
 				{{-- {{ form_error('scoreboard', '<div class="alert alert-danger">', '</div>') }} --}}
 
-				<label for="form_late_rule">Coefficient rule (<a target="_blank" href="https://github.com/truongan/wecode-judge/blob/docs/v1.4/add_assignment.md#coefficient-rule">?</a>)
-					<small class="form-text text-muted  ">PHP script without &lt;?php ?&gt; tags. You can use 3 variables: <code>$extra_time</code>, <code>$delay</code>, <code>$submit_time</code></small>
+				<label for="form_late_rule">Coefficient rule (<a target="_blank" href="https://symfony.com/doc/current/reference/formats/expression_language.html">Expression</a>)
+					<small class="form-text text-muted  "> to calculate score coefficient (in percentage) based on <code>extra_time</code>, <code>delay</code> and <code>submit_time</code></small>
 				</label>
-				<textarea id="form_late_rule" name="late_rule" rows="4" class="form-control add_text">{{ $edit ? $assignment->late_rule : old('late_rule', $settings['default_late_rule'], false) }}</textarea>
+				<input type="text" id="form_late_rule" name="late_rule" rows="4" class="form-control add_text" value="{{ $edit ? $assignment->late_rule : old('late_rule', $settings['default_late_rule'], false) }}"/>
 				{{-- {{ form_error('late_rule', '<div class="alert alert-danger">', '</div>') }} --}}
 
 				<div class="mt-2 row">
@@ -187,14 +187,14 @@
 							Limit language <small class="form-text text-muted">if your problems support many languages, you can limit the languages that can be used in this assigment </small>
 						</label>
 					</div>
-					
+
 					<div class="col-sm-8">
 						<select name="language_ids[]" class="form-select"  multiple aria-label="Further limit allow language for this assignments">
 							@foreach ($all_languages as $lang)
-								<option value="{{ $lang->id }}" 
+								<option value="{{ $lang->id }}"
 									@if (!$edit ||  in_array($lang->id , explode(", ", $assignment->language_ids) ))
 										selected
-									@endif	
+									@endif
 								>{{$lang->name}}</option>
 							@endforeach
 						</select>
@@ -202,7 +202,7 @@
 				</div>
 			</div>
 		</div>
-	
+
 		<div class="row my-3">
 			<div class="col-sm-8" id="choice_multi_assignment">
 				<label> Select problem(s) for this assignment
@@ -211,7 +211,7 @@
 				</label>
 				<select class="all_problems form-control" multiple="multiple">
 					@foreach( $all_problems as $p)
-					<option value="{{ $p->id }}" data-name="{{$p->name}}" data-id="{{$p->id}}" data-tags="{{ $p->tags->implode('text', ', ')}}" data-note="{{ $p->admin_note }}" data-no_of_assignment="{{ $p->assignments_count }}"  data-owner="{{ $p->user->username ?? 'none'}}" 
+					<option value="{{ $p->id }}" data-name="{{$p->name}}" data-id="{{$p->id}}" data-tags="{{ $p->tags->implode('text', ', ')}}" data-note="{{ $p->admin_note }}" data-no_of_assignment="{{ $p->assignments_count }}"  data-owner="{{ $p->user->username ?? 'none'}}"
 						{{ isset($problems[$p->id]) ? 'selected="selected"' : ''  }}
 						>
 					{{$p->id}} - {{$p->name}} ({{ $p->user->username ?? 'none'}} |  {{ $p->tags->implode('text', ', ') }}  | {{   $p->admin_note }}) </option>
@@ -229,8 +229,8 @@
 				<small id="helpId" class="text-muted">Use this to select every problems that have been used in no more than a specific number of assignments. You can still fine tuning the selection afterward </small>
 			</div>
 		</div>
-	
-	<label> Set alias, score and order for problems in this assignment  
+
+	<label> Set alias, score and order for problems in this assignment
 		<small class="form-text text-muted">Problem's alias will be displayed when student view this assignment instead of the problem's original name<br/>
 		You can drag the handle to re-order the problems.<br/>
 		Remove one problem from assignment won't remove the submissions of that problem but will reset its alias and score to default if you re-add it later.
@@ -248,7 +248,7 @@
 				<span><i class="fa fa-grip-vertical fa-lg fa-fw"></i></span>
 			</div>
 			<div class="col">
-				<div class="row  row-cols-auto align-items-center" >			
+				<div class="row  row-cols-auto align-items-center" >
 					{{-- <div class="input-group"> --}}
 						<input type="hidden" name="problem_id[]" value="{{$problem->id}}"/>
 						<div class="col lead me-2">
@@ -280,11 +280,10 @@
 		</div></li>
 		@endforeach
 	</ul>
-	
+
 	<div class="mt-4">
 		<input type="submit" value="{{ $edit ? "Edit" : "Add" }} Assignment" class="sharif_input btn btn-primary"/>
 	</div>
 	</form>
 </div>
 @endsection
-
