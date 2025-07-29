@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Response;
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Database\Eloquent\Builder;
-
+use ZipArchive;
 use App\Http\Middleware\read_only_archive;
 
 class problem_controller extends Controller
@@ -451,76 +451,72 @@ class problem_controller extends Controller
 		// Remove the zip file
 		shell_exec("cd $assignments_root; rm -rf " . escapeshellarg($name_zip));
 
-		$a = 1;
-		if ($a == 1) {
-			$this->clean_up_old_problem_dir($problem_dir);
+		$this->clean_up_old_problem_dir($problem_dir);
 
-			if (glob("$tmp_dir/*.pdf")) {
-				shell_exec("cd $problem_dir; rm -f *.pdf");
-			}
+		if (glob("$tmp_dir/*.pdf")) {
+			shell_exec("cd $problem_dir; rm -f *.pdf");
+		}
 
-			shell_exec("cp -R $tmp_dir/* $problem_dir;");
+		shell_exec("cp -R $tmp_dir/* $problem_dir;");
 
-			$in = glob("$problem_dir/in/*");
-			$out = glob("$problem_dir/out/*");
+		$in = glob("$problem_dir/in/*");
+		$out = glob("$problem_dir/out/*");
 
-			if ($in) {
-				//rename input and output file base on file name order
-				if ($rename_inputoutput) {
-					// dd($rename_inputoutput);
-					if (count($in) != count($out)) {
-						$messages[] =
-							"The zip contain mismatch number of input and output files: " .
-							count($in) .
-							" input files vs " .
-							count($out) .
-							" output files";
-					} else {
-						shell_exec("cd $problem_dir; rm -f in_old out_old");
-						rename("$problem_dir/in", "$problem_dir/in_old");
-						rename("$problem_dir/out", "$problem_dir/out_old");
-						shell_exec("cd $problem_dir; mkdir in out");
-						$in = glob("$problem_dir/in_old/*");
-						$out = glob("$problem_dir/out_old/*");
-						// dd($out);
-						for ($i = 1; $i <= count($in); $i++) {
-							// var_dump([$in[$i-1],"$problem_dir/in/input$i.txt"] );
-							copy($in[$i - 1], "$problem_dir/in/input$i.txt");
-							copy($out[$i - 1], "$problem_dir/out/output$i.txt");
-						}
-						shell_exec("cd $problem_dir; rm -f in_old out_old");
-						shell_exec("rm -rf $problem_dir/in_old");
-						shell_exec("rm -rf $problem_dir/out_old");
-						// dd($in);
-					}
+		if ($in) {
+			//rename input and output file base on file name order
+			if ($rename_inputoutput) {
+				// dd($rename_inputoutput);
+				if (count($in) != count($out)) {
+					$messages[] =
+						"The zip contain mismatch number of input and output files: " .
+						count($in) .
+						" input files vs " .
+						count($out) .
+						" output files";
 				} else {
-					//Check input and output file but won't rename
-					// var_dump($problem_dir);die();$problem_dir."/out/output$i.txt"
-					for ($i = 0; $i < count($in); $i++) {
-						$real_id = $i + 1;
+					shell_exec("cd $problem_dir; rm -f in_old out_old");
+					rename("$problem_dir/in", "$problem_dir/in_old");
+					rename("$problem_dir/out", "$problem_dir/out_old");
+					shell_exec("cd $problem_dir; mkdir in out");
+					$in = glob("$problem_dir/in_old/*");
+					$out = glob("$problem_dir/out_old/*");
+					// dd($out);
+					for ($i = 1; $i <= count($in); $i++) {
+						// var_dump([$in[$i-1],"$problem_dir/in/input$i.txt"] );
+						copy($in[$i - 1], "$problem_dir/in/input$i.txt");
+						copy($out[$i - 1], "$problem_dir/out/output$i.txt");
+					}
+					shell_exec("cd $problem_dir; rm -f in_old out_old");
+					shell_exec("rm -rf $problem_dir/in_old");
+					shell_exec("rm -rf $problem_dir/out_old");
+					// dd($in);
+				}
+			} else {
+				//Check input and output file but won't rename
+				// var_dump($problem_dir);die();$problem_dir."/out/output$i.txt"
+				for ($i = 0; $i < count($in); $i++) {
+					$real_id = $i + 1;
+					if (
+						!in_array(
+							$problem_dir . "/in/input$real_id.txt",
+							$in,
+						)
+					) {
+						$messages[] = "A file name input$real_id.txt seem to be missing in your folder";
+					} else {
 						if (
 							!in_array(
-								$problem_dir . "/in/input$real_id.txt",
-								$in,
+								$problem_dir . "/out/output$real_id.txt",
+								$out,
 							)
 						) {
-							$messages[] = "A file name input$real_id.txt seem to be missing in your folder";
-						} else {
-							if (
-								!in_array(
-									$problem_dir . "/out/output$real_id.txt",
-									$out,
-								)
-							) {
-								$messages[] = "A file name output$real_id.txt seem to be missing in your folder";
-							}
+							$messages[] = "A file name output$real_id.txt seem to be missing in your folder";
 						}
 					}
 				}
 			}
-		} else {
-			$messages[] = "Error: Error extracting zip archive.";
 		}
+
 
 		// Remove temp directory
 		shell_exec("rm -rf $tmp_dir");
@@ -585,13 +581,13 @@ class problem_controller extends Controller
 		$probs = Problem::whereIn("id", $ids)->get()->load("user");
 
 		if (!in_array(Auth::user()->role->name, ["admin"])) {
-			$probs = $probs->reject(function (Problem $prob, int $key) {
-				return !(
-					$prob->sharable && Auth::user()->role->name != "student"
-				) && $prob->user->id != Auth::user()->id;
-			});
+			$probs = $probs->reject(fn(Problem $prob, int $key)
+				=> !(
+   					$prob->sharable && Auth::user()->role->name != "student"
+				) && $prob->user->id != Auth::user()->id
+			);
 		}
-		$probs->load("languages");
+		$probs->load("languages")->load("tags");
 
 		$assignments_root = Setting::get("assignments_root");
 		$zipFile =
@@ -605,9 +601,7 @@ class problem_controller extends Controller
 		foreach ($probs as $prob) {
 			$pathdir = $prob->get_directory_path();
 			$metadata_file = $pathdir . "/problem.wecode.metadata.json";
-			// dd($metadata_file);
 			file_put_contents($metadata_file, $prob->toJSON(JSON_PRETTY_PRINT));
-			// dd("cd $pathdir && zip -r $zipFile *");
 			$a = shell_exec(
 				"cd $pathdir/.. && zip -r $zipFile  " .
 					(string) $prob->id .

@@ -25,7 +25,7 @@
 
 @section('content')
 <div class="row">
-		
+
 	<div class="accordion  accordion-flus" id="accordionExample">
 		<div class="accordion-item">
 		  <h2 class="accordion-header">
@@ -55,7 +55,7 @@
 			</div>
 		  </div>
 		</div>
-	  
+
 	<form class="row mb-3 gx-3  align-items-center" method="get" action="{{ route('problems.index') }}">
 		<div class=" col-5">
 			<div class="input-group">
@@ -88,10 +88,11 @@
 	<table class="table table-striped table-bordered">
 		<thead class="thead-old table-dark">
 			<tr>
-				<th>ID</th>
+				<th>owned?</th>
+				<th>ID?</th>
 				<th style="width: 20%">Name</th>
-				<th style="width: 15%">Note</th>
-				<th>owner</th>
+				<th style="width: 55%">Note</th>
+				<!-- <th>owner</th> -->
 				<th style="width: 15%">Tags</th>
 				<th>Lang</th>
 				<th>Date</th>
@@ -103,22 +104,26 @@
 		</thead>
 	  @foreach ($problems as $item)
 		<tr data-id="{{$item->id}}">
-			<td>{{ $item->id}}</td> 
+			<td>{{ $item->user->username == Auth::user()->username }}</td>
+			<td>{{ $item->id}}</td>
 			{{-- NAME --}}
-			<td><a href="{{ route( 'practices.show' ,$item->id) }}">{{ $item->name }}</a></td>
-			{{-- NOTE --}}
-			<td class="fs-6 text-break"> {{$item->admin_note}}</td>
-			{{-- OWNER --}}
-			<td> 
-				<span data-bs-toggle="tooltip"  
-					@if($item->sharable) class="text-success"  title="publicly shared problem"
-					@else class="text-black-50" title="Private problem"
+			<td>
+			    <a href="{{ route( 'practices.show' ,$item->id) }}"> <span class="badge text-bg-info"> {{ $item->id}}</span> {{ $item->name }}</a>
+				<br/>
+				by:
+				<span
+				    class="badge rounded-pill
+					@if($item->sharable) text-bg-success
+					@else text-bg-secondary
 					@endif
+					"
 				>
 					{{$item->user->username ?? 'no-owner'}}
 				</span>
-
 			</td>
+			{{-- NOTE --}}
+			<td class="fs-6 "> {{$item->admin_note}}</td>
+
 			{{-- TAGS --}}
 			<td>
 				<div class="holder-for-one-problem-tags">
@@ -133,7 +138,7 @@
 						<button type="submit" class="btn btn-small btn-primary" ><i class="fa fa-check" aria-hidden="true"></i></button>
 					</form>
 					<span  class = "edit-tag-list-handle"> <i title="Edit tag list" class="far fa-edit fa-lg text-warning"> </i> </span>
-				@endif 
+				@endif
 			</td>
 			{{-- LANG --}}
 			<td>
@@ -141,17 +146,17 @@
 					{{  $item->languages->pluck('name')->join(", ")  }}
 				</a>
 				<div class="collapse" id="language_list_{{$item->id}}">
-					
+
 				@foreach ($item->languages as $language_name)
 					<span class="btn btn-sm btn-secondary mb-1">{{$language_name->name}} <span class="badge rounded-pill bg-info">{{$language_name->pivot->time_limit/1000}}s</span><span class="badge rounded-pill bg-info">{{$language_name->pivot->memory_limit/1000}}MB</span></span>
 				@endforeach
 				</div>
 			</td>
-			
+
 			{{-- Date --}}
 			<td>
-				Created: {{ $item->created_at ?  $item->created_at->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('YYYY/MM/DD-HH:mm:ss') : 'Unknown' }}
-				Modified: {{ $item->created_at ?  $item->updated_at->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('YYYY/MM/DD-HH:mm:ss') : 'Unknown' }}
+				Created: {{ $item->created_at ?  $item->created_at->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('YYYY/MM/DD HH:mm:ss') : 'Unknown' }}
+				Modified: {{ $item->created_at ?  $item->updated_at->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('YYYY/MM/DD HH:mm:ss') : 'Unknown' }}
 			</td>
 			{{-- ASSIGNMENTS --}}
 			<td>
@@ -159,7 +164,7 @@
 						{{ $item->assignments->count()}}<small> assignments</small>
 					</a>
 				<div class="collapse" id="assignment_list_{{$item->id}}">
-					
+
 					@foreach ($item->assignments as $assignment)
 						<a href="{{ route('submissions.index', ['assignment_id' => $assignment->id, 'problem_id' => $item->id, 'user_id' => 'all' , 'choose' => 'all']) }}" >
 						<span class="btn  btn-secondary btn-sm my-1">{{$assignment->name}} <span class="badge bg-info">{{$assignment->user->username ?? "no-owner"}}</span> </span></a>
@@ -169,27 +174,27 @@
 			</td>
 			{{-- SUBMISSIONS --}}
 			<td>
-				<span class="text-success">{{ $item->accepted_submit }}</span> 
+				<span class="text-success">{{ $item->accepted_submit }}</span>
 				/
 				<span class="text-info">{{ $item->total_submit }} ({{ $item->ratio }}%) </span>
 			</td>
 			{{-- SHARE, PRACTICE, EDITORIAL --}}
-			<td>  
-				
+			<td>
+
 				<i  style="cursor:pointer" data-bs-toggle="tooltip" data-id='{{ "toggle." .  $item->id}}'  title='Green icon means this problem is available for practice, Black icon for otherwise' class="toggle_practice-share fas fa-dumbbell fa-2x clickable .stretched-link
 					@if( $item->allow_practice)
 						text-success
 
 					@else
 						text-black-50
-						
+
 					@endif
 				">
 				</i>
 				<i style="cursor:pointer" data-bs-toggle="tooltip" data-id='{{'share.' . $item->id}}' title='Green icon means this problem is shared among instructors. Black icon means it is only visible  to its author and admins'  class="toggle_practice-share fas fa-share-alt fa-2x clickable .stretched-link
 				@if( $item->sharable)
-					text-success  
-					
+					text-success
+
 				@else
 					text-black-50
 				@endif
@@ -199,7 +204,7 @@
 				@if($item->editorial != '')
 					<a href="{{ $item->editorial }}" data-bs-toggle="tooltip" title='This problem has some linked editorial'><i class="fas fa-lightbulb fa-2x   "></i></a>
 				@endif
-				
+
 				@if($item->author != '')
 					<br/><i class="fas fa-user   "></i> {{$item->author}}
 				@endif
@@ -219,7 +224,7 @@
 					</span>
 				@endif
 			</td>
-		
+
 		</tr>
 	  @endforeach
 	</table>
@@ -272,7 +277,7 @@
 				// console.log(event.currentTarget);
 				var tag_list_div = event.currentTarget.parentElement.querySelector('.holder-for-one-problem-tags')
 				tag_id_list = [...tag_list_div.querySelectorAll('span')].map(i => i.dataset.id);
-				
+
 				var tag_edit_form = event.currentTarget.parentElement.querySelector('form')
 				tag_edit_form.classList.remove('d-none');
 
@@ -320,7 +325,7 @@
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
-					'X-CSRF-TOKEN' : document.querySelector('meta[name="csrf-token"]').getAttribute('content') 
+					'X-CSRF-TOKEN' : document.querySelector('meta[name="csrf-token"]').getAttribute('content')
 				},
 				body: JSON.stringify({
 					tag_id: select_obj.val(),
@@ -335,13 +340,13 @@
 			}).catch(error => console.log("Error", error));
 
 		})
-	);	
-	
+	);
+
 	document.querySelectorAll('#select_all_for_download')[0].onclick = (event) => {
 		event.preventDefault();
 		document.querySelectorAll('.form-check-input').forEach(select => select.checked = true);
 	};
-	
+
 	document.querySelectorAll('#deselect_all_for_download')[0].onclick = (event) => {
 		event.preventDefault();
 		document.querySelectorAll('.form-check-input').forEach(select => select.checked = false);
@@ -351,11 +356,11 @@
 		// event.preventDefault();
 		// fetch(
 		// 	'{{ route("problems.export") }}',
-		// 	{	
+		// 	{
 		// 		method: 'POST',
 		// 		headers: {
 		// 			'Content-Type': 'application/json',
-		// 			'X-CSRF-TOKEN' : document.querySelector('meta[name="csrf-token"]').getAttribute('content') 
+		// 			'X-CSRF-TOKEN' : document.querySelector('meta[name="csrf-token"]').getAttribute('content')
 		// 		},
 		// 		body: JSON.stringify({
 		// 			'ids' : [...document.querySelectorAll('.form-check-input:checked')].map(i => i.dataset['id']),
@@ -404,8 +409,21 @@
 
 	$("table").DataTable({
 		"paging": false,
+		columnDefs:[
+		    {
+				target: 0,
+				visible : false
+			}
+		    ,{
+				target: 1,
+				visible : false
+			}
+		],
 		{{-- "ordering": false, --}}
-		'order':[[0, 'desc']]
+		'order':[
+		    [0, 'desc']
+			,[1, 'desc']
+		]
 	});
 	document.querySelector('.dataTables_filter > label').childNodes[0].data = "Filter in this page"
   });
@@ -444,4 +462,3 @@
 
 </script>
 @endsection
-
