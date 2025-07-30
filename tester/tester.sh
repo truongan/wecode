@@ -103,8 +103,8 @@ DISPLAY_JAVA_EXCEPTION_ON=true
 
 #$runcode
 declare -A languages_to_docker
-languages_to_docker["c"]="gcc:10"
-languages_to_docker["cpp"]="gcc:10"
+languages_to_docker["c"]="gcc:14"
+languages_to_docker["cpp"]="gcc:14"
 languages_to_docker["py2"]="python:2"
 languages_to_docker["py3"]="python:3"
 languages_to_docker["numpy"]="truongan/wecodejudge:numpy"
@@ -178,7 +178,7 @@ fi
 
 #################### We got judger script, hand over everything
 if [ -f "$PROBLEMPATH/judger.executable" ]; then
-	cp -r $PROBLEMPATH/* . 
+	cp -r $PROBLEMPATH/* .
 	chmod +x $PROBLEMPATH/judger.executable
 
 	cp $USERDIR/$FILENAME.$EXT $FILENAME.user
@@ -206,14 +206,14 @@ if [ -f "$PROBLEMPATH/judger.executable" ]; then
 	else
 		cp $RANDOM_RESULT_FILE $RESULTFILE
 		cat $RANDOM_LOG_FILE >> $LOGFILE
-	fi 
-	
+	fi
+
 	# echo "PREAPRE TO REMOVE JAIL $JAIL"
 	# rm -r $JAIL  # removing files
 	cd ..
 	rm -r $JAIL >/dev/null 2>/dev/null # removing files
 
-	exit 
+	exit
 fi
 
 
@@ -326,7 +326,7 @@ for((i=1;i<=TST;i++)); do
 	fi
 
 	shj_log "$tester_dir/run_judge_in_docker.sh "`pwd` "${languages_to_docker[$EXT]} $runcode"
-	
+
 	$tester_dir/run_judge_in_docker.sh `pwd` ${languages_to_docker[$EXT]} > run_judge_error $runcode 2>&1
 	EXITCODE=$?
 
@@ -367,8 +367,8 @@ for((i=1;i<=TST;i++)); do
 	m=`grep "SHJ_" err|cut -d" " -f5`
 	m2=`grep "SHJ_" err|cut -d" " -f7`
 	m=$((m>m2?m:m2))
-	
-	
+
+
 	found_error=0
 
 	if ! grep -q "FINISHED" err; then
@@ -382,7 +382,7 @@ for((i=1;i<=TST;i++)); do
 				break
 			fi
 		done
-			
+
 	fi
 
 	shj_log "Time: $t s"

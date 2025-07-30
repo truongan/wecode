@@ -13,9 +13,9 @@ C_OPTIONS=" -g -O2 -static "
 # Read more: http://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html
 C_WARNING_OPTION="-w"
 
-COMPILER="gcc -std=c17"
+COMPILER="gcc -std=gnu11"
 if [ "$EXT" = "cpp" ]; then
-    COMPILER="g++ -std=c++17"
+    COMPILER="g++ -std=c++20"
 fi
 EXEFILE="s_$(echo $FILENAME | sed 's/[^a-zA-Z0-9]//g')" # Name of executable file
 

@@ -7,26 +7,26 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
-    {
-        Schema::table('submissions', function (Blueprint $table) {
-            //
-            $table->double('coefficient')->change();
-        });
-        Setting::set('default_late_rule', 'delay < 0 ? 100 : 100*pow(0.99, delay/3600');
-    }
+	/**
+	 * Run the migrations.
+	 */
+	public function up(): void
+	{
+		Schema::table('submissions', function (Blueprint $table) {
+			//
+			$table->string('coefficient')->change();
+		});
+		Setting::set('default_late_rule', 'delay < 0 ? 100 : 100*pow(0.99, delay/3600)');
+	}
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
-    {
-        Schema::table('submissions', function (Blueprint $table) {
-            //
-            $table->string('coefficient')->change();
-        });
-    }
+	/**
+	 * Reverse the migrations.
+	 */
+	public function down(): void
+	{
+		Schema::table('submissions', function (Blueprint $table) {
+			//
+			$table->string('coefficient')->change();
+		});
+	}
 };
