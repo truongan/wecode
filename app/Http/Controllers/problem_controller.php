@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Database\Eloquent\Builder;
 use ZipArchive;
+use Carbon;
 use App\Http\Middleware\read_only_archive;
 
 class problem_controller extends Controller
@@ -658,10 +659,10 @@ class problem_controller extends Controller
 				$problem->id = null;
 				$problem->user_id = Auth::user()->id;
 				$problem->admin_note .= sprintf(
-					"\nIMPORTED: orignal user %s (%s), original updated at %s",
+					"\nIMPORTED: orignal user %s(%s), updated %s",
 					$metadata->user->username,
 					$metadata->user->email,
-					$metadata->updated_at,
+					new Carbon\Carbon($metadata->updated_at),
 				);
 				$problem->save();
 
