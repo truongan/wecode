@@ -584,7 +584,7 @@ class problem_controller extends Controller
 		if (!in_array(Auth::user()->role->name, ["admin"])) {
 			$probs = $probs->reject(fn(Problem $prob, int $key)
 				=> !(
-   					$prob->sharable && Auth::user()->role->name != "student"
+					$prob->sharable && Auth::user()->role->name != "student"
 				) && $prob->user->id != Auth::user()->id
 			);
 		}
@@ -647,7 +647,7 @@ class problem_controller extends Controller
 		}
 
 		$lang_to_id = Language::all()->pluck("id", "name");
-        $tag_to_id = Tag::all()->pluck('id', 'text');
+		$tag_to_id = Tag::all()->pluck('id', 'text');
 		$error_message = [];
 		foreach ($storage->directories($tmp_dir) as $prob_folder) {
 			try {
@@ -678,12 +678,12 @@ class problem_controller extends Controller
 				}
 				$problem->languages()->sync($langs);
 
-                $metadata->tags ??= [];
+				$metadata->tags ??= [];
 				$tag_ids = [];
 				foreach ($metadata->tags as $tag){
 					$tag_ids[] = $tag_to_id[$tag->text] ?? Tag::create(['text' => $tag->text])->id;
 				}
-                $problem->tags()->sync($tag_ids);
+				$problem->tags()->sync($tag_ids);
 
 				$storage->makeDirectory("problems/{$problem->id}/");
 
