@@ -41,7 +41,7 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
-        
+
     }
 
 
@@ -97,7 +97,7 @@ class LoginController extends Controller
 			if ( $user ){
                 $user_id = $user->id;
                 Auth::login($user, $remember);
-                
+
                 ///Super optional: reset display name after each login
                 $user->display_name = $ldap_user['hoten'];
                 $user->save;
@@ -125,9 +125,9 @@ class LoginController extends Controller
     {
         $credentials = $request->only('username', 'password');
         $success = false;
-        if ( Auth::viaRemember() 
-            || $this->ldap_authentication($credentials['username'], $credentials['password'],  $request->input('remember') !== NULL) 
-            || Auth::attempt($credentials, $request->input('remember') !== NULL) 
+        if ( Auth::viaRemember()
+            || $this->ldap_authentication($credentials['username'], $credentials['password'],  $request->input('remember') !== NULL)
+            || Auth::attempt($credentials, $request->input('remember') !== NULL)
         )
         {
             $user = Auth::user();
@@ -140,11 +140,11 @@ class LoginController extends Controller
 
             if ($user->first_login_time == NULL) $user->first_login_time = now();
             else $user->last_login_time=now();
-        
-            $user->save();
-            $path = parse_url(redirect()->intended(route('home'))->getTargetUrl())['path'];
 
-            return redirect(url($path));
+            $user->save();
+            // Hopefully with proper trustedproxy configuration, this can be fixed.
+            // $path = parse_url(redirect()->intended(route('home'))->getTargetUrl())['path'];
+            return redirect()->intended('home');
         } else {
             return back()->withInput()->withErrors([
                 'username' => 'Either your username or password are incorrect.',

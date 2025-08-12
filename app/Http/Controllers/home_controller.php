@@ -26,7 +26,7 @@ class home_controller extends Controller
 	 */
 	public function index(Request $request)
 	{
-		// dd($request);
+		dd($request->ips());
 		return view('home', ['selected' => 'dashboard', 'notifications'=>Notification::latest()->paginate(3),'all_assignments'=> Assignment::with('lops')->where('id', '>', 0)->get()->filter(function($item){return $item->can_submit(Auth::user());}) ]);
 	}
 }
