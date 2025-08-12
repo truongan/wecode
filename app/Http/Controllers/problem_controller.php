@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\Builder;
 use ZipArchive;
 use Carbon;
 use App\Http\Middleware\read_only_archive;
-
+use App\Http\Middleware\ip_white_listing;
 class problem_controller extends Controller
 {
 	/**
@@ -31,6 +31,7 @@ class problem_controller extends Controller
 	{
 		$this->middleware("auth"); // phải login
 		$this->middleware(read_only_archive::class); // Make this controller read only when app is in archived mode.
+		$this->middleware(ip_white_listing::class);
 	}
 
 	private function _can_edit_or_404($problem)

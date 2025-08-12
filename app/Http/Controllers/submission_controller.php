@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Storage;
 
 use App\Http\Middleware\read_only_archive;
 use App\View\Components\submission\verdict;
+use App\Http\Middleware\ip_white_listing;
 
 class submission_controller extends Controller
 {
@@ -29,6 +30,7 @@ class submission_controller extends Controller
 		$this->middleware(read_only_archive::class); // Make this controller read only
 		//
 		// when app is in archived mode.
+		$this->middleware(ip_white_listing::class);
 	}
 
 	private function _do_access_check($submission){
