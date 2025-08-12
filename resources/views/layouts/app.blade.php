@@ -30,14 +30,12 @@
                 @yield('title_menu')
             </div>
         </div>
-        <div id="main_content" class="px-3 pt-3" > 
+        <div id="main_content" class="px-3 pt-3" >
             @yield('content')
         </div>
     </div>
-    
+
     <script type="text/javascript" src="{{ asset('assets/js/jquery-3.6.3.min.js') }}"></script>
-    {{-- <script type="text/javascript" src="{{ asset('assets/js/popper.min.js') }}"></script>  --}}
-    {{-- Popper is included in bootstrap.bundle --}}
     <script type="text/javascript" src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
 
     {{-- <script type='text/javascript' src="{{ asset('assets/sbadmin/js/sb-admin.min.js') }}"></script> --}}
@@ -68,13 +66,13 @@
         shj.offset = new Date("{{ date(DATE_ISO8601) }}") - new Date();
         shj.time = new Date();
 
-        
-        shj.finish_time = new Date("{!! (Auth::user()->selected_assignment->finish_time ?? now() )->format(DateTime::ISO8601) !!}"); 
-        shj.extra_time = {!! (Auth::user()->selected_assignment->extra_time) ?? 0 !!}; 
+
+        shj.finish_time = new Date("{!! (Auth::user()->selected_assignment->finish_time ?? now() )->format(DateTime::ISO8601) !!}");
+        shj.extra_time = {!! (Auth::user()->selected_assignment->extra_time) ?? 0 !!};
         shj.color_scheme = 'github';
     </script>
 
-    
+
     <script type="text/javascript" src="{{ asset('assets/js/shj_functions.js') }}"></script>
     @yield('body_end')
 </body>
