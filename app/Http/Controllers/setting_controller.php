@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use App\Rules\IPranges;
+use Illuminate\Support\Facades\Auth;
+
 class setting_controller extends Controller
 {
 	//
@@ -25,24 +27,27 @@ class setting_controller extends Controller
 	 */
 	public function index()
 	{
+		if (in_array(Auth::user()->role->name, ["student"])) {
+			abort(403, 'No access');
+		}
 		$t = Setting::all();
+
 		$data = array();
 		foreach($t as $setting){
 			$data[$setting->key] = $setting->value;
 		}
-		// $data['selected'] = 'settings';
-		// var_dump($data);die();
 		return view('admin.settings', $data);
 	}
 
 	public function update(Request $request){
 		$t = Setting::all();
-
-
+		if (!in_array(Auth::user()->role->name, ["admin"])) {
+			abort(403, 'No access');
+		}
 		if ($request->validate([
-                'timezone' => 'required',
-    			'ip_white_list' => [new IPranges]
-    		])
+				'timezone' => 'required',
+				'ip_white_list' => [new IPranges]
+			])
 		)
 		{
 			$submitted = $request->input();
