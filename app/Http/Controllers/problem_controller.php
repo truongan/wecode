@@ -330,7 +330,7 @@ class problem_controller extends Controller
 				"assignment_root",
 			);
 
-			$this->unload_zip_test_file(
+			$this->_unload_zip_test_file(
 				$request,
 				$assignments_root,
 				$problem_dir,
@@ -430,7 +430,7 @@ class problem_controller extends Controller
 		}
 	}
 
-	private function unload_zip_test_file(
+	private function _unload_zip_test_file(
 		Request $request,
 		$assignments_root,
 		$problem_dir,

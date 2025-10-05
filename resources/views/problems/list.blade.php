@@ -186,7 +186,7 @@
 						text-success
 
 					@else
-						text-black-50
+						text-body-tertiary
 
 					@endif
 				">
@@ -196,7 +196,7 @@
 					text-success
 
 				@else
-					text-black-50
+					text-body-tertiary
 				@endif
 				"">
 				</i>
@@ -443,12 +443,12 @@
 					console.log(response);
 					console.log(icon);
 					icon.classList.remove('text-success');
-					icon.classList.remove('text-black-50');
+					icon.classList.remove('text-body-tertiary');
 					if (response == '1') {
 						icon.classList.add('text-success');
 					}
 					else if (response == ''){
-						icon.classList.add('text-black-50');
+						icon.classList.add('text-body-tertiary');
 					}
 					else
 						shj.loading_failed(response.message);
