@@ -7,18 +7,22 @@ use Illuminate\Database\Eloquent\Model;
 class Setting extends Model
 {
     //
-    protected $fillable = ['key', 'value'];
-    
-    static public function get($key){
-        $a = Setting::where('key', $key)->get();
-        if ($a->count() > 0)
-            return $a->first()->value;
-        else return NULL;
-    }   
+    protected $fillable = ["key", "value"];
 
-    static public function set($key, $value){
-        $a = Setting::where('key', $key)->first();
-        if ($a != NULL){
+    public static function get($key, $default = null)
+    {
+        $a = Setting::where("key", $key)->get();
+        if ($a->count() > 0) {
+            return $a->first()->value;
+        } else {
+            return $default;
+        }
+    }
+
+    public static function set($key, $value)
+    {
+        $a = Setting::where("key", $key)->first();
+        if ($a != null) {
             $a->value = $value;
             $a->save();
             return true;
@@ -26,9 +30,9 @@ class Setting extends Model
         return false;
     }
 
-    static public function load_all(){
-
-        $all = Setting::all()->reduce(function($carry, $i){
+    public static function load_all()
+    {
+        $all = Setting::all()->reduce(function ($carry, $i) {
             $carry[$i->key] = $i->value;
             return $carry;
         }, []);
