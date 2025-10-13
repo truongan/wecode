@@ -38,8 +38,8 @@ class Setting extends Model
         }, []);
         return $all;
     }
-    static public function find_by_key($key){
-        return Setting::where('key', $key)->first();
+    public static function find_by_key($key)
+    {
+        return Setting::where("key", $key)->first();
     }
-
 }
