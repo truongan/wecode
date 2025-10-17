@@ -141,7 +141,11 @@
 							@foreach( $all_lops as $p)
 							<option value="{{ $p->id }}" data-name="{{$p->name}}"
 								{{ isset($lops[$p->id]) ? 'selected="selected"' : ''  }}
-								> {{$p->name}}</option>
+							>
+								{{$p->name}}
+								{{-- ( {{ $p->instructors->pluck('username')->join(', ')}}) --}}
+								({{$p->users->first()->username}})
+							</option>
 							@endforeach
 						</select>
 					</div>

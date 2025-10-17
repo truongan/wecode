@@ -6,13 +6,13 @@
 
 function format_problem(prob) {
     if (!prob.id) return prob.text; // THis is necessary because one dummy options with "searching" text will be created by select2
-
+    var data = prob.element.dataset;
     var element = $(
-        `<span class="badge bg-primary">${prob.element.dataset.id} </span>` +
-            `<span class="badge rounded-pill bg-${prob.element.dataset.sharable == 1 ? "success" : "secondary"}">${prob.element.dataset.owner}</span>` +
-            `<span class="text-dark">${prob.element.dataset.name} </span>` +
-            `<span class="text-small text-dark-subtle">(${prob.element.dataset.note})</span>` +
-            `<span class="text-small text-dark">(${prob.element.dataset.tags})</span>`,
+        `<span class="badge bg-primary">${data.id} </span>` +
+            `<span class="badge rounded-pill bg-${data.sharable == 1 ? "success" : "secondary"}">${data.owner}</span>` +
+            `<span class="text-dark">${data.name} </span>` +
+            `<span class="text-small text-dark-subtle">(${data.note})</span>` +
+            `<span class="text-small text-dark">(${data.tags})</span>`,
     );
     return element;
 }
