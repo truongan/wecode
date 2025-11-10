@@ -10,9 +10,9 @@ function format_problem(prob) {
 	var element = $(
 		`<span class="badge bg-primary">${data.id} </span>` +
 			`<span class="badge rounded-pill bg-${data.sharable == 1 ? "success" : "secondary"}">${data.owner}</span>` +
-			`<span class="text-dark">${data.name} </span>` +
-			`<span class="text-small text-dark-subtle">(${data.note})</span>` +
-			`<span class="text-small text-dark">(${data.tags})</span>`,
+			`<span class="   text-muted">(${data.tags})</span>` +
+			`<span class=" text-dark fs-5">${data.name} </span>` +
+			`<span class="text-muted ">(${data.note})</span>` ,
 	);
 	return element;
 }

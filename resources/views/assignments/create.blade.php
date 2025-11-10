@@ -215,7 +215,7 @@
 				</label>
 				<select class="all_problems form-control" multiple="multiple">
 					@foreach( $all_problems as $p)
-					<option value="{{ $p->id }}" data-name="{{$p->name}}" data-sharable="{{$p->sharable}}" data-id="{{$p->id}}" data-tags="{{ $p->tags->implode('text', ', ')}}" data-note="{{ $p->admin_note }}" data-no_of_assignment="{{ $p->assignments_count }}"  data-owner="{{ $p->user->username ?? 'none'}}"
+					<option value="{{ $p->id }}" data-name="{{$p->name}}" data-sharable="{{$p->sharable}}" data-id="{{$p->id}}" data-tags="{{ $p->tags->implode('text', ', ')}}" data-note="{{ Str::limit($p->admin_note, 80) }}" data-no_of_assignment="{{ $p->assignments_count }}"  data-owner="{{ $p->user->username ?? 'none'}}"
 						{{ isset($problems[$p->id]) ? 'selected="selected"' : ''  }}
 						>
 					{{$p->id}} - {{$p->name}} ({{ $p->user->username ?? 'none'}} |  {{ $p->tags->implode('text', ', ') }}  | {{   $p->admin_note }}) </option>
