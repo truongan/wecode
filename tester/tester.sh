@@ -424,13 +424,14 @@ for((i=1;i<=TST;i++)); do
 	else
 		# ln -sf  $PROBLEMPATH/out/output$i.txt correctout
 		# cp  $PROBLEMPATH/out/output$i.txt correctout
-		for i in {1..10}; do shj_log cp  $PROBLEMPATH/out/output$i.txt correctout; done
+		for j in {1..2}; do shj_log cp  $PROBLEMPATH/out/output$i.txt correctout; done
+		for j in {1..13}; do  cp  $PROBLEMPATH/out/output$i.txt correctout$j; sync ; done
 
-		if [ "$DIFFOPTION" = "ignore" ]; then
-			# Removing all newlines and whitespaces before diff
-			tr -d ' \t\n\r\f' <out >tmp1 && mv tmp1 out;
-			tr -d ' \t\n\r\f' <correctout >tmp1 && mv tmp1 correctout;
-		fi
+		# if [ "$DIFFOPTION" = "ignore" ]; then
+		# 	# Removing all newlines and whitespaces before diff
+		# 	tr -d ' \t\n\r\f' <out >tmp1 && mv tmp1 out;
+		# 	tr -d ' \t\n\r\f' <correctout >tmp1 && mv tmp1 correctout;
+		# fi
 		# Add a newline at the end of both files
 
 		echo "" >> out
@@ -462,7 +463,7 @@ done
 
 cd ..
 # cp -r $JAIL "debug-jail-backup"
-rm -r $JAIL >/dev/null 2>/dev/null # removing files
+# rm -r $JAIL >/dev/null 2>/dev/null # removing files
 
 
 ((SCORE=PASSEDTESTS*10000/TST)) # give score from 10,000
