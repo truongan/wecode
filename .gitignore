@@ -4,6 +4,7 @@ node_modules
 /storage/*.key
 /vendor
 /assignments/
+.DS_Store
 .env
 .env.backup
 .phpunit.result.cache

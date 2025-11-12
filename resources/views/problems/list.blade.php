@@ -136,6 +136,7 @@
 						<select  multiple="multiple" class="form-control edit-tag-list"></select>
 						<button type="button" class="btn btn-small btn-danger tags-edit-cancel"><i class="fas fa-window-close"></i></button>
 						<button type="submit" class="btn btn-small btn-primary" ><i class="fa fa-check" aria-hidden="true"></i></button>
+					<span class ="text-secondary text-small">Use '#' character to add new tag</span>
 					</form>
 					<span  class = "edit-tag-list-handle"> <i title="Edit tag list" class="far fa-edit fa-lg text-warning"> </i> </span>
 				@endif

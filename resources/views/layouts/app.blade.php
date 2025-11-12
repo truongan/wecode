@@ -14,6 +14,7 @@
 
     <!-- Styles -->
 	<link rel="stylesheet" type='text/css' href="{{ asset('assets/styles/bootstrap/' . $settings['theme']  . '.min.css') }}">
+    <link rel="stylesheet" type='text/css' href="{{ asset('assets/bootstrap-icons-1.13.1/bootstrap-icons.min.css') }}">
     <link rel="stylesheet" type='text/css' href="{{ asset('assets/sbadmin/css/sb-admin.css') }}">
     <link href="{{ asset('assets/styles/main.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/fontawesome/css/all.min.css') }}" rel="stylesheet">
