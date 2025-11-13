@@ -406,7 +406,7 @@ for((i=1;i<=TST;i++)); do
 ############################################################################
 #################	# checking correctness of output #######################
 ############################################################################
-    # shj_log `iostat /dev/sda`
+
 	ACCEPTED=false
 	if [ -f shj_tester ]; then
 		#Limit the amount of time tester run.
@@ -422,16 +422,12 @@ for((i=1;i<=TST;i++)); do
 			ACCEPTED=true
 		fi
 	else
-		# ln -sf  $PROBLEMPATH/out/output$i.txt correctout
-		# cp  $PROBLEMPATH/out/output$i.txt correctout
-		for j in {1..2}; do shj_log cp  $PROBLEMPATH/out/output$i.txt correctout; done
-		for j in {1..13}; do  cp  $PROBLEMPATH/out/output$i.txt correctout$j; sync ; done
-
-		# if [ "$DIFFOPTION" = "ignore" ]; then
-		# 	# Removing all newlines and whitespaces before diff
-		# 	tr -d ' \t\n\r\f' <out >tmp1 && mv tmp1 out;
-		# 	tr -d ' \t\n\r\f' <correctout >tmp1 && mv tmp1 correctout;
-		# fi
+		cp $PROBLEMPATH/out/output$i.txt correctout
+		if [ "$DIFFOPTION" = "ignore" ]; then
+			# Removing all newlines and whitespaces before diff
+			tr -d ' \t\n\r\f' <out >tmp1 && mv tmp1 out;
+			tr -d ' \t\n\r\f' <correctout >tmp1 && mv tmp1 correctout;
+		fi
 		# Add a newline at the end of both files
 
 		echo "" >> out
@@ -458,7 +454,6 @@ for((i=1;i<=TST;i++)); do
 		shj_log "WRONG"
 		echo "<span class=\"text-danger\">WRONG</span>" >>$RESULTFILE
 	fi
-	# shj_log `iostat /dev/sda`
 done
 
 cd ..
