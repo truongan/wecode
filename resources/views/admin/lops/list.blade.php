@@ -7,7 +7,7 @@
 
 @section('title_menu')
 @if ( in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
-    <a class="link-dark ms-3 fs-6" href="{{ route('lops.create') }}"><i class="fa fa-plus text-success"></i>Add class</a>
+    <a class="link-dark-subtle ms-3 fs-6" href="{{ route('lops.create') }}"><i class="fa fa-plus text-success"></i>Add class</a>
 @endif
 @endsection
 
@@ -37,7 +37,7 @@
           <td>{{$lop->users()->count() }}</td>
           <td>{{$lop->assignments()->count() }}</td>
           <td>
-            
+
             <a title="student list" href="{{ route('lops.show', $lop->id) }}" class = "fas fa-list fa-lg color8"></a>
             @if ( in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
               <a title="Email all student" href = {{ 'mailto:' . $lop->users->pluck('email')->join(',') }}> <i class="fas fa-mail-bulk    "></i> </a>

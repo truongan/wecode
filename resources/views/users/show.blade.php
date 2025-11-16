@@ -15,8 +15,8 @@
 
 @section('title_menu')
 
-  <a class=" ms-4 fs-6 link-dark" href="{{ route('users.edit', $user) }}"> <i class="fa fa-user-edit color2"></i>Edit user profile</a>
-  <a class="ms-2 fs-6 link-dark" href="{{ route('users.index') }}"> <i class="fa fa-list color2"></i>List all users</a>
+  <a class=" ms-4 fs-6 link-dark-subtle" href="{{ route('users.edit', $user) }}"> <i class="fa fa-user-edit color2"></i>Edit user profile</a>
+  <a class="ms-2 fs-6 link-dark-subtle" href="{{ route('users.index') }}"> <i class="fa fa-list color2"></i>List all users</a>
 
 @endsection
 
@@ -70,7 +70,7 @@ new frappe.Chart( "#pre_score", {
 @section('icon', 'fas fa-users')
 
 @section('title')
-Users - {{$user->username}} 
+Users - {{$user->username}}
 @endsection
 
 @section('content')
@@ -149,7 +149,7 @@ Users - {{$user->username}}
 
 <div id="heat_map"></div>
 <div class='row'>
-  
+
 <div class='col-8' id="hourly"></div>
 <div class='col-4' id="pre_score"></div>
 
@@ -187,17 +187,17 @@ Users - {{$user->username}}
         {{-- @endif --}}
       </td>
 			<td>{{$as->accept}} ({{ round($as->accept / $as->total * 100, 2) }}%)</td>
-			<td> 
-        <a class="btn btn-outline-success" href="{{ route('submissions.index', ['assignment_id'=>$as->ass->id, 'problem_id'=>'all', 'user_id' => $user->id, 'choose'=>'final']) }}"> 
+			<td>
+        <a class="btn btn-outline-success" href="{{ route('submissions.index', ['assignment_id'=>$as->ass->id, 'problem_id'=>'all', 'user_id' => $user->id, 'choose'=>'final']) }}">
           {{$as->solved}} ({{ $as->ac_score}})
         </a>
       </td>
 			<td>
-        <a class="btn btn-outline-danger" href="{{ route('submissions.index', ['assignment_id'=>$as->ass->id, 'problem_id'=>'all', 'user_id' =>   $user->id, 'choose'=>'all']) }}"> 
+        <a class="btn btn-outline-danger" href="{{ route('submissions.index', ['assignment_id'=>$as->ass->id, 'problem_id'=>'all', 'user_id' =>   $user->id, 'choose'=>'all']) }}">
         {{ $as->score }}
         </a>
       </td>
-			
+
 		</tr>
 	@endforeach
 </table>

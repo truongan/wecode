@@ -9,8 +9,8 @@ Users - {{$user->username}}
 
 @section('title_menu')
 
-  <a class=" ms-4 fs-6 link-dark" href="{{ route('users.show', $user) }}"> <i class="fa fa-user-edit color2"></i>View user profile</a>
-  <a class="ms-2 fs-6 link-dark" href="{{ route('users.index') }}"> <i class="fa fa-list color2"></i>List all users</a>
+  <a class=" ms-4 fs-6 link-dark-subtle" href="{{ route('users.show', $user) }}"> <i class="fa fa-user-edit color2"></i>View user profile</a>
+  <a class="ms-2 fs-6 link-dark-subtle" href="{{ route('users.index') }}"> <i class="fa fa-list color2"></i>List all users</a>
 
 @endsection
 
@@ -95,7 +95,7 @@ Users - {{$user->username}}
 			<span class="form-text text-muted">If you don't want to change password, leave this blank.</span>
 			{{-- {{ form_error('password', '<span class="form-text text-danger">', '</span>') }} --}}
 		</div>
- 
+
 		<div class="col-sm-6 form-floating">
 			<input id="form_password_2" type="password" name="password_confirmation" class="form-control" />
 			<label for="form_password_2" >New Password, Again:</label>
@@ -114,6 +114,5 @@ Users - {{$user->username}}
 		<input type="submit" value="Save" class=" form-control col-12 btn btn-primary" />
 	</div>
 </form>
-	
-@endsection
 
+@endsection

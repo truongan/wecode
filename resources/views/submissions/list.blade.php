@@ -21,16 +21,16 @@
 @endsection
 @section('title')
 	{{$choose =='all' ? 'All submissions' : 'Final submissions'}}:
-	    <a class="link-dark" href=" @if($assignment->id !=0) {{ route('assignments.edit', $assignment)  }} @else # @endif ">
+	    <a class="link-dark-subtle" href=" @if($assignment->id !=0) {{ route('assignments.edit', $assignment)  }} @else # @endif ">
 	    {{$assignment->name}}  {for: {{ $assignment->lops->pluck('name')->join(",") }} - by:  {{$assignment->user->username ?? "no-owner"}})
 		</a>
 @endsection
 @section('title_menu')
 @if ($user_id != 'all' and !in_array( Auth::user()->role->name, ['student', 'guest']))
-		<a class="ms-4 fs-6 link-dark" href="{{route('submissions.index', [$assignment->id, 'all', $problem_id, 'all'])}}">Remove filter user</a>
+		<a class="ms-4 fs-6 link-dark-subtle" href="{{route('submissions.index', [$assignment->id, 'all', $problem_id, 'all'])}}">Remove filter user</a>
 @endif
 @if ($problem_id != 'all')
-	<a class="ms-4 fs-6 link-dark" href="{{route('submissions.index', [$assignment->id, $user_id, 'all', 'all'])}}">Remove filter problem</a>
+	<a class="ms-4 fs-6 link-dark-subtle" href="{{route('submissions.index', [$assignment->id, $user_id, 'all', 'all'])}}">Remove filter problem</a>
 @endif
 @endsection
 @section('body_end')

@@ -6,7 +6,7 @@
 @section('title', ' Set multiple users trial time')
 
 @section('title_menu')
-	<a class="ms-3 fs-6 link-dark" href="{{route('users.index') }}"><i class="fas fa-list    "></i>Users list</a>
+	<a class="ms-3 fs-6 link-dark-subtle" href="{{route('users.index') }}"><i class="fas fa-list    "></i>Users list</a>
 @endsection
 
 
@@ -76,4 +76,4 @@
 	}));
 	document.main_form.set_choice[0].dispatchEvent(new Event('change'));
 </script>
-@endsection	
+@endsection

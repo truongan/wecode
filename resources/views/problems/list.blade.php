@@ -19,8 +19,8 @@
 
 @section('title_menu')
 {{-- {% if user.level >= 2 %} --}}
-<a href="{{ route('problems.create') }}"><span class="ms-4 fs-6 text-dark"><i class="fas fa-plus fa-lg color8"></i> Add</span></a>
-<a href="{{ route('submissions.index',[0, Auth::user()->id, 'all', 'all'] ) }}"><span class="ms-4 fs-6 text-dark"><i class="fas fa-list-ul fa-lg color8"></i>Review practice submissions</span></a>
+<a href="{{ route('problems.create') }}"><span class="ms-4 fs-6 text-dark-subtle"><i class="fas fa-plus fa-lg color8"></i> Add</span></a>
+<a href="{{ route('submissions.index',[0, Auth::user()->id, 'all', 'all'] ) }}"><span class="ms-4 fs-6 text-dark-subtle"><i class="fas fa-list-ul fa-lg color8"></i>Review practice submissions</span></a>
 @endsection
 
 @section('content')

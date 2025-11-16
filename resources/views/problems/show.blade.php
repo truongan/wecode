@@ -30,7 +30,7 @@
 @section('title_menu')
 
 @if($problem->has_pdf)
-	<a href="{{ $pdf_route }}" class="link-dark"><span class="ms-4 fs-6"><i class="fas fa-file-pdf text-danger"></i> PDF</span></a>
+	<a href="{{ $pdf_route }}" class="link-dark-subtle"><span class="ms-4 fs-6"><i class="fas fa-file-pdf text-danger"></i> PDF</span></a>
 @endif
 
 @if ($problem->allow_input_download)
