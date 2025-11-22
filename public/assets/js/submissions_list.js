@@ -59,13 +59,13 @@ document.addEventListener("DOMContentLoaded", function () {
 	});
 
 	//$(".btn").click(function () {
-	$("td").on('click', '.btn', function () {
+	$("td").on('click', 'div.btn', function () {
 		$('.modal-body').html('<div class="text-center">		<div class="spinner-border" ole="status">			<span class="sr-only">Loading...</span>		</div>	</div>'); //First, clean up the modal body probably left over from previous view
 		var button = $(this);
 		var row = button.parents('tr');
 		var type = button.data('type');
 		var view_code_request = $.ajax({
-			
+
 			cache: true,
 			type: 'POST',
 			url: site_url + '/submissions/view_code',
@@ -120,7 +120,7 @@ document.addEventListener("DOMContentLoaded", function () {
 					vanilajs_row.querySelector('.js-time').innerHTML = '';
 					vanilajs_row.querySelector('.js-mem').innerHTML = '';
 					vanilajs_row.querySelector('.js-score').innerHTML = '';
-					
+
 					$.notify('Rejudge in progress', {position: 'bottom right', className: 'info', autoHideDelay: 2500});
 					setTimeout(update_status, update_status_interval);
 				}
@@ -178,7 +178,7 @@ function update_status(){
 				url: site_url + '/submissions/view_status',
 				data: {
 					submit_id: $(this).data('id'),
-				}, 
+				},
 				error: shj.loading_error,
 				success: function (response) {
 					response = JSON.parse(response);
