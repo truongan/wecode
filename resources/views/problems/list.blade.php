@@ -7,8 +7,6 @@
   <link rel="stylesheet" type="text/css" href="{{ asset('assets/select2/select2.min.css') }}">
   <link rel="stylesheet" type="text/css" href="{{ asset('assets/select2/select2-bootstrap-5-theme.min.css') }}">
   <link rel="stylesheet" type="text/css" href="{{ asset('assets/slimselect/slimselect.css') }}">
-  {{-- <link rel="stylesheet" type="text/css" href="{{ asset('assets/choices.js/base.min.css') }}"> --}}
-  <link rel="stylesheet" type="text/css" href="{{ asset('assets/choices.js/choices.min.css') }}">
 <style>
 html[data-bs-theme="dark"] .ss-main,
 html[data-bs-theme="dark"] .ss-content,
@@ -17,9 +15,9 @@ html[data-bs-theme="dark"] .ss-search input,
 html[data-bs-theme="dark"] .ss-content .ss-list,
 html[data-bs-theme="dark"] .ss-content .ss-list .ss-option
 {
-    background-color: var(--bs-body-bg); /* Use Bootstrap's dark background */
-    color: var(--bs-body-color); /* Use Bootstrap's dark text color */
-    border-color: var(--bs-border-color);
+	background-color: var(--bs-body-bg); /* Use Bootstrap's dark background */
+	color: var(--bs-body-color); /* Use Bootstrap's dark text color */
+	border-color: var(--bs-border-color);
 }
 
 </style>
@@ -66,21 +64,18 @@ html[data-bs-theme="dark"] .ss-content .ss-list .ss-option
 		</div>
 
 	<form class="row mb-3 gx-3  align-items-center" method="get" action="{{ route('problems.index') }}">
-		<div class=" col-5">
+		<div class=" col">
 			<div class="input-group">
 				<label class="input-group-text" for="search">Search by name</label>
 				<input type="text" name="search" id="search" class="form-control" placeholder="Search by name" aria-describedby="Search by name" value="{{ Request::get('search') }} " >
 				<button type="button" class="btn btn-outline-danger" onClick="document.getElementById('search').value = '' ;"><i class="fas fa-times    "></i></button>
-			</div>
-		</div>
-		<div class="col-6">
-			<div class="input-group  top-search-bar">
-				<label class="input-group-text"> and by tag(s)</label>
+
+				<label class="input-group-text">by tag</label>
 				<select class="search-by-tags form-control " multiple="multiple" name="tag_id[]">
 				</select>
 			</div>
 		</div>
-		<div class="col-1">
+		<div class="col-auto">
 			<button type="submit" class="btn btn-primary form-control">Search</button>
 		</div>
 	</form>
@@ -117,11 +112,11 @@ html[data-bs-theme="dark"] .ss-content .ss-list .ss-option
 			<td>{{ $item->id}}</td>
 			{{-- NAME --}}
 			<td>
-			    <a href="{{ route( 'practices.show' ,$item->id) }}"> <span class="badge text-bg-info"> {{ $item->id}}</span> {{ $item->name }}</a>
+				<a href="{{ route( 'practices.show' ,$item->id) }}"> <span class="badge text-bg-info"> {{ $item->id}}</span> {{ $item->name }}</a>
 				<br/>
 				by:
 				<span
-				    class="badge rounded-pill
+					class="badge rounded-pill
 					@if($item->sharable) text-bg-success
 					@else text-bg-secondary
 					@endif
@@ -249,10 +244,10 @@ html[data-bs-theme="dark"] .ss-content .ss-list .ss-option
 				<h5 class="modal-title" id="exampleModalLongTitle">Are you sure you want to delete this tag?</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
-		  	<div class="modal-footer">
+			<div class="modal-footer">
 				<button type="button" class="btn btn-danger confirm-tag-delete">YES</button>
 				<button type="button" class="btn btn-primary" data-bs-dismiss="modal">NO</button>
-		  	</div>
+			</div>
 		</div>
 	</div>
 </div>
@@ -263,7 +258,6 @@ html[data-bs-theme="dark"] .ss-content .ss-list .ss-option
 <script type="text/javascript" src="{{ asset('assets/select2/select2.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('assets/DataTables/datatables.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('assets/slimselect/slimselect.js') }}"></script>
-<script type="text/javascript" src="{{ asset('assets/choices.js/choices.min.js') }}"></script>
 
 <script>
 
@@ -271,157 +265,155 @@ html[data-bs-theme="dark"] .ss-content .ss-list .ss-option
 	// alert(all_tags);
 
 	function populate_search(){
-		document.querySelector("select.search-by-tags").textContent = '' ;
-		$("select.search-by-tags").append(all_tags.map(i => new Option(i.text, i.id, false, false)));
-		$("select.search-by-tags").val( {!! json_encode(Request::get('tag_id')) !!} ).trigger('change');
+		var tagsearch = document.querySelector("select.search-by-tags");
+		tagsearch.slim.setData(all_tags.map( (i) => {return {value: i.id, text: i.text}} ));
+		searched_tags =  {!! json_encode(Request::get('tag_id')) !!} ;
+		tagsearch.slim.setSelected(searched_tags, false);
 	}
 
-  document.addEventListener("DOMContentLoaded", function () {
+	document.addEventListener("DOMContentLoaded", function () {
 
+		var search_select = new SlimSelect({
+			select:'.search-by-tags'
+		})
+		populate_search();
 
-	new SlimSelect({
-	    select:'.search-by-tags'
-	})
-	populate_search();
+		document.querySelectorAll('.edit-tag-list-handle').forEach(
+			i => i.addEventListener('click'
+				, () => {
+					// console.log(event.currentTarget);
+					var tag_list_div = event.currentTarget.parentElement.querySelector('.holder-for-one-problem-tags')
+					tag_id_list = [...tag_list_div.querySelectorAll('span')].map(i => i.dataset.id);
 
-	document.querySelectorAll('.edit-tag-list-handle').forEach(
-		i => i.addEventListener('click'
-			, () => {
-				// console.log(event.currentTarget);
-				var tag_list_div = event.currentTarget.parentElement.querySelector('.holder-for-one-problem-tags')
-				tag_id_list = [...tag_list_div.querySelectorAll('span')].map(i => i.dataset.id);
+					var tag_edit_form = event.currentTarget.parentElement.querySelector('form')
+					tag_edit_form.classList.remove('d-none');
 
-				var tag_edit_form = event.currentTarget.parentElement.querySelector('form')
-				tag_edit_form.classList.remove('d-none');
+					var select_element = tag_edit_form.querySelector('select');
+					var select_obj = new SlimSelect({
+						select: select_element,
+						events: {
+							addable : (params) => {
+								var term = params.trim();
+								if (term === '') return false;
+								if (term[0] != '#') return false;
 
-				var select_element = tag_edit_form.querySelector('select');
-				select_element.textContent = '';
-				var select_obj = $(select_element).select2({
-					tags:true,
-					tokenSeparators: [','],
-					closeOnSelect: false,
-					createTag: (params) => {
-						var term = $.trim(params.term);
-
-						if (term === '') return null;
-						if (term[0] != '#') return null;
-
-						return {
-							id: term,
-							text: term,
-							newTag: true // add additional parameters
+								return term;
+							},
 						}
-					},
-				});
-				select_obj.append(all_tags.map(i=> new Option(i.text, i.id, false, false)));
-				select_obj.val(tag_id_list);
-				// console.log(tag_id_list);
+					});
 
-				tag_list_div.classList.add('d-none')
-				event.currentTarget.classList.add('d-none');
-			})
-	);
-	document.querySelectorAll('.tags-edit-cancel').forEach(
-		i => i.addEventListener('click', ()=>{
-			// console.log(event.currentTarget);
-			event.currentTarget.parentElement.classList.add('d-none');
-			event.currentTarget.parentElement.parentElement.querySelector('.holder-for-one-problem-tags').classList.remove('d-none');
-			event.currentTarget.parentElement.parentElement.querySelector('.edit-tag-list-handle').classList.remove('d-none');
-		})
-	)
-	document.querySelectorAll('.edit-tag-form').forEach(
-		i => i.addEventListener('submit', (event)=>{
-			event.preventDefault();
+					select_obj.setData(all_tags.map( (i) => {return {value: i.id, text: i.text}} ));
+					select_obj.setSelected(tag_id_list, false);
 
-			var select_obj = $(event.currentTarget.querySelector('select'));
-			fetch(event.currentTarget.action, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					'X-CSRF-TOKEN' : document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-				},
-				body: JSON.stringify({
-					tag_id: select_obj.val(),
+					tag_list_div.classList.add('d-none')
+					event.currentTarget.classList.add('d-none');
 				})
-			}).then( response =>  response.json()
-			).then((data) => {
-				all_tags = data.all_tags;
+		);
+		document.querySelectorAll('.tags-edit-cancel').forEach(
+			i => i.addEventListener('click', ()=>{
+				// console.log(event.currentTarget);
+				event.currentTarget.parentElement.querySelector('select').slim.destroy();
+				event.currentTarget.parentElement.classList.add('d-none');
+				event.currentTarget.parentElement.parentElement.querySelector('.holder-for-one-problem-tags').classList.remove('d-none');
+				event.currentTarget.parentElement.parentElement.querySelector('.edit-tag-list-handle').classList.remove('d-none');
+			})
+		)
+		document.querySelectorAll('.edit-tag-form').forEach(
+			i => i.addEventListener('submit', (event)=>{
+				event.preventDefault();
 
-				event.target.parentElement.querySelector('.holder-for-one-problem-tags').innerHTML = data.new_tags.map(i => '<span class="badge rounded-pill bg-info" data-id="'+i.id+'">'+i.text+'</span>').join('');
-				event.target.querySelector('.tags-edit-cancel').click();
-				populate_search();
-			}).catch(error => console.log("Error", error));
+				var select_obj = event.currentTarget.querySelector('select');
+				console.log(select_obj.selectedOptions);
+				console.log(Array.from(select_obj.selectedOptions).map(opt => opt.value));
+				fetch(event.currentTarget.action, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+						'X-CSRF-TOKEN' : document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+					},
+					body: JSON.stringify({
+						tag_id: Array.from(select_obj.selectedOptions).map(opt => opt.value),
+					})
+				}).then( response =>  response.json())
+				.then((data) => {
+					all_tags = data.all_tags;
 
-		})
-	);
+					event.target.parentElement.querySelector('.holder-for-one-problem-tags').innerHTML = data.new_tags.map(i => '<span class="badge rounded-pill bg-info" data-id="'+i.id+'">'+i.text+'</span>').join('');
+					event.target.querySelector('.tags-edit-cancel').click();
+					select_obj.slim.destroy();
+					populate_search();
+				}).catch(error => console.log("Error", error));
 
-	document.querySelectorAll('#select_all_for_download')[0].onclick = (event) => {
-		event.preventDefault();
-		document.querySelectorAll('.form-check-input').forEach(select => select.checked = true);
-	};
+			})
+		);
 
-	document.querySelectorAll('#deselect_all_for_download')[0].onclick = (event) => {
-		event.preventDefault();
-		document.querySelectorAll('.form-check-input').forEach(select => select.checked = false);
-	};
+		document.querySelectorAll('#select_all_for_download')[0].onclick = (event) => {
+			event.preventDefault();
+			document.querySelectorAll('.form-check-input').forEach(select => select.checked = true);
+		};
 
-	document.querySelectorAll('#download_all_selected')[0].onclick = (event) => {
+		document.querySelectorAll('#deselect_all_for_download')[0].onclick = (event) => {
+			event.preventDefault();
+			document.querySelectorAll('.form-check-input').forEach(select => select.checked = false);
+		};
 
-		event.target.href = '{{ route('problems.export') }}?'
-			+ new URLSearchParams(
-				{
-					'ids' : [...document.querySelectorAll('.form-check-input:checked')].map(i => i.dataset['id'])
-				}
-			).toString();
-	};
+		document.querySelectorAll('#download_all_selected')[0].onclick = (event) => {
 
-	$('.del_n').click(function () {
-	  var row = $(this).parents('tr');
-	  var id = row.data('id');
-		$(".confirm-tag-delete").off();
-		$(".confirm-tag-delete").click(function(){
-		  $("#problem_delete").modal("hide");
-			$.ajax({
-			  type: 'DELETE',
-			  url: '{{ route('problems.index') }}/'+id,
-			  data: {
-						  '_token': "{{ csrf_token() }}",
-			  },
-			  error: shj.loading_error,
-			  success: function (response) {
-				if (response.done) {
-				  row.animate({backgroundColor: '#FF7676'},100, function(){row.remove();});
-				  $.notify('problem deleted'	, {position: 'bottom right', className: 'success', autoHideDelay: 5000});
-				  $("#problem_delete").modal("hide");
-				}
-				else
-				  shj.loading_failed(response.message);
-			  }
+			event.target.href = '{{ route('problems.export') }}?'
+				+ new URLSearchParams(
+					{
+						'ids' : [...document.querySelectorAll('.form-check-input:checked')].map(i => i.dataset['id'])
+					}
+				).toString();
+		};
+
+		$('.del_n').click(function () {
+			var row = $(this).parents('tr');
+			var id = row.data('id');
+			$(".confirm-tag-delete").off();
+			$(".confirm-tag-delete").click(function(){
+				$("#problem_delete").modal("hide");
+				$.ajax({
+					type: 'DELETE',
+					url: '{{ route('problems.index') }}/'+id,
+					data: {
+						'_token': "{{ csrf_token() }}",
+					},
+					error: shj.loading_error,
+					success: function (response) {
+					if (response.done) {
+						row.animate({backgroundColor: '#FF7676'},100, function(){row.remove();});
+						$.notify('problem deleted'	, {position: 'bottom right', className: 'success', autoHideDelay: 5000});
+						$("#problem_delete").modal("hide");
+					}
+					else
+						shj.loading_failed(response.message);
+					}
+				});
 			});
+			$("#problem_delete").modal("show");
 		});
-	  $("#problem_delete").modal("show");
-	});
 
-	$("table").DataTable({
-		"paging": false,
-		columnDefs:[
-		    {
-				target: 0,
-				visible : false
-			}
-		    ,{
-				target: 1,
-				visible : false
-			}
-		],
-		{{-- "ordering": false, --}}
-		'order':[
-		    [0, 'desc']
-			,[1, 'desc']
-		]
+		$("table").DataTable({
+			"paging": false,
+			columnDefs:[
+				{
+					target: 0,
+					visible : false
+				}
+				,{
+					target: 1,
+					visible : false
+				}
+			],
+			{{-- "ordering": false, --}}
+			'order':[
+				[0, 'desc']
+				,[1, 'desc']
+			]
+		});
+		document.querySelector('.dataTables_filter > label').childNodes[0].data = "Filter in this page"
 	});
-	document.querySelector('.dataTables_filter > label').childNodes[0].data = "Filter in this page"
-  });
 
 	document.querySelectorAll('.toggle_practice-share').forEach( item => {
 		item.addEventListener('click', (ev) => {

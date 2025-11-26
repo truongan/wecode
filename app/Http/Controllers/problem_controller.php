@@ -129,7 +129,7 @@ class problem_controller extends Controller
 			"tags" => [],
 		]);
 	}
-	private function add_missing_tags($tags)
+	private function _add_missing_tags($tags)
 	{
 		foreach ($tags as $i => $tag) {
 			if (Tag::find($tag) == null) {
@@ -173,7 +173,7 @@ class problem_controller extends Controller
 
 		$tags = $request->input("tag_id");
 		if ($tags != null) {
-			$tags = $this->add_missing_tags($tags);
+			$tags = $this->_add_missing_tags($tags);
 		}
 
 		$langs = [];
@@ -287,7 +287,7 @@ class problem_controller extends Controller
 		$tags = $request->input("tag_id");
 
 		if ($tags != null) {
-			$tags = $this->add_missing_tags($tags);
+			$tags = $this->_add_missing_tags($tags);
 		}
 
 		$problem->tags()->sync($tags);
@@ -834,7 +834,7 @@ class problem_controller extends Controller
 	public function edit_tags(Request $request, Problem $problem)
 	{
 		$this->_can_edit_or_404($problem);
-		$tags = $this->add_missing_tags($request->input("tag_id"));
+		$tags = $this->_add_missing_tags($request->input("tag_id"));
 		$problem->tags()->sync($tags);
 		return json_encode([
 			"all_tags" => Tag::all(),
