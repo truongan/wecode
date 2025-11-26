@@ -5,14 +5,23 @@
 @section('other_assets')
   <link rel='stylesheet' type='text/css' href='{{ asset('assets/DataTables/datatables.min.css') }}'/>
   <link rel="stylesheet" type="text/css" href="{{ asset('assets/select2/select2.min.css') }}">
-  {{-- <link rel="stylesheet" type="text/css" href="{{ asset('assets/select2/select2-bootstrap-5-theme.min.css') }}"> --}}
+  <link rel="stylesheet" type="text/css" href="{{ asset('assets/select2/select2-bootstrap-5-theme.min.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ asset('assets/slimselect/slimselect.css') }}">
+  {{-- <link rel="stylesheet" type="text/css" href="{{ asset('assets/choices.js/base.min.css') }}"> --}}
+  <link rel="stylesheet" type="text/css" href="{{ asset('assets/choices.js/choices.min.css') }}">
 <style>
-	.top-search-bar > .select2-container {
-		flex: 1 1;
-	}
-	.select2-container  textarea {
-		color: black;
-	}
+html[data-bs-theme="dark"] .ss-main,
+html[data-bs-theme="dark"] .ss-content,
+html[data-bs-theme="dark"] .ss-search,
+html[data-bs-theme="dark"] .ss-search input,
+html[data-bs-theme="dark"] .ss-content .ss-list,
+html[data-bs-theme="dark"] .ss-content .ss-list .ss-option
+{
+    background-color: var(--bs-body-bg); /* Use Bootstrap's dark background */
+    color: var(--bs-body-color); /* Use Bootstrap's dark text color */
+    border-color: var(--bs-border-color);
+}
+
 </style>
 @endsection
 @section('title','Problems')
@@ -67,7 +76,7 @@
 		<div class="col-6">
 			<div class="input-group  top-search-bar">
 				<label class="input-group-text"> and by tag(s)</label>
-				<select class="search-by-tags form-control"multiple="multiple" name="tag_id[]">
+				<select class="search-by-tags form-control " multiple="multiple" name="tag_id[]">
 				</select>
 			</div>
 		</div>
@@ -252,24 +261,27 @@
 
 @section('body_end')
 <script type="text/javascript" src="{{ asset('assets/select2/select2.min.js') }}"></script>
-
 <script type="text/javascript" src="{{ asset('assets/DataTables/datatables.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/slimselect/slimselect.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/choices.js/choices.min.js') }}"></script>
+
 <script>
 
 	var all_tags = {!! $all_tags !!};
 	// alert(all_tags);
 
 	function populate_search(){
-		document.querySelector(".search-by-tags").textContent = '' ;
-		$(".search-by-tags").append(all_tags.map(i=> new Option(i.text, i.id, false, false)));
-		$(".search-by-tags").val( {!! json_encode(Request::get('tag_id')) !!} ).trigger('change');
+		document.querySelector("select.search-by-tags").textContent = '' ;
+		$("select.search-by-tags").append(all_tags.map(i => new Option(i.text, i.id, false, false)));
+		$("select.search-by-tags").val( {!! json_encode(Request::get('tag_id')) !!} ).trigger('change');
 	}
 
   document.addEventListener("DOMContentLoaded", function () {
 
-	$(".search-by-tags").select2({
-		closeOnSelect: false
-	});
+
+	new SlimSelect({
+	    select:'.search-by-tags'
+	})
 	populate_search();
 
 	document.querySelectorAll('.edit-tag-list-handle').forEach(
@@ -354,24 +366,6 @@
 	};
 
 	document.querySelectorAll('#download_all_selected')[0].onclick = (event) => {
-		// event.preventDefault();
-		// fetch(
-		// 	'{{ route("problems.export") }}',
-		// 	{
-		// 		method: 'POST',
-		// 		headers: {
-		// 			'Content-Type': 'application/json',
-		// 			'X-CSRF-TOKEN' : document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-		// 		},
-		// 		body: JSON.stringify({
-		// 			'ids' : [...document.querySelectorAll('.form-check-input:checked')].map(i => i.dataset['id']),
-		// 		}),
-		// 	}
-		// )
-		// .then(response => response.blob())
-		// .then(blob => {
-
-		// });
 
 		event.target.href = '{{ route('problems.export') }}?'
 			+ new URLSearchParams(
