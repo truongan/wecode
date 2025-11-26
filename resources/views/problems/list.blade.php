@@ -4,8 +4,6 @@
 @section('icon', 'fas fa-clipboard-list')
 @section('other_assets')
   <link rel='stylesheet' type='text/css' href='{{ asset('assets/DataTables/datatables.min.css') }}'/>
-  <link rel="stylesheet" type="text/css" href="{{ asset('assets/select2/select2.min.css') }}">
-  <link rel="stylesheet" type="text/css" href="{{ asset('assets/select2/select2-bootstrap-5-theme.min.css') }}">
   <link rel="stylesheet" type="text/css" href="{{ asset('assets/slimselect/slimselect.css') }}">
 <style>
 html[data-bs-theme="dark"] .ss-main,
@@ -255,7 +253,6 @@ html[data-bs-theme="dark"] .ss-content .ss-list .ss-option
 
 
 @section('body_end')
-<script type="text/javascript" src="{{ asset('assets/select2/select2.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('assets/DataTables/datatables.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('assets/slimselect/slimselect.js') }}"></script>
 
