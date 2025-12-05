@@ -77,159 +77,165 @@
 	</form>
 
 
-
-	<div class="table-responsive">
-	@error('messages')
-		@php( $msgclasses = array('text-success'=> 'text-success', 'text-info'=> 'text-warning', 'text-danger'=> 'text-danger') )
-		@foreach ($errors->get('messages') as $msg)
-			<p class="text-danger">{{ $msg }}</p>
-		@endforeach
-	@enderror
-	<table class="table table-striped table-bordered">
-		<thead class="thead-old table-dark">
-			<tr>
-				<th>owned?</th>
-				<th>ID?</th>
-				<th style="width: 20%">Name</th>
-				<th style="width: 55%">Note</th>
-				<!-- <th>owner</th> -->
-				<th style="width: 15%">Tags</th>
-				<th>Lang</th>
-				<th>Date</th>
-				<th><small>Assignmnet</small></th>
-				<th><small>Submission</small></th>
-				<th>Misc</th>
-				<th>Tools</th>
-			</tr>
-		</thead>
-	  @foreach ($problems as $item)
-		<tr data-id="{{$item->id}}">
-			<td>{{ $item->user->username == Auth::user()->username }}</td>
-			<td>{{ $item->id}}</td>
-			{{-- NAME --}}
-			<td>
-			    <a href="{{ route( 'practices.show' ,$item->id) }}"> <span class="badge text-bg-info"> {{ $item->id}}</span> {{ $item->name }}</a>
-				<br/>
-				by:
-				<span
-				    class="badge rounded-pill
-					@if($item->sharable) text-bg-success
-					@else text-bg-secondary
-					@endif
-					"
-				>
-					{{$item->user->username ?? 'no-owner'}}
-				</span>
-			</td>
-			{{-- NOTE --}}
-			<td class="fs-6 "> {{$item->admin_note}}</td>
-
-			{{-- TAGS --}}
-			<td>
-				<div class="holder-for-one-problem-tags">
-					@foreach ($item->tags as $tag)
-						<span class="badge rounded-pill bg-info" data-id="{{$tag->id}}">{{$tag->text}}</span>
-					@endforeach
-				</div>
-				@if($item->can_edit(Auth::user()))
-					<form action="{{ route('problems.edit_tags', $item->id) }}" method="post" class="edit-tag-form d-none">
-						<select  multiple="multiple" class="form-control edit-tag-list"></select>
-						<button type="button" class="btn btn-small btn-danger tags-edit-cancel"><i class="fas fa-window-close"></i></button>
-						<button type="submit" class="btn btn-small btn-primary" ><i class="fa fa-check" aria-hidden="true"></i></button>
-					</form>
-					<span  class = "edit-tag-list-handle"> <i title="Edit tag list" class="far fa-edit fa-lg text-warning"> </i> </span>
-				@endif
-			</td>
-			{{-- LANG --}}
-			<td>
-				<a class="btn btn-sm btn-primary" data-bs-toggle="collapse" href="#language_list_{{$item->id}}" aria-expanded="false" aria-controls="language_list_{{$item->id}}">
-					{{  $item->languages->pluck('name')->join(", ")  }}
-				</a>
-				<div class="collapse" id="language_list_{{$item->id}}">
-
-				@foreach ($item->languages as $language_name)
-					<span class="btn btn-sm btn-secondary mb-1">{{$language_name->name}} <span class="badge rounded-pill bg-info">{{$language_name->pivot->time_limit/1000}}s</span><span class="badge rounded-pill bg-info">{{$language_name->pivot->memory_limit/1000}}MB</span></span>
+	<div class="row">
+		<div class="table-responsive">
+			@error('messages')
+				@php( $msgclasses = array('text-success'=> 'text-success', 'text-info'=> 'text-warning', 'text-danger'=> 'text-danger') )
+				@foreach ($errors->get('messages') as $msg)
+					<p class="text-danger">{{ $msg }}</p>
 				@endforeach
-				</div>
-			</td>
+			@enderror
+			<table class="table table-striped table-bordered">
+				<thead class="thead-old table-dark">
+					<tr>
+						<th>owned?</th>
+						<th>ID?</th>
+						<th style="width: 20%">Name</th>
+						<th style="width: 55%">Note</th>
+						<!-- <th>owner</th> -->
+						<th style="width: 15%">Tags</th>
+						<th>Lang</th>
+						<th>Date</th>
+						<th><small>Assignmnet</small></th>
+						<th><small>Submission</small></th>
+						<th>Misc</th>
+						<th>Tools</th>
+					</tr>
+				</thead>
+			  @foreach ($problems as $item)
+				<tr data-id="{{$item->id}}">
+					<td>{{ $item->user->username == Auth::user()->username }}</td>
+					<td>{{ $item->id}}</td>
+					{{-- NAME --}}
+					<td>
+						<a href="{{ route( 'practices.show' ,$item->id) }}"> <span class="badge text-bg-info"> {{ $item->id}}</span> {{ $item->name }}</a>
+						<br/>
+						by:
+						<span
+							class="badge rounded-pill
+							@if($item->sharable) text-bg-success
+							@else text-bg-secondary
+							@endif
+							"
+						>
+							{{$item->user->username ?? 'no-owner'}}
+						</span>
+					</td>
+					{{-- NOTE --}}
+					<td class="fs-6 "> {{$item->admin_note}}</td>
 
-			{{-- Date --}}
-			<td>
-				Created: {{ $item->created_at ?  $item->created_at->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('YYYY/MM/DD HH:mm:ss') : 'Unknown' }}
-				Modified: {{ $item->created_at ?  $item->updated_at->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('YYYY/MM/DD HH:mm:ss') : 'Unknown' }}
-			</td>
-			{{-- ASSIGNMENTS --}}
-			<td>
-					<a class="btn btn-sm btn-primary" data-bs-toggle="collapse" href="#assignment_list_{{$item->id}}" aria-expanded="false" aria-controls="assignment_list_{{$item->id}}">
-						{{ $item->assignments->count()}}<small> assignments</small>
-					</a>
-				<div class="collapse" id="assignment_list_{{$item->id}}">
+					{{-- TAGS --}}
+					<td>
+						<div class="holder-for-one-problem-tags">
+							@foreach ($item->tags as $tag)
+								<span class="badge rounded-pill bg-info" data-id="{{$tag->id}}">{{$tag->text}}</span>
+							@endforeach
+						</div>
+						@if($item->can_edit(Auth::user()))
+							<form action="{{ route('problems.edit_tags', $item->id) }}" method="post" class="edit-tag-form d-none">
+								<select  multiple="multiple" class="form-control edit-tag-list"></select>
+								<button type="button" class="btn btn-small btn-danger tags-edit-cancel"><i class="fas fa-window-close"></i></button>
+								<button type="submit" class="btn btn-small btn-primary" ><i class="fa fa-check" aria-hidden="true"></i></button>
+							</form>
+							<span  class = "edit-tag-list-handle"> <i title="Edit tag list" class="far fa-edit fa-lg text-warning"> </i> </span>
+						@endif
+					</td>
+					{{-- LANG --}}
+					<td>
+						<a class="btn btn-sm btn-primary" data-bs-toggle="collapse" href="#language_list_{{$item->id}}" aria-expanded="false" aria-controls="language_list_{{$item->id}}">
+							{{  $item->languages->pluck('name')->join(", ")  }}
+						</a>
+						<div class="collapse" id="language_list_{{$item->id}}">
 
-					@foreach ($item->assignments as $assignment)
-						<a href="{{ route('submissions.index', ['assignment_id' => $assignment->id, 'problem_id' => $item->id, 'user_id' => 'all' , 'choose' => 'all']) }}" >
-						<span class="btn  btn-secondary btn-sm my-1">{{$assignment->name}} <span class="badge bg-info">{{$assignment->user->username ?? "no-owner"}}</span> </span></a>
-					@endforeach
-				</div>
+						@foreach ($item->languages as $language_name)
+							<span class="btn btn-sm btn-secondary mb-1">{{$language_name->name}} <span class="badge rounded-pill bg-info">{{$language_name->pivot->time_limit/1000}}s</span><span class="badge rounded-pill bg-info">{{$language_name->pivot->memory_limit/1000}}MB</span></span>
+						@endforeach
+						</div>
+					</td>
 
-			</td>
-			{{-- SUBMISSIONS --}}
-			<td>
-				<span class="text-success">{{ $item->accepted_submit }}</span>
-				/
-				<span class="text-info">{{ $item->total_submit }} ({{ $item->ratio }}%) </span>
-			</td>
-			{{-- SHARE, PRACTICE, EDITORIAL --}}
-			<td>
+					{{-- Date --}}
+					<td>
+						Created: {{ $item->created_at ?  $item->created_at->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('YYYY/MM/DD HH:mm:ss') : 'Unknown' }}
+						Modified: {{ $item->created_at ?  $item->updated_at->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('YYYY/MM/DD HH:mm:ss') : 'Unknown' }}
+					</td>
+					{{-- ASSIGNMENTS --}}
+					<td>
+							<a class="btn btn-sm btn-primary" data-bs-toggle="collapse" href="#assignment_list_{{$item->id}}" aria-expanded="false" aria-controls="assignment_list_{{$item->id}}">
+								{{ $item->assignments->count()}}<small> assignments</small>
+							</a>
+						<div class="collapse" id="assignment_list_{{$item->id}}">
 
-				<i  style="cursor:pointer" data-bs-toggle="tooltip" data-id='{{ "toggle." .  $item->id}}'  title='Green icon means this problem is available for practice, Black icon for otherwise' class="toggle_practice-share fas fa-dumbbell fa-2x clickable .stretched-link
-					@if( $item->allow_practice)
-						text-success
+							@foreach ($item->assignments as $assignment)
+								<a href="{{ route('submissions.index', ['assignment_id' => $assignment->id, 'problem_id' => $item->id, 'user_id' => 'all' , 'choose' => 'all']) }}" >
+								<span class="btn  btn-secondary btn-sm my-1">{{$assignment->name}} <span class="badge bg-info">{{$assignment->user->username ?? "no-owner"}}</span> </span></a>
+							@endforeach
+						</div>
 
-					@else
-						text-body-tertiary
+					</td>
+					{{-- SUBMISSIONS --}}
+					<td>
+						<span class="text-success">{{ $item->accepted_submit }}</span>
+						/
+						<span class="text-info">{{ $item->total_submit }} ({{ $item->ratio }}%) </span>
+					</td>
+					{{-- SHARE, PRACTICE, EDITORIAL --}}
+					<td>
 
-					@endif
-				">
-				</i>
-				<i style="cursor:pointer" data-bs-toggle="tooltip" data-id='{{'share.' . $item->id}}' title='Green icon means this problem is shared among instructors. Black icon means it is only visible  to its author and admins'  class="toggle_practice-share fas fa-share-alt fa-2x clickable .stretched-link
-				@if( $item->sharable)
-					text-success
+						<i  style="cursor:pointer" data-bs-toggle="tooltip" data-id='{{ "toggle." .  $item->id}}'  title='Green icon means this problem is available for practice, Black icon for otherwise' class="toggle_practice-share fas fa-dumbbell fa-2x clickable .stretched-link
+							@if( $item->allow_practice)
+								text-success
 
-				@else
-					text-body-tertiary
-				@endif
-				"">
-				</i>
+							@else
+								text-body-tertiary
 
-				@if($item->editorial != '')
-					<a href="{{ $item->editorial }}" data-bs-toggle="tooltip" title='This problem has some linked editorial'><i class="fas fa-lightbulb fa-2x   "></i></a>
-				@endif
+							@endif
+						">
+						</i>
+						<i style="cursor:pointer" data-bs-toggle="tooltip" data-id='{{'share.' . $item->id}}' title='Green icon means this problem is shared among instructors. Black icon means it is only visible  to its author and admins'  class="toggle_practice-share fas fa-share-alt fa-2x clickable .stretched-link
+						@if( $item->sharable)
+							text-success
 
-				@if($item->author != '')
-					<br/><i class="fas fa-user   "></i> {{$item->author}}
-				@endif
-			</td>
-			{{-- DOWNLOAD, EDIT, DELETE --}}
-			<td>
-				<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault-{{$item->id}}" data-id="{{$item->id}}">
-					<label class="form-check-label" for="flexCheckDefault-{{$item->id}}"
-						<i title="Select for download" class="fa fa-cloud-download-alt fa-lg text-success"></i>
-					</label>
-				  </div>
-				@if($item->can_edit(Auth::user()))
-					<a href="{{ route('problems.edit', $item) }}"> <i title="Edit" class="far fa-edit fa-lg color3"> </i> </a>
-					<span title="Delete problem" class="del_n delete_tag pointer">
-					<i title="Delete problem" class="far fa-trash-alt fa-lg text-danger"></i>
-					</span>
-				@endif
-			</td>
+						@else
+							text-body-tertiary
+						@endif
+						"">
+						</i>
 
-		</tr>
-	  @endforeach
-	</table>
-	<div class=" d-flex justify-content-center">{{$problems->links(null, ['class'=>'justify-content-center'])}}</div>
+						@if($item->editorial != '')
+							<a href="{{ $item->editorial }}" data-bs-toggle="tooltip" title='This problem has some linked editorial'><i class="fas fa-lightbulb fa-2x   "></i></a>
+						@endif
+
+						@if($item->author != '')
+							<br/><i class="fas fa-user   "></i> {{$item->author}}
+						@endif
+					</td>
+					{{-- DOWNLOAD, EDIT, DELETE --}}
+					<td>
+						<div class="form-check">
+							<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault-{{$item->id}}" data-id="{{$item->id}}">
+							<label class="form-check-label" for="flexCheckDefault-{{$item->id}}"
+								<i title="Select for download" class="fa fa-cloud-download-alt fa-lg text-success"></i>
+							</label>
+						  </div>
+						@if($item->can_edit(Auth::user()))
+							<a href="{{ route('problems.edit', $item) }}"> <i title="Edit" class="far fa-edit fa-lg color3"> </i> </a>
+							<span title="Delete problem" class="del_n delete_tag pointer">
+							<i title="Delete problem" class="far fa-trash-alt fa-lg text-danger"></i>
+							</span>
+						@endif
+					</td>
+
+				</tr>
+			  @endforeach
+			</table>
+			<div class=" d-flex justify-content-center">{{$problems->links(null, ['class'=>'justify-content-center'])}}</div>
+			</div>
+		</div>
+
 	</div>
+
+
+
 </div>
 
 <div class="modal fade" id="problem_delete" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
@@ -239,10 +245,10 @@
 				<h5 class="modal-title" id="exampleModalLongTitle">Are you sure you want to delete this tag?</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
-		  	<div class="modal-footer">
+			<div class="modal-footer">
 				<button type="button" class="btn btn-danger confirm-tag-delete">YES</button>
 				<button type="button" class="btn btn-primary" data-bs-dismiss="modal">NO</button>
-		  	</div>
+			</div>
 		</div>
 	</div>
 </div>
@@ -409,19 +415,25 @@
 
 	$("table").DataTable({
 		"paging": false,
-		columnDefs:[
-		    {
-				target: 0,
-				visible : false
-			}
-		    ,{
-				target: 1,
-				visible : false
+		// columnDefs:[
+		// 	{
+		// 		target: 0,
+		// 		visible : false
+		// 	}
+		// 	,{
+		// 		target: 1,
+		// 		visible : false
+		// 	}
+		// ],
+		columnDefs : [
+			{
+			    target:[0,1],
+				visible:false,
 			}
 		],
 		{{-- "ordering": false, --}}
 		'order':[
-		    [0, 'desc']
+			[0, 'desc']
 			,[1, 'desc']
 		]
 	});
