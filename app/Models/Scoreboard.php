@@ -13,30 +13,30 @@ class Scoreboard extends Model
 	protected $fillable = ['assignment_id', 'scoreboard'];
 
 	public function assignment(){
-        return $this->belongsTo('App\Models\Assignment');
+		return $this->belongsTo('App\Models\Assignment');
 	}
 
 	private function _generate_scoreboard()
-    {
+	{
 		CarbonInterval::setCascadeFactors(['minute' => [60, 'seconds'], 'hour' => [60, 'minutes']]); //Cascade to hours only when display submit time and delay time
-		
-    	$assignment = $this->assignment;
-        $submissions = $assignment->submissions->where('is_final',1);
-        $total_score = array();
+
+		$assignment = $this->assignment;
+		$submissions = $assignment->submissions->where('is_final',1);
+		$total_score = array();
 		$total_accepted_score = array();
 		$solved = array();
 		$tried_to_solve = array();
 		$penalty = array();
 		$users = array();
 
-        $scores = array();
-        
-        $problems = $assignment->problems->keyBy('id');
-        $number_of_submissions= [];
-        foreach($assignment->submissions as $item)
-        {
-            $number_of_submissions[$item->user->username][$item->problem_id]=0;
-        }
+		$scores = array();
+
+		$problems = $assignment->problems->keyBy('id');
+		$number_of_submissions= [];
+		foreach($assignment->submissions as $item)
+		{
+			$number_of_submissions[$item->user->username][$item->problem_id]=0;
+		}
 
 		$lopsnames = array();
 		foreach ($assignment->lops()->with('users')->get() as $key =>$lop) {
@@ -45,15 +45,15 @@ class Scoreboard extends Model
 			}
 		}
 
-		
-        foreach($assignment->submissions as $item)
-        {
-            $number_of_submissions[$item->user->username][$item->problem_id]+=1;
+
+		foreach($assignment->submissions as $item)
+		{
+			$number_of_submissions[$item->user->username][$item->problem_id]+=1;
 		}
-		
+
 		$statistics = array();
-        foreach($submissions as $submission)
-        {
+		foreach($submissions as $submission)
+		{
 
 			$pre_score = ceil(
 						$submission->pre_score*
@@ -67,7 +67,7 @@ class Scoreboard extends Model
 			$time = CarbonInterval::seconds( $assignment->start_time->diffInSeconds($submission->created_at, true))->cascade(); // time is absolute different
 			$late = CarbonInterval::seconds( $assignment->finish_time->diffInSeconds($submission->created_at))->cascade(); //late can either be negative (submit in time) or positive (submit late)
 			// dd($late);
-            $username = $submission->user->username;
+			$username = $submission->user->username;
 			$scores[$username][$submission->problem_id]['score'] = $final_score;
 			$scores[$username][$submission->problem_id]['time'] = $time;
 			$scores[$username][$submission->problem_id]['late'] = $late;
@@ -88,7 +88,7 @@ class Scoreboard extends Model
 			$tried_to_solve[$username] += 1;
 			$total_score[$username] += $final_score;
 			if ($fullmark) $total_accepted_score[$username] += $final_score;
-			
+
 			if($fullmark
 				&& $final_score > 0 //Only count problem with larger than 0 score
 			) {
@@ -98,9 +98,9 @@ class Scoreboard extends Model
 			}
 			$users[] = $submission->user;
 
-        }
+		}
 
-        $scoreboard = array(
+		$scoreboard = array(
 			'username' => array(),
 			'user_id' => array(),
 			'score' => array(),
@@ -109,9 +109,9 @@ class Scoreboard extends Model
 			'submit_penalty' => array()
 			,'solved' => array()
 			,'tried_to_solve' => array()
-        );
-		
-        $users = array_unique($users);
+		);
+
+		$users = array_unique($users);
 		foreach($users as $user){
 			array_push($scoreboard['username'], $user->username);
 			array_push($scoreboard['score'], $total_score[$user->username]);
@@ -120,9 +120,9 @@ class Scoreboard extends Model
 			array_push($scoreboard['solved'], $solved[$user->username]);
 			array_push($scoreboard['tried_to_solve'], $tried_to_solve[$user->username]);
 		}
-		
-		
-        array_multisort(
+
+
+		array_multisort(
 			$scoreboard['accepted_score'], SORT_NUMERIC, SORT_DESC,
 			//$scoreboard['submit_penalty'], SORT_NATURAL, SORT_ASC,
 			array_map(function($time){return $time->total('seconds');}, $scoreboard['submit_penalty']),
@@ -131,7 +131,7 @@ class Scoreboard extends Model
 			$scoreboard['username'],
 			$scoreboard['tried_to_solve'],
 			$scoreboard['submit_penalty'], SORT_NATURAL
-        );
+		);
 		// DB::enableQueryLog();
 		$aggr = $assignment->submissions()->groupBy('user_id', 'problem_id')->select(DB::raw('user_id, problem_id, count(*) as submit'))->get();
 		$aggr_ac = $assignment->submissions()->groupBy('user_id', 'problem_id')->where('pre_score', 10000)->select(DB::raw('user_id, problem_id, count(*) as submit'))->get();
@@ -164,25 +164,25 @@ class Scoreboard extends Model
 			$a = &$statistics[$id] ;
 			$stat_print[$id] = new class{};
 			$stat_print[$id]->solved_tries = "$a->solved / $a->tries " . ($a->tries == 0 ? "" : "(" . round($a->solved * 100/$a->tries, 2) . "%)" );
-			$stat_print[$id]->solved_tries_users = "$a->solved_user / $a->tries_user " 
+			$stat_print[$id]->solved_tries_users = "$a->solved_user / $a->tries_user "
 				. ($a->tries_user == 0 ? "" : "(" . round($a->solved_user * 100/$a->tries_user, 2) . "%)" )
 				. (count($users) == 0 ? "" : "(" . round($a->solved_user * 100/count($users), 2) . "%)" );
 			$stat_print[$id]->average_tries =  ($a->tries == 0 ? "" : round($a->tries /$a->tries_user, 1) );
 			$stat_print[$id]->average_tries_2_solve =  ($a->solved == 0 ? "" : round($a->tries /$a->solved, 1) );
-			
+
 		}
 
 		// dd($statistics);
 		// dd($stat_print);
-        return array($scores, $scoreboard, $number_of_submissions, $stat_print);
-    }
+		return array($scores, $scoreboard, $number_of_submissions, $stat_print);
+	}
 
 	public function _update_scoreboard()
 	{
 
 		if ($this->assignment->id == 0)
 			return false;
-		
+
 		$assignment = $this->assignment;
 
 		if (!$assignment)
@@ -192,17 +192,17 @@ class Scoreboard extends Model
 
 		list ($scores, $scoreboard, $number_of_submissions,$stat_print) = $this->_generate_scoreboard();
 		$all_problems = $assignment->problems;
-		
+
 		$total_score = 0;
 		foreach($all_problems as $item)
 			$total_score += $item->pivot->score;
-	
+
 		$all_name = User::all();
 		foreach($all_name as $row)
 		{
 			$result[$row->username] = $row->display_name;
 		}
-		
+
 		$data = array(
 			'assignment_id' => $assignment->id,
 			'problems' => $all_problems,
@@ -220,9 +220,14 @@ class Scoreboard extends Model
 		$scoreboard_table = view('scoreboard_table', $data)->render();
 		#Minify the scoreboard's html code
 		// $scoreboard_table = $this->output->minify($scoreboard_table, 'text/html');
+
+		$scoreboard_table =  str_replace(["\n", "\r", "\t"], '', $scoreboard_table);
+		$scoreboard_table = preg_replace('/ {2,}/', ' ', $scoreboard_table);
+
+		//
 		$this->scoreboard = $scoreboard_table;
 		$this->save();
-		
+
 		return true;
 	}
 
@@ -231,7 +236,14 @@ class Scoreboard extends Model
 		// dd(['assignment_id' => $assignment_id]);
 		if ($assignment_id != 0) {
 			//We don't create scoreboard for practice assignment
-			return Scoreboard::firstOrCreate(['assignment_id' => $assignment_id], ['scoreboard' => ""])->_update_scoreboard();     
+			$a =  Scoreboard::firstOrCreate(['assignment_id' => $assignment_id], ['scoreboard' => ""]);
+
+			// Hardcode rate limniter, only update scoreboard once every 30 seconds
+			if ($a->updated_at->lessthan(Carbon::now()->subSeconds(30))){
+				$a->_update_scoreboard();
+			}
+
+			return true;
 		}
 	}
 

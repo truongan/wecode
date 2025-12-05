@@ -129,7 +129,7 @@ class problem_controller extends Controller
 			"tags" => [],
 		]);
 	}
-	private function add_missing_tags($tags)
+	private function _add_missing_tags($tags)
 	{
 		foreach ($tags as $i => $tag) {
 			if (Tag::find($tag) == null) {
@@ -173,7 +173,7 @@ class problem_controller extends Controller
 
 		$tags = $request->input("tag_id");
 		if ($tags != null) {
-			$tags = $this->add_missing_tags($tags);
+			$tags = $this->_add_missing_tags($tags);
 		}
 
 		$langs = [];
@@ -287,7 +287,7 @@ class problem_controller extends Controller
 		$tags = $request->input("tag_id");
 
 		if ($tags != null) {
-			$tags = $this->add_missing_tags($tags);
+			$tags = $this->_add_missing_tags($tags);
 		}
 
 		$problem->tags()->sync($tags);
@@ -318,7 +318,7 @@ class problem_controller extends Controller
 		if (!file_exists($problem_dir)) {
 			mkdir($problem_dir, 0700, true);
 		}
-
+        $this->tmp_dir_name = sprintf("problem_upload_tmp_dir_%s_%s", Auth::user()->username, time());
 		if ($up_zip) {
 			//Upload Tests (zip file)
 			shell_exec("rm -f " . $assignments_root . "/*.zip");
@@ -339,7 +339,7 @@ class problem_controller extends Controller
 			);
 		} else {
 			if ($up_dir) {
-				$this->handle_test_dir_upload(
+				$this->_handle_test_dir_upload(
 					$request,
 					$assignments_root,
 					$up_dir,
@@ -349,87 +349,6 @@ class problem_controller extends Controller
 			}
 		}
 	}
-
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  \App\Problem  $problem
-	 * @return \Illuminate\Http\Response
-	 */
-	public function destroy($id = null)
-	{
-		if (
-			!in_array(Auth::user()->role->name, [
-				"admin",
-				"head_instructor",
-				"instructor",
-			])
-		) {
-			abort(404);
-		} elseif ($id === null) {
-			$json_result = ["done" => 0, "message" => "Input Error"];
-		} else {
-			$problem = Problem::find($id);
-
-			$this->_can_edit_or_404($problem);
-
-			$result["no_of_ass"] = $problem->assignments->count();
-			$result["no_of_sub"] = $problem->submissions->count();
-			$result["languages"] = $problem->languages;
-
-			if ($problem == null) {
-				$json_result = ["done" => 0, "message" => "Not found detailed"];
-			} elseif (
-				($problem["no_of_ass"] != 0) &
-				($problem["no_of_sub"] != 0)
-			) {
-				$json_result = [
-					"done" => 0,
-					"message" =>
-						"Problem already appear in assignments and got some submission should not be delete",
-				];
-			} else {
-				$problem->delete();
-				$json_result = ["done" => 1];
-			}
-		}
-
-		header("Content-Type: application/json; charset=utf-8");
-		return $json_result;
-	}
-
-	private function save_problem_description(
-		Problem $problem,
-		$text,
-		$type = "html",
-	) {
-		$problem_dir = $problem->get_directory_path();
-		if (file_put_contents("$problem_dir/desc.html", $text)) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	public function edit_description(Request $request, Problem $problem)
-	{
-		if (
-			!in_array(Auth::user()->role->name, [
-				"admin",
-				"head_instructor",
-				"instructor",
-			])
-		) {
-			abort(404);
-		}
-		if ($this->save_problem_description($problem, $request->content)) {
-			echo "success";
-			return;
-		} else {
-			echo "error";
-		}
-	}
-
 	private function _unload_zip_test_file(
 		Request $request,
 		$assignments_root,
@@ -437,8 +356,7 @@ class problem_controller extends Controller
 		&$messages,
 		$name_zip,
 	) {
-		$tmp_dir_name = "shj_tmp_directory";
-		$tmp_dir = "$assignments_root/$tmp_dir_name";
+		$tmp_dir = "$assignments_root/$this->tmp_dir_name";
 		shell_exec("rm -rf $tmp_dir; mkdir $tmp_dir;");
 
 		// get new name
@@ -523,6 +441,166 @@ class problem_controller extends Controller
 		// Remove temp directory
 		shell_exec("rm -rf $tmp_dir");
 	}
+
+	private function _handle_test_dir_upload(
+		Request $request,
+		$assignments_root,
+		$up_dir,
+		$problem_dir,
+		&$messages,
+	) {
+		$tmp_dir = "$assignments_root/$this->tmp_dir_name";
+		shell_exec("rm -rf $tmp_dir; mkdir $tmp_dir;");
+
+		foreach ($request->tests_dir as $item) {
+			$item->storeAs(
+				$this->tmp_dir_name,
+				$item->getClientOriginalName(),
+				"assignment_root",
+			);
+		}
+
+		// path data
+		$data = glob("$tmp_dir/*");
+
+		//
+		if (!in_array($tmp_dir . "/desc.html", $data)) {
+			$messages[] =
+				"Your test folder doesn't have desc.html file for problem description";
+		}
+		$in = $out = $files = [];
+
+		for ($i = 0; $i < count($data); $i++) {
+			// var_dump($data[$i]);
+			$path = explode("string", $data[$i]);
+			$name = explode("/", $data[$i]);
+			$name_with_extension = explode(".", end($name));
+			$prefix_name = $name_with_extension[0];
+
+			if (substr($prefix_name, 0, 5) == "input") {
+				$in[end($name)] = $data[$i];
+			} elseif (substr($prefix_name, 0, 6) == "output") {
+				$out[end($name)] = $data[$i];
+			} else {
+				$files[end($name)] = $data[$i];
+			}
+		}
+
+		if (!isset($files["desc.html"])) {
+			$messages[] =
+				"Your test folder doesn't have desc.html file for problem description";
+		}
+
+		for ($i = 1; $i < count($in); $i++) {
+			if (!isset($in["input$i.txt"])) {
+				$messages[] = "A file name input$i.txt seem to be missing in your folder";
+			} else {
+				if (!isset($out["output$i.txt"])) {
+					$messages[] = "A file name output$i.txt seem to be missing in your folder";
+				}
+			}
+		}
+
+		$this->clean_up_old_problem_dir($problem_dir);
+
+		foreach ($in as $name => $tmp_name) {
+			rename($tmp_name, "$problem_dir/in/$name");
+		}
+
+		foreach ($out as $name => $tmp_name) {
+			rename($tmp_name, "$problem_dir/out/$name");
+		}
+
+		foreach ($files as $name => $tmp_name) {
+			rename($tmp_name, "$problem_dir/$name");
+		}
+
+		shell_exec("rm -rf $tmp_dir");
+
+	}
+
+
+
+	/**
+	 * Remove the specified resource from storage.
+	 *
+	 * @param  \App\Problem  $problem
+	 * @return \Illuminate\Http\Response
+	 */
+	public function destroy($id = null)
+	{
+		if (
+			!in_array(Auth::user()->role->name, [
+				"admin",
+				"head_instructor",
+				"instructor",
+			])
+		) {
+			abort(404);
+		} elseif ($id === null) {
+			$json_result = ["done" => 0, "message" => "Input Error"];
+		} else {
+			$problem = Problem::find($id);
+
+			$this->_can_edit_or_404($problem);
+
+			$result["no_of_ass"] = $problem->assignments->count();
+			$result["no_of_sub"] = $problem->submissions->count();
+			$result["languages"] = $problem->languages;
+
+			if ($problem == null) {
+				$json_result = ["done" => 0, "message" => "Not found detailed"];
+			} elseif (
+				($problem["no_of_ass"] != 0) &
+				($problem["no_of_sub"] != 0)
+			) {
+				$json_result = [
+					"done" => 0,
+					"message" =>
+						"Problem already appear in assignments and got some submission should not be delete",
+				];
+			} else {
+				$problem->delete();
+				$json_result = ["done" => 1];
+			}
+		}
+
+		header("Content-Type: application/json; charset=utf-8");
+		return $json_result;
+	}
+
+	private function save_problem_description(
+		Problem $problem,
+		$text,
+		$type = "html",
+	) {
+		$problem_dir = $problem->get_directory_path();
+		if (file_put_contents("$problem_dir/desc.html", $text)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public function edit_description(Request $request, Problem $problem)
+	{
+		if (
+			!in_array(Auth::user()->role->name, [
+				"admin",
+				"head_instructor",
+				"instructor",
+			])
+		) {
+			abort(404);
+		}
+		if ($this->save_problem_description($problem, $request->content)) {
+			echo "success";
+			return;
+		} else {
+			echo "error";
+		}
+	}
+
 
 	private function clean_up_old_problem_dir($problem_dir)
 	{
@@ -711,81 +789,6 @@ class problem_controller extends Controller
 			->withErrors(["messages" => $error_message]);
 	}
 
-	private function handle_test_dir_upload(
-		Request $request,
-		$assignments_root,
-		$up_dir,
-		$problem_dir,
-		&$messages,
-	) {
-		$tmp_dir_name = "shj_tmp_directory";
-		$tmp_dir = "$assignments_root/$tmp_dir_name";
-		shell_exec("rm -rf $tmp_dir; mkdir $tmp_dir;");
-
-		foreach ($request->tests_dir as $item) {
-			$item->storeAs(
-				$tmp_dir_name,
-				$item->getClientOriginalName(),
-				"assignment_root",
-			);
-		}
-
-		// path data
-		$data = glob("$tmp_dir/*");
-
-		//
-		if (!in_array($tmp_dir . "/desc.html", $data)) {
-			$messages[] =
-				"Your test folder doesn't have desc.html file for problem description";
-		}
-		$in = $out = $files = [];
-
-		for ($i = 0; $i < count($data); $i++) {
-			// var_dump($data[$i]);
-			$path = explode("string", $data[$i]);
-			$name = explode("/", $data[$i]);
-			$name_with_extension = explode(".", end($name));
-			$prefix_name = $name_with_extension[0];
-
-			if (substr($prefix_name, 0, 5) == "input") {
-				$in[end($name)] = $data[$i];
-			} elseif (substr($prefix_name, 0, 6) == "output") {
-				$out[end($name)] = $data[$i];
-			} else {
-				$files[end($name)] = $data[$i];
-			}
-		}
-
-		if (!isset($files["desc.html"])) {
-			$messages[] =
-				"Your test folder doesn't have desc.html file for problem description";
-		}
-
-		for ($i = 1; $i < count($in); $i++) {
-			if (!isset($in["input$i.txt"])) {
-				$messages[] = "A file name input$i.txt seem to be missing in your folder";
-			} else {
-				if (!isset($out["output$i.txt"])) {
-					$messages[] = "A file name output$i.txt seem to be missing in your folder";
-				}
-			}
-		}
-
-		$this->clean_up_old_problem_dir($problem_dir);
-
-		foreach ($in as $name => $tmp_name) {
-			rename($tmp_name, "$problem_dir/in/$name");
-		}
-
-		foreach ($out as $name => $tmp_name) {
-			rename($tmp_name, "$problem_dir/out/$name");
-		}
-
-		foreach ($files as $name => $tmp_name) {
-			rename($tmp_name, "$problem_dir/$name");
-		}
-	}
-
 	private function _replace_problem(Request $request, Problem $problem)
 	{
 		DB::beginTransaction();
@@ -831,7 +834,7 @@ class problem_controller extends Controller
 	public function edit_tags(Request $request, Problem $problem)
 	{
 		$this->_can_edit_or_404($problem);
-		$tags = $this->add_missing_tags($request->input("tag_id"));
+		$tags = $this->_add_missing_tags($request->input("tag_id"));
 		$problem->tags()->sync($tags);
 		return json_encode([
 			"all_tags" => Tag::all(),

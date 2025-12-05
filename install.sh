@@ -48,7 +48,7 @@ echo $site_url
 
 
 php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-php -r "if (hash_file('sha384', 'composer-setup.php') === 'dac665fdc30fdd8ec78b38b9800061b4150413ff2e3b6f88543c636f7cd84f6db9189d43a81e5503cda447da73c7e5b6') { echo 'Installer verified'.PHP_EOL; } else { echo 'Installer corrupt'.PHP_EOL; unlink('composer-setup.php'); exit(1); }"
+php -r "if (hash_file('sha384', 'composer-setup.php') === 'ed0feb545ba87161262f2d45a633e34f591ebb3381f2e0063c345ebea4d228dd0043083717770234ec00c5a9f9593792') { echo 'Installer verified'.PHP_EOL; } else { echo 'Installer corrupt'.PHP_EOL; unlink('composer-setup.php'); exit(1); }"
 php composer-setup.php
 php -r "unlink('composer-setup.php');"
 
@@ -59,7 +59,7 @@ cp .env.example .env
 # site_url=`printf "%q" "$site_url"`
 # password=`printf "%q" "$password"`
 
-sed -i "s,APP_URL.*,APP_URL=$site_url,g" .env # Can't use / character here because it's url 
+sed -i "s,APP_URL.*,APP_URL=$site_url,g" .env # Can't use / character here because it's url
 sed -i "s/DB_USERNAME.*/DB_USERNAME=$db_user/g" .env
 sed -i "s/DB_DATABASE.*/DB_DATABASE=$db/g" .env
 sed -i "s/DB_PASSWORD.*/DB_PASSWORD=$password/g" .env

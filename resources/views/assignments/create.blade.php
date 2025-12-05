@@ -6,7 +6,19 @@
 
 @section('other_assets')
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/select2/select2.min.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/slimselect/slimselect.css') }}">
 <style>
+html[data-bs-theme="dark"] .ss-main,
+html[data-bs-theme="dark"] .ss-content,
+html[data-bs-theme="dark"] .ss-search,
+html[data-bs-theme="dark"] .ss-search input,
+html[data-bs-theme="dark"] .ss-content .ss-list,
+html[data-bs-theme="dark"] .ss-content .ss-list .ss-option
+{
+	background-color: var(--bs-body-bg); /* Use Bootstrap's dark background */
+	color: var(--bs-body-color); /* Use Bootstrap's dark text color */
+	border-color: var(--bs-border-color);
+}
 	#choice_multi_assignment .select2-selection__choice{
 		display:none !important;
 	}
@@ -31,12 +43,15 @@
 @section('body_end')
 <script type="text/javascript" src="{{ asset('assets/js/Sortable.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('assets/select2/select2.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/slimselect/slimselect.js') }}"></script>
 <script type="text/javascript" src="{{ asset('assets/js/add_assignments.js') }}"></script>
 <script type='text/javascript' src="{{ asset('assets/js/taboverride.min.js') }}"></script>
 <script>
 	document.addEventListener("DOMContentLoaded", function(){
 		tabOverride.set(document.getElementsByTagName('textarea'));
-		$('.js-example-basic-multiple').select2();
+		new SlimSelect({select : '.lop-select'});
+		new SlimSelect({select: '.languages-limit-select'})
+		// ('.lop-select').select2();
 	});
 </script>
 <script type="text/javascript">
@@ -137,11 +152,15 @@
 						</label>
 					</div>
 					<div class="col-sm-8">
-						<select class="js-example-basic-multiple form-control" multiple="multiple" name="lop_id[]">
+						<select class="lop-select form-control" multiple="multiple" name="lop_id[]">
 							@foreach( $all_lops as $p)
 							<option value="{{ $p->id }}" data-name="{{$p->name}}"
 								{{ isset($lops[$p->id]) ? 'selected="selected"' : ''  }}
-								> {{$p->name}}</option>
+							>
+								{{$p->name}}
+								{{-- ( {{ $p->instructors->pluck('username')->join(', ')}}) --}}
+								({{$p->users->first()->username}})
+							</option>
 							@endforeach
 						</select>
 					</div>
@@ -189,7 +208,7 @@
 					</div>
 
 					<div class="col-sm-8">
-						<select name="language_ids[]" class="form-select"  multiple aria-label="Further limit allow language for this assignments">
+						<select name="language_ids[]" class="languages-limit-select form-select"  multiple aria-label="Further limit allow language for this assignments">
 							@foreach ($all_languages as $lang)
 								<option value="{{ $lang->id }}"
 									@if (!$edit ||  in_array($lang->id , explode(", ", $assignment->language_ids) ))
@@ -211,7 +230,7 @@
 				</label>
 				<select class="all_problems form-control" multiple="multiple">
 					@foreach( $all_problems as $p)
-					<option value="{{ $p->id }}" data-name="{{$p->name}}" data-id="{{$p->id}}" data-tags="{{ $p->tags->implode('text', ', ')}}" data-note="{{ $p->admin_note }}" data-no_of_assignment="{{ $p->assignments_count }}"  data-owner="{{ $p->user->username ?? 'none'}}"
+					<option value="{{ $p->id }}" data-name="{{$p->name}}" data-sharable="{{$p->sharable}}" data-id="{{$p->id}}" data-tags="{{ $p->tags->implode('text', ', ')}}" data-note="{{ Str::limit($p->admin_note, 80) }}" data-no_of_assignment="{{ $p->assignments_count }}"  data-owner="{{ $p->user->username ?? 'none'}}"
 						{{ isset($problems[$p->id]) ? 'selected="selected"' : ''  }}
 						>
 					{{$p->id}} - {{$p->name}} ({{ $p->user->username ?? 'none'}} |  {{ $p->tags->implode('text', ', ') }}  | {{   $p->admin_note }}) </option>

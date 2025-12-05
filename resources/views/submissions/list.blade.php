@@ -20,14 +20,17 @@
 	fas {{$choose =='all' ? 'fa-bars' : 'fa-map-marker'}}
 @endsection
 @section('title')
-	{{$choose =='all' ? 'All submissions' : 'Final submissions'}}  for <a class="link-dark" href=" @if($assignment->id !=0) {{ route('assignments.edit', $assignment)  }} @else # @endif "> {{$assignment->name}} </a>
+	{{$choose =='all' ? 'All submissions' : 'Final submissions'}}:
+	    <a class="link-dark-subtle" href=" @if($assignment->id !=0) {{ route('assignments.edit', $assignment)  }} @else # @endif ">
+	    {{$assignment->name}}  {for: {{ $assignment->lops->pluck('name')->join(",") }} - by:  {{$assignment->user->username ?? "no-owner"}})
+		</a>
 @endsection
 @section('title_menu')
-@if ($user_id != 'all' and !in_array( Auth::user()->role->name, ['student', 'guest'])) 
-		<a class="ms-4 fs-6 link-dark" href="{{route('submissions.index', [$assignment->id, 'all', $problem_id, 'all'])}}">Remove filter user</a>
+@if ($user_id != 'all' and !in_array( Auth::user()->role->name, ['student', 'guest']))
+		<a class="ms-4 fs-6 link-dark-subtle" href="{{route('submissions.index', [$assignment->id, 'all', $problem_id, 'all'])}}">Remove filter user</a>
 @endif
 @if ($problem_id != 'all')
-	<a class="ms-4 fs-6 link-dark" href="{{route('submissions.index', [$assignment->id, $user_id, 'all', 'all'])}}">Remove filter problem</a>
+	<a class="ms-4 fs-6 link-dark-subtle" href="{{route('submissions.index', [$assignment->id, $user_id, 'all', 'all'])}}">Remove filter problem</a>
 @endif
 @endsection
 @section('body_end')
@@ -52,7 +55,7 @@
 		site_url = '{{ url('/') }}';
 	</script>
 	<script type='text/javascript' src="{{ asset("assets/prismjs/prism.js") }}"></script>
-	<script type='text/javascript' src="{{ asset("assets/js/shj_submissions.js") }}"></script>
+	<script type='text/javascript' src="{{ asset("assets/js/submissions_list.js") }}"></script>
 
 	<script type="text/javascript" src="{{ asset('assets/DataTables/datatables.min.js') }}"></script>
 
@@ -89,9 +92,9 @@
 						<th width="1%" rowspan="1">#</th>
 					@endif
 						<th width="2%" rowspan="1"><small> Submit ID</small></th>
-					
+
 					@if (in_array( Auth::user()->role->name, ['student', 'guest']))
-	
+
 					@else
 						<th width="10%"><small> Username</small></th>
 						<th width="6%"><small> Log / rejudge</small></th>
@@ -112,7 +115,7 @@
 						<i class="pointer set_final far {{ $submission->is_final ? 'fa-check-circle text-success' : 'fa-circle' }} fa-2x"></i>
 					</td>
 				@endif
-				
+
 				@if ($choose == 'final')
 					<td>{{$loop->iteration}} </td>
 				@endif
@@ -152,13 +155,13 @@
 							{{ $submission->delay->forHumans(['short'=>true, 'parts' => 2]) }} late
 						@endif
 					</span><br>
-					
+
 				</td>
 				<td class="js-verdict">
 					<x-submission.verdict :submission=$submission/>
 				</td>
 				<td class="js-time">
-					@if ((count($submission->judgement->mems ?? []) > 0 && $submission->pre_score == 10000)) 
+					@if ((count($submission->judgement->mems ?? []) > 0 && $submission->pre_score == 10000))
 						{{max($submission->judgement->times) }}
 					@endif
 				</td>
@@ -169,7 +172,7 @@
 				</td>
 				<td class="status js-score">
 					@if (strtolower($submission->status) != "pending")
-						<span class= "lead 
+						<span class= "lead
 						@if ($submission->pre_score == 10000)
 							text-success
 						@else
@@ -187,9 +190,8 @@
 			</tr>
 			@endforeach
 		</table>
-	
+
 		<div class=" d-flex justify-content-center">{{$submissions->links(null, ['class'=>'justify-content-center'])}}</div>
 	</div>
 </div>
 @endsection
-

@@ -4,7 +4,7 @@
 	@php ($pdf_route = route('assignments.show_pdf',['assignment' => $assignment,  'problem' => $problem]))
 @else
 	@php ($pdf_route = route('practices.show_pdf', $problem))
-@endif 
+@endif
 @section('head_title','View Problem')
 @section('icon', 'fas fa-puzzle-piece')
 
@@ -30,7 +30,7 @@
 @section('title_menu')
 
 @if($problem->has_pdf)
-	<a href="{{ $pdf_route }}" class="link-dark"><span class="ms-4 fs-6"><i class="fas fa-file-pdf text-danger"></i> PDF</span></a>
+	<a href="{{ $pdf_route }}" class="link-dark-subtle"><span class="ms-4 fs-6"><i class="fas fa-file-pdf text-danger"></i> PDF</span></a>
 @endif
 
 @if ($problem->allow_input_download)
@@ -44,7 +44,7 @@
 
 @if (in_array( Auth::user()->role->name, ['admin', 'head_instructor']))
 	<span class="ms-4 fs-6 ms-auto"><a href="#" class="btn btn-info save-button"><i class="fa fa-floppy-o "></i> Save</a></span>
-@endif 
+@endif
 
 @endsection
 
@@ -84,7 +84,7 @@
                         , {position: 'bottom right', className: 'error', autoHideDelay: 3500});
                 }
             });
-        }); 
+        });
     });
 </script>
 
@@ -99,12 +99,12 @@
 		@if($problem->has_pdf)
 			<div class="problem_description" id="problem_pdf_embed">
 				<object data="{{ $pdf_route }}" type="application/pdf" width="100%" height="100%">
-					<p>If this browser does not support PDFs. Please download the PDF to view it: 
+					<p>If this browser does not support PDFs. Please download the PDF to view it:
 					<a href="{{ $pdf_route }}">Download PDF</a>.</p>
 				</object>
 			</div>
 		@endif
-        <div class="problem_description" id="problem_description" 
+        <div class="problem_description" id="problem_description"
         {{ in_array( Auth::user()->role->name, ['admin', 'head_instructor']) ? 'contenteditable=true' : ''}}
 		>
 			{!! $problem->description !!}
@@ -117,12 +117,13 @@
 		<div class="problems_widget">
 			@if ( in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
 			<a href="{{ route('assignments.edit', $assignment->id) }}" >
+			<i class="fa fa-edit  color9"></i>
 			@endif
-				{{ $assignment->name }} <i class="fa fa-edit  color9"></i> <br/>
+				{{ $assignment->name }} <br/>
 			@if ( in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
-			</a>
+			Lớp: {{ $assignment->lops->pluck('name')->join(",")  }} </a>
 			@endif
-			
+
 			<p class="text-muted"><span class="badge bg-secondary count_problems">{{ count($all_problems) }}</span> problems with a total score of <span class="badge bg-secondary sum_score">{{ $sum_score }}</span></p>
 			<table class="wecode_table table  table-bordered">
 				<thead>
@@ -152,13 +153,13 @@
 		<div class="problems_widget ">
 
 			<span><i class="fa fa-upload fa-lg text-success"></i> Submit</span>
-			
+
 			<form action="{{ route('submissions.store') }}" method="POST" enctype="multipart/form-data" class="row g-2 align-items-end">
 			@csrf
 
 			@if ($all_problems != NULL)
 				<input type="hidden" name="assignment" value="{{ $assignment->id }}"/>
-			@else 
+			@else
 			{{-- Default assignment to practice --}}
 				<input type="hidden" name="assignment" value="0"/>
 			@endif

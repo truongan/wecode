@@ -16,8 +16,8 @@
 @if (in_array( Auth::user()->role->name, ['admin',  'head_instructor', 'instructor']))
 @section('title_menu')
 <nav class=" ms-3 fs-6 nav nav-pills">
-	<a class="nav-link link-dark" href="{{ route('assignments.create') }}"><i class="fa fa-plus color8"></i> Add</a>
-	<a class="nav-link link-dark active" href="{{ route('assignments.index') }}"><i class="far fa-star text-danger"></i>Assignments setting</a>
+	<a class="nav-link link-dark-subtle" href="{{ route('assignments.create') }}"><i class="fa fa-plus color8"></i> Add</a>
+	<a class="nav-link link-dark-subtle active" href="{{ route('assignments.index') }}"><i class="far fa-star text-danger"></i>Assignments setting</a>
 </nav>
 @endsection
 @endif
@@ -50,7 +50,7 @@
 					@endif
 				</tr>
 			</thead>
-			
+
 			@foreach ($assignments as $assignment)
 				@if($assignment->id==0)
 					@continue
@@ -123,7 +123,7 @@
 					<a href="{{ route('submissions.rejudge_view', $assignment->id) }}"><i title="Rejudge submissions" class="fa fa-retweet fa-lg text-success"></i></a>
 					<a title="Edit" href="{{ route('assignments.edit', $assignment) }}"><i class="fas fa-edit fa-lg color9"></i></a>
 					<span title="Delete Assignment" class="del_n delete_Assignment pointer"><i title="Delete Assignment" class="far fa-trash-alt fa-lg text-danger"></i></span>
-					
+
 					<a href="#extra_action_{{$assignment->id}}" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="#extra_action_{{$assignment->id}}" ><i class="fas fa-ellipsis-v text-info m-2"></i></i></a>
 					<div class="collapse" id="extra_action_{{$assignment->id}}">
 						<a href="{{ route('assignments.download_submissions', ['type'=>'by_user', 'assignment_id'=>$assignment->id]) }}"><i title="Download Final Submissions (by user)" class="fa fa-download fa-lg color12"></i></a>
