@@ -31,14 +31,14 @@ html[data-bs-theme="dark"] .ss-content .ss-list .ss-option
 @section('content')
 <div class="row">
 
-	<div class="accordion  accordion-flus" id="accordionExample">
+	<div class="accordion mb-5 " id="accordionExample">
 		<div class="accordion-item">
 		  <h2 class="accordion-header">
-			<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+			<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-controls="collapseOne">
 			  Import/Export problems
 			</button>
 		  </h2>
-		  <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+		  <div id="collapseOne" class="accordion-collapse collapse " data-bs-parent="#accordionExample">
 			<div class="accordion-body">
 				<div class="row mb-2">
 					<div class="col-md"><a href="" download id = "download_all_selected"><i class="fas fa-download fa-lg text-info"></i>Export selected problem (zip)</a></div>
@@ -61,7 +61,7 @@ html[data-bs-theme="dark"] .ss-content .ss-list .ss-option
 		  </div>
 		</div>
 
-	<form class="row mb-3 gx-3  align-items-center" method="get" action="{{ route('problems.index') }}">
+	<form class="row mt-3 mb-3 gx-3  align-items-center" method="get" action="{{ route('problems.index') }}">
 		<div class=" col">
 			<div class="input-group">
 				<label class="input-group-text" for="search">Search by name</label>
@@ -90,7 +90,6 @@ html[data-bs-theme="dark"] .ss-content .ss-list .ss-option
 			<table class="table table-striped table-bordered">
 				<thead class="thead-old table-dark">
 					<tr>
-						<th>owned?</th>
 						<th>ID?</th>
 						<th style="width: 20%">Name</th>
 						<th style="width: 55%">Note</th>
@@ -98,19 +97,18 @@ html[data-bs-theme="dark"] .ss-content .ss-list .ss-option
 						<th style="width: 15%">Tags</th>
 						<th>Lang</th>
 						<th>Date</th>
-						<th><small>Assignmnet</small></th>
-						<th><small>Submission</small></th>
-						<th>Misc</th>
+						<th><small>used</small></th>
+						<th><small>stat</small></th>
+						{{-- <th>Misc</th> --}}
 						<th>Tools</th>
 					</tr>
 				</thead>
 			  @foreach ($problems as $item)
 				<tr data-id="{{$item->id}}">
-					<td>{{ $item->user->username == Auth::user()->username }}</td>
-					<td>{{ $item->id}}</td>
+					<td>{{ ($item->user->username == Auth::user()->username ? 100000 : 0) + intval( ($item->id) )}}</td>
 					{{-- NAME --}}
 					<td>
-						<a href="{{ route( 'practices.show' ,$item->id) }}"> <span class="badge text-bg-info"> {{ $item->id}}</span> {{ $item->name }}</a>
+						<a href="{{ route( 'practices.show' ,$item->id) }}">{{ $item->name }}</a>
 						<br/>
 						by:
 						<span
@@ -124,7 +122,7 @@ html[data-bs-theme="dark"] .ss-content .ss-list .ss-option
 						</span>
 					</td>
 					{{-- NOTE --}}
-					<td class="fs-6 "> {{$item->admin_note}}</td>
+					<td class="fs-6 text-break "> {{$item->admin_note}}</td>
 
 					{{-- TAGS --}}
 					<td>
@@ -144,6 +142,7 @@ html[data-bs-theme="dark"] .ss-content .ss-list .ss-option
 					</td>
 					{{-- LANG --}}
 					<td>
+
 						<a class="btn btn-sm btn-primary" data-bs-toggle="collapse" href="#language_list_{{$item->id}}" aria-expanded="false" aria-controls="language_list_{{$item->id}}">
 							{{  $item->languages->pluck('name')->join(", ")  }}
 						</a>
@@ -156,9 +155,14 @@ html[data-bs-theme="dark"] .ss-content .ss-list .ss-option
 					</td>
 
 					{{-- Date --}}
-					<td>
-						Created: {{ $item->created_at ?  $item->created_at->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('YYYY/MM/DD HH:mm:ss') : 'Unknown' }}
-						Modified: {{ $item->created_at ?  $item->updated_at->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('YYYY/MM/DD HH:mm:ss') : 'Unknown' }}
+					<td class="text-break">
+						<span class="text-info">
+
+						{{ $item->updated_at ?  $item->updated_at->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('YYYY/MM/DD HH:mm:ss') : 'Unknown' }}
+						</span>
+						<span class="text-muted">
+						{{ $item->created_at ?  $item->created_at->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('YYYY/MM/DD HH:mm:ss') : 'Unknown' }}
+						</span>
 					</td>
 					{{-- ASSIGNMENTS --}}
 					<td>
@@ -210,9 +214,9 @@ html[data-bs-theme="dark"] .ss-content .ss-list .ss-option
 						@if($item->author != '')
 							<br/><i class="fas fa-user   "></i> {{$item->author}}
 						@endif
-					</td>
+					{{-- </td> --}}
 					{{-- DOWNLOAD, EDIT, DELETE --}}
-					<td>
+					{{-- <td> --}}
 						<div class="form-check">
 							<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault-{{$item->id}}" data-id="{{$item->id}}">
 							<label class="form-check-label" for="flexCheckDefault-{{$item->id}}"
@@ -399,26 +403,12 @@ html[data-bs-theme="dark"] .ss-content .ss-list .ss-option
 
 	$("table").DataTable({
 		"paging": false,
-		// columnDefs:[
-		// 	{
-		// 		target: 0,
-		// 		visible : false
-		// 	}
-		// 	,{
-		// 		target: 1,
-		// 		visible : false
-		// 	}
-		// ],
-		columnDefs : [
-			{
-			    target:[0,1],
-				visible:false,
-			}
-		],
+
+
 		{{-- "ordering": false, --}}
 		'order':[
 			[0, 'desc']
-			,[1, 'desc']
+
 		]
 	});
 
