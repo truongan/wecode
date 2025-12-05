@@ -129,9 +129,6 @@
 			let current = activeThemeIcon.classList[activeThemeIcon.classList.length -1]
 			activeThemeIcon.classList.remove(current)
 			activeThemeIcon.classList.add(`bi-${svgOfActiveBtn}`)
-			console.log(a)
-			// activeThemeIcon.classList = [...(a.slice(0,-1)), `bi-${svgOfActiveBtn}` ]
-			// activeThemeIcon.setAttribute('href', svgOfActiveBtn)
 			const themeSwitcherLabel = `${themeSwitcherText.textContent} (${btnToActive.dataset.bsThemeValue})`
 			themeSwitcher.setAttribute('aria-label', themeSwitcherLabel)
 

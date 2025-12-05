@@ -8,15 +8,20 @@
 @section('title', 'New Problem')
 
 @section('other_assets')
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/select2/select2.min.css') }}">
-<style type="text/css">
-	input[type='number']{
-		min-width: 80px!important;
-	}
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/slimselect/slimselect.css') }}">
 
-	#choice_multi_assignment .select2-selection__choice{
-		display:none !important;
-	}
+<style type="text/css">
+    html[data-bs-theme="dark"] .ss-main,
+    html[data-bs-theme="dark"] .ss-content,
+    html[data-bs-theme="dark"] .ss-search,
+    html[data-bs-theme="dark"] .ss-search input,
+    html[data-bs-theme="dark"] .ss-content .ss-list,
+    html[data-bs-theme="dark"] .ss-content .ss-list .ss-option
+    {
+    	background-color: var(--bs-body-bg); /* Use Bootstrap's dark background */
+    	color: var(--bs-body-color); /* Use Bootstrap's dark text color */
+    	border-color: var(--bs-border-color);
+    }
 	span.select2{
 		width: 100% !important;
 	}
@@ -33,57 +38,51 @@
 @endsection
 
 @section('body_end')
-<script type="text/javascript" src="{{ asset('assets/select2/select2.min.js') }}"></script>
-<script type='text/javascript' src="{{ asset('assets/js/taboverride.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/slimselect/slimselect.js') }}"></script>
+
 <script type="text/javascript">
-	$(".add_language").click(function(){
-		var lang = $(this).data('lang');
+	document.querySelectorAll(".add_language").forEach( x => x.addEventListener('click', function(){
+		var lang = this.dataset['lang'];
 		console.log(lang);
-		$(this).toggleClass('d-none');
-		
-		var row = $(".lang_row_" + lang);
-		row.toggleClass('d-none');//.show();
-		row.children('.lang_checkbox').val(1);
-	});
+		this.classList.toggle('d-none');
 
-	$(".remove_language").click(function(){
-		var lang = $(this).data('lang');
-		console.log(lang);
-		var row = $(".lang_row_" + lang);
-		row.toggleClass('d-none');//.show();
-		row.children('.lang_checkbox').val(0);
+		var row = document.querySelector(".lang_row_" + lang);
+		row.classList.toggle('d-none');//.show();
+		row.querySelector('.lang_checkbox').checked = true;
+	}));
 
-		$('.add_language_' + lang).toggleClass('d-none');
-	});
+	document.querySelectorAll(".remove_language").forEach( x => x.addEventListener("click", function(){
+		var lang = this.dataset['lang'];
+		var row = document.querySelector(".lang_row_" + lang);
+		row.classList.toggle('d-none');//.show();
+		row.querySelector('.lang_checkbox').checked = false;
+
+		document.querySelector('.add_language_' + lang).classList.toggle('d-none');
+	}));
 
 	document.addEventListener("DOMContentLoaded", function(){
-		tabOverride.set(document.getElementsByTagName('textarea'));
-		$('.js-example-basic-multiple').select2();
 		@if (!$edit)
-		$lang = document.querySelectorAll('.add_language');
+		lang = document.querySelectorAll('.add_language');
 		for(var i = 0; i < {{$settings['default_language_number']}} ; i++){
-			if (i > $lang.length) break;
-			$lang[i].click();
+			if (i > lang.length) break;
+			lang[i].click();
 		}
 		@endif
 	});
-	$(".js-example-tokenizer").select2({
-		tags: true,
-		tokenSeparators: [','],
-		createTag: function(params) {
-			var term = $.trim(params.term);
 
-			if (term === '') return null;
-			if (term[0] != '#') return null;
+	var select_obj = new SlimSelect({
+		select : ".js-example-tokenizer",
+		events: {
+			addable : (params) => {
+				var term = params.trim();
+				if (term === '') return false;
+				if (term[0] != '#') return false;
 
-			return {
-				id: term,
-				text: term,
-				newTag: true // add additional parameters
-			}
-		},
-		closeOnSelect: false,
+				return term;
+			},
+		}
 	});
+
 
 </script>
 @endsection
@@ -92,24 +91,24 @@
 
 <div class=" ">
 	@php( $msgclasses = array('text-success'=> 'text-success', 'text-info'=> 'text-warning', 'text-danger'=> 'text-danger') )
-	
+
 	@foreach ($messages as $message)
 		<p class="{{ $msgclasses[$message->type] }}">
 			{{ $message->text }}
 		</p>
 	@endforeach
-	
+
 	@if ($edit)
 	<p>
 		<i class="fa fa-info-circle fa-lg color8"></i> If you don't want to change tests or pdf file, just do not upload its file.
 	</p>
 	@endif
-	
-	
+
+
 	<form method="POST"
 		@if ($edit)
 			action="{{ route('problems.update', $problem) }}"
-		@else  
+		@else
 			action="{{ route('problems.store') }}"
 		@endif
 		enctype="multipart/form-data"
@@ -119,7 +118,7 @@
 	@endif
 	@csrf
 	<div class="row mb-4">
-		<div class="col-sm-6">
+		<div class="col-sm-6 mb-3">
 			<div class="row gy-3">
 				<div class="form-floating">
 					<input id="name" type="text" name="name" class="form-control col-xs-7" value="{{ old('name',  $edit ? $problem->name : '') }}"/>
@@ -137,7 +136,7 @@
 							<strong>{{ $message }}</strong>
 						</div>
 					@enderror
-					<label for="author">Original author 							
+					<label for="author">Original author
 					</label>
 					<small class="text-secondary">Honor original author by writing his/her name and affiliation here.</small>
 				</div>
@@ -149,7 +148,7 @@
 							<strong>{{ $message }}</strong>
 						</div>
 					@enderror
-					<label for="editorial">Link to editorial 
+					<label for="editorial">Link to editorial
 					</label>
 					<small class="text-secondary">Provide a link to editorial here</small>
 				</div>
@@ -175,10 +174,10 @@
 					</label>
 					<input id="form_tests_dir" type="file" webkitdirectory  multiple name="tests_dir[]" class="form-control" />
 					<small class="text-secondary">You can upload an entire folder of <strong> {{ $max_file_uploads }} </strong> file(s).
-						If your test folder have more files you will have to upload a zip file of that folder instead. Also, this features is not web standard, some browser may not support it 
+						If your test folder have more files you will have to upload a zip file of that folder instead. Also, this features is not web standard, some browser may not support it
 					</small>
 				</div>
-			
+
 				<div class="just-for-gutter">
 					<label>Difficult</label>
 					<div class="row  small">
@@ -198,7 +197,7 @@
 					<small class="text-secondary">You can add new tag by precedding them with '#' character (this character will not be present in the tag's text)</small>
 					<select class="js-example-tokenizer form-control" multiple="multiple" name="tag_id[]">
 						@foreach( $all_tags as $t)
-						<option value="{{ $t->id }}" data-text="{{$t->text}}" data-id="{{$t->id}}" 
+						<option value="{{ $t->id }}" data-text="{{$t->text}}" data-id="{{$t->id}}"
 							{{ isset($tags[$t->id]) ? 'selected="selected"' : ''  }}
 							>{{$t->text}}</option>
 						@endforeach
@@ -213,7 +212,7 @@
 				<label for="admin_note">Admin's note</label>
 				{{-- {{ form_error('admin_note', '<div class="alert alert-danger">', '</div>') }} --}}
 			</div>
-			
+
 			<div class="row g-3 mt-4">
 				<div class="form-check-inline  form-check form-switch col">
 					<input type="checkbox" class="form-check-input" id="customSwitch2" name = "allow_practice" {{ ($edit ? $problem->allow_practice : old('allow_practice', 0)) ? 'checked' : '' }} >
@@ -222,7 +221,7 @@
 					</label>
 				</div>
 				<div class="form-check-inline form-check form-switch col">
-					
+
 					<input type="checkbox" class="form-check-input" id="sharable_switch" name = "sharable"  {{ ($edit ? $problem->sharable : old('sharable', 0)) ? 'checked' : '' }} >
 					<label class="form-check-label" for="sharable_switch">
 						Sharable <small class="text-secondary">Allow other head_instructor to view this problem and use it in theirs assignments</small>
@@ -231,14 +230,14 @@
 			</div>
 			<div class="row g-3 mt-2">
 				<div class="form-check-inline form-check form-switch col">
-					
+
 					<input value="1" type="checkbox" class="form-check-input" id="allow_input_download_switch" name = "allow_input_download"  {{ ($edit ? $problem->allow_input_download : old('allow_input_download', 0)) ? 'checked' : '' }} >
 					<label class="form-check-label" for="allow_input_download_switch">
 						Alow input download <small class="text-secondary">Allow anyone that can submit to the problems to be able to download the input from testcases as well</small>
 					</label>
 				</div>
 				<div class="form-check-inline form-check form-switch col">
-					
+
 					<input value="1" type="checkbox" class="form-check-input" id="allow_output_download_switch" name = "allow_output_download"  {{ ($edit ? $problem->allow_output_download : old('allow_output_download', 0)) ? 'checked' : '' }} >
 					<label class="form-check-label" for="allow_output_download_switch">
 						Allow output download <small class="text-secondary">Allow anyone that can submit to the problems to be able to download the output from testcases as well</small>
@@ -272,19 +271,19 @@
 			</div>
 		</div>
 	</div>
-	
+
 
 	<label >Click on the button to add more language for this problems</label></br>
 	{{-- <div class ="form-old-row row"> --}}
 		@foreach($all_languages as $lang)
-			<a data-lang="{{ $lang->id }}" class="btn btn-success me-2 add_language add_language_{{ $lang->id }} 
+			<a data-lang="{{ $lang->id }}" class="btn btn-success me-2 add_language add_language_{{ $lang->id }}
 				{{ isset($languages[$lang->id]) ? "d-none" : "" }}" href="#!" role="button">
 				{{ $lang->name }}
 			</a>
 		@endforeach
 	{{-- </div> --}}
-	
-	<div class="form-old-row row"> 
+
+	<div class="form-old-row row">
 		<div class="table-responsive">
 			<table id="problems_table" class="mt-2 table">
 				<thead class="thead-old table-light">

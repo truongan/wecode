@@ -36,7 +36,7 @@
 				<tr>
 					<th>ID</th>
 					{{-- <th>Owner</th> --}}
-					<th><small>Select</small></th>
+					{{-- <th><small>Select</small></th> --}}
 					<th width="15%">Class</th>
 					<th width="15%">Name</th>
 					<th width="15%"><small>Submit</small></th>
@@ -56,11 +56,10 @@
 					@continue
 				@endif
 			<tr data-id="{{$assignment->id}}">
-				<td><span title="Owner's username and assignment id"> {{$assignment->id}}  </span> </td>
-				{{-- <td></td> --}}
-				<td>
-					<span title="View an assignment's problem or submission will set it as your default assignment">
-						<i  class=" far {{ (isset(Auth::user()->selected_assignment->id) && $assignment->id == Auth::user()->selected_assignment->id) ? 'fa-check-square color6' : 'fa-square' }} fa-2x" data-id="{{ $assignment->id }}"></i>
+				<td><span  class ="
+						{{  (Auth::user()->selected_assignment->id ?? -1) == $assignment->id ? 'text-info' : 'text-body' }}
+					">
+						{{$assignment->id}}
 					</span>
 				</td>
 				<td>
@@ -69,7 +68,9 @@
 					@endforeach
 				</td>
 				<td>
-					<a href="{{ route('assignments.show',['assignment'=>$assignment,'problem_id'=>0]) }}" title="Click to view problem(s)">
+					<a href="{{ route('assignments.show',['assignment'=>$assignment,'problem_id'=>0]) }}"
+					title="Click to view problem(s)"
+					>
 						<strong>{{ $assignment->name }}</strong>
 						<br/> (by:{{$assignment->user->username ?? "no owner"}})
 					</a>
@@ -99,8 +100,8 @@
 					@endif
 					</small>
 				</td>
-				<td><small>{{$assignment->start_time->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('llll (UZZ)') }}</small></td>
-				<td><small>{{$assignment->finish_time->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('llll (UZZ)') }}</small></td>
+				<td><small>{{$assignment->start_time->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('llll') }}</small></td>
+				<td><small>{{$assignment->finish_time->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('llll') }}</small></td>
 				<td>
 					<a href="{{ route('scoreboards.index', $assignment->id)}}" title="Click to viewa assignment's scoreboard">
 						@if ($assignment->score_board)
@@ -110,7 +111,6 @@
 						@endif
 					</a>
 					<br/>
-					{{-- <a href="{{ url("assignments/pdf/$assignment->id") }}"><i class="far fa-lg fa-file-pdf"></i></a> --}}
 				</td>
 				@if (!in_array( Auth::user()->role->name, ['student', 'guest']))
 				<td>
@@ -203,33 +203,32 @@ document.addEventListener("DOMContentLoaded", function () {
 		},
 		error: shj.loading_error,
 		success: function (response) {
-            if (response == "success"){
-                $.notify('Change sucessfully saved', {position: 'bottom right', className: 'success', autoHideDelay: 3500});
-                $('.save-button').removeClass('btn-info').addClass('btn-secondary');
-                }
-            },
-        error: function(response){
-            $.notify('Error while saving', {position: 'bottom right', className: 'error', autoHideDelay: 3500});
-        	}
+			if (response == "success"){
+				$.notify('Change sucessfully saved', {position: 'bottom right', className: 'success', autoHideDelay: 3500});
+				$('.save-button').removeClass('btn-info').addClass('btn-secondary');
+				}
+			},
+		error: function(response){
+			$.notify('Error while saving', {position: 'bottom right', className: 'error', autoHideDelay: 3500});
+			}
 		});
 	});
 
-    $("table").DataTable({
+	$("table").DataTable({
 		{{-- "pageLength": 60, --}}
 		{{-- "ordering":false, --}}
 		"order":['0', 'desc'],
 		"columns": [
-		    null,
-		    { "orderable": false }, //select
-		    null,
-		    null,
-		    null,
-		    null,//start
-		    null,//finish
-		    { "orderable": false }, //scoreboard
+			null,
+			null,
+			null,
+			null,
+			null,//start
+			null,//finish
+			{ "orderable": false }, //scoreboard
 			@if (!in_array( Auth::user()->role->name, ['student', 'guest']))
 				{ "orderable": false }, //open
-		    	{ "orderable": false }, //action
+				{ "orderable": false }, //action
 			@endif
 		  ],
 		"lengthMenu": [ [20, 60, 150, 500, -1], [20, 60, 150, 500, "All"] ]
