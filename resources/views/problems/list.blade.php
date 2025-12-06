@@ -81,15 +81,15 @@
 					<tr>
 						<th>ID?</th>
 						<th style="width: 20%">Name</th>
-						<th style="width: 55%">Note</th>
+						<th style="width: 35%">Note</th>
 						<!-- <th>owner</th> -->
 						<th style="width: 15%">Tags</th>
-						<th>Lang</th>
-						<th>Date</th>
+						<th  style="width: 10%">Lang</th>
+						<th style="width: 10%">Date</th>
 						<th><small>used</small></th>
 						<th><small>stat</small></th>
 						{{-- <th>Misc</th> --}}
-						<th>Tools</th>
+						<th style="width: 10%">Tools</th>
 					</tr>
 				</thead>
 			  @foreach ($problems as $item)

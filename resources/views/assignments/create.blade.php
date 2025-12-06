@@ -33,8 +33,8 @@
 
 @section('body_end')
 <script type="text/javascript" src="{{ asset('assets/js/Sortable.min.js') }}"></script>
-<script type="text/javascript" src="{{ asset('assets/slimselect/slimselect.js') }}"></script>
-<script type="text/javascript" src="{{ asset('assets/js/add_assignments.js') }}"></script>
+<script  type="text/javascript" src="{{ asset('assets/slimselect/slimselect.js') }}"></script>
+<script integrity="sha384-uek4Os3EgXiGYKNUHPJzYoJkQhBOKlfIYq6OUOotrhUREP0mFW+62x2jbJXZPcv6" type="text/javascript" src="{{ asset('assets/js/add_assignments.js') }}"></script>
 <script>
 	new SlimSelect({
 		select : '.lop-select',
