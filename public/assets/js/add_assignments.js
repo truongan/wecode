@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			maxValuesShown: 1,
 			closeOnSelect: false,
 			keepOrder: true,
-			allowDeselect: false,
+			hideSelected: true,
 		},
 	});
 

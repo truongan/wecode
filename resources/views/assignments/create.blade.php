@@ -5,9 +5,8 @@
 @section('title', 'New assignments')
 
 @section('other_assets')
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/select2/select2.min.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/slimselect/an.slimselect.bootstrap.hack.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/slimselect/slimselect.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/slimselect/an.slimselect.bootstrap.hack.css') }}">
 <style>
 
 
@@ -34,7 +33,6 @@
 
 @section('body_end')
 <script type="text/javascript" src="{{ asset('assets/js/Sortable.min.js') }}"></script>
-<script type="text/javascript" src="{{ asset('assets/select2/select2.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('assets/slimselect/slimselect.js') }}"></script>
 <script type="text/javascript" src="{{ asset('assets/js/add_assignments.js') }}"></script>
 <script>
