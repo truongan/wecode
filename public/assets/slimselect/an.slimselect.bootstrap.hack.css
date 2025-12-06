@@ -1,0 +1,16 @@
+html[data-bs-theme="dark"] .ss-main,
+html[data-bs-theme="dark"] .ss-content,
+html[data-bs-theme="dark"] .ss-search,
+html[data-bs-theme="dark"] .ss-search input,
+html[data-bs-theme="dark"] .ss-content .ss-list
+{
+	background-color: var(--bs-body-bg); /* Use Bootstrap's dark background */
+	color: var(--bs-body-color); /* Use Bootstrap's dark text color */
+	border-color: var(--bs-border-color);
+}
+html[data-bs-theme="dark"] .ss-content .ss-list .ss-option
+{
+    /* slim select options background is used to distinguish selected options, shold sould not override */
+	color: var(--bs-body-color); /* Use Bootstrap's dark text color */
+	border-color: var(--bs-border-color);
+}

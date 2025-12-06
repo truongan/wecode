@@ -5,21 +5,10 @@
 @section('other_assets')
   <link rel='stylesheet' type='text/css' href='{{ asset('assets/DataTables/datatables.min.css') }}'/>
   <link rel="stylesheet" type="text/css" href="{{ asset('assets/slimselect/slimselect.css') }}">
-<style>
-html[data-bs-theme="dark"] .ss-main,
-html[data-bs-theme="dark"] .ss-content,
-html[data-bs-theme="dark"] .ss-search,
-html[data-bs-theme="dark"] .ss-search input,
-html[data-bs-theme="dark"] .ss-content .ss-list,
-html[data-bs-theme="dark"] .ss-content .ss-list .ss-option
-{
-	background-color: var(--bs-body-bg); /* Use Bootstrap's dark background */
-	color: var(--bs-body-color); /* Use Bootstrap's dark text color */
-	border-color: var(--bs-border-color);
-}
+  <link rel="stylesheet" type="text/css" href="{{ asset('assets/slimselect/an.slimselect.bootstrap.hack.css') }}">
 
-</style>
 @endsection
+
 @section('title','Problems')
 
 @section('title_menu')

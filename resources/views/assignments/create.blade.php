@@ -6,28 +6,20 @@
 
 @section('other_assets')
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/select2/select2.min.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/slimselect/an.slimselect.bootstrap.hack.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/slimselect/slimselect.css') }}">
 <style>
-html[data-bs-theme="dark"] .ss-main,
-html[data-bs-theme="dark"] .ss-content,
-html[data-bs-theme="dark"] .ss-search,
-html[data-bs-theme="dark"] .ss-search input,
-html[data-bs-theme="dark"] .ss-content .ss-list,
-html[data-bs-theme="dark"] .ss-content .ss-list .ss-option
-{
-	background-color: var(--bs-body-bg); /* Use Bootstrap's dark background */
-	color: var(--bs-body-color); /* Use Bootstrap's dark text color */
-	border-color: var(--bs-border-color);
+
+
+#choice_multi_assignment .select2-selection__choice{
+	display:none !important;
 }
-	#choice_multi_assignment .select2-selection__choice{
-		display:none !important;
-	}
-	.problem-score{
-		width:8em!important;
-	}
-	.select2-container  textarea {
-		color: black;
-	}
+.problem-score{
+	width:8em!important;
+}
+.select2-container  textarea {
+	color: black;
+}
 </style>
 @endsection
 
@@ -45,14 +37,11 @@ html[data-bs-theme="dark"] .ss-content .ss-list .ss-option
 <script type="text/javascript" src="{{ asset('assets/select2/select2.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('assets/slimselect/slimselect.js') }}"></script>
 <script type="text/javascript" src="{{ asset('assets/js/add_assignments.js') }}"></script>
-<script type='text/javascript' src="{{ asset('assets/js/taboverride.min.js') }}"></script>
 <script>
-	document.addEventListener("DOMContentLoaded", function(){
-		tabOverride.set(document.getElementsByTagName('textarea'));
 		new SlimSelect({select : '.lop-select'});
 		new SlimSelect({select: '.languages-limit-select'})
-		// ('.lop-select').select2();
-	});
+	// document.addEventListener("DOMContentLoaded", function(){
+	// });
 </script>
 <script type="text/javascript">
 	shj.num_of_problems={{ count($problems) }};
@@ -195,10 +184,6 @@ html[data-bs-theme="dark"] .ss-content .ss-list .ss-option
 				{{-- {{ form_error('scoreboard', '<div class="alert alert-danger">', '</div>') }} --}}
 
 				<label for="form_late_rule">Coefficient rule (<a target="_blank" href="https://symfony.com/doc/current/reference/formats/expression_language.html">Expression</a>)
-					<small class="form-text text-muted  "> to calculate score coefficient (in percentage) based on <code>extra_time</code>, <code>delay</code> and <code>submit_time</code></small>
-				</label>
-				<input type="text" id="form_late_rule" name="late_rule" rows="4" class="form-control add_text" value="{{ $edit ? $assignment->late_rule : old('late_rule', $settings['default_late_rule'], false) }}"/>
-				{{-- {{ form_error('late_rule', '<div class="alert alert-danger">', '</div>') }} --}}
 
 				<div class="mt-2 row">
 					<div class="col-sm-4 ">

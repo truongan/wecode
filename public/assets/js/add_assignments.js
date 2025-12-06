@@ -19,6 +19,11 @@ function format_problem(prob) {
 function update_problem_count() {
 	$(".count_problems").html($(".list-group-item").length - 1);
 }
+function sum_score(){
+	document.querySelector(".sum_score").innerHTML =
+		Array.from(document.querySelectorAll('.problem-score'))
+			.reduce((sum, input) => sum + parseInt(input.value), 0) ;
+}
 
 document.addEventListener("DOMContentLoaded", function () {
 	var a = Sortable.create(problem_list, {
@@ -66,7 +71,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			.html(
 				'<span class="badge text-dark bg-light">' +
 					selected_data.id +
-					"</span>" +
+					   "</span>" +
 					'<span class="badge bg-secondary rounded-pill">' +
 					selected_data.owner +
 					"</span>" +
@@ -82,7 +87,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		e.preventDefault();
 	});
 
-	$("#select_multiple_problems").click(function () {
+	document.querySelector("#select_multiple_problems").addEventListener('click', function () {
 		console.log("shit");
 		var min = document.getElementById("multiple_problems_min").value;
 		var will_select = [];
@@ -107,7 +112,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			});
 	});
 
-	$("#distribute_score").click(function () {
+	document.querySelector("#distribute_score").addEventListener('click', function () {
 		var scores = $(".problem-score");
 		var count = scores.length - 1;
 		if (count > 0) {
@@ -116,20 +121,19 @@ document.addEventListener("DOMContentLoaded", function () {
 		scores.last().val(0);
 		scores.last().change();
 	});
-	$("#set_score").click(function () {
+	document.querySelector("#set_score").addEventListener('click', function () {
 		var scores = $(".problem-score");
 		scores.val($("#score_amount").val());
 		scores.last().val(0);
 		scores.last().change();
+
 	});
-	$("ul").on("change", ".problem-score", function () {
-		$(".sum_score").html("0");
-		var i = 0;
-		$(".problem-score").each(function () {
-			i = i + parseInt($(this).val());
-		});
-		$(".sum_score").html(i);
+	document.querySelector("#problem_list").addEventListener('change', e => {
+		if (e.target.matches('.problem-score')){
+			sum_score();
+		}
 	});
-	$(".problem-score").change();
+
+	sum_score();
 	update_problem_count();
 });

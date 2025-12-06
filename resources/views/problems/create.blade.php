@@ -8,24 +8,10 @@
 @section('title', 'New Problem')
 
 @section('other_assets')
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/slimselect/slimselect.css') }}">
 
-<style type="text/css">
-    html[data-bs-theme="dark"] .ss-main,
-    html[data-bs-theme="dark"] .ss-content,
-    html[data-bs-theme="dark"] .ss-search,
-    html[data-bs-theme="dark"] .ss-search input,
-    html[data-bs-theme="dark"] .ss-content .ss-list,
-    html[data-bs-theme="dark"] .ss-content .ss-list .ss-option
-    {
-    	background-color: var(--bs-body-bg); /* Use Bootstrap's dark background */
-    	color: var(--bs-body-color); /* Use Bootstrap's dark text color */
-    	border-color: var(--bs-border-color);
-    }
-	span.select2{
-		width: 100% !important;
-	}
-</style>
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/slimselect/slimselect.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/slimselect/an.slimselect.bootstrap.hack.css') }}">
+
 @endsection
 
 @section('title_menu')
@@ -286,7 +272,7 @@
 	<div class="form-old-row row">
 		<div class="table-responsive">
 			<table id="problems_table" class="mt-2 table">
-				<thead class="thead-old table-light">
+				<thead class="thead-old ">
 				<tr>
 					<th>ID</th>
 					<th>Name</th>
