@@ -38,10 +38,21 @@
 <script type="text/javascript" src="{{ asset('assets/slimselect/slimselect.js') }}"></script>
 <script type="text/javascript" src="{{ asset('assets/js/add_assignments.js') }}"></script>
 <script>
-		new SlimSelect({select : '.lop-select'});
-		new SlimSelect({select: '.languages-limit-select'})
-	// document.addEventListener("DOMContentLoaded", function(){
-	// });
+	new SlimSelect({
+		select : '.lop-select',
+		settings: {
+			maxValuesShown: 3,
+			closeOnSelect: false,
+		},
+	});
+	new SlimSelect({
+		select: '.languages-limit-select' ,
+		settings: {
+			maxValuesShown: 3,
+			closeOnSelect: false,
+		},
+	});
+
 </script>
 <script type="text/javascript">
 	shj.num_of_problems={{ count($problems) }};
