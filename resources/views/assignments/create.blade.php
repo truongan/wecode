@@ -193,6 +193,10 @@
 				{{-- {{ form_error('scoreboard', '<div class="alert alert-danger">', '</div>') }} --}}
 
 				<label for="form_late_rule">Coefficient rule (<a target="_blank" href="https://symfony.com/doc/current/reference/formats/expression_language.html">Expression</a>)
+					<small class="form-text text-muted  "> to calculate score coefficient (in percentage) based on <code>extra_time</code>, <code>delay</code> and <code>submit_time</code></small>
+					</label>
+				<input type="text" id="form_late_rule" name="late_rule" rows="4" class="form-control add_text" value="{{ $edit ? $assignment->late_rule : old('late_rule', $settings['default_late_rule'], false) }}"/>
+
 
 				<div class="mt-2 row">
 					<div class="col-sm-4 ">
