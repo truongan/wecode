@@ -34,14 +34,14 @@
 
 		var row = document.querySelector(".lang_row_" + lang);
 		row.classList.toggle('d-none');//.show();
-		row.querySelector('.lang_checkbox').checked = true;
+		row.querySelector('.lang_checkbox').value = 1;
 	}));
 
 	document.querySelectorAll(".remove_language").forEach( x => x.addEventListener("click", function(){
 		var lang = this.dataset['lang'];
 		var row = document.querySelector(".lang_row_" + lang);
 		row.classList.toggle('d-none');//.show();
-		row.querySelector('.lang_checkbox').checked = false;
+		row.querySelector('.lang_checkbox').value = 0;
 
 		document.querySelector('.add_language_' + lang).classList.toggle('d-none');
 	}));
