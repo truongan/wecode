@@ -199,9 +199,8 @@
 						@if($item->editorial != '')
 							<a href="{{ $item->editorial }}" data-bs-toggle="tooltip" title='This problem has some linked editorial'><i class="fas fa-lightbulb fa-2x   "></i></a>
 						@endif
-
 						@if($item->author != '')
-							<br/><i class="fas fa-user   "></i> {{$item->author}}
+							<i class="fas fa-user   "></i> {{$item->author}}
 						@endif
 					{{-- </td> --}}
 					{{-- DOWNLOAD, EDIT, DELETE --}}
