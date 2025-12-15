@@ -107,7 +107,7 @@ class problem_controller extends Controller
 		return view("problems.list", [
 			"problems" => $all_problem,
 			"all_tags" => Tag::all(),
-			'all_user_names' => User::pluck('username'),
+			'all_user_names' => User::has('problems')->pluck('username'),
 		]);
 	}
 

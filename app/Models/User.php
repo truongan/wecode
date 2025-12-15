@@ -18,7 +18,7 @@ use Role;
 class User extends Authenticatable
 {
     use Notifiable;
-	
+
     /**
      * The attributes that are mass assignable.
      *
@@ -55,16 +55,20 @@ class User extends Authenticatable
     public function role(){
         return $this->belongsTo('App\Models\Role');
 	}
-	
+
     function submissions()
     {
         return $this->hasMany('App\Models\Submission');
     }
 
+    function problems(){
+    	return $this->hasMany(Problem::class);
+    }
+
 	function lops(){
 		return $this->belongsToMany('App\Models\Lop');
     }
-    
+
     function selected_assignment(){
         return $this->belongsTo('App\Models\Assignment', 'selected_assignment_id');
     }
