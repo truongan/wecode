@@ -6,6 +6,7 @@ use App\Models\Problem;
 use App\Models\Setting;
 use App\Models\Language;
 use App\Models\Tag;
+use App\Models\User;
 use App\Models\Submission;
 use App\Models\Assignment;
 use Illuminate\Http\Request;
@@ -68,6 +69,14 @@ class problem_controller extends Controller
 				$query->whereIn("tag_id", $request->get("tag_id"));
 			});
 		}
+		if ($request->get("owners") != null) {
+			// dd($request->get("owners"));
+			$all_problem->whereHas("user", function (Builder $query) use (
+				$request,
+			) {
+				$query->whereIn("username", $request->get("owners"));
+			});
+		}
 
 		$all_problem = $all_problem
 			->with("assignments", "languages")
@@ -98,6 +107,7 @@ class problem_controller extends Controller
 		return view("problems.list", [
 			"problems" => $all_problem,
 			"all_tags" => Tag::all(),
+			'all_user_names' => User::pluck('username'),
 		]);
 	}
 

@@ -22,32 +22,32 @@
 
 	<div class="accordion mb-5 " id="accordionExample">
 		<div class="accordion-item">
-		  <h2 class="accordion-header">
-			<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-controls="collapseOne">
-			  Import/Export problems
-			</button>
-		  </h2>
-		  <div id="collapseOne" class="accordion-collapse collapse " data-bs-parent="#accordionExample">
-			<div class="accordion-body">
-				<div class="row mb-2">
-					<div class="col-md"><a href="" download id = "download_all_selected"><i class="fas fa-download fa-lg text-info"></i>Export selected problem (zip)</a></div>
-					<div class="col-md"><a href="" id="select_all_for_download"><i class="fas fa-check-square fa-lg text-info"></i>Select all problems</a></div>
-					<div class="col-md"><a href="" id="deselect_all_for_download"><i class="far fa-square fa-lg text-info"></i>Deselect all problems</a></div>
-					<div class="col-md-6">
-						<form 		enctype="multipart/form-data"			action="{{ route('problems.import') }}"  method="post"  class="row g-3 needs-validation" novalidate>
-						  <div class="col-md-10">
-							<label for="validationCustom05" class="form-label">Import multiple (zipped) problems</label>
-							<input name="zip_upload" type="file" class="form-control-sm" id="validationCustom05" required>
-						  </div>
-						  <input type="hidden" name="_token" value="{{ csrf_token() }}" />
-						  <div class="col-2">
-							<button class="btn btn-primary" type="submit">Import</button>
-						  </div>
-						</form>
+			<h2 class="accordion-header">
+				<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-controls="collapseOne">
+					Import/Export problems
+				</button>
+			</h2>
+			<div id="collapseOne" class="accordion-collapse collapse " data-bs-parent="#accordionExample">
+				<div class="accordion-body">
+					<div class="row mb-2">
+						<div class="col-md"><a href="" download id = "download_all_selected"><i class="fas fa-download fa-lg text-info"></i>Export selected problem (zip)</a></div>
+						<div class="col-md"><a href="" id="select_all_for_download"><i class="fas fa-check-square fa-lg text-info"></i>Select all problems</a></div>
+						<div class="col-md"><a href="" id="deselect_all_for_download"><i class="far fa-square fa-lg text-info"></i>Deselect all problems</a></div>
+						<div class="col-md-6">
+							<form 		enctype="multipart/form-data"			action="{{ route('problems.import') }}"  method="post"  class="row g-3 needs-validation" novalidate>
+							  <div class="col-md-10">
+								<label for="validationCustom05" class="form-label">Import multiple (zipped) problems</label>
+								<input name="zip_upload" type="file" class="form-control-sm" id="validationCustom05" required>
+							  </div>
+							  <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+							  <div class="col-2">
+								<button class="btn btn-primary" type="submit">Import</button>
+							  </div>
+							</form>
+						</div>
 					</div>
 				</div>
 			</div>
-		  </div>
 		</div>
 
 	<form class="row mt-3 mb-3 gx-3  align-items-center" method="get" action="{{ route('problems.index') }}">
@@ -57,8 +57,14 @@
 				<input type="text" name="search" id="search" class="form-control" placeholder="Search by name" aria-describedby="Search by name" value="{{ Request::get('search') }} " >
 				<button type="button" class="btn btn-outline-danger" onClick="document.getElementById('search').value = '' ;"><i class="fas fa-times    "></i></button>
 
-				<label class="input-group-text">by tag</label>
-				<select class="search-by-tags form-control " multiple="multiple" name="tag_id[]">
+				<label class="input-group-text">tag</label>
+				<select class="search-by-tags form-control " multiple="multiple" name="tag_id[]"></select>
+
+				<label class="input-group-text">owner</label>
+				<select class="search-by-authors form-control " multiple="multiple" name="owners[]">
+					@foreach ($all_user_names as $user_name)
+					<option value="{{$user_name}}" >{{$user_name}} </option>
+					@endforeach
 				</select>
 			</div>
 		</div>
@@ -94,7 +100,7 @@
 				</thead>
 			  @foreach ($problems as $item)
 				<tr data-id="{{$item->id}}">
-					<td>{{ ($item->user->username == Auth::user()->username ? 100000 : 0) + intval( ($item->id) )}}</td>
+					<td>{{ ($item->user->username == Auth::user()->username ? 0 : 0) + intval( ($item->id) )}}</td>
 					{{-- NAME --}}
 					<td>
 						<a href="{{ route( 'practices.show' ,$item->id) }}">{{ $item->name }}</a>
@@ -270,6 +276,12 @@
 		var search_select = new SlimSelect({
 			select:'.search-by-tags'
 		})
+		var search_owner = new SlimSelect({
+			select: '.search-by-authors'
+		})
+		searched_owners =  {!! json_encode(Request::get('owners')) !!} ;
+		console.log(searched_owners)
+		search_owner.setSelected(searched_owners, false);
 		populate_search();
 
 		document.querySelectorAll('.edit-tag-list-handle').forEach(
