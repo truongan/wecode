@@ -80,7 +80,7 @@ class problem_controller extends Controller
 
 		$all_problem = $all_problem
 			->with("assignments", "languages")
-			->paginate(Setting::get("results_per_page_all"));
+			->paginate(Setting::get("results_per_page_all"))->withQueryString();
 		$all_problem->appends(["search" => $request->get("search")]);
 
 		$a = $all_problem->pluck("id");
