@@ -79,9 +79,10 @@ class submission_controller extends Controller
 		Auth::user()->save();
 
 		$submissions =$assignment->submissions();;
-		if ( in_array( Auth::user()->role->name, ['student', 'guest']) )
+		if ( in_array( Auth::user()->role->name, ['student', 'guest']) or ($assignment->id == 0 and !in_array( Auth::user()->role->name, ['admin']) ) )
 		{
 			//Student can only view their own submissions, regardless of assignment, so we don't check assignment permissions for student
+			//or in case of instructors and assignment is 'practice' they can view their own submissions also
 			$submissions = $submissions->where('user_id',Auth::user()->id);
 		}
 		else if ($user_id != 'all'){

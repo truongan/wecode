@@ -36,7 +36,8 @@ class covert_brackets_to_tags extends Command
 
 
 			$new_name = preg_replace('/\[(.*?)\]/', '', $name);
-            $matches[1][] = $prob->user->username; //Add uploader name as a tags
+            // $matches[1][] = $prob->user->username; //Add uploader name as a tags
+            // Now that we have search be owner name, this is not very useful anymore
 			echo ("Problem {$id} got the following brackets: " . print_r($matches[1], true) . "rename to {$new_name}\n\n");
 
 			if ($this->option('dry_run')) continue;
