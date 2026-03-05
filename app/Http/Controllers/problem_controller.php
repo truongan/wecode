@@ -690,7 +690,13 @@ class problem_controller extends Controller
 
 		foreach ($probs as $prob) {
 			$pathdir = $prob->get_directory_path();
+			if (!file_exists($pathdir)){
+				// Nothing to export,
+				// dd($pathdir);
+				mkdir($pathdir, 0700, true);
+			}
 			$metadata_file = $pathdir . "/problem.wecode.metadata.json";
+
 			file_put_contents($metadata_file, $prob->toJSON(JSON_PRETTY_PRINT));
 			$a = shell_exec(
 				"cd $pathdir/.. && zip -r $zipFile  " .
