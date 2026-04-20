@@ -163,7 +163,7 @@
 	</script>
 
 
-	<script type="text/javascript" src="{{ asset('assets/js/shj_functions.js') }}"></script>
+	<script type="text/javascript" integrity="sha384-6idc9ARLj8MxJGpKeLStkNk2I7s3J5WftynCb/ULIc54fe815w9H/t6FHNSX1nXf" src="{{ asset('assets/js/shj_functions.js') }}"></script>
 	@yield('body_end')
 </body>
 </html>
