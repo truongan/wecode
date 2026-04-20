@@ -55,7 +55,7 @@
 		site_url = '{{ url('/') }}';
 	</script>
 	<script type='text/javascript' src="{{ asset("assets/prismjs/prism.js") }}"></script>
-	<script type='text/javascript' src="{{ asset("assets/js/submissions_list.js") }}"></script>
+	<script type='text/javascript' src="{{ asset("assets/js/submissions_list.js?v=20260421") }}"></script>
 
 	<script type="text/javascript" src="{{ asset('assets/DataTables/datatables.min.js') }}"></script>
 
