@@ -60,7 +60,6 @@ document.addEventListener("DOMContentLoaded", function () {
 		$(".code-column").selectText();
 	});
 
-	//$(".btn").click(function () {
 	$("td").on("click", "div.btn", function () {
 		$(".modal-body").html(
 			'<div class="text-center">		<div class="spinner-border" ole="status">			<span class="sr-only">Loading...</span>		</div>	</div>',
@@ -175,7 +174,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 update_status_interval = 6000;
 function update_status() {
-	// $('tr').each(function(){
 	last_pend = document.querySelectorAll(" div.btn.pending");
 
 	last_pend = last_pend[last_pend.length - 1];
@@ -219,7 +217,6 @@ function update_status() {
 				default:
 					element = '<div class="btn btn-primary"  data-type="result">' + response.status + "</div>";
 			}
-			// status.html(element);
 			row.querySelector(".js-verdict").innerHTML = response.rendered_verdict;
 		},
 	});

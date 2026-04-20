@@ -9,7 +9,9 @@ use Illuminate\Pagination\Paginator;
 // use Illuminate\Support\Facades\App;
 // use Illuminate\Support\Facades\URL;
 
-
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\RateLimiter;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -47,6 +49,9 @@ class AppServiceProvider extends ServiceProvider
 		//    return $url->current();
 		// });
 
+		RateLimiter::for("view_submit", function (Request $request) {
+			return Limit::perMinutes(1, 90)->by($request->user()?->id ?: $request->ip());
+		});
 		Paginator::useBootstrapFive();
 	}
 }
