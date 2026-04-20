@@ -25,7 +25,7 @@ shj.update_clock = function () {
 	shj.time = new Date();
 	var now = new Date(new Date().getTime() + shj.offset);
 	// console.log(now);
-	$(".timer").html("Server time: " + now);
+	$(".timer").html(now);
 
 	var countdown = shj.finish_time - now;
 
