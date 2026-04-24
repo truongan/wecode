@@ -137,6 +137,8 @@
 			</tr>
 			@endforeach
 		</table>
+		<div class=" d-flex justify-content-center">{{$assignments->links(null, ['class'=>'justify-content-center'])}}</div>
+
 	</div>
 	{{-- @php(dd(DB::getQueryLog())) --}}
 </div>
@@ -215,6 +217,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	});
 
 	$("table").DataTable({
+		"paging": false,
 		{{-- "pageLength": 60, --}}
 		{{-- "ordering":false, --}}
 		"order":['0', 'desc'],
@@ -231,7 +234,7 @@ document.addEventListener("DOMContentLoaded", function () {
 				{ "orderable": false }, //action
 			@endif
 		  ],
-		"lengthMenu": [ [20, 60, 150, 500, -1], [20, 60, 150, 500, "All"] ]
+		// "lengthMenu": [ [20, 60, 150, 500, -1], [20, 60, 150, 500, "All"] ]
 	});
 });
 </script>

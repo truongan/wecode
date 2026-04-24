@@ -403,8 +403,6 @@
 
 	$("table").DataTable({
 		"paging": false,
-
-
 		{{-- "ordering": false, --}}
 		'order':[
 			[0, 'desc']

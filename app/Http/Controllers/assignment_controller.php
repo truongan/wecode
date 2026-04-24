@@ -21,16 +21,16 @@ use App\Http\Middleware\ip_white_listing;
 
 class assignment_controller extends Controller
 {
-
-	protected static function dummy_problem(){
-		$problem = new class{};
-		$problem->pivot = new class{};
+	protected static function dummy_problem()
+	{
+		$problem = new class {};
+		$problem->pivot = new class {};
 		$problem->id = -1;
-		$problem->name = 'dummy';
-		$problem->pivot->problem_name = 'dummy';
-		$problem->pivot->score=0;
-		$problem->admin_note = 'dummy';
-		$problem->user = (object)['username'=>'dummy'];
+		$problem->name = "dummy";
+		$problem->pivot->problem_name = "dummy";
+		$problem->pivot->score = 0;
+		$problem->admin_note = "dummy";
+		$problem->user = (object) ["username" => "dummy"];
 
 		return $problem;
 	}
@@ -41,8 +41,8 @@ class assignment_controller extends Controller
 	 */
 	public function __construct()
 	{
-		$this->middleware('auth'); // phải login
-        $this->middleware(ip_white_listing::class);
+		$this->middleware("auth"); // phải login
+		$this->middleware(ip_white_listing::class);
 		$this->middleware(read_only_archive::class); // Make this controller read only when app is in archived mode.
 	}
 
@@ -55,35 +55,36 @@ class assignment_controller extends Controller
 	{
 		DB::enableQueryLog();
 		//
-		if (!in_array( Auth::user()->role->name, ['admin']) )
-		{
-			$lops_id =  Auth::user()->lops->pluck('id');
+		if (!in_array(Auth::user()->role->name, ["admin"])) {
+			$lops_id = Auth::user()->lops->pluck("id");
 			// dd($lops_id->join(','));
 			// $assignments = Auth::user()->lops()->with('assignments')->get()->pluck('assignments')->collapse()->keyBy('id')->sortByDesc('created_at');
-			$assignments =
-				Assignment::where( function($query) use ($lops_id){
-					$query
-						->whereHas('lops' , function( $q) use ($lops_id){
-							$q->whereIn('lops.id', $lops_id);
-						})
-						->orWhere('user_id', Auth::user()->id);
-				});
-			if (Auth::user()->role->name == 'student'){
-				$assignments = $assignments->where(['open' => 1]);
+			$assignments = Assignment::where(function ($query) use ($lops_id) {
+				$query
+					->whereHas("lops", function ($q) use ($lops_id) {
+						$q->whereIn("lops.id", $lops_id);
+					})
+					->orWhere("user_id", Auth::user()->id);
+			});
+			if (Auth::user()->role->name == "student") {
+				$assignments = $assignments->where(["open" => 1]);
 			}
-			$assignments = $assignments->latest()->get();
+			$assignments = $assignments->latest();
+		} else {
+			$assignments = Assignment::with("problems", "lops")->latest();
 		}
-		else $assignments = Assignment::with('problems','lops')->latest()->get();
-		foreach ($assignments as &$assignment)
-		{
+
+		$assignments = $assignments->paginate(Setting::get("results_per_page_all"))->withQueryString();
+
+		foreach ($assignments as &$assignment) {
 			$delay = strtotime(date("Y-m-d H:i:s")) - strtotime($assignment->finish_time);
 			$submit_time = strtotime(date("Y-m-d H:i:s")) - strtotime($assignment->start_time);
 
-			$assignment->coefficient = $assignment->eval_coefficient();// $coefficient;
+			$assignment->coefficient = $assignment->eval_coefficient(); // $coefficient;
 			$assignment->finished = $assignment->is_finished();
 			$assignment->no_of_problems = $assignment->problems->count();
 		}
-		$a =  view('assignments.list',['assignments'=> $assignments]);
+		$a = view("assignments.list", ["assignments" => $assignments]);
 
 		return $a;
 	}
@@ -95,54 +96,67 @@ class assignment_controller extends Controller
 	 */
 	public function create()
 	{
-		if (Auth::user()->role->name == 'admin'){
+		if (Auth::user()->role->name == "admin") {
 			$all_lops = Lop::latest()->get();
-		} else if (Auth::user()->role->name == 'head_instructor'){
-			$all_lops = Auth::user()->lops->keyBy('id');
+		} elseif (Auth::user()->role->name == "head_instructor") {
+			$all_lops = Auth::user()->lops->keyBy("id");
+		} else {
+			abort(403, "You do not have permission to edit assignment");
 		}
-		else abort(403,'You do not have permission to edit assignment');
 
 		$problems[-1] = $this->dummy_problem();
 
-		if(Auth::user()->role->name == 'admin') $allprob = Problem::withCount('assignments')->latest()->get();
-		else $allprob = Problem::available(Auth::user()->id)->latest()->withCount('assignments')->get();
+		if (Auth::user()->role->name == "admin") {
+			$allprob = Problem::withCount("assignments")->latest()->get();
+		} else {
+			$allprob = Problem::available(Auth::user()->id)
+				->latest()
+				->withCount("assignments")
+				->get();
+		}
 
-		return view(
-			'assignments.create',
-			[
-				'all_problems' => $allprob,
-				'all_lops' => $all_lops,
-				'extra_time' => '0*60*60',
-				'lops' => [],
-				'messages' => [],
-				'problems' => $problems,
-				'selected' => 'assignments',
-				'all_languages' => Language::all()
-			]
-		);
+		return view("assignments.create", [
+			"all_problems" => $allprob,
+			"all_lops" => $all_lops,
+			"extra_time" => "0*60*60",
+			"lops" => [],
+			"messages" => [],
+			"problems" => $problems,
+			"selected" => "assignments",
+			"all_languages" => Language::all(),
+		]);
 	}
 
-	private function _process_form(&$request){
-		if ($request['open']??0 == 1)
-			$request['open'] = True;
-		else $request['open'] = False;
+	private function _process_form(&$request)
+	{
+		if ($request["open"] ?? 0 == 1) {
+			$request["open"] = true;
+		} else {
+			$request["open"] = false;
+		}
 
-		if ($request['scoreboard']??0 == 1)
-			$request['score_board'] = True;
-		else $request['score_board'] = False;
+		if ($request["scoreboard"] ?? 0 == 1) {
+			$request["score_board"] = true;
+		} else {
+			$request["score_board"] = false;
+		}
 
 		$extra_time = 1;
-		foreach( explode('*',$request['extra_time'] ) as $t){
+		foreach (explode("*", $request["extra_time"]) as $t) {
 			$extra_time *= $t;
 		}
-		$request['extra_time'] = $extra_time;
+		$request["extra_time"] = $extra_time;
 
 		$zone = Carbon::now()->getTimezone();
 
-		$request['start_time'] = (new Carbon($request['start_time_date'] . ' ' . $request['start_time_time'] . ' ' . Setting::get('timezone')))->setTimezone($zone);
-		$request['finish_time'] = (new Carbon($request['finish_time_date'] . ' ' . $request['finish_time_time'] . ' ' . Setting::get('timezone')))->setTimezone($zone);
+		$request["start_time"] = (new Carbon(
+			$request["start_time_date"] . " " . $request["start_time_time"] . " " . Setting::get("timezone"),
+		))->setTimezone($zone);
+		$request["finish_time"] = (new Carbon(
+			$request["finish_time_date"] . " " . $request["finish_time_time"] . " " . Setting::get("timezone"),
+		))->setTimezone($zone);
 
-		$request['language_ids'] = implode(", ", $request['language_ids']);
+		$request["language_ids"] = implode(", ", $request["language_ids"]);
 	}
 
 	/**
@@ -154,134 +168,147 @@ class assignment_controller extends Controller
 	public function store(Request $request)
 	{
 		//
-		if ( !in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
-			abort(403,'You do not have permission to add assignment');
+		if (!in_array(Auth::user()->role->name, ["admin", "head_instructor"])) {
+			abort(403, "You do not have permission to add assignment");
+		}
 
 		$validated = $request->validate([
-			'name' => ['required','max:150'],
-			'pdf_file' => 'mimes:pdf',
+			"name" => ["required", "max:150"],
+			"pdf_file" => "mimes:pdf",
 		]);
 
 		$input = $request->input();
 		// dd($input);
 		$this->_process_form($input);
 
-		$assignment = new Assignment;
+		$assignment = new Assignment();
 		$assignment->fill($input);
 		$assignment->user_id = Auth::user()->id;
 
 		$assignment->save();
-		if ($request->hasFile('pdf')) {
+		if ($request->hasFile("pdf")) {
 			$path_pdf = Setting::get("assignments_root");
 
-			$path = $request->pdf->storeAs("/assignment_" .  strval($assignment->id),$request->pdf->getClientOriginalName(),'assignment_root');
+			$path = $request->pdf->storeAs(
+				"/assignment_" . strval($assignment->id),
+				$request->pdf->getClientOriginalName(),
+				"assignment_root",
+			);
 		}
-		foreach ($request->problem_id as $i => $id)
-		{
-			if ($id == -1) continue;
+		foreach ($request->problem_id as $i => $id) {
+			if ($id == -1) {
+				continue;
+			}
 			$assignment->problems()->attach([
-				$id => ['problem_name' => $request->problem_name[$i], 'score' => $request->problem_score[$i], 'ordering' => $i],
+				$id => [
+					"problem_name" => $request->problem_name[$i],
+					"score" => $request->problem_score[$i],
+					"ordering" => $i,
+				],
 			]);
 		}
 
-		if ($request->lop_id != NULL)
-		{
-			foreach ($request->lop_id as $i => $id)
-			{
+		if ($request->lop_id != null) {
+			foreach ($request->lop_id as $i => $id) {
 				$assignment->lops()->attach($id);
 			}
 		}
 
-
-		return redirect('assignments');
+		return redirect("assignments");
 	}
 
-
-	private function collect_problem_data_to_show(Assignment $assignment, $problem_id){
+	private function collect_problem_data_to_show(Assignment $assignment, $problem_id)
+	{
 		$assignment_id = $assignment->id;
 
-		if ($assignment->id == 0){
-			return redirect()->route('practice');
+		if ($assignment->id == 0) {
+			return redirect()->route("practice");
 		}
 
-		$data=array(
-			'can_submit' => TRUE,
-			'problem_status' => NULL,
-			'sum_score' => 0
-		);
+		$data = [
+			"can_submit" => true,
+			"problem_status" => null,
+			"sum_score" => 0,
+		];
 
-		$data['all_problems'] = $assignment->problems;
+		$data["all_problems"] = $assignment->problems;
 
-		if ( $data['all_problems']->pluck('id')->contains($problem_id) == false){
+		if ($data["all_problems"]->pluck("id")->contains($problem_id) == false) {
 			//If we can't found problem_id, view the first problem
-			$problem_id = $data['all_problems']->first()->id ?? null;
-			if ($problem_id == null) abort(403, 'No problem to show');
+			$problem_id = $data["all_problems"]->first()->id ?? null;
+			if ($problem_id == null) {
+				abort(403, "No problem to show");
+			}
 		}
 
 		$problem = Problem::find($problem_id);
 		$result = $problem->description();
-		$problem['has_pdf'] = $result['has_pdf'];
-		$problem['description'] = $result['description'];
-		$problem['has_template'] = $result['has_template'];
-		$problem['error'] = NULL;
-		$data['problem'] = $problem;
-		$data['language'] = $problem->languages();
-		$data['all_problems'] = $assignment->problems;
-		$data['assignment'] =$assignment;
+		$problem["has_pdf"] = $result["has_pdf"];
+		$problem["description"] = $result["description"];
+		$problem["has_template"] = $result["has_template"];
+		$problem["error"] = null;
+		$data["problem"] = $problem;
+		$data["language"] = $problem->languages();
+		$data["all_problems"] = $assignment->problems;
+		$data["assignment"] = $assignment;
 
-		while(1){
-
-			if($assignment->id == 0){
-				if ( !in_array( Auth::user()->role->name, ['admin']) && $problem_id != 0) redirect('problems.show/'.$problem_id);
-				$data['error'] = "There is nothing to submit to. Please select assignment and problem.";
+		while (1) {
+			if ($assignment->id == 0) {
+				if (!in_array(Auth::user()->role->name, ["admin"]) && $problem_id != 0) {
+					redirect("problems.show/" . $problem_id);
+				}
+				$data["error"] = "There is nothing to submit to. Please select assignment and problem.";
 				break;
 			}
 
-			if (! $assignment->started() && in_array( Auth::user()->role->name, ['student']) ){
-				$data['error'] = "selected assignment hasn't started yet";
+			if (!$assignment->started() && in_array(Auth::user()->role->name, ["student"])) {
+				$data["error"] = "selected assignment hasn't started yet";
 				break;
 			}
 
-			if ($assignment->open == 0  && in_array( Auth::user()->role->name, ['student'])){
-				$data['error'] =("assignment " . $assignment['name'] . " has been closed");
+			if ($assignment->open == 0 && in_array(Auth::user()->role->name, ["student"])) {
+				$data["error"] = "assignment " . $assignment["name"] . " has been closed";
 				break;
 			}
 
-			if (! $assignment->is_participant(Auth::user())){
-				$data['error'] = "You are not registered to participate in this assignment";
+			if (!$assignment->is_participant(Auth::user())) {
+				$data["error"] = "You are not registered to participate in this assignment";
 				break;
 			}
 
 			// dd($assignment);
 			$a = $assignment->can_submit(Auth::user());
-			$data['can_submit'] = $a->can_submit;
-			$data['sum_score'] = 0;
-			foreach( $assignment->problems as $p)
-			{
-				$data['sum_score'] = $data['sum_score'] + $p->pivot->score;
+			$data["can_submit"] = $a->can_submit;
+			$data["sum_score"] = 0;
+			foreach ($assignment->problems as $p) {
+				$data["sum_score"] = $data["sum_score"] + $p->pivot->score;
 			}
 
-			$data['error'] = NULL;
+			$data["error"] = null;
 
 			$probs = [];
 
-			$subs = $assignment->submissions->where('is_final',1)->where('user_id',Auth::user()->id);
+			$subs = $assignment->submissions->where("is_final", 1)->where("user_id", Auth::user()->id);
 
-			foreach($assignment->problems as $p)
-			{
-				$probs[$p->pivot->id] = 'text-light bg-secondary';
+			foreach ($assignment->problems as $p) {
+				$probs[$p->pivot->id] = "text-light bg-secondary";
 			}
 
-			foreach($subs as $sub){
+			foreach ($subs as $sub) {
 				$class = "";
-				if($sub->status != 'PENDING'){
-					if ($sub->pre_score == 10000) $class = 'text-light bg-success';
-					else $class = "text-light bg-danger";
-				} else $class = "text-light bg-secondary";
-				$probs[$sub['problem_id']] = $class;
+				if ($sub->status != "PENDING") {
+					if ($sub->pre_score == 10000) {
+						$class = "text-light bg-success";
+					} else {
+						$class = "text-light bg-danger";
+					}
+				} else {
+					$class = "text-light bg-secondary";
+				}
+				$probs[$sub["problem_id"]] = $class;
 			}
 
-			$data['problem_status'] = $probs;
+			$data["problem_status"] = $probs;
 			break;
 		}
 
@@ -294,38 +321,43 @@ class assignment_controller extends Controller
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function show(Assignment $assignment, $problem_id ){
+	public function show(Assignment $assignment, $problem_id)
+	{
 		$data = $this->collect_problem_data_to_show($assignment, $problem_id);
 
 		Auth::user()->selected_assignment_id = $assignment->id;
 		Auth::user()->save();
 
-		return view('problems.show',$data);
+		return view("problems.show", $data);
 	}
 
-	public function show_pdf(Assignment $assignment,Problem  $problem ){
-
+	public function show_pdf(Assignment $assignment, Problem $problem)
+	{
 		$data = $this->collect_problem_data_to_show($assignment, $problem->id);
 		// dd($data);
-		if ($data['error'] != NULL){
-			abort(403, $data['error']);
+		if ($data["error"] != null) {
+			abort(403, $data["error"]);
 		}
 
 		return $problem->pdf();
 	}
 
-	public function get_directory_path($id = NULL){
-		if ($id === NULL) return NULL;
+	public function get_directory_path($id = null)
+	{
+		if ($id === null) {
+			return null;
+		}
 
 		$assignments_root = Setting::get("assignments_root");
 
-		$problem_dir = $assignments_root . "/problems/".$id;
+		$problem_dir = $assignments_root . "/problems/" . $id;
 
 		return $problem_dir;
 	}
 
-	public function duplicate(Assignment $assignment){
-		if (($t = $assignment->cannot_edit(Auth::user())) !== false){
+	public function duplicate(Assignment $assignment)
+	{
+		if (($t = $assignment->cannot_edit(Auth::user())) !== false) {
 			abort(403, $t);
 		}
 
@@ -335,9 +367,13 @@ class assignment_controller extends Controller
 		$new->save();
 
 		foreach ($assignment->problems as $p) {
-			$new->problems()->attach($p->id, ['score' => $p->pivot->score, 'problem_name' => $p->pivot->problem_name, 'ordering' =>$p->pivot->ordering] );
+			$new->problems()->attach($p->id, [
+				"score" => $p->pivot->score,
+				"problem_name" => $p->pivot->problem_name,
+				"ordering" => $p->pivot->ordering,
+			]);
 		}
-		return redirect()->route('assignments.index');
+		return redirect()->route("assignments.index");
 	}
 
 	/**
@@ -348,30 +384,47 @@ class assignment_controller extends Controller
 	 */
 	public function edit(Assignment $assignment)
 	{
-
-		if (($t = $assignment->cannot_edit(Auth::user())) !== false){
+		if (($t = $assignment->cannot_edit(Auth::user())) !== false) {
 			abort(403, $t);
 		}
 
-		if (Auth::user()->role->name == 'admin'){
+		if (Auth::user()->role->name == "admin") {
 			$all_lops = Lop::latest()->get();
 		} else {
-			$all_lops = Auth::user()->lops->keyBy('id');
+			$all_lops = Auth::user()->lops->keyBy("id");
 		}
 
 		$problems = [];
-		$problems = $assignment->problems()->orderBy('ordering')->get()->push($this->dummy_problem())->keyBy('id');
+		$problems = $assignment->problems()->orderBy("ordering")->get()->push($this->dummy_problem())->keyBy("id");
 
 		$e = $assignment->extra_time;
-		if ($e % 3600 == 0) $assignment->extra_time = intval($e/3600) . "*60*60";
-		else if ($e % 60 == 0) $assignment->extra_time = intval($e/60) . "*60";
+		if ($e % 3600 == 0) {
+			$assignment->extra_time = intval($e / 3600) . "*60*60";
+		} elseif ($e % 60 == 0) {
+			$assignment->extra_time = intval($e / 60) . "*60";
+		}
 
-		$lops = $assignment->lops->keyBy('id');
+		$lops = $assignment->lops->keyBy("id");
 
-		if(Auth::user()->role->name == 'admin') $allprob = Problem::withCount('assignments')->latest()->get();
-		else $allprob = Problem::available(Auth::user()->id)->latest()->withCount('assignments')->get();
+		if (Auth::user()->role->name == "admin") {
+			$allprob = Problem::withCount("assignments")->latest()->get();
+		} else {
+			$allprob = Problem::available(Auth::user()->id)
+				->latest()
+				->withCount("assignments")
+				->get();
+		}
 
-		return view('assignments.create',['assignment' => $assignment, 'all_problems' => $allprob, 'messages' => [], 'problems' => $problems, 'all_lops' => $all_lops, 'lops' => $lops, 'selected' => 'assignments', 'all_languages' => Language::all()]);
+		return view("assignments.create", [
+			"assignment" => $assignment,
+			"all_problems" => $allprob,
+			"messages" => [],
+			"problems" => $problems,
+			"all_lops" => $all_lops,
+			"lops" => $lops,
+			"selected" => "assignments",
+			"all_languages" => Language::all(),
+		]);
 	}
 
 	/**
@@ -383,12 +436,12 @@ class assignment_controller extends Controller
 	 */
 	public function update(Request $request, Assignment $assignment)
 	{
-		if (($t = $assignment->cannot_edit(Auth::user())) !== false){
+		if (($t = $assignment->cannot_edit(Auth::user())) !== false) {
 			abort(403, $t);
 		}
 		$validated = $request->validate([
-			'name' => ['required','max:150'],
-			'pdf' => 'mimes:pdf',
+			"name" => ["required", "max:150"],
+			"pdf" => "mimes:pdf",
 		]);
 
 		$input = $request->input();
@@ -396,44 +449,49 @@ class assignment_controller extends Controller
 		// dd($input);
 		$assignment->fill($input);
 
-
 		// $assignment->total_submits = 0;
 
 		$assignment->save();
-		if ($request->hasFile('pdf')) {
+		if ($request->hasFile("pdf")) {
 			$path_pdf = Setting::get("assignments_root");
-			$path_pdf = $path_pdf . "/assignment_" .  strval($assignment->id);
+			$path_pdf = $path_pdf . "/assignment_" . strval($assignment->id);
 			if (!file_exists($path_pdf)) {
 				mkdir($path_pdf);
 			}
-			foreach(glob($path_pdf . "/*") as $file)
-			{
+			foreach (glob($path_pdf . "/*") as $file) {
 				unlink($file);
 			}
-			$path = $request->pdf->storeAs("/assignment_" .  strval($assignment->id),$request->pdf->getClientOriginalName(),'assignment_root');
+			$path = $request->pdf->storeAs(
+				"/assignment_" . strval($assignment->id),
+				$request->pdf->getClientOriginalName(),
+				"assignment_root",
+			);
 		}
 
 		$assignment->problems()->detach();
-		foreach ($request->problem_id as $i => $id)
-		{
-			if ($id == -1) continue;
+		foreach ($request->problem_id as $i => $id) {
+			if ($id == -1) {
+				continue;
+			}
 			$assignment->problems()->attach([
-				$id => ['problem_name' => $request->problem_name[$i], 'score' => $request->problem_score[$i], 'ordering' => $i],
+				$id => [
+					"problem_name" => $request->problem_name[$i],
+					"score" => $request->problem_score[$i],
+					"ordering" => $i,
+				],
 			]);
 		}
 
 		$assignment->lops()->detach();
-		if ($request->lop_id != NULL)
-		{
-			foreach ($request->lop_id as $i => $id)
-			{
+		if ($request->lop_id != null) {
+			foreach ($request->lop_id as $i => $id) {
 				$assignment->lops()->attach($id);
 			}
 		}
 		$assignment->update_submissions_coefficient();
 		Scoreboard::update_scoreboard($assignment->id);
 
-		return redirect('assignments');
+		return redirect("assignments");
 	}
 
 	/**
@@ -444,149 +502,182 @@ class assignment_controller extends Controller
 	 */
 	public function destroy($id)
 	{
-		if ($id == 0){
+		if ($id == 0) {
 			//Do nothing, we just don't touch the practice assignment
-		}
-		else
-		{
+		} else {
 			//TO DO SOMETHING HERE
-			if (Assignment::find($id) == null)
-				$json_result = array('done' => 0, 'message' => 'Cannot delete assignment: "Not found"');
-			else
-			{
+			if (Assignment::find($id) == null) {
+				$json_result = ["done" => 0, "message" => 'Cannot delete assignment: "Not found"'];
+			} else {
 				$assignment = Assignment::find($id);
 
-				if (($t = $assignment->cannot_edit(Auth::user())) !== false){
-					$json_result = ['done' => 0, 'message' => $t];
+				if (($t = $assignment->cannot_edit(Auth::user())) !== false) {
+					$json_result = ["done" => 0, "message" => $t];
 				} else {
-
-					$submissions_in_queue = Submission::Where(['assignment_id' => $id, 'status' => 'pending'])->pluck('id')->toArray();
-					DB::table('queue_items')->whereIn('submission_id', $submissions_in_queue)->delete();
-					DB::table('submissions')->where('assignment_id', '=', $id)->delete();
-					DB::table('assignment_lop')->where('assignment_id', '=', $id)->delete();
-					DB::table('assignment_problem')->where('assignment_id', '=', $id)->delete();
-					$path_pdf = Setting::get('assignments_root') . "/assignment_" .  strval($assignment->id);
+					$submissions_in_queue = Submission::Where(["assignment_id" => $id, "status" => "pending"])
+						->pluck("id")
+						->toArray();
+					DB::table("queue_items")->whereIn("submission_id", $submissions_in_queue)->delete();
+					DB::table("submissions")->where("assignment_id", "=", $id)->delete();
+					DB::table("assignment_lop")->where("assignment_id", "=", $id)->delete();
+					DB::table("assignment_problem")->where("assignment_id", "=", $id)->delete();
+					$path_pdf = Setting::get("assignments_root") . "/assignment_" . strval($assignment->id);
 					if (file_exists($path_pdf)) {
 						shell_exec("rm -r -f $path_pdf");
 					}
 					Assignment::destroy($id);
-					$json_result = array('done' => 1);
+					$json_result = ["done" => 1];
 				}
 			}
 		}
 
-		header('Content-Type: application/json; charset=utf-8');
-		return ($json_result);
+		header("Content-Type: application/json; charset=utf-8");
+		return $json_result;
 	}
 
 	public function score_accepted()
 	{
-		if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
+		if (!in_array(Auth::user()->role->name, ["admin", "head_instructor", "instructor"])) {
 			abort(403);
-		return view('assignments.score_accepted');
+		}
+		return view("assignments.score_accepted");
 	}
 
 	public function score_sum()
 	{
-		if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
+		if (!in_array(Auth::user()->role->name, ["admin", "head_instructor", "instructor"])) {
 			abort(403);
-		return view('assignments.score_sum');
+		}
+		return view("assignments.score_sum");
 	}
-
 
 	public function download_all_submissions($assignment_id)
 	{
-		if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
+		if (!in_array(Auth::user()->role->name, ["admin", "head_instructor", "instructor"])) {
 			abort(403);
-		$ass = Assignment::find($assignment_id) ;
-		if ($ass == null)
+		}
+		$ass = Assignment::find($assignment_id);
+		if ($ass == null) {
 			abort(404);
+		}
 
-		if ($ass->submissions->count() == 0) abort(404);
+		if ($ass->submissions->count() == 0) {
+			abort(404);
+		}
 
 		$assignments_root = Setting::get("assignments_root");
-		$zipFile = $assignments_root . "/assignment" . (string)$assignment_id . "." . (string)date('Y-m-d_H-i') . ".zip";
-		$pathdir = $assignments_root . '/assignment_' . $assignment_id . "/";
+		$zipFile =
+			$assignments_root . "/assignment" . (string) $assignment_id . "." . (string) date("Y-m-d_H-i") . ".zip";
+		$pathdir = $assignments_root . "/assignment_" . $assignment_id . "/";
 		shell_exec("zip -r $zipFile $pathdir");
 		return response()->download($zipFile)->deleteFileAfterSend();
 	}
 
 	public function download_submissions($type, $assignment_id)
 	{
-		if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
+		if (!in_array(Auth::user()->role->name, ["admin", "head_instructor", "instructor"])) {
 			abort(403);
-		if (Assignment::find($assignment_id) == null)
+		}
+		if (Assignment::find($assignment_id) == null) {
 			abort(404);
-		if ($type !== 'by_user' && $type !== 'by_problem')
+		}
+		if ($type !== "by_user" && $type !== "by_problem") {
 			abort(404);
+		}
 
 		$assignments_root = Setting::get("assignments_root");
 		$final_subs = Submission::get_final_submissions($assignment_id);
 
-		if($final_subs->count() <= 0) abort (404);
-
-		$zip = new ZipArchive;
-		if ($type === 'by_user')
-			$zip_name = $assignments_root . "/assignment" . (string)$assignment_id . "_submissions_by_user_" . (string)date('Y-m-d_H-i') . ".zip";
-		elseif ($type === 'by_problem')
-			$zip_name = $assignments_root . "/assignment" . (string)$assignment_id . "_submissions_by_problem_" . (string)date('Y-m-d_H-i') . ".zip";
-		$zip->open($zip_name, ZipArchive::CREATE | ZipArchive::OVERWRITE);
-		// dd($zip);
-		foreach ($final_subs as $final_sub)
-		{
-			$file_path = Submission::get_path($final_sub->username, $assignment_id, $final_sub->problem_id)
-			. "/" . (string)$final_sub->file_name . "." .(string)Language::find($final_sub->language_id)->extension;
-			if ( ! file_exists($file_path))
-				continue;
-			$file = file_get_contents($file_path);
-			if ($type === 'by_user')
-				$zip->addFromString("{$final_sub->username}/problem_{$final_sub->problem_id}." . (string)Language::find($final_sub->language_id)->extension, $file);
-			elseif ($type === 'by_problem')
-				$zip->addFromString("problem_{$final_sub->problem_id}/{$final_sub->username}." . (string)Language::find($final_sub->language_id)->extension, $file);
+		if ($final_subs->count() <= 0) {
+			abort(404);
 		}
 
-		if ($zip->count() == 0){
+		$zip = new ZipArchive();
+		if ($type === "by_user") {
+			$zip_name =
+				$assignments_root .
+				"/assignment" .
+				(string) $assignment_id .
+				"_submissions_by_user_" .
+				(string) date("Y-m-d_H-i") .
+				".zip";
+		} elseif ($type === "by_problem") {
+			$zip_name =
+				$assignments_root .
+				"/assignment" .
+				(string) $assignment_id .
+				"_submissions_by_problem_" .
+				(string) date("Y-m-d_H-i") .
+				".zip";
+		}
+		$zip->open($zip_name, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+		// dd($zip);
+		foreach ($final_subs as $final_sub) {
+			$file_path =
+				Submission::get_path($final_sub->username, $assignment_id, $final_sub->problem_id) .
+				"/" .
+				(string) $final_sub->file_name .
+				"." .
+				(string) Language::find($final_sub->language_id)->extension;
+			if (!file_exists($file_path)) {
+				continue;
+			}
+			$file = file_get_contents($file_path);
+			if ($type === "by_user") {
+				$zip->addFromString(
+					"{$final_sub->username}/problem_{$final_sub->problem_id}." .
+						(string) Language::find($final_sub->language_id)->extension,
+					$file,
+				);
+			} elseif ($type === "by_problem") {
+				$zip->addFromString(
+					"problem_{$final_sub->problem_id}/{$final_sub->username}." .
+						(string) Language::find($final_sub->language_id)->extension,
+					$file,
+				);
+			}
+		}
+
+		if ($zip->count() == 0) {
 			abort(404, "No submissions to download");
 		}
 		$zip->close();
-
 
 		return response()->download($zip_name)->deleteFileAfterSend();
 	}
 
 	public function reload_scoreboard($assignment_id)
 	{
-
-		if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
+		if (!in_array(Auth::user()->role->name, ["admin", "head_instructor", "instructor"])) {
 			abort(403);
+		}
 		$assignment = Assignment::find($assignment_id);
-		if ($assignment == null){
+		if ($assignment == null) {
 			abort(404);
 		}
 
 		// Reset all final submission choice to the best score
 		$assignment->reset_final_submission_choices();
 
-		if (Scoreboard::update_scoreboard($assignment_id)){
-			return redirect()->back()->with('success', 'Reload Scoreboard sucecss');
+		if (Scoreboard::update_scoreboard($assignment_id)) {
+			return redirect()->back()->with("success", "Reload Scoreboard sucecss");
 		}
 	}
 	public function check_open(Request $request)
 	{
 		$assignment_id = $request->assignment_id;
 		$assignment = Assignment::find($assignment_id);
-		if ($assignment != NULL){
-
-			if (($t = $assignment->cannot_edit(Auth::user())) !== false){
+		if ($assignment != null) {
+			if (($t = $assignment->cannot_edit(Auth::user())) !== false) {
 				echo "error, " . $t;
 				return;
 			}
-			$assignment->open=!$assignment->open;
+			$assignment->open = !$assignment->open;
 			$assignment->save();
 			echo "success";
-				return;
-		}
-		else
+			return;
+		} else {
 			echo "error";
+		}
 	}
 }
