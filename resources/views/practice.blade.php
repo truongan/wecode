@@ -28,7 +28,7 @@
 					<th>Tag</th>
 				</tr>
 			</thead>
-			
+
 			@foreach ($problems as $problem)
 			<tr data-id="{{$problem->id}}">
 				<td>{{$problem->id}}</td>
@@ -46,7 +46,7 @@
 						{{ $problem->assignments->count()}}<small> assignments</small>
 					</a>
 					<div class="collapse" id="assignment_list_{{$problem->id}}">
-						
+
 						@foreach ($problem->assignments as $assignment)
 							<a href="{{ route('submissions.index', ['assignment_id' => $assignment->id, 'problem_id' => $problem->id, 'user_id' => 'all' , 'choose' => 'all']) }}" >
 							<span class="btn  btn-secondary btn-sm my-1">{{$assignment->name}} <span class="badge bg-info">{{$assignment->user->username ?? "no-owner"}}</span> </span></a>
@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		"paging": false,
 		"ordering": false,
 	});
-	document.querySelector('.dataTables_filter > label').childNodes[0].data = "Filter in this page";
+	document.querySelector('.dt-search > label').childNodes[0].data = "Filter in this page";
 });
 </script>
 @endsection

@@ -236,6 +236,8 @@ document.addEventListener("DOMContentLoaded", function () {
 		  ],
 		// "lengthMenu": [ [20, 60, 150, 500, -1], [20, 60, 150, 500, "All"] ]
 	});
+	document.querySelector('.dt-search > label').childNodes[0].data = "Filter in this page";
+
 });
 </script>
 @endsection
