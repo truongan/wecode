@@ -1,10 +1,5 @@
 {
 	"mcpServers": {
-		// We jail claude in docker container so not this shit
-		// "laravel-boost": {
-		// 	"command": "vendor/bin/sail",
-		// 	"args": ["artisan", "boost:mcp"]
-		// }
 		"laravel-boost": {
 			"command": "php",
 			"args": ["artisan", "boost:mcp"]
