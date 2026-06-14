@@ -29,7 +29,7 @@ Download the latest release by cloning this repository.
 
 For running Wecode judge, a Linux server with following requirements is needed:
 
-  * Written using Laravel 7, wecode judge share the server requirement with its [framework](https://laravel.com/docs/7.x#server-requirements)
+  * Written using Laravel 12, wecode judge share the server requirement with its [framework](https://laravel.com/docs/12.x#server-requirements)
   * MySql or PostgreSql database
   * PHP must have permission to run shell commands using [`shell_exec()`](http://www.php.net/manual/en/function.shell-exec.php) php function (specially `shell_exec("php");`). 
   * composer should be install 

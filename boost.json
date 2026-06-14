@@ -1,0 +1,14 @@
+{
+    "agents": [
+        "claude_code",
+        "zed"
+    ],
+    "cloud": false,
+    "guidelines": true,
+    "mcp": true,
+    "nightwatch": false,
+    "sail": true,
+    "skills": [
+        "laravel-best-practices"
+    ]
+}
