@@ -9,12 +9,9 @@ use App\Models\Queue_item;
 use App\Models\Language;
 use App\Models\Scoreboard;
 use App\Models\Setting;
-use Redirect;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-
 use App\Http\Middleware\read_only_archive;
 use App\View\Components\submission\verdict;
 use App\Http\Middleware\ip_white_listing;
@@ -22,6 +19,7 @@ use App\Http\Middleware\ip_white_listing;
 class submission_controller extends Controller
 {
 	private $storage;
+
 	public function __construct()
 	{
 		$this->storage = Storage::disk("assignment_root");
@@ -45,7 +43,7 @@ class submission_controller extends Controller
 		}
 	}
 
-	//abort on invalid creation
+	// abort on invalid creation
 
 	/**
 	 * Display a listing of the resource.
@@ -61,14 +59,14 @@ class submission_controller extends Controller
 			return redirect()->route("submissions.index", [0, "all", "all", "all"]);
 		}
 
-		$assignment = Assignment::with("lops.users") //This is to display lop info for each submissions
+		$assignment = Assignment::with("lops.users") // This is to display lop info for each submissions
 			->find($assignment_id);
 
 		if (Auth::user()->role->name == "admin") {
 			// Admin can view anything
 		} elseif (
 			in_array(Auth::user()->role->name, ["head_instructor", "instructor"]) &&
-			$assignment->id != 0 //Allow instructors to view any practice submissions
+			$assignment->id != 0 // Allow instructors to view any practice submissions
 		) {
 			if (
 				$assignment->user != Auth::user() &&
@@ -88,16 +86,19 @@ class submission_controller extends Controller
 			}
 		}
 
-		Auth::user()->selected_assignment_id = $assignment_id;
-		Auth::user()->save();
+		$user = Auth::user();
+		$user->selected_assignment_id = $assignment_id;
+		if ($user->isDirty("selected_assignment_id")) {
+			$user->save();
+		}
 
 		$submissions = $assignment->submissions();
 		if (
 			in_array(Auth::user()->role->name, ["student", "guest"]) or
 			$assignment->id == 0 and !in_array(Auth::user()->role->name, ["admin"])
 		) {
-			//Student can only view their own submissions, regardless of assignment, so we don't check assignment permissions for student
-			//or in case of instructors and assignment is 'practice' they can view their own submissions also
+			// Student can only view their own submissions, regardless of assignment, so we don't check assignment permissions for student
+			// or in case of instructors and assignment is 'practice' they can view their own submissions also
 			$submissions = $submissions->where("user_id", Auth::user()->id);
 		} elseif ($user_id != "all") {
 			$submissions = $submissions->where("user_id", intval($user_id));
@@ -220,6 +221,7 @@ class submission_controller extends Controller
 		);
 
 		$this->add_to_queue($submission, $submission->assignment, $file_name);
+
 		return true;
 	}
 
@@ -234,6 +236,7 @@ class submission_controller extends Controller
 		$this->storage->put("{$user_dir}/{$file_name}.{$ext}", $code);
 
 		$this->add_to_queue($submission, $submission->assignment, "{$file_name}");
+
 		return true;
 	}
 
@@ -256,6 +259,7 @@ class submission_controller extends Controller
 	private function get_path($username, $assignment_id, $problem_id)
 	{
 		$assignment_root = rtrim(Setting::get("assignments_root"), "/");
+
 		return $assignment_root . "/assignment_{$assignment_id}/problem_{$problem_id}/{$username}";
 	}
 
@@ -302,6 +306,7 @@ class submission_controller extends Controller
 		for ($i = 0; $i < Setting::get("concurent_queue_process", 2); $i++) {
 			Queue_item::work();
 		}
+
 		return redirect()->back()->with("status", "Rejudge in progress");
 	}
 
@@ -351,16 +356,13 @@ class submission_controller extends Controller
 				if (isset($arr[$key])) {
 					return $arr[$key];
 				}
+
 				return "";
 			};
 
 			$banned = $set_or_empty($matches, 2);
 
-			preg_match(
-				"/(###End banned keyword\*\/\n)((.*\n)*)\/\/###INSERT CODE HERE -\n?((.*\n?)*)/",
-				$template,
-				$matches,
-			);
+			preg_match("/(###End banned keyword\*\/\n)((.*\n)*)\/\/###INSERT CODE HERE -\n?((.*\n?)*)/", $template, $matches);
 
 			$before = $set_or_empty($matches, 2);
 			$after = $set_or_empty($matches, 4);
@@ -379,7 +381,7 @@ class submission_controller extends Controller
 
 		$coefficient = 100;
 		if ($assignment->id == 0) {
-			//Practice
+			// Practice
 			if (!in_array(Auth::user()->role->name, ["admin", "head_instructor"]) && $problem->allow_practice != 1) {
 				abort(403, "This problem is not open for practice");
 			}
@@ -448,8 +450,10 @@ class submission_controller extends Controller
 		$submission_curr->save();
 
 		Scoreboard::update_scoreboard($submission_curr->assignment_id);
+
 		return response()->json(["done" => 1]);
 	}
+
 	public function view_code()
 	{
 		$submit_id = $_POST["submit_id"];
@@ -501,7 +505,7 @@ class submission_controller extends Controller
 		if ($all_problems == null) {
 			$all_problems = $submission->assignment->problems->keyBy("id");
 		}
-		//If we can't find the assignment's score for problem (in case of practice), default to 100
+		// If we can't find the assignment's score for problem (in case of practice), default to 100
 		$score = ($submission->pre_score * ($all_problems[$submission->problem_id]->pivot->score ?? 100)) / 10000;
 		if ($submission->coefficient == "error") {
 			$submission->final_score = $score;

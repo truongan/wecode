@@ -349,8 +349,11 @@ class assignment_controller extends Controller
 	{
 		$data = $this->collect_problem_data_to_show($assignment, $problem_id);
 
-		Auth::user()->selected_assignment_id = $assignment->id;
-		Auth::user()->save();
+		$user = Auth::user();
+		$user->selected_assignment_id = $assignment->id;
+		if ($user->isDirty("selected_assignment_id")) {
+			$user->save();
+		}
 
 		return view("problems.show", $data);
 	}
