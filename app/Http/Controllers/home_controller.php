@@ -30,7 +30,7 @@ class home_controller extends Controller
 		return view("home", [
 			"selected" => "dashboard",
 			"notifications" => Notification::latest()->paginate(3),
-			"all_assignments" => Assignment::with("lops")
+			"all_assignments" => Assignment::with("lops.users")
 				->where("id", ">", 0)
 				->get()
 				->filter(function ($item) {

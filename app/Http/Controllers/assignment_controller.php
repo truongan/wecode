@@ -55,7 +55,6 @@ class assignment_controller extends Controller
 	 */
 	public function index(Request $request)
 	{
-		DB::enableQueryLog();
 		//
 		if (!in_array(Auth::user()->role->name, ["admin"])) {
 			$lops_id = Auth::user()->lops->pluck("id");
@@ -92,7 +91,9 @@ class assignment_controller extends Controller
 			});
 		}
 
-		$assignments = $assignments->paginate(Setting::get("results_per_page_all"))->withQueryString();
+		$assignments = $assignments
+			->with(["user", "lops", "problems"])
+			->paginate(Setting::get("results_per_page_all"))->withQueryString();
 
 		foreach ($assignments as &$assignment) {
 			$delay = strtotime(date("Y-m-d H:i:s")) - strtotime($assignment->finish_time);
