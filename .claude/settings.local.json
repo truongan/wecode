@@ -1,11 +1,6 @@
 {
-  "permissions": {
-    "allow": [
-      "WebSearch",
-      "Bash(php *)"
-    ]
-  },
-  "enabledMcpjsonServers": [
-    "laravel-boost"
-  ]
+	"permissions": {
+		"allow": ["WebSearch", "Bash(php *)"]
+	},
+	"enabledMcpjsonServers": ["laravel-boost"]
 }
