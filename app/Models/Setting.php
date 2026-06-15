@@ -6,40 +6,58 @@ use Illuminate\Database\Eloquent\Model;
 
 class Setting extends Model
 {
-    //
-    protected $fillable = ["key", "value"];
+	//
+	protected $fillable = ["key", "value"];
 
-    public static function get($key, $default = null)
-    {
-        $a = Setting::where("key", $key)->get();
-        if ($a->count() > 0) {
-            return $a->first()->value;
-        } else {
-            return $default;
-        }
-    }
+	/**
+	 * Request-level cache of every setting as a key => value map.
+	 *
+	 * @var array<string, string>|null
+	 */
+	protected static ?array $cache = null;
 
-    public static function set($key, $value)
-    {
-        $a = Setting::where("key", $key)->first();
-        if ($a != null) {
-            $a->value = $value;
-            $a->save();
-            return true;
-        }
-        return false;
-    }
+	/**
+	 * Load every setting once per request and reuse it for subsequent lookups.
+	 *
+	 * @return array<string, string>
+	 */
+	protected static function cache(): array
+	{
+		if (static::$cache === null) {
+			static::$cache = static::pluck("value", "key")->all();
+		}
 
-    public static function load_all()
-    {
-        $all = Setting::all()->reduce(function ($carry, $i) {
-            $carry[$i->key] = $i->value;
-            return $carry;
-        }, []);
-        return $all;
-    }
-    public static function find_by_key($key)
-    {
-        return Setting::where("key", $key)->first();
-    }
+		return static::$cache;
+	}
+
+	public static function get($key, $default = null)
+	{
+		return static::cache()[$key] ?? $default;
+	}
+
+	public static function set($key, $value)
+	{
+		$a = Setting::where("key", $key)->first();
+		if ($a != null) {
+			$a->value = $value;
+			$a->save();
+			if (static::$cache !== null) {
+				static::$cache[$key] = $value;
+			}
+
+			return true;
+		}
+
+		return false;
+	}
+
+	public static function load_all()
+	{
+		return static::cache();
+	}
+
+	public static function find_by_key($key)
+	{
+		return Setting::where("key", $key)->first();
+	}
 }
