@@ -34,8 +34,8 @@
           <td>{{$lop->name}}</td>
           <td><i  class=" far {{ $lop->open ? 'fa-check-square color6' : 'fa-square' }} fa-2x"></i></td>
           <td>{{$lop->users->filter(function($item){return in_array( $item->role->name, ['admin', 'head_instructor', 'instructor']);})->pluck('username')->join(', ') }}</td>
-          <td>{{$lop->users()->count() }}</td>
-          <td>{{$lop->assignments()->count() }}</td>
+          <td>{{$lop->users_count }}</td>
+          <td>{{$lop->assignments_count }}</td>
           <td>
 
             <a title="student list" href="{{ route('lops.show', $lop->id) }}" class = "fas fa-list fa-lg color8"></a>

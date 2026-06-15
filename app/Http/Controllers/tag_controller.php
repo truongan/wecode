@@ -8,113 +8,124 @@ use Illuminate\Support\Facades\Auth;
 
 class tag_controller extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
-            abort(403);
-        return view('admin.tags.index',['tags'=>Tag::all()]); 
-    }
+	public function __construct()
+	{
+		$this->middleware("auth");
+	}
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
-            abort(403);
-        return view('tags.create');
-    }
+	/**
+	 * Display a listing of the resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function index()
+	{
+		if (!in_array(Auth::user()->role->name, ["admin", "head_instructor"])) {
+			abort(403);
+		}
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
-            abort(403);
-        $request->validate(['text' => 'required']);
-        Tag::create($request->input());
-        return redirect('tags'); 
-    }
+		return view("admin.tags.index", ["tags" => Tag::withCount("problems")->get()]);
+	}
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Tag  $tag
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Tag $tag)
-    {
-        //
-        return view('admin.tags.edit', ['tag'=>$tag]);
-    }
+	/**
+	 * Show the form for creating a new resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function create()
+	{
+		if (!in_array(Auth::user()->role->name, ["admin", "head_instructor"])) {
+			abort(403);
+		}
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Tag  $tag
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Tag $tag)
-    {
-        //
-        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
-            abort(403);
-        return view('admin.tags.edit', ['tag'=>$tag]);
-    }
+		return view("tags.create");
+	}
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Tag  $tag
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Tag $tag)
-    {
-        //
-        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
-            abort(403);
-        $tag->update($request->input());
-        $remove = $request->input('remove');
-        if($remove != NULL){
-            $tag->problems()->detach($remove);
-        }
-        return redirect()->route('tags.index');
-    }
+	/**
+	 * Store a newly created resource in storage.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function store(Request $request)
+	{
+		if (!in_array(Auth::user()->role->name, ["admin", "head_instructor", "instructor"])) {
+			abort(403);
+		}
+		$request->validate(["text" => "required"]);
+		Tag::create($request->input());
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Tag  $tag
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        if ( ! in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
-            abort(403);
-        elseif ($id === NULL)
-			$json_result = array('done' => 0, 'message' => 'Input Error');
-        else
-        {
-            Tag::destroy($id);
-            $json_result = array('done' => 1);
-        }
-        header('Content-Type: application/json; charset=utf-8');  
-        return ($json_result);
-    }
+		return redirect("tags");
+	}
+
+	/**
+	 * Display the specified resource.
+	 *
+	 * @param  \App\Tag  $tag
+	 * @return \Illuminate\Http\Response
+	 */
+	public function show(Tag $tag)
+	{
+		//
+		return view("admin.tags.edit", ["tag" => $tag]);
+	}
+
+	/**
+	 * Show the form for editing the specified resource.
+	 *
+	 * @param  \App\Tag  $tag
+	 * @return \Illuminate\Http\Response
+	 */
+	public function edit(Tag $tag)
+	{
+		//
+		if (!in_array(Auth::user()->role->name, ["admin", "head_instructor"])) {
+			abort(403);
+		}
+
+		return view("admin.tags.edit", ["tag" => $tag]);
+	}
+
+	/**
+	 * Update the specified resource in storage.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @param  \App\Tag  $tag
+	 * @return \Illuminate\Http\Response
+	 */
+	public function update(Request $request, Tag $tag)
+	{
+		//
+		if (!in_array(Auth::user()->role->name, ["admin", "head_instructor"])) {
+			abort(403);
+		}
+		$tag->update($request->input());
+		$remove = $request->input("remove");
+		if ($remove != null) {
+			$tag->problems()->detach($remove);
+		}
+
+		return redirect()->route("tags.index");
+	}
+
+	/**
+	 * Remove the specified resource from storage.
+	 *
+	 * @param  \App\Tag  $tag
+	 * @return \Illuminate\Http\Response
+	 */
+	public function destroy($id)
+	{
+		if (!in_array(Auth::user()->role->name, ["admin", "head_instructor", "instructor"])) {
+			abort(403);
+		} elseif ($id === null) {
+			$json_result = ["done" => 0, "message" => "Input Error"];
+		} else {
+			Tag::destroy($id);
+			$json_result = ["done" => 1];
+		}
+		header("Content-Type: application/json; charset=utf-8");
+
+		return $json_result;
+	}
 }
