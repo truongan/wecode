@@ -2,22 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
+use App\Http\Middleware\ip_white_listing;
+use App\Http\Middleware\read_only_archive;
 use App\Models\Assignment;
-use App\Models\Setting;
-use App\Models\Problem;
-use App\Models\Lop;
 use App\Models\Language;
-use App\Models\Submission;
+use App\Models\Lop;
+use App\Models\Problem;
 use App\Models\Scoreboard;
-use ZipArchive;
+use App\Models\Setting;
+use App\Models\Submission;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-
-use App\Http\Middleware\read_only_archive;
-use App\Http\Middleware\ip_white_listing;
+use ZipArchive;
 
 class assignment_controller extends Controller
 {
@@ -34,6 +35,7 @@ class assignment_controller extends Controller
 
 		return $problem;
 	}
+
 	/**
 	 * Create a new controller instance.
 	 *
@@ -49,9 +51,9 @@ class assignment_controller extends Controller
 	/**
 	 * Display a listing of the resource.
 	 *
-	 * @return \Illuminate\Http\Response
+	 * @return Response
 	 */
-	public function index()
+	public function index(Request $request)
 	{
 		DB::enableQueryLog();
 		//
@@ -74,6 +76,22 @@ class assignment_controller extends Controller
 			$assignments = Assignment::with("problems", "lops")->latest();
 		}
 
+		if ($request->get("search") != "") {
+			$assignments->where("name", "like", "%" . trim($request->get("search")) . "%");
+		}
+
+		if ($request->get("owners") != null) {
+			$assignments->whereHas("user", function ($query) use ($request) {
+				$query->whereIn("username", $request->get("owners"));
+			});
+		}
+
+		if ($request->get("lop_id") != null) {
+			$assignments->whereHas("lops", function ($query) use ($request) {
+				$query->whereIn("lops.id", $request->get("lop_id"));
+			});
+		}
+
 		$assignments = $assignments->paginate(Setting::get("results_per_page_all"))->withQueryString();
 
 		foreach ($assignments as &$assignment) {
@@ -84,7 +102,14 @@ class assignment_controller extends Controller
 			$assignment->finished = $assignment->is_finished();
 			$assignment->no_of_problems = $assignment->problems->count();
 		}
-		$a = view("assignments.list", ["assignments" => $assignments]);
+
+		$a = view("assignments.list", [
+			"assignments" => $assignments,
+			"all_user_names" => User::has("assignments")->pluck("username"),
+			"all_lops" => in_array(Auth::user()->role->name, ["admin"])
+				? Lop::all(["id", "name"])
+				: Lop::available(Auth::user()->id)->get(["id", "name"]),
+		]);
 
 		return $a;
 	}
@@ -92,7 +117,7 @@ class assignment_controller extends Controller
 	/**
 	 * Show the form for creating a new resource.
 	 *
-	 * @return \Illuminate\Http\Response
+	 * @return Response
 	 */
 	public function create()
 	{
@@ -162,8 +187,7 @@ class assignment_controller extends Controller
 	/**
 	 * Store a newly created resource in storage.
 	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @return \Illuminate\Http\Response
+	 * @return Response
 	 */
 	public function store(Request $request)
 	{
@@ -234,7 +258,7 @@ class assignment_controller extends Controller
 		$data["all_problems"] = $assignment->problems;
 
 		if ($data["all_problems"]->pluck("id")->contains($problem_id) == false) {
-			//If we can't found problem_id, view the first problem
+			// If we can't found problem_id, view the first problem
 			$problem_id = $data["all_problems"]->first()->id ?? null;
 			if ($problem_id == null) {
 				abort(403, "No problem to show");
@@ -319,7 +343,7 @@ class assignment_controller extends Controller
 	 * Display the specified resource.
 	 *
 	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
+	 * @return Response
 	 */
 	public function show(Assignment $assignment, $problem_id)
 	{
@@ -373,6 +397,7 @@ class assignment_controller extends Controller
 				"ordering" => $p->pivot->ordering,
 			]);
 		}
+
 		return redirect()->route("assignments.index");
 	}
 
@@ -380,7 +405,7 @@ class assignment_controller extends Controller
 	 * Show the form for editing the specified resource.
 	 *
 	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
+	 * @return Response
 	 */
 	public function edit(Assignment $assignment)
 	{
@@ -430,9 +455,8 @@ class assignment_controller extends Controller
 	/**
 	 * Update the specified resource in storage.
 	 *
-	 * @param  \Illuminate\Http\Request  $request
 	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
+	 * @return Response
 	 */
 	public function update(Request $request, Assignment $assignment)
 	{
@@ -498,14 +522,14 @@ class assignment_controller extends Controller
 	 * Remove the specified resource from storage.
 	 *
 	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
+	 * @return Response
 	 */
 	public function destroy($id)
 	{
 		if ($id == 0) {
-			//Do nothing, we just don't touch the practice assignment
+			// Do nothing, we just don't touch the practice assignment
 		} else {
-			//TO DO SOMETHING HERE
+			// TO DO SOMETHING HERE
 			if (Assignment::find($id) == null) {
 				$json_result = ["done" => 0, "message" => 'Cannot delete assignment: "Not found"'];
 			} else {
@@ -532,6 +556,7 @@ class assignment_controller extends Controller
 		}
 
 		header("Content-Type: application/json; charset=utf-8");
+
 		return $json_result;
 	}
 
@@ -540,6 +565,7 @@ class assignment_controller extends Controller
 		if (!in_array(Auth::user()->role->name, ["admin", "head_instructor", "instructor"])) {
 			abort(403);
 		}
+
 		return view("assignments.score_accepted");
 	}
 
@@ -548,6 +574,7 @@ class assignment_controller extends Controller
 		if (!in_array(Auth::user()->role->name, ["admin", "head_instructor", "instructor"])) {
 			abort(403);
 		}
+
 		return view("assignments.score_sum");
 	}
 
@@ -566,10 +593,10 @@ class assignment_controller extends Controller
 		}
 
 		$assignments_root = Setting::get("assignments_root");
-		$zipFile =
-			$assignments_root . "/assignment" . (string) $assignment_id . "." . (string) date("Y-m-d_H-i") . ".zip";
+		$zipFile = $assignments_root . "/assignment" . (string) $assignment_id . "." . (string) date("Y-m-d_H-i") . ".zip";
 		$pathdir = $assignments_root . "/assignment_" . $assignment_id . "/";
 		shell_exec("zip -r $zipFile $pathdir");
+
 		return response()->download($zipFile)->deleteFileAfterSend();
 	}
 
@@ -663,6 +690,7 @@ class assignment_controller extends Controller
 			return redirect()->back()->with("success", "Reload Scoreboard sucecss");
 		}
 	}
+
 	public function check_open(Request $request)
 	{
 		$assignment_id = $request->assignment_id;
@@ -670,11 +698,13 @@ class assignment_controller extends Controller
 		if ($assignment != null) {
 			if (($t = $assignment->cannot_edit(Auth::user())) !== false) {
 				echo "error, " . $t;
+
 				return;
 			}
 			$assignment->open = !$assignment->open;
 			$assignment->save();
 			echo "success";
+
 			return;
 		} else {
 			echo "error";

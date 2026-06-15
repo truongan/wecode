@@ -6,6 +6,8 @@
 
 @section('other_assets')
 <link rel='stylesheet' type='text/css' href="{{ asset('assets/DataTables/datatables.min.css') }}"/>
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/slimselect/slimselect.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/slimselect/an.slimselect.bootstrap.hack.css') }}">
 <script>
 	if(!!window.performance && window.performance.navigation.type === 2)
 	{
@@ -29,6 +31,29 @@
 
 	</div>
 @endif
+<form class="row mb-3 gx-3 align-items-center" method="get" action="{{ route('assignments.index') }}">
+	<div class="col">
+		<div class="input-group">
+			<label class="input-group-text" for="search">Search by name</label>
+			<input type="text" name="search" id="search" class="form-control" placeholder="Search by name" value="{{ Request::get('search') }}">
+			<button type="button" class="btn btn-outline-danger" onClick="document.getElementById('search').value = '';"><i class="fas fa-times"></i></button>
+
+			<label class="input-group-text">lop</label>
+			<select class="search-by-lops form-control" multiple="multiple" name="lop_id[]"></select>
+
+			<label class="input-group-text">owner</label>
+			<select class="search-by-authors form-control" multiple="multiple" name="owners[]">
+				@foreach ($all_user_names as $user_name)
+				<option value="{{ $user_name }}">{{ $user_name }}</option>
+				@endforeach
+			</select>
+		</div>
+	</div>
+	<div class="col-auto">
+		<button type="submit" class="btn btn-primary form-control">Search</button>
+	</div>
+</form>
+
 <div class="row ">
 	<div class = "table-responsive">
 		<table class=" table table-striped table-bordered">
@@ -163,8 +188,20 @@
 
 @section('body_end')
 <script type='text/javascript' src="{{ asset('assets/DataTables/datatables.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/slimselect/slimselect.js') }}"></script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
+	var all_lops = {!! $all_lops !!};
+	var search_lop = new SlimSelect({ select: '.search-by-lops' });
+	search_lop.setData(all_lops.map((i) => { return { value: i.id, text: i.name }; }));
+	var searched_lops = {!! json_encode(Request::get('lop_id')) !!};
+	search_lop.setSelected(searched_lops, false);
+
+	var search_owner = new SlimSelect({
+		select: '.search-by-authors'
+	});
+	var searched_owners = {!! json_encode(Request::get('owners')) !!};
+	search_owner.setSelected(searched_owners, false);
 	$('.del_n').click(function () {
 	var row = $(this).parents('tr');
 		var id = row.data('id');
