@@ -59,8 +59,11 @@ class Scoreboard extends Model
 
 			// dd($submission['created_at']);
 			$fullmark = $submission->pre_score == 10000;
-			$time = CarbonInterval::seconds($assignment->start_time->diffInSeconds($submission->created_at, true))->cascade(); // time is absolute different
-			$late = CarbonInterval::seconds($assignment->finish_time->diffInSeconds($submission->created_at))->cascade(); // late can either be negative (submit in time) or positive (submit late)
+			// Store raw second counts; the CarbonInterval is built lazily in the view
+			// (only for the one branch actually displayed) to avoid creating/cascading
+			// two intervals per submission here.
+			$time = $assignment->start_time->diffInSeconds($submission->created_at, true); // time is absolute different
+			$late = $assignment->finish_time->diffInSeconds($submission->created_at); // late can either be negative (submit in time) or positive (submit late)
 			// dd($late);
 			$username = $submission->user->username;
 			$scores[$username][$submission->problem_id]["score"] = $final_score;
@@ -92,7 +95,7 @@ class Scoreboard extends Model
 				$final_score > 0 // Only count problem with larger than 0 score
 			) {
 				$penalty[$username]->add(
-					$time->totalSeconds +
+					$time +
 						($number_of_submissions[$submission->user->username][$submission->problem_id] - 1) *
 							Setting::get("submit_penalty"),
 					"seconds",

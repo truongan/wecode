@@ -23,7 +23,7 @@
 
         </tr>
     </thead>
-   
+
     @foreach ($scoreboard['username'] as $i => $sc_username)
     <tr>
         <td>{{ $loop->index + 1}}</td>
@@ -48,7 +48,7 @@
         <td>
             @if (isset($scores[$sc_username][$problem->id]['score']))
                 <a href="{{ route('submissions.index', ['assignment_id' => $assignment_id, 'problem_id' => $problem->id, 'user_id' => $scores[$sc_username]['id'] , 'choose' => 'all']) }}"
-                    class = "lead 
+                    class = "lead
                     @if ($scores[$sc_username][$problem->id]['fullmark'] == true)
                         text-success" >
                             {{ $scores[$sc_username][$problem->id]['score'] }}
@@ -62,10 +62,10 @@
                     {{$number_of_submissions[$sc_username][$problem->id]}}
                         - </span>
 
-                    @if ($scores[$sc_username][$problem->id]['late']->totalSeconds > 0)
-                        <span class="text-warning">{{ $scores[$sc_username][$problem->id]['late']->forHumans(['short' => true]) }}</span>
+                    @if ($scores[$sc_username][$problem->id]['late'] > 0)
+                        <span class="text-warning">{{ \Carbon\CarbonInterval::seconds($scores[$sc_username][$problem->id]['late'])->cascade()->forHumans(['short' => true]) }}</span>
                     @else
-                        <span class="small text-info">{{ $scores[$sc_username][$problem->id]['time']->forHumans(['short' => true]) }}</span>
+                        <span class="small text-info">{{ \Carbon\CarbonInterval::seconds($scores[$sc_username][$problem->id]['time'])->cascade()->forHumans(['short' => true]) }}</span>
                     @endif
                 </p>
             @else
@@ -73,7 +73,7 @@
             @endif
         </td>
         @endforeach
-        
+
     </tr>
     @endforeach
 
@@ -120,5 +120,5 @@
             </td>
             @endforeach
         </tr>
-    </tfoot>    
+    </tfoot>
 </table>
