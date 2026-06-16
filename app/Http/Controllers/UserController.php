@@ -39,9 +39,75 @@ class UserController extends Controller
 		}
 
 		return view("users.list", [
-			"users" => User::with("role")->get(),
 			"selected" => "settings",
-			"timezone" => Setting::get("timezone"),
+		]);
+	}
+
+	/**
+	 * Provide the paginated, searchable, sortable dataset for the users
+	 * DataTable (server-side processing protocol).
+	 *
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function data(Request $request)
+	{
+		if (!in_array(Auth::user()->role->name, ["admin", "head_instructor"])) {
+			abort(403);
+		}
+
+		$timezone = Setting::get("timezone");
+
+		$query = User::with("role");
+
+		$search = trim((string) $request->input("search.value"));
+		if ($search !== "") {
+			$query->where(function ($q) use ($search) {
+				$q->where("username", "like", "%{$search}%")
+					->orWhere("display_name", "like", "%{$search}%")
+					->orWhere("email", "like", "%{$search}%")
+					->orWhereHas("role", function ($q2) use ($search) {
+						$q2->where("name", "like", "%{$search}%");
+					});
+			});
+		}
+
+		$recordsFiltered = $query->count();
+
+		$orderableColumns = ["username", "display_name", "email", "first_login_time", "last_login_time"];
+		$orderColumnName = $request->input("columns." . $request->input("order.0.column", 1) . ".name");
+		$orderDir = $request->input("order.0.dir") === "desc" ? "desc" : "asc";
+		$query->orderBy(in_array($orderColumnName, $orderableColumns) ? $orderColumnName : "id", $orderDir);
+
+		$start = (int) $request->input("start", 0);
+		$length = (int) $request->input("length", 50);
+		if ($length >= 0) {
+			$query->skip($start)->take($length);
+		}
+
+		$users = $query->get()->map(function ($user) use ($timezone) {
+			return [
+				"id" => $user->id,
+				"username" => $user->username,
+				"display_name" => $user->display_name,
+				"email" => $user->email,
+				"role_name" => $user->role->name,
+				"trial_end" => $user->trial_time
+					? $user->created_at->addHours($user->trial_time)->diffForHumans()
+					: "Permanent user",
+				"first_login" => $user->first_login_time
+					? $user->first_login_time->setTimezone($timezone)->locale("en-GB")->isoFormat("lll")
+					: null,
+				"last_login" => $user->last_login_time
+					? $user->last_login_time->setTimezone($timezone)->locale("en-GB")->isoFormat("lll")
+					: null,
+			];
+		});
+
+		return response()->json([
+			"draw" => (int) $request->input("draw"),
+			"recordsTotal" => User::count(),
+			"recordsFiltered" => $recordsFiltered,
+			"data" => $users,
 		]);
 	}
 

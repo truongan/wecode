@@ -62,29 +62,7 @@ thead tr:after {
           <th>Actions</th>
         </tr>
       </thead>
-      @foreach ($users as $user)
-      <tr data-id="{{$user->id}}">
-        <td> {{$loop->iteration}} </td>
-        {{-- <td> {{$user->id}} </td> --}}
-        <td id="un"> {{$user->username}} </td>
-        <td>{{$user->display_name}}</td>
-        <td>{{$user->email}}<br/>{{$user->role->name}}</td>
-        <td>{{ $user->trial_time ? ($user->created_at->addHours($user->trial_time)->diffForHumans()) : "Permanent user" }}</td>
-        <td>
-          <small>{{ $user->first_login_time ? $user->first_login_time->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('lll') : 'Never'}}</small>
-        </td>
-        <td>
-          <small>{{ $user->last_login_time ? $user->last_login_time->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('lll') : 'Never'}} </small>
-        </td>
-        <td>
-          <a title="Profile" href="{{ route('users.show', $user) }}" class = "fas fa-address-book fa-lg color0"></a>
-          <a title="Edit" href="{{ route('users.edit', $user) }}"><i class="fas fa-user-edit fa-lg color9"></i></a>
-          <a title="Submissions" href="{{ url('submissions/all/user/'.$user->username) }}"><i class="fa fa-bars fa-lg color12"></i></a>
-          <span title="Delete User" class="delete-btn delete_user pointer"><i title="Delete User" class="fa fa-user-times fa-lg color2"></i></span>
-          <span title="Delete Submissions" class="delete-btn delete_submissions pointer"><i class="far fa-trash-alt fa-lg text-danger"></i></span>
-        </td>
-      </tr>
-      @endforeach
+      <tbody></tbody>
     </table>
   </div>
 </div>
@@ -130,20 +108,74 @@ document.getElementById('copy_user_list').addEventListener('click', function(){
   }
   document.execCommand("copy");
 });
+
+function escapeHtml(str){
+	return $('<div>').text(str ?? '').html();
+}
+
+function renderActions(row){
+	var showUrl = "{{ route('users.show', ['user' => '__ID__']) }}".replace('__ID__', row.id);
+	var editUrl = "{{ route('users.edit', ['user' => '__ID__']) }}".replace('__ID__', row.id);
+	var subsUrl = "{{ url('submissions/all/user/__USERNAME__') }}".replace('__USERNAME__', encodeURIComponent(row.username));
+
+	return '<a title="Profile" href="'+showUrl+'" class="fas fa-address-book fa-lg color0"></a> '
+		+ '<a title="Edit" href="'+editUrl+'"><i class="fas fa-user-edit fa-lg color9"></i></a> '
+		+ '<a title="Submissions" href="'+subsUrl+'"><i class="fa fa-bars fa-lg color12"></i></a> '
+		+ '<span title="Delete User" class="delete-btn delete_user pointer"><i title="Delete User" class="fa fa-user-times fa-lg color2"></i></span> '
+		+ '<span title="Delete Submissions" class="delete-btn delete_submissions pointer"><i class="far fa-trash-alt fa-lg text-danger"></i></span>';
+}
+
 /**
  * "Users" page
  */
 document.addEventListener("DOMContentLoaded", function(){
-	$('.delete-btn').click(function(){
-		var row = $(this).parents('tr');
-		var user_id = row.data('id');
-		var username = row.children('#un').html();
+	var table = $("table").DataTable({
+		"serverSide": true,
+		"ajax": "{{ route('users.data') }}",
+		"pageLength": 50,
+		"lengthMenu": [ [20, 50, 100, 200, -1], [20, 50, 100, 200, "All"] ],
+		"order": [[1, 'asc']],
+		"columns": [
+			{
+				"data": null, "orderable": false, "searchable": false,
+				"render": function(data, type, row, meta){ return meta.row + meta.settings._iDisplayStart + 1; }
+			},
+			{
+				"data": "username", "name": "username",
+				"render": $.fn.dataTable.render.text(),
+				"createdCell": function(cell){ cell.id = 'un'; }
+			},
+			{ "data": "display_name", "name": "display_name", "render": $.fn.dataTable.render.text() },
+			{
+				"data": null, "name": "email",
+				"render": function(data, type, row){ return escapeHtml(row.email) + '<br>' + escapeHtml(row.role_name); }
+			},
+			{ "data": "trial_end", "orderable": false, "searchable": false, "render": $.fn.dataTable.render.text() },
+			{
+				"data": "first_login", "name": "first_login_time",
+				"render": function(data){ return '<small>' + (data ? escapeHtml(data) : 'Never') + '</small>'; }
+			},
+			{
+				"data": "last_login", "name": "last_login_time",
+				"render": function(data){ return '<small>' + (data ? escapeHtml(data) : 'Never') + '</small>'; }
+			},
+			{
+				"data": null, "orderable": false, "searchable": false,
+				"render": function(data, type, row){ return renderActions(row); }
+			},
+		],
+	});
+
+	$("table").on('click', '.delete-btn', function(){
+		var row_data = table.row($(this).parents('tr')).data();
+		var user_id = row_data.id;
+		var username = row_data.username;
     var token = $("meta[name='csrf-token']").attr("content");
 		var del_submssion = $(this).hasClass('delete_submissions');
 		if (del_submssion) $(".modal-title").html("Are you sure you want to delete this user's SUBMISSIONS?");
 		else $(".modal-title").html("Are you sure you want to delete this user?");
 
-		$(".modal-body").html('User ID: '+user_id+'<br>Username: '+username+'<br><i class="splashy-warning_triangle"></i> All submissions of this user will be deleted.');
+		$(".modal-body").html('User ID: '+user_id+'<br>Username: '+escapeHtml(username)+'<br><i class="splashy-warning_triangle"></i> All submissions of this user will be deleted.');
 		$(".confirm-user-delete").off();
 		$(".confirm-user-delete").click(function(){
       console.log(del_submssion);
@@ -160,8 +192,8 @@ document.addEventListener("DOMContentLoaded", function(){
             if (response.done)
             {
               if (!del_submssion){
-                row.animate({backgroundColor: '#FF7676'},100, function(){row.remove();});
                 $.notify('User '+username+' deleted.', {position: 'bottom right', className: 'success', autoHideDelay: 5000});
+                table.ajax.reload(null, false);
               } else {
                 $.notify('All ' + parseInt( response.count) +' submission(s) ' + 'of User '+username +' has been deleted.', {position: 'bottom right', className: 'success', autoHideDelay: 5000});
               }
@@ -174,11 +206,6 @@ document.addEventListener("DOMContentLoaded", function(){
 			});
 		});
 		$("#user_delete").modal("show");
-	});
-
-  $("table").DataTable({
-		"pageLength": 50,
-		"lengthMenu": [ [20, 50, 100, 200, -1], [20, 50, 100, 200, "All"] ]
 	});
 });
 

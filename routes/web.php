@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\home_controller;
+
 // use App\Http\Controllers\html_editor_controller;
 /*
 |--------------------------------------------------------------------------
@@ -43,6 +44,7 @@ Route::post("/users/delete_submissions/{user}", [
 ])->name("users.delete_submissions");
 Route::delete("users/{id}", [App\Http\Controllers\UserController::class, "destroy"])->name("users.destroy");
 Route::get("users/ranking", [App\Http\Controllers\UserController::class, "rank"])->name("users.rank");
+Route::get("users/data", [App\Http\Controllers\UserController::class, "data"])->name("users.data");
 Route::view("users/set_trial", "users.set_trial")->name("users.set_trial")->middleware("auth");
 Route::post("users/set_trial", [App\Http\Controllers\UserController::class, "set_trial"])->name("users.set_trial_post");
 
@@ -170,7 +172,7 @@ Route::get("/server_time", function () {
 });
 Route::get("/lop/scoreboard/{lop}", [App\Http\Controllers\lop_controller::class, "scoreboard"])->name("lop.scoreboard");
 
-//Resource route phải được  ghi cuối cùng, nếu không các route sau dính tới /usres sẽ ăn shit
+// Resource route phải được  ghi cuối cùng, nếu không các route sau dính tới /usres sẽ ăn shit
 Route::resource("users", App\Http\Controllers\UserController::class);
 Route::resource("notifications", App\Http\Controllers\notification_controller::class);
 Route::resource("lops", App\Http\Controllers\lop_controller::class);
