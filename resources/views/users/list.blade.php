@@ -51,8 +51,7 @@ thead tr:after {
     <table class="table table-striped table-bordered">
       <thead class="thead-old table-dark">
         <tr>
-          <th>#</th>
-          {{-- <th>User ID</th> --}}
+          <th>id</th>
           <th>Username</th>
           <th>Display Name</th>
           <th>Email</th>
@@ -134,11 +133,11 @@ document.addEventListener("DOMContentLoaded", function(){
 		"ajax": "{{ route('users.data') }}",
 		"pageLength": 50,
 		"lengthMenu": [ [20, 50, 100, 200, -1], [20, 50, 100, 200, "All"] ],
-		"order": [[1, 'asc']],
+		"order": [[0, 'asc']],
 		"columns": [
 			{
-				"data": null, "orderable": false, "searchable": false,
-				"render": function(data, type, row, meta){ return meta.row + meta.settings._iDisplayStart + 1; }
+				"data": "id", "name": "id", "orderable": true, "searchable": false,
+				"render":  $.fn.dataTable.render.number(),
 			},
 			{
 				"data": "username", "name": "username",

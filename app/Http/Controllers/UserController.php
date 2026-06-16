@@ -73,8 +73,8 @@ class UserController extends Controller
 
 		$recordsFiltered = $query->count();
 
-		$orderableColumns = ["username", "display_name", "email", "first_login_time", "last_login_time"];
-		$orderColumnName = $request->input("columns." . $request->input("order.0.column", 1) . ".name");
+		$orderableColumns = ["id", "username", "display_name", "email", "first_login_time", "last_login_time"];
+		$orderColumnName = $request->input("columns." . $request->input("order.0.column", 0) . ".name");
 		$orderDir = $request->input("order.0.dir") === "desc" ? "desc" : "asc";
 		$query->orderBy(in_array($orderColumnName, $orderableColumns) ? $orderColumnName : "id", $orderDir);
 
