@@ -21,10 +21,16 @@ class Scoreboard extends Model
 		CarbonInterval::setCascadeFactors(["minute" => [60, "seconds"], "hour" => [60, "minutes"]]); // Cascade to hours only when display submit time and delay time
 
 		$assignment = $this->assignment;
-		// Eager load the user for every submission up-front to avoid an N+1
-		// query when building usernames/penalties below.
-		$assignment->loadMissing("submissions.user");
-		$submissions = $assignment->submissions->where("is_final", 1);
+		// Only the final submissions need full hydration (for the score/time computation
+		// below). Per-(user, problem) submission counts come from a single aggregate query
+		// instead of hydrating every submission for the assignment. We pull the username via
+		// a join rather than loading the full User relation (only the username is ever used).
+		$submissions = $assignment
+			->submissions()
+			->where("is_final", 1)
+			->join("users", "users.id", "=", "submissions.user_id")
+			->select("submissions.*", "users.username")
+			->get();
 		$total_score = [];
 		$total_accepted_score = [];
 		$solved = [];
@@ -35,16 +41,30 @@ class Scoreboard extends Model
 		$scores = [];
 
 		$problems = $assignment->problems->keyBy("id");
-		$number_of_submissions = [];
-		foreach ($assignment->submissions as $item) {
-			$username = $item->user->username;
-			$number_of_submissions[$username][$item->problem_id] = ($number_of_submissions[$username][$item->problem_id] ?? 0) + 1;
-		}
 
 		$lopsnames = [];
 		foreach ($assignment->lops()->with("users")->get() as $key => $lop) {
 			foreach ($lop->users as $key => $user) {
 				$lopsnames[$user->username] = $lop->name;
+			}
+		}
+
+		// Total submission count per (user, problem) across ALL submissions. Feeds the main
+		// loop (via $number_of_submissions) and is reused for the per-problem statistics below.
+		$aggr = $assignment
+			->submissions()
+			->groupBy("user_id", "problem_id")
+			->select(DB::raw("user_id, problem_id, count(*) as submit"))
+			->get();
+
+		// user_id => username for the users that appear on the scoreboard (those with a
+		// final submission); used to key $number_of_submissions by username.
+		$usernameById = $submissions->pluck("username", "user_id")->all();
+
+		$number_of_submissions = [];
+		foreach ($aggr as $row) {
+			if (isset($usernameById[$row->user_id])) {
+				$number_of_submissions[$usernameById[$row->user_id]][$row->problem_id] = $row->submit;
 			}
 		}
 
@@ -65,7 +85,7 @@ class Scoreboard extends Model
 			$time = $assignment->start_time->diffInSeconds($submission->created_at, true); // time is absolute different
 			$late = $assignment->finish_time->diffInSeconds($submission->created_at); // late can either be negative (submit in time) or positive (submit late)
 			// dd($late);
-			$username = $submission->user->username;
+			$username = $submission->username;
 			$scores[$username][$submission->problem_id]["score"] = $final_score;
 			$scores[$username][$submission->problem_id]["time"] = $time;
 			$scores[$username][$submission->problem_id]["late"] = $late;
@@ -96,12 +116,12 @@ class Scoreboard extends Model
 			) {
 				$penalty[$username]->add(
 					$time +
-						($number_of_submissions[$submission->user->username][$submission->problem_id] - 1) *
+						($number_of_submissions[$username][$submission->problem_id] - 1) *
 							Setting::get("submit_penalty"),
 					"seconds",
 				);
 			}
-			$users[$submission->user_id] = $submission->user;
+			$users[$submission->user_id] = $username;
 		}
 
 		$scoreboard = [
@@ -115,13 +135,13 @@ class Scoreboard extends Model
 			"tried_to_solve" => [],
 		];
 
-		foreach ($users as $user) {
-			array_push($scoreboard["username"], $user->username);
-			array_push($scoreboard["score"], $total_score[$user->username]);
-			array_push($scoreboard["accepted_score"], $total_accepted_score[$user->username]);
-			array_push($scoreboard["submit_penalty"], $penalty[$user->username]);
-			array_push($scoreboard["solved"], $solved[$user->username]);
-			array_push($scoreboard["tried_to_solve"], $tried_to_solve[$user->username]);
+		foreach ($users as $username) {
+			array_push($scoreboard["username"], $username);
+			array_push($scoreboard["score"], $total_score[$username]);
+			array_push($scoreboard["accepted_score"], $total_accepted_score[$username]);
+			array_push($scoreboard["submit_penalty"], $penalty[$username]);
+			array_push($scoreboard["solved"], $solved[$username]);
+			array_push($scoreboard["tried_to_solve"], $tried_to_solve[$username]);
 		}
 
 		array_multisort(
@@ -144,11 +164,6 @@ class Scoreboard extends Model
 			SORT_NATURAL,
 		);
 		// DB::enableQueryLog();
-		$aggr = $assignment
-			->submissions()
-			->groupBy("user_id", "problem_id")
-			->select(DB::raw("user_id, problem_id, count(*) as submit"))
-			->get();
 		$aggr_ac = $assignment
 			->submissions()
 			->groupBy("user_id", "problem_id")
