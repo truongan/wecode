@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function(){
 	var file_name ="";
 
     let is_dirty = false;
-
+    let is_saving = false;
 
     const quill = new Quill('#editor', {
         modules: {
@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
 			reader.onload = function (e) {
                 console.log(e.target);
-				ckeditor.setData(e.target.result);
+				quill.clipboard.dangerouslyPasteHTML(e.target.result);
 			}
 			
 			reader.readAsText(this.files[0]);
@@ -86,34 +86,22 @@ document.addEventListener("DOMContentLoaded", function(){
 
     //FOR AUTOSAVING
 
-    const pendingActions = ckeditor.plugins.get( 'PendingActions' );
-
-
-    // Listen to new changes (to enable the "Save" button) and to
-    // pending actions (to show the spinner animation when the editor is busy).
-    // function handleStatusChanges( editor ) {
-    ckeditor.plugins.get( 'PendingActions' ).on( 'change:hasAny', () => updateStatus( ckeditor ) );
-
-    ckeditor.model.document.on( 'change:data', () => {
+    // Listen to new changes (to enable the "Save" button).
+    quill.on( 'text-change', () => {
         is_dirty = true;
 
-        updateStatus( ckeditor );
+        updateStatus();
     } );
-    // }
 
     // If the user tries to leave the page before the data is saved, ask
     // them whether they are sure they want to proceed.
-    // function handleBeforeunload( editor ) {
-    //     const pendingActions = editor.plugins.get( 'PendingActions' );
-
     window.addEventListener( 'beforeunload', evt => {
-        if ( pendingActions.hasAny ) {
+        if ( is_saving ) {
             evt.preventDefault();
         }
     } );
-    // }
 
-    function updateStatus( editor ) {
+    function updateStatus() {
         const saveButton = document.querySelector( '.save-button' );
 
         // Disables the "Save" button when the data on the server is up to date.
@@ -124,7 +112,7 @@ document.addEventListener("DOMContentLoaded", function(){
         }
 
         // Shows the spinner animation.
-        if ( editor.plugins.get( 'PendingActions' ).hasAny ) {
+        if ( is_saving ) {
             saveButton.classList.add( 'btn-lg' );
         } else {
             saveButton.classList.remove( 'btn-lg' );
@@ -133,12 +121,13 @@ document.addEventListener("DOMContentLoaded", function(){
 
 	
 	document.querySelector("#save").onmouseover = (function(){
-		document.querySelector("#save > a").href = "data:text/html;base64," + b64EncodeUnicode( ckeditor.getData() ) ;
+		document.querySelector("#save > a").href = "data:text/html;base64," + b64EncodeUnicode( quill.getSemanticHTML() ) ;
 		document.querySelector("#save > a").download =  file_name ;
 	});
     document.querySelector('.save-button').onclick = (function(){
-        const action = pendingActions.add( 'Saving changes' );
-        const data = ckeditor.getData();
+        is_saving = true;
+        updateStatus();
+        const data = quill.getSemanticHTML();
         $.ajax({
             type: 'POST',
             url: '{{ route('htmleditor.autosave') }}',
@@ -152,16 +141,18 @@ document.addEventListener("DOMContentLoaded", function(){
                         , {position: 'bottom right', className: 'success', autoHideDelay: 3500});
                     $('.save-button').removeClass('btn-info').addClass('btn-secondary');
                 }
-                pendingActions.remove( action );
-                if ( data == ckeditor.getData() ) {
+                is_saving = false;
+                if ( data == quill.getSemanticHTML() ) {
                     is_dirty = false;
                 }
-                updateStatus( ckeditor );
+                updateStatus();
             
             },
             error: function(response){
                 $.notify('Error while saving'
                     , {position: 'bottom right', className: 'error', autoHideDelay: 3500});
+                is_saving = false;
+                updateStatus();
             }
         });
     }); 
