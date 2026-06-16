@@ -61,7 +61,7 @@
 
 @section('body_end')
 {{-- <script type="text/javascript" async Language listing ? What for ?
-src="{{ asset('assets/MathJax-2.7.9') }}/MathJax.js?config=TeX-MML-AM_CHTML">
+src="{{ asset('assets/mathjax') }}/MathJax.js?config=TeX-MML-AM_CHTML">
 </script> --}}
 <script>
 /**

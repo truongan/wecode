@@ -15,11 +15,11 @@
 
 @section('body_end')
 <script type="text/javascript">
-    mathjax_path = "{{ asset('assets/MathJax-2.7.9') }}/MathJax.js?config=TeX-MML-AM_CHTML"
+    mathjax_path = "{{ asset('assets/mathjax') }}/MathJax.js?config=TeX-MML-AM_CHTML"
 </script>
 
-<script src = "{{ asset('assets/quill/quill2.0.3.js')}}" ></script>
-<link href="{{ asset('assets/quill/quill2.0.3.snow.css')}}" rel="stylesheet">
+<script src = "{{ asset('assets/quill/quill.js')}}" ></script>
+<link href="{{ asset('assets/quill/quill.snow.css')}}" rel="stylesheet">
 
 <script type="module">
 

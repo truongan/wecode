@@ -3,7 +3,6 @@
 
 @section('other_assets')
 
-<link rel="stylesheet" type='text/css' href="{{ asset('assets/frappe/frappe-charts.min.css') }}"/>
 <script src="{{ asset('assets/frappe/frappe-charts.min.iife.js') }}"></script>
   {{-- <script src="https://cdn.jsdelivr.net/npm/frappe-charts@1.2.4/dist/frappe-charts.min.iife.js"></script> --}}
   {{-- <!-- or -->
