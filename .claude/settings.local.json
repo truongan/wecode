@@ -1,6 +1,12 @@
 {
 	"permissions": {
-		"allow": ["WebSearch", "Bash(php *)"]
+		"allow": [
+			"WebSearch",
+			"Bash(php *)",
+			"mcp__laravel-boost__database-schema",
+			"mcp__laravel-boost__database-query",
+			"Bash(vendor/bin/pint --dirty --format agent)"
+		]
 	},
 	"enabledMcpjsonServers": ["laravel-boost"]
 }

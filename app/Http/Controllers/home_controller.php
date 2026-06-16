@@ -27,11 +27,20 @@ class home_controller extends Controller
 	public function index(Request $request)
 	{
 		// dd($request->ips());
+		$lops_id = Auth::user()->lops->pluck("id");
+
 		return view("home", [
 			"selected" => "dashboard",
 			"notifications" => Notification::latest()->paginate(3),
 			"all_assignments" => Assignment::with("lops.users")
 				->where("id", ">", 0)
+				->where(function ($query) use ($lops_id) {
+					$query
+						->whereHas("lops", function ($q) use ($lops_id) {
+							$q->whereIn("lops.id", $lops_id);
+						})
+						->orWhere("user_id", Auth::user()->id);
+				})
 				->get()
 				->filter(function ($item) {
 					return $item->can_submit(Auth::user())->can_submit;
