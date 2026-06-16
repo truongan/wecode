@@ -37,7 +37,8 @@ class Scoreboard extends Model
 		$problems = $assignment->problems->keyBy("id");
 		$number_of_submissions = [];
 		foreach ($assignment->submissions as $item) {
-			$number_of_submissions[$item->user->username][$item->problem_id] = 0;
+			$username = $item->user->username;
+			$number_of_submissions[$username][$item->problem_id] = ($number_of_submissions[$username][$item->problem_id] ?? 0) + 1;
 		}
 
 		$lopsnames = [];
@@ -45,10 +46,6 @@ class Scoreboard extends Model
 			foreach ($lop->users as $key => $user) {
 				$lopsnames[$user->username] = $lop->name;
 			}
-		}
-
-		foreach ($assignment->submissions as $item) {
-			$number_of_submissions[$item->user->username][$item->problem_id] += 1;
 		}
 
 		$statistics = [];
@@ -101,7 +98,7 @@ class Scoreboard extends Model
 					"seconds",
 				);
 			}
-			$users[] = $submission->user;
+			$users[$submission->user_id] = $submission->user;
 		}
 
 		$scoreboard = [
@@ -115,7 +112,6 @@ class Scoreboard extends Model
 			"tried_to_solve" => [],
 		];
 
-		$users = array_unique($users);
 		foreach ($users as $user) {
 			array_push($scoreboard["username"], $user->username);
 			array_push($scoreboard["score"], $total_score[$user->username]);
