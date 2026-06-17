@@ -162,7 +162,7 @@
 	</script>
 
 
-	<script type="text/javascript" integrity="sha384-yExUdgygwAfJKHwoFyHp1o6g3zD70xx7448KbaORczrLujZgsrHHDBzlsnkwzRiN" src="{{ asset('assets/js/shj_functions.js?v=20260421') }}"></script>
+	<script type="text/javascript" integrity="sha384-pbfsVph9JyesvB+gHygG+hh8xNxUaZl71uglEZsQkGbJrpP970gpmw+ihwFrv5U2" src="{{ asset('assets/js/shj_functions.js?v=20260617') }}"></script>
 	@yield('body_end')
 </body>
 </html>

@@ -7,7 +7,9 @@
       "mcp__laravel-boost__database-query",
       "Bash(vendor/bin/pint --dirty --format agent)",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" \"http://localhost/assets/ace/mode-javascript.js\")",
-      "Bash(vendor/bin/pint --dirty --format=agent)"
+      "Bash(vendor/bin/pint --dirty --format=agent)",
+      "Bash(grep -rnE \"\\\\.notify\\\\\\(|notify\\\\\\(|\\\\\\\\\\\\$\\\\.notify\" resources/ public/assets/js/)",
+      "mcp__laravel-boost__search-docs"
     ]
   },
   "enabledMcpjsonServers": [
