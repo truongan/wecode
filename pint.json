@@ -1,6 +1,7 @@
 {
     "preset": "laravel",
     "indent": "\t",
+    "notName": ["*.php", "*.blade.php"],
     "rules": {
         "indentation_type": false,
         "array_indentation": false,

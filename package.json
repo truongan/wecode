@@ -12,7 +12,9 @@
         "postinstall": "npm run sync-vendor-assets"
     },
     "devDependencies": {
-        "@prettier/plugin-php": "^0.24.0"
+        "@prettier/plugin-php": "^0.24.0",
+        "prettier-plugin-blade": "^3.1.6",
+        "prettier-plugin-tailwindcss": "^0.7.4"
     },
     "dependencies": {
         "ace-builds": "^1.44.0",

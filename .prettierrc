@@ -1,0 +1,10 @@
+{
+    "plugins": [
+        "@prettier/plugin-php",
+        "prettier-plugin-tailwindcss",
+        "prettier-plugin-blade"
+    ],
+    "useTabs": true,
+    "printWidth": 132,
+    "bladeDirectiveArgSpacing": "none"
+}
