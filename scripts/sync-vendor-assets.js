@@ -50,21 +50,21 @@ for (const theme of fs.readdirSync(`${nm}/bootswatch/dist`)) {
 
 // --- DataTables: core + Bootstrap 5 styling, concatenated like the
 //     datatables.net/download builder produces ---------------------------
-concat(["datatables.net/js/dataTables.js", "datatables.net-bs5/js/dataTables.bootstrap5.js"], "DataTables/datatables.min.js");
-concat(["datatables.net-bs5/css/dataTables.bootstrap5.css"], "DataTables/datatables.min.css");
+concat(["datatables.net/js/dataTables.min.js", "datatables.net-bs5/js/dataTables.bootstrap5.min.js"], "DataTables/datatables.min.js");
+copy("datatables.net-bs5/css/dataTables.bootstrap5.min.css", "DataTables/datatables.min.css");
 
 // --- Prism: matches the exact recipe baked into the current theme file's
 //     header comment (themes=prism-solarizedlight&languages=clike+javascript
 //     +c+cpp+java+pascal+python&plugins=line-numbers+toolbar) --------------
 concat(
-	["core", "clike", "javascript", "c", "cpp", "java", "pascal", "python"].map((l) => `prismjs/components/prism-${l}.js`),
+	["core", "clike", "javascript", "c", "cpp", "java", "pascal", "python"].map((l) => `prismjs/components/prism-${l}.min.js`),
 	"prismjs/prism.js",
 );
 concat(
 	[
-		"prismjs/themes/prism-solarizedlight.css",
-		"prismjs/plugins/line-numbers/prism-line-numbers.css",
-		"prismjs/plugins/toolbar/prism-toolbar.css",
+		"prismjs/themes/prism-solarizedlight.min.css",
+		"prismjs/plugins/line-numbers/prism-line-numbers.min.css",
+		"prismjs/plugins/toolbar/prism-toolbar.min.css",
 	],
 	"prismjs/prism.css",
 );
