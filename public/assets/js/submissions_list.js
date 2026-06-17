@@ -129,7 +129,7 @@ document.addEventListener("DOMContentLoaded", function () {
 					vanilajs_row.querySelector(".js-mem").innerHTML = "";
 					vanilajs_row.querySelector(".js-score").innerHTML = "";
 
-					$.notify("Rejudge in progress", { position: "bottom right", className: "info", autoHideDelay: 2500 });
+					notify("Rejudge in progress", { position: "bottom right", className: "info", autoHideDelay: 2500 });
 					setTimeout(update_status, update_status_interval);
 				} else shj.loading_failed(response.message);
 			},
@@ -194,7 +194,7 @@ function update_status() {
 			switch (response.status.toLowerCase()) {
 				case "pending":
 					element = '<div class="btn btn-secondary pending" data-type="result" >PENDING</div>';
-					$.notify("Still pending", { position: "bottom right", className: "info", autoHideDelay: 2000 });
+					notify("Still pending", { position: "bottom right", className: "info", autoHideDelay: 2000 });
 
 					break;
 
@@ -206,7 +206,7 @@ function update_status() {
 					row.querySelector(".js-score").innerHTML = '<span class = "lead " > ' + response.final_score + "</span>";
 					row.querySelector(".js-score").classList.add(response.pre_score == 10000 ? "text-success" : "text-danger");
 
-					$.notify("Submission has been judged", {
+					notify("Submission has been judged", {
 						position: "bottom right",
 						className: "success",
 						autoHideDelay: 2000,

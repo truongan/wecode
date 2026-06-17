@@ -6,7 +6,7 @@
  */
 
 shj.loading_error = function () {
-	$.notify("An error encountered while processing your request. Check your network connection.", {
+	notify("An error encountered while processing your request. Check your network connection.", {
 		position: "bottom right",
 		className: "error",
 		autoHideDelay: 3500,
@@ -14,7 +14,7 @@ shj.loading_error = function () {
 };
 
 shj.loading_failed = function (message) {
-	$.notify("Request failed. Server says: " + message, {
+	notify("Request failed. Server says: " + message, {
 		position: "bottom right",
 		className: "error",
 		autoHideDelay: 3500,
@@ -68,12 +68,12 @@ shj.setup_save = function (save_button, post_url, ckeditor_instance) {
 			},
 			success: function (response) {
 				if (response == "success") {
-					$.notify("Change sucessfully saved", { position: "bottom right", className: "success", autoHideDelay: 3500 });
+					notify("Change sucessfully saved", { position: "bottom right", className: "success", autoHideDelay: 3500 });
 					$(save_button).removeClass("btn-info").addClass("btn-secondary");
 				}
 			},
 			error: function (response) {
-				$.notify("Error while saving", { position: "bottom right", className: "error", autoHideDelay: 3500 });
+				notify("Error while saving", { position: "bottom right", className: "error", autoHideDelay: 3500 });
 				//alert('There was problem saving change. You should download the content right now');
 			},
 		});

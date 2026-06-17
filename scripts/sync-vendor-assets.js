@@ -68,8 +68,6 @@ const copies = [
 	[nm("bootstrap", "dist", "css", "bootstrap.min.css"), out("styles", "bootstrap", "default.min.css")],
 
 	[nm("sortablejs", "Sortable.min.js"), out("js", "Sortable.min.js")],
-
-	[nm("bootstrap-notify", "bootstrap-notify.min.js"), out("js", "notify.min.js")],
 ];
 
 for (const [src, dest] of copies) {

@@ -40,7 +40,7 @@
 
 	{{-- <script type='text/javascript' src="{{ asset('assets/sbadmin/js/sb-admin.min.js') }}"></script> --}}
 
-	<script	src="{{ asset('assets/js/notify.min.js') }}"></script>
+	<script	src="{{ asset('assets/js/notify.js') }}"></script>
 
 	<script type="text/javascript">
 		$.ajaxSetup({

@@ -218,7 +218,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		success: function (response) {
 			if (response.done) {
 			row.animate({backgroundColor: '#FF7676'},100, function(){row.remove();});
-			$.notify('assignment deleted'	, {position: 'bottom right', className: 'success', autoHideDelay: 5000});
+			notify('assignment deleted'	, {position: 'bottom right', className: 'success', autoHideDelay: 5000});
 			$("#assignment_delete").modal("hide");
 			}
 			else
@@ -243,12 +243,12 @@ document.addEventListener("DOMContentLoaded", function () {
 		error: shj.loading_error,
 		success: function (response) {
 			if (response == "success"){
-				$.notify('Change sucessfully saved', {position: 'bottom right', className: 'success', autoHideDelay: 3500});
+				notify('Change sucessfully saved', {position: 'bottom right', className: 'success', autoHideDelay: 3500});
 				$('.save-button').removeClass('btn-info').addClass('btn-secondary');
 				}
 			},
 		error: function(response){
-			$.notify('Error while saving', {position: 'bottom right', className: 'error', autoHideDelay: 3500});
+			notify('Error while saving', {position: 'bottom right', className: 'error', autoHideDelay: 3500});
 			}
 		});
 	});

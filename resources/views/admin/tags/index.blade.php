@@ -94,7 +94,7 @@ $('.del_n').click(function () {
       success: function (response) {
         if (response.done) {
           row.animate({backgroundColor: '#FF7676'},100, function(){row.remove();});
-          $.notify('tag deleted'	, {position: 'bottom right', className: 'success', autoHideDelay: 5000});
+          notify('tag deleted'	, {position: 'bottom right', className: 'success', autoHideDelay: 5000});
           $("#tag_delete").modal("hide");
         }
         else

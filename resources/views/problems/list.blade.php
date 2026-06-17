@@ -389,7 +389,7 @@
 					success: function (response) {
 					if (response.done) {
 						row.animate({backgroundColor: '#FF7676'},100, function(){row.remove();});
-						$.notify('problem deleted'	, {position: 'bottom right', className: 'success', autoHideDelay: 5000});
+						notify('problem deleted'	, {position: 'bottom right', className: 'success', autoHideDelay: 5000});
 						$("#problem_delete").modal("hide");
 					}
 					else

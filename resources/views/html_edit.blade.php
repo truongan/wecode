@@ -137,7 +137,7 @@ document.addEventListener("DOMContentLoaded", function(){
             },
             success: function (response) {
                 if (response == "success"){
-                    $.notify('Change sucessfully saved'
+                    notify('Change sucessfully saved'
                         , {position: 'bottom right', className: 'success', autoHideDelay: 3500});
                     $('.save-button').removeClass('btn-info').addClass('btn-secondary');
                 }
@@ -149,7 +149,7 @@ document.addEventListener("DOMContentLoaded", function(){
             
             },
             error: function(response){
-                $.notify('Error while saving'
+                notify('Error while saving'
                     , {position: 'bottom right', className: 'error', autoHideDelay: 3500});
                 is_saving = false;
                 updateStatus();

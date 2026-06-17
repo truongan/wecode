@@ -35,7 +35,7 @@
 			@if ( in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
 				<li class="nav-item color-instructor_panel {{ ($selected=="instructor_panel") ? "selected" : ""}}" >
 					<a class="nav-link" href="{{ route('problems.index') }}">
-						<i class="bi bi-sliders fs-5"></i>
+						<i class="bi bi-patch-question fs-5"></i>
 						<span class="nav-link-text">Problems</span>
 					</a>
 				</li>

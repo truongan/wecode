@@ -191,10 +191,10 @@ document.addEventListener("DOMContentLoaded", function(){
             if (response.done)
             {
               if (!del_submssion){
-                $.notify('User '+username+' deleted.', {position: 'bottom right', className: 'success', autoHideDelay: 5000});
+                notify('User '+username+' deleted.', {position: 'bottom right', className: 'success', autoHideDelay: 5000});
                 table.ajax.reload(null, false);
               } else {
-                $.notify('All ' + parseInt( response.count) +' submission(s) ' + 'of User '+username +' has been deleted.', {position: 'bottom right', className: 'success', autoHideDelay: 5000});
+                notify('All ' + parseInt( response.count) +' submission(s) ' + 'of User '+username +' has been deleted.', {position: 'bottom right', className: 'success', autoHideDelay: 5000});
               }
             }
             else{
