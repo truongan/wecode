@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @php($selected = 'users')
 @section('head_title','Practice')
-@section('icon', 'fas fa-khanda fa-fw fa-lg')
+@section('icon', 'bi bi-activity')
 
 @section('title', 'Practice')
 
@@ -56,7 +56,7 @@
 				</td>
 				<td>
 					@if ($problem->editorial != null)
-						<a href="{{ $problem->editorial }} "><i class="fas fa-lightbulb  fa-2x  "></i> Editorial </a>
+						<a href="{{ $problem->editorial }} "><i class="bi bi-lightbulb-fill  fs-4  "></i> Editorial </a>
 					@endif
 				</td>
 				<td>

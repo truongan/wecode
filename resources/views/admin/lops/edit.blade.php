@@ -8,7 +8,7 @@
 		Classes list
 	@endif
 @endsection
-@section('icon', 'fas fa-school')
+@section('icon', 'bi bi-mortarboard-fill')
 
 @section('title')
 	@if ($ed)
@@ -19,9 +19,9 @@
 @endsection
 
 @section('title_menu')
-	<span class="ms-4 fs-6"><a href="{{ route('lops.index') }}"><i class="fa fa-list text-success"></i>Back to list of class</a></span>
+	<span class="ms-4 fs-6"><a href="{{ route('lops.index') }}"><i class="bi bi-list text-success"></i>Back to list of class</a></span>
 	@if (in_array( Auth::user()->role->name, ['admin', 'head_instructor']))
-	<span class="ms-4 fs-6"><a href="{{ route('lops.create') }}"><i class="fa fa-plus text-success"></i>Add class</a></span>
+	<span class="ms-4 fs-6"><a href="{{ route('lops.create') }}"><i class="bi bi-plus text-success"></i>Add class</a></span>
 	@endif
 @endsection
 

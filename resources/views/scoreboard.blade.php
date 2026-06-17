@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('icon', 'fas fa-star')
+@section('icon', 'bi bi-star-fill')
 @section('head_title', 'Scoreboard')
 @section('title', 'Scoreboard')
 
@@ -25,17 +25,17 @@
 	<li class="nav-item">
 		<a class="nav-link link-dark-subtle {{$place=="full" ? "active" :""}}"
 			href="{{ route('scoreboards.index', $assignment->id) }}">
-		<i class="fas fa-star color10"></i> Full information </a>
+		<i class="bi bi-star-fill color10"></i> Full information </a>
 	</li>
 	<li class="nav-item">
 		<a class="nav-link link-dark-subtle {{$place=="simplify" ? "active" :""}}"
 			href="{{ route('scoreboards.simplify', $assignment->id) }}">
-		<i class="fas fa-star-half-alt color10"></i> Minimal information </a>
+		<i class="bi bi-star-half color10"></i> Minimal information </a>
 	</li>
 	<li class="nav-item">
 		<a class="nav-link link-dark-subtle {{$place=="plain" ? "active" :""}}"
 			href="{{ route('scoreboards.plain', $assignment->id) }}">
-		<i class="fas fa-star-half-alt color10"></i> Plain text Minimal </a>
+		<i class="bi bi-star-half color10"></i> Plain text Minimal </a>
 	</li>
 </ul>
 @endsection

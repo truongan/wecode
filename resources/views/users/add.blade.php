@@ -1,15 +1,15 @@
 @extends('layouts.app')
 @php($selected="settings")
 @section('head_title','New Users')
-@section('icon', 'fas fa-user-plus')
+@section('icon', 'bi bi-person-plus-fill')
 
 @section('title', ' New Users')
 
 @section('title_menu')
     {{-- Nếu là admin thì hiển thị --}}
 
-    <span class="ms-4 fs-6"><a href="{{ route('users.index') }}" ><i class="fa fa-list-alt color6"></i> Users list</a></span>
-    <span class="ms-4 fs-6"><a href="https://github.com/truongan/wecode-judge/blob/docs/v1.4/users.md#add-users" target="_blank"><i class="fa fa-question-circle color6"></i> Help</a></span>
+    <span class="ms-4 fs-6"><a href="{{ route('users.index') }}" ><i class="bi bi-card-list color6"></i> Users list</a></span>
+    <span class="ms-4 fs-6"><a href="https://github.com/truongan/wecode-judge/blob/docs/v1.4/users.md#add-users" target="_blank"><i class="bi bi-question-circle-fill color6"></i> Help</a></span>
 @endsection
 
 @section('body_end')

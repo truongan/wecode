@@ -17,7 +17,6 @@
 	<link rel="stylesheet" type='text/css' href="{{ asset('assets/bootstrap-icons/bootstrap-icons.min.css') }}">
 	<link rel="stylesheet" type='text/css' href="{{ asset('assets/sbadmin/css/sb-admin.css') }}">
 	<link href="{{ asset('assets/styles/main.css') }}" rel="stylesheet">
-	<link href="{{ asset('assets/fontawesome/css/all.min.css') }}" rel="stylesheet">
 	@yield('other_assets')
 </head>
 <body id="body" class="fixed-nav ">
@@ -26,7 +25,7 @@
 	<div class="content-wrapper"><div class="container-fluid">
 		<div class="row">
 			<div id="page_title" class="fs-5 border shadow bg-light-subtle text-dark-subtle container-fluid py-3 mb-0 col-12 align-items-center d-flex">
-				<i class="@yield('icon') fa-fw fa-lg"></i>
+				<i class="@yield('icon') fs-5"></i>
 				<span>@yield('title')</span>
 				@yield('title_menu')
 			</div>

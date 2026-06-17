@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @php($selected = 'settings')
 @section('head_title','Rejudge')
-@section('icon', 'fas fa-redo')
+@section('icon', 'bi bi-arrow-clockwise')
 
 @section('title', 'Rejudge')
 

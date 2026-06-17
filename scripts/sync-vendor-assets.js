@@ -54,8 +54,6 @@ const copies = [
 	[nm("bootstrap-icons", "font", "fonts", "bootstrap-icons.woff"), out("bootstrap-icons", "fonts", "bootstrap-icons.woff")],
 	[nm("bootstrap-icons", "font", "fonts", "bootstrap-icons.woff2"), out("bootstrap-icons", "fonts", "bootstrap-icons.woff2")],
 
-	[nm("@fortawesome", "fontawesome-free", "css", "all.min.css"), out("fontawesome", "css", "all.min.css")],
-
 	[nm("frappe-charts", "dist", "frappe-charts.min.umd.js"), out("frappe", "frappe-charts.min.iife.js")],
 
 	[nm("select2", "dist", "js", "select2.min.js"), out("select2", "select2.min.js")],
@@ -85,10 +83,6 @@ copyDir(nm("ace-builds", "src-min-noconflict"), out("ace"));
 copyDir(nm("mathjax"), out("mathjax"), {
 	exclude: ["package.json", "README.md", "LICENSE", "CONTRIBUTING.md", "test"],
 });
-
-for (const webfont of fs.readdirSync(nm("@fortawesome", "fontawesome-free", "webfonts"))) {
-	copyFile(nm("@fortawesome", "fontawesome-free", "webfonts", webfont), out("fontawesome", "webfonts", webfont));
-}
 
 // --- Bootswatch themes ------------------------------------------------------
 

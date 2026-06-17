@@ -17,7 +17,7 @@
 	</style>
 @endsection
 @section('icon')
-	fas {{$choose =='all' ? 'fa-bars' : 'fa-map-marker'}}
+	bi {{$choose =='all' ? 'bi-list' : 'bi-geo-alt-fill'}}
 @endsection
 @section('title')
 	{{$choose =='all' ? 'All submissions' : 'Final submissions'}}:
@@ -65,16 +65,16 @@
 <div class="row row-cols-auto mb-2">
 	<div class="col">
 		@if($choose == 'all')
-		<a href="{{route('submissions.index', [$assignment->id, $user_id, $problem_id, 'all'])}}" class="btn btn-primary active" role="button">All <i class="fas fa-chevron-down"></i></a>
-		<a style="opacity: 0.3;" href="{{route('submissions.index', [$assignment->id, $user_id, $problem_id, 'final'])}}" class="btn btn-light active" role="button">Final <i class="fas fa-chevron-right"></i></a>
+		<a href="{{route('submissions.index', [$assignment->id, $user_id, $problem_id, 'all'])}}" class="btn btn-primary active" role="button">All <i class="bi bi-chevron-down"></i></a>
+		<a style="opacity: 0.3;" href="{{route('submissions.index', [$assignment->id, $user_id, $problem_id, 'final'])}}" class="btn btn-light active" role="button">Final <i class="bi bi-chevron-right"></i></a>
 		@else
-		<a style="opacity: 0.3;" href="{{route('submissions.index', [$assignment->id, $user_id, $problem_id, 'all'])}}" class="btn btn-light active" role="button">All <i class="fas fa-chevron-right"></i></a>
-		<a href="{{route('submissions.index', [$assignment->id, $user_id, $problem_id, 'final'])}}" class="btn btn-primary active" role="button">Final <i class="fas fa-chevron-down"></i></a>
+		<a style="opacity: 0.3;" href="{{route('submissions.index', [$assignment->id, $user_id, $problem_id, 'all'])}}" class="btn btn-light active" role="button">All <i class="bi bi-chevron-right"></i></a>
+		<a href="{{route('submissions.index', [$assignment->id, $user_id, $problem_id, 'final'])}}" class="btn btn-primary active" role="button">Final <i class="bi bi-chevron-down"></i></a>
 		@endif
 		{{-- <hr> --}}
 		@if ($choose == 'all')
 		<span>
-			<i class="fas fa-exclamation-triangle"></i> You cannot change your final submissions after assignment finishes.
+			<i class="bi bi-exclamation-triangle-fill"></i> You cannot change your final submissions after assignment finishes.
 		</span>
 		@endif
 	</div>
@@ -102,8 +102,8 @@
 					<th width="15%"><small> Problem</small></th>
 					<th width="10%"><small> Submit Time</small></th>
 					<th width="25%"><small> judge verdict </small></th>
-					<th width="1%"><small> Max <i class="far fa-clock"></i>(s)</small></th>
-					<th width="1%"><small> Max <i class="fas fa-memory"></i>(kiB) </small></th>
+					<th width="1%"><small> Max <i class="bi bi-clock"></i>(s)</small></th>
+					<th width="1%"><small> Max <i class="bi bi-memory"></i>(kiB) </small></th>
 					<th width="6%"><small> Score</small></th>
 					<th width="5%"><small> Code</small></th>
 				</tr>
@@ -112,7 +112,7 @@
 			<tr data-u="{{$submission->user->username}}" data-a="{{ $assignment->id }}" data-p="{{ $submission->problem_id }}" data-id="{{$submission->id}}">
 				@if ($choose == 'all')
 					<td>
-						<i class="pointer set_final far {{ $submission->is_final ? 'fa-check-circle text-success' : 'fa-circle' }} fa-2x"></i>
+						<i class="pointer set_final bi {{ $submission->is_final ? 'bi-check-circle text-success' : 'bi-circle' }} fs-4"></i>
 					</td>
 				@endif
 
@@ -125,12 +125,12 @@
 					<a href="{{route('submissions.index', [$assignment->id, strval($submission->user_id), $problem_id, 'all'])}}">
 						{{$submission->user->username}}
 					({{$submission->user->display_name}})
-					<br/><i class="fas fa-filter"></i>
+					<br/><i class="bi bi-filter"></i>
 					</a><br/>
 				</td>
 				<td>
 					<div class="btn btn-secondary" data-type="log">Log</div>
-					<span class="shj_rejudge pointer m-2"><i class="fa fa-redo fa-lg color10"></i></span>
+					<span class="shj_rejudge pointer m-2"><i class="bi bi-arrow-clockwise fs-5 color10"></i></span>
 				</td>
 				@endif
 				<td>
@@ -142,8 +142,8 @@
 						{{ $all_problems[$submission->problem_id]->pivot->problem_name ?? "--- removed ---"}}
 					@endif
 					</a><br>
-					<a href="{{route('submissions.create', [$assignment->id,$submission->problem_id,$submission->id])}}"><span class="btn btn-dark btn-sm"><i class="fas fa-edit"></i></span></a>
-					<a href="{{route('submissions.index', [$assignment->id, $user_id, strval($submission->problem_id), 'all'])}}"><span class="btn btn-info btn-sm m-1"><i class="fas fa-filter"></i></span></a>
+					<a href="{{route('submissions.create', [$assignment->id,$submission->problem_id,$submission->id])}}"><span class="btn btn-dark btn-sm"><i class="bi bi-pencil-square"></i></span></a>
+					<a href="{{route('submissions.index', [$assignment->id, $user_id, strval($submission->problem_id), 'all'])}}"><span class="btn btn-info btn-sm m-1"><i class="bi bi-filter"></i></span></a>
 				</td>
 				<td title="reward / penalty on submission time: {{ $submission->coefficient }}%">
 					<span class="small">

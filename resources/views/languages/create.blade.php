@@ -1,7 +1,7 @@
 @php($selected = 'settings')
 @extends('layouts.app')
 @section('head_title','New Language')
-@section('icon', 'fas fa-plus')
+@section('icon', 'bi bi-plus')
 
 @section('title', 'New Language')
 

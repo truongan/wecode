@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @php($selected="instructor_panel")
 @section('head_title','Tags')
-@section('icon', 'fas fa-tags')
+@section('icon', 'bi bi-tags-fill')
 
 @section('title','Tags')
 
@@ -15,7 +15,7 @@
     <form method="POST"  action="{!! route('tags.store') !!}">
         <input type="hidden"  name ="_token" value="{!! csrf_token() !!}"/>
         <input placeholder="Tag's name here" type="text" name="text" required>
-        <button type="submit" class="bg-transparent border-0 text-primary"><i class="fas fa-plus fa-lg color8"></i> Add</button>
+        <button type="submit" class="bg-transparent border-0 text-primary"><i class="bi bi-plus fs-5 color8"></i> Add</button>
     </form>
 </div>
 
@@ -43,8 +43,8 @@
                 {{$item->problems_count}}
             </td>
             <td>
-                <a title="Edit" href="{{ route('tags.edit', $item) }}"><i class="fas fa-edit fa-lg color9"></i></a>
-                <span title="Delete Tag" class="del_n delete_tag pointer"><i title="Delete Tag" class="far fa-trash-alt fa-lg text-danger"></i></span>
+                <a title="Edit" href="{{ route('tags.edit', $item) }}"><i class="bi bi-pencil-square fs-5 color9"></i></a>
+                <span title="Delete Tag" class="del_n delete_tag pointer"><i title="Delete Tag" class="bi bi-trash3 fs-5 text-danger"></i></span>
             </td>
 
         </tr>

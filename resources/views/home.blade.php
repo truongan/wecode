@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('head_title','Dashboard')
-@section('icon', 'fa fa-tachometer-alt')
+@section('icon', 'bi bi-speedometer2')
 
 @section('title', 'Dashboard')
 
@@ -59,7 +59,7 @@ js') }}"></script>
 	<div class="card-group ">
 		<div class="m-2">
 			<div class="card bg-dark text-light">
-				<i class="text-center card-img-top fas fa-cogs fa-2x p-3"></i>
+				<i class="text-center card-img-top bi bi-gear-wide-connected fs-4 p-3"></i>
 				<div class="card-body bg-light text-dark">
 					<small><strong class="card-title">SETTING</strong></small>
 					<small>
@@ -71,7 +71,7 @@ js') }}"></script>
 		</div>
 		<div class="m-2">
 			<div class="card bg-dark text-light">
-				<i class="text-center card-img-top fas fa-laptop-code fa-2x p-3"></i>
+				<i class="text-center card-img-top bi bi-code-square fs-4 p-3"></i>
 				<div class="card-body bg-light text-dark">
 					<small><strong class="card-title">LANGUAGES</strong></small>
 					<small>
@@ -84,7 +84,7 @@ js') }}"></script>
 
 		<div class="m-2">
 			<div class="card bg-dark text-light">
-				<i class="text-center card-img-top fas fa-play fa-2x p-3"></i>
+				<i class="text-center card-img-top bi bi-play-fill fs-4 p-3"></i>
 				<div class="card-body bg-light text-dark">
 					<small><strong class="card-title">Submission Queue</strong></small>
 					<small>
@@ -103,7 +103,7 @@ js') }}"></script>
 	<div class="card-group ">
 		<div class="m-2">
 			<div class="card bg-dark text-light">
-				<i class="text-center card-img-top fas fa-users fa-2x p-3"></i>
+				<i class="text-center card-img-top bi bi-people-fill fs-4 p-3"></i>
 				<div class="card-body bg-light text-dark">
 					<small><strong class="card-title">USERS</strong></small>
 					<small>
@@ -115,7 +115,7 @@ js') }}"></script>
 		</div>
 		<div class="m-2">
 			<div class="card bg-dark text-light">
-				<i class="text-center card-img-top fas fa-clipboard-list fa-2x p-3"></i>
+				<i class="text-center card-img-top bi bi-clipboard-data-fill fs-4 p-3"></i>
 				<div class="card-body bg-light text-dark">
 					<small><strong class="card-title">User statistics</strong></small>
 					<small>
@@ -127,7 +127,7 @@ js') }}"></script>
 		</div>
 		<div class="m-2">
 			<div class="card bg-dark text-light">
-				<i class="text-center card-img-top fas fa-tags fa-2x p-3"></i>
+				<i class="text-center card-img-top bi bi-tags-fill fs-4 p-3"></i>
 				<div class="card-body bg-light text-dark">
 					<small><strong class="card-title">TAGS</strong></small>
 					<small>
@@ -140,7 +140,7 @@ js') }}"></script>
 
 		<div class="m-2">
 			<div class="card bg-dark text-light">
-				<i class="text-center card-img-top fas fa-edit fa-2x p-3"></i>
+				<i class="text-center card-img-top bi bi-pencil-square fs-4 p-3"></i>
 				<div class="card-body bg-light text-dark">
 					<small><strong class="card-title">EDIT BY HTML</strong></small>
 					<small>
@@ -152,7 +152,7 @@ js') }}"></script>
 		</div>
 		<div class="m-2">
 			<div class="card bg-dark text-light">
-				<i class="text-center card-img-top fas fa-user-secret fa-2x p-3"></i>
+				<i class="text-center card-img-top bi bi-incognito fs-4 p-3"></i>
 				<div class="card-body bg-light text-dark">
 					<small><strong class="card-title">Detect Similar Codes</strong></small>
 					<small>
@@ -170,14 +170,14 @@ js') }}"></script>
 <div class="row">
 	<div class="col-md-6">
 		<div class="border shadow mb-2 rounded-2">
-			<div class="border-bottom p-2 lead text-center"> <i class="fa fa-calendar" aria-hidden="true"></i>  Calendar</div>
+			<div class="border-bottom p-2 lead text-center"> <i class="bi bi-calendar" aria-hidden="true"></i>  Calendar</div>
 			<div class="p-1 widget_contents_container" id='calendar'></div>
 		</div>
 	</div>
 
 	<div class="col-md-6">
 		<div class="border shadow  rounded-2">
-			<div class="border-bottom p-2 lead text-center"><i class="fa fa-bell-o fa-lg color2"></i>
+			<div class="border-bottom p-2 lead text-center"><i class="bi bi-bell fs-5 color2"></i>
 				Latest Notifications
 			</div>
 			<div class="widget_contents_container">

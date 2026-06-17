@@ -6,7 +6,7 @@
 	@php ($pdf_route = route('practices.show_pdf', $problem))
 @endif
 @section('head_title','View Problem')
-@section('icon', 'fas fa-puzzle-piece')
+@section('icon', 'bi bi-puzzle-fill')
 
 @section('title')
 {{ isset($all_problems) ? $all_problems->find($problem->id)->pivot->problem_name : $problem->name }}
@@ -30,20 +30,20 @@
 @section('title_menu')
 
 @if($problem->has_pdf)
-	<a href="{{ $pdf_route }}" class="link-dark-subtle"><span class="ms-4 fs-6"><i class="fas fa-file-pdf text-danger"></i> PDF</span></a>
+	<a href="{{ $pdf_route }}" class="link-dark-subtle"><span class="ms-4 fs-6"><i class="bi bi-file-earmark-pdf-fill text-danger"></i> PDF</span></a>
 @endif
 
 @if ($problem->allow_input_download)
-	<span class="ms-4 fs-6"><a href="{{ route('problems.download_testcases', ['problem' => $problem->id, 'assignment' => ($all_problems != NULL ? $assignment->id : 0), 'type' => 'in'] ) }}" class="link-dark"><i class="fa fa-download text-success"></i> Download testcases' input</a></span>
+	<span class="ms-4 fs-6"><a href="{{ route('problems.download_testcases', ['problem' => $problem->id, 'assignment' => ($all_problems != NULL ? $assignment->id : 0), 'type' => 'in'] ) }}" class="link-dark"><i class="bi bi-download text-success"></i> Download testcases' input</a></span>
 @endif
 @if ($problem->allow_output_download)
-	<span class="ms-4 fs-6"><a href="{{ route('problems.download_testcases', ['problem' => $problem->id, 'assignment' => ($all_problems != NULL ? $assignment->id : 0), 'type' => 'out'] ) }}" class="link-dark"><i class="fa fa-download text-primary"></i> Download testcases' output</a></span>
+	<span class="ms-4 fs-6"><a href="{{ route('problems.download_testcases', ['problem' => $problem->id, 'assignment' => ($all_problems != NULL ? $assignment->id : 0), 'type' => 'out'] ) }}" class="link-dark"><i class="bi bi-download text-primary"></i> Download testcases' output</a></span>
 @endif
 
 
 
 @if (in_array( Auth::user()->role->name, ['admin', 'head_instructor']))
-	<span class="ms-4 fs-6 ms-auto"><a href="#" class="btn btn-info save-button"><i class="fa fa-floppy-o "></i> Save</a></span>
+	<span class="ms-4 fs-6 ms-auto"><a href="#" class="btn btn-info save-button"><i class="bi bi-save "></i> Save</a></span>
 @endif
 
 @endsection
@@ -117,7 +117,7 @@
 		<div class="problems_widget">
 			@if ( in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
 			<a href="{{ route('assignments.edit', $assignment->id) }}" >
-			<i class="fa fa-edit  color9"></i>
+			<i class="bi bi-pencil-square  color9"></i>
 			@endif
 				{{ $assignment->name }} <br/>
 			@if ( in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
@@ -152,7 +152,7 @@
 		@if ($can_submit)
 		<div class="problems_widget ">
 
-			<span><i class="fa fa-upload fa-lg text-success"></i> Submit</span>
+			<span><i class="bi bi-upload fs-5 text-success"></i> Submit</span>
 
 			<form action="{{ route('submissions.store') }}" method="POST" enctype="multipart/form-data" class="row g-2 align-items-end">
 			@csrf
@@ -190,7 +190,7 @@
 		</div>
 		<div class="problems_widget row">
 			@php($t = $assignment->id ?? 0)
-			<span class=""><a href="{{ route("submissions.create", ['assignment' => $t, 'problem' => $problem->id]) }}" target="_blank"><i class="fa fa-pencil-square-o"></i> Code editor</a></span>
+			<span class=""><a href="{{ route("submissions.create", ['assignment' => $t, 'problem' => $problem->id]) }}" target="_blank"><i class="bi bi-pencil-square"></i> Code editor</a></span>
 		</div>
 		@endif
 

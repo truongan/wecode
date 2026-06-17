@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('head_title','New assignments')
-@section('icon', 'fas fa-plus-square')
+@section('icon', 'bi bi-plus-square-fill')
 
 @section('title', 'New assignments')
 
@@ -24,9 +24,9 @@
 
 @section('title_menu')
 <span class="ms-4 fs-6">
-	<a href="https://github.com/truongan/wecode-judge/blob/docs/v1.4/add_assignment.md" target="_blank"><i class="fa fa-question-circle text-danger"></i> Help</a>
+	<a href="https://github.com/truongan/wecode-judge/blob/docs/v1.4/add_assignment.md" target="_blank"><i class="bi bi-question-circle-fill text-danger"></i> Help</a>
 	@if (Route::currentRouteName() == 'assignments.edit')
-	<a href="{{ route('submissions.index', ['assignment_id' => $assignment->id, 'problem_id' => 'all', 'user_id' =>'all', 'choose' => 'all']) }}"> <i class="fa fa-list color2"></i> Submissions list</a>
+	<a href="{{ route('submissions.index', ['assignment_id' => $assignment->id, 'problem_id' => 'all', 'user_id' =>'all', 'choose' => 'all']) }}"> <i class="bi bi-list color2"></i> Submissions list</a>
 	@endif
 </span>
 @endsection
@@ -69,7 +69,7 @@
 
 	{{-- {% if edit %}
 	<p>
-		<i class="fa fa-info-circle fa-lg color8"></i> If you don't want to change tests or pdf file, just do not upload its file.
+		<i class="bi bi-info-circle-fill fs-5 color8"></i> If you don't want to change tests or pdf file, just do not upload its file.
 	</p>
 	{% endif %} --}}
 	@php($edit = Route::currentRouteName() == 'assignments.edit')
@@ -262,7 +262,7 @@
 		@foreach($problems as $problem)
 		<li   class="list-group-item {{$problem->id == -1 ? 'd-none' : ''}} "><div class="row align-items-center">
 			<div class="col-auto list_handle pointer">
-				<span><i class="fa fa-grip-vertical fa-lg fa-fw"></i></span>
+				<span><i class="bi bi-grip-vertical fs-5"></i></span>
 			</div>
 			<div class="col">
 				<div class="row  row-cols-auto align-items-center" >
@@ -291,7 +291,7 @@
 				</div>
 			</div>
 			<div class="col-auto">
-					<button class="btn btn-danger list_remover"><span><i class="fa fa-times-circle fa-lg fa-fw pointer"></i></span></button>
+					<button class="btn btn-danger list_remover"><span><i class="bi bi-x-circle-fill fs-5 pointer"></i></span></button>
 			</div>
 			@php($i = $i+1)
 		</div></li>

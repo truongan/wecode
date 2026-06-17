@@ -3,7 +3,7 @@
 
 @extends('layouts.app')
 @section('head_title','New Problem')
-@section('icon', 'fas fa-plus-square')
+@section('icon', 'bi bi-plus-square-fill')
 
 @section('title', 'New Problem')
 
@@ -16,10 +16,10 @@
 
 @section('title_menu')
 <span class="ms-4 fs-6">
-	<a href="{{ route('problems.index') }} " target="_blank"><i class="fa fa-list text-danger"></i> List of problems</a>
+	<a href="{{ route('problems.index') }} " target="_blank"><i class="bi bi-list text-danger"></i> List of problems</a>
 </span>
 <span class="ms-4 fs-6">
-	<a href="https://github.com/truongan/wecode-judge/blob/docs/v1.4/add_assignment.md" target="_blank"><i class="fa fa-question-circle text-danger"></i> Help</a>
+	<a href="https://github.com/truongan/wecode-judge/blob/docs/v1.4/add_assignment.md" target="_blank"><i class="bi bi-question-circle-fill text-danger"></i> Help</a>
 </span>
 @endsection
 
@@ -86,7 +86,7 @@
 
 	@if ($edit)
 	<p>
-		<i class="fa fa-info-circle fa-lg color8"></i> If you don't want to change tests or pdf file, just do not upload its file.
+		<i class="bi bi-info-circle-fill fs-5 color8"></i> If you don't want to change tests or pdf file, just do not upload its file.
 	</p>
 	@endif
 
@@ -155,7 +155,7 @@
 					</div>
 				</div>
 				<div class="just-for-gutter">
-					<label for="form_tests_dir"><i class="far fa-lg fa-folder-open">
+					<label for="form_tests_dir"><i class="bi fs-5 bi-folder2-open">
 					</i>Tests and Descriptions (folder)
 					</label>
 					<input id="form_tests_dir" type="file" webkitdirectory  multiple name="tests_dir[]" class="form-control" />
@@ -238,7 +238,7 @@
 					</label>
 				</div>
 				<div class="my-4">
-					<label for="form_tests_zip"><i class="far fa-lg fa-file-archive"></i>Tests and Descriptions (zip file)</label>
+					<label for="form_tests_zip"><i class="bi fs-5 bi-file-earmark-zip"></i>Tests and Descriptions (zip file)</label>
 					<input id="form_tests_zip" type="file" name="tests_zip" class="form-control" />
 					<small class="text-secondary">Folder upload will always take precedent, if you want to upload zip file, leave upload folder field blank. </small>
 				</div>
@@ -289,7 +289,7 @@
 						<td>{{ $lang->name }}</td>
 						<td><input type="number" name="time_limit[]" class="form-control" value="{{ isset($languages[$lang->id]) ? $languages[$lang->id]->pivot->time_limit : $lang->default_time_limit}}"/></td>
 						<td><input type="number" name="memory_limit[]" class="form-control" value="{{ isset($languages[$lang->id]) ? $languages[$lang->id]->pivot->memory_limit :  $lang->default_memory_limit }}"/></td>
-						<td><a  data-lang="{{ $lang->id }}"  class="btn btn-danger remove_language remove_language_{{ $lang->id }}" href="#" role="button"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+						<td><a  data-lang="{{ $lang->id }}"  class="btn btn-danger remove_language remove_language_{{ $lang->id }}" href="#" role="button"><i class="bi bi-trash" aria-hidden="true"></i></a></td>
 					</tr>
 					@endforeach
 				</tbody>

@@ -153,9 +153,9 @@ document.addEventListener("DOMContentLoaded", function () {
 			success: function (response) {
 				if (response.done) {
 					$("tr[data-u='" + username + "'][data-p='" + problem + "'] i.set_final")
-						.removeClass("fa-check-circle color11")
-						.addClass("fa-circle");
-					row.find("i.set_final").removeClass("fa-circle").addClass("fa-check-circle color11");
+						.removeClass("bi-check-circle color11")
+						.addClass("bi-circle");
+					row.find("i.set_final").removeClass("bi-circle").addClass("bi-check-circle color11");
 				} else shj.loading_failed(response.message);
 			},
 		});

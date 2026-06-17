@@ -1,7 +1,7 @@
 @php($selected = 'settings')
 @extends('layouts.app')
 @section('head_title','Settings')
-@section('icon', 'fas fa-cogs')
+@section('icon', 'bi bi-gear-wide-connected')
 
 @section('title', 'Settings')
 
@@ -152,7 +152,7 @@
 					<label for="form_reg_code">Registration Code</label>
 			<div class="input-group">
 			<input id="form_reg_code" type="text" name="registration_code" class="form-control medium" value="{{ $registration_code }}"/>
-				<button class="btn btn-info" type="button" onClick="document.getElementById('form_reg_code').value =  Math.random().toString(36).substring(2,4) + Math.random().toString(36).substring(2,4);"><i class="fas fa-random    "></i></button>
+				<button class="btn btn-info" type="button" onClick="document.getElementById('form_reg_code').value =  Math.random().toString(36).substring(2,4) + Math.random().toString(36).substring(2,4);"><i class="bi bi-shuffle    "></i></button>
 			</div>
 			<small class="form-text text-muted">If you want to enable registration (above option), It is better to give a registration code	to students in your class for validating registration. Enter 0 to disable.</small>
 		</fieldset>

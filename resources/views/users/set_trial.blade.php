@@ -1,12 +1,12 @@
 @extends('layouts.app')
 @php($selected="settings")
 @section('head_title','View User')
-@section('icon', 'fas fa-users')
+@section('icon', 'bi bi-people-fill')
 
 @section('title', ' Set multiple users trial time')
 
 @section('title_menu')
-	<a class="ms-3 fs-6 link-dark-subtle" href="{{route('users.index') }}"><i class="fas fa-list    "></i>Users list</a>
+	<a class="ms-3 fs-6 link-dark-subtle" href="{{route('users.index') }}"><i class="bi bi-list    "></i>Users list</a>
 @endsection
 
 

@@ -1,7 +1,7 @@
 @php($selected = 'assignments')
 @extends('layouts.app')
 @section('head_title','Assignments')
-@section('icon', 'fas fa-folder-open')
+@section('icon', 'bi bi-folder2-open')
 @section('title', 'Assignments')
 
 @section('other_assets')
@@ -18,8 +18,8 @@
 @if (in_array( Auth::user()->role->name, ['admin',  'head_instructor', 'instructor']))
 @section('title_menu')
 <nav class=" ms-3 fs-6 nav nav-pills">
-	<a class="nav-link link-dark-subtle" href="{{ route('assignments.create') }}"><i class="fa fa-plus color8"></i> Add</a>
-	<a class="nav-link link-dark-subtle active" href="{{ route('assignments.index') }}"><i class="far fa-star text-danger"></i>Assignments setting</a>
+	<a class="nav-link link-dark-subtle" href="{{ route('assignments.create') }}"><i class="bi bi-plus color8"></i> Add</a>
+	<a class="nav-link link-dark-subtle active" href="{{ route('assignments.index') }}"><i class="bi bi-star-fill text-danger"></i>Assignments setting</a>
 </nav>
 @endsection
 @endif
@@ -36,7 +36,7 @@
 		<div class="input-group">
 			<label class="input-group-text" for="search">Search by name</label>
 			<input type="text" name="search" id="search" class="form-control" placeholder="Search by name" value="{{ Request::get('search') }}">
-			<button type="button" class="btn btn-outline-danger" onClick="document.getElementById('search').value = '';"><i class="fas fa-times"></i></button>
+			<button type="button" class="btn btn-outline-danger" onClick="document.getElementById('search').value = '';"><i class="bi bi-x"></i></button>
 
 			<label class="input-group-text">lop</label>
 			<select class="search-by-lops form-control" multiple="multiple" name="lop_id[]"></select>
@@ -130,9 +130,9 @@
 				<td>
 					<a href="{{ route('scoreboards.index', $assignment->id)}}" title="Click to viewa assignment's scoreboard">
 						@if ($assignment->score_board)
-							View<i class="fas fa-external-link-alt"></i>
+							View<i class="bi bi-box-arrow-up-right"></i>
 						@elseif (!in_array( Auth::user()->role->name, ['student', 'guest']))
-							<span class="text-black-50">View<i class="fas fa-external-link-alt "></i></span>
+							<span class="text-black-50">View<i class="bi bi-box-arrow-up-right "></i></span>
 						@endif
 					</a>
 					<br/>
@@ -144,18 +144,18 @@
 					</div>
 				</td>
 				<td>
-					<a href="{{ route('assignments.duplicate', $assignment->id) }}" title="Duplicate assignment" ><i title="Duplicate assignment" class="far fa-copy fa-lg text-danger"></i></a>
-					<a href="{{ route('submissions.rejudge_view', $assignment->id) }}"><i title="Rejudge submissions" class="fa fa-retweet fa-lg text-success"></i></a>
-					<a title="Edit" href="{{ route('assignments.edit', $assignment) }}"><i class="fas fa-edit fa-lg color9"></i></a>
-					<span title="Delete Assignment" class="del_n delete_Assignment pointer"><i title="Delete Assignment" class="far fa-trash-alt fa-lg text-danger"></i></span>
+					<a href="{{ route('assignments.duplicate', $assignment->id) }}" title="Duplicate assignment" ><i title="Duplicate assignment" class="bi bi-copy fs-5 text-danger"></i></a>
+					<a href="{{ route('submissions.rejudge_view', $assignment->id) }}"><i title="Rejudge submissions" class="bi bi-arrow-repeat fs-5 text-success"></i></a>
+					<a title="Edit" href="{{ route('assignments.edit', $assignment) }}"><i class="bi bi-pencil-square fs-5 color9"></i></a>
+					<span title="Delete Assignment" class="del_n delete_Assignment pointer"><i title="Delete Assignment" class="bi bi-trash3 fs-5 text-danger"></i></span>
 
-					<a href="#extra_action_{{$assignment->id}}" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="#extra_action_{{$assignment->id}}" ><i class="fas fa-ellipsis-v text-info m-2"></i></i></a>
+					<a href="#extra_action_{{$assignment->id}}" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="#extra_action_{{$assignment->id}}" ><i class="bi bi-three-dots-vertical text-info m-2"></i></i></a>
 					<div class="collapse" id="extra_action_{{$assignment->id}}">
-						<a href="{{ route('assignments.download_submissions', ['type'=>'by_user', 'assignment_id'=>$assignment->id]) }}"><i title="Download Final Submissions (by user)" class="fa fa-download fa-lg color12"></i></a>
-						<a href="{{ route('assignments.download_submissions', ['type'=>'by_problem', 'assignment_id'=>$assignment->id]) }}"><i title="Download Final Submissions (by problem)" class="fa fa-download fa-lg color2"></i></a>
-						<a href="{{ route('assignments.download_all_submissions', $assignment->id) }}"><i title="Download all submissions" class="fas fa-cloud-download-alt"></i></a>
-						<a href="{{ route('moss.index', $assignment->id) }}"><i title="Detect Similar Codes" class="fa fa-user-secret fa-lg color7"></i></a>
-						<a href="{{ route('assignments.reload_scoreboard', $assignment->id) }}"><i title="Force reload scoreboard" class="fa fa-redo fa-lg text-success"></i></a>
+						<a href="{{ route('assignments.download_submissions', ['type'=>'by_user', 'assignment_id'=>$assignment->id]) }}"><i title="Download Final Submissions (by user)" class="bi bi-download fs-5 color12"></i></a>
+						<a href="{{ route('assignments.download_submissions', ['type'=>'by_problem', 'assignment_id'=>$assignment->id]) }}"><i title="Download Final Submissions (by problem)" class="bi bi-download fs-5 color2"></i></a>
+						<a href="{{ route('assignments.download_all_submissions', $assignment->id) }}"><i title="Download all submissions" class="bi bi-cloud-download-fill"></i></a>
+						<a href="{{ route('moss.index', $assignment->id) }}"><i title="Detect Similar Codes" class="bi bi-incognito fs-5 color7"></i></a>
+						<a href="{{ route('assignments.reload_scoreboard', $assignment->id) }}"><i title="Force reload scoreboard" class="bi bi-arrow-clockwise fs-5 text-success"></i></a>
 					</div>
 				</td>
 				@endif

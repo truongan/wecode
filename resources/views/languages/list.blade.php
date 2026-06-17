@@ -1,13 +1,13 @@
 @extends('layouts.app')
 @php($selected="settings")
 @section('head_title','Languages')
-@section('icon', 'fas fa-laptop-code')
+@section('icon', 'bi bi-code-square')
 
 @section('title','Languages')
 
 @section('title_menu')
-{{-- <a class="ms-4 fs-6 link-dark-subtle" href="https://github.com/truongan/wecode-judge/blob/docs/v1.4/users.md" target="_blank"><i class="fa fa-question-circle color6"></i> Help</a> --}}
-<a class="ms-4 fs-6 link-dark-subtle" href="{{ url('languages/create') }}"><i class="fa fa-plus color10"></i> Add</a>
+{{-- <a class="ms-4 fs-6 link-dark-subtle" href="https://github.com/truongan/wecode-judge/blob/docs/v1.4/users.md" target="_blank"><i class="bi bi-question-circle-fill color6"></i> Help</a> --}}
+<a class="ms-4 fs-6 link-dark-subtle" href="{{ url('languages/create') }}"><i class="bi bi-plus color10"></i> Add</a>
 @endsection
 
 @section('content')
@@ -34,8 +34,8 @@
         <td>{{$item->default_memory_limit}}</td>
         <td>{{$item->sorting}}</td>
         <td>
-          <a title="Edit" href="{{ route('languages.edit', $item->id) }}"><i class="fas fa-edit fa-lg color9"></i></a>
-          <span title="Delete Language" class="delete-btn del_n delete_language pointer" href="{{ route('languages.destroy', $item->id) }}"><i class="far fa-trash-alt fa-lg text-danger"></i></span>
+          <a title="Edit" href="{{ route('languages.edit', $item->id) }}"><i class="bi bi-pencil-square fs-5 color9"></i></a>
+          <span title="Delete Language" class="delete-btn del_n delete_language pointer" href="{{ route('languages.destroy', $item->id) }}"><i class="bi bi-trash3 fs-5 text-danger"></i></span>
         </td>
       </tr>
       @endforeach

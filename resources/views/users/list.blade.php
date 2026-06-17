@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('head_title','Users')
-@section('icon', 'fas fa-users')
+@section('icon', 'bi bi-people-fill')
 
 @section('title', 'Users')
 
@@ -36,16 +36,16 @@ thead tr:after {
 @endsection
 
 @section('title_menu')
-  {{-- <span class="ms-4 fs-6"><a href="https://github.com/truongan/wecode-judge/blob/docs/v1.4/users.md" target="_blank"><i class="fa fa-question-circle color6"></i> Help</a></span> --}}
+  {{-- <span class="ms-4 fs-6"><a href="https://github.com/truongan/wecode-judge/blob/docs/v1.4/users.md" target="_blank"><i class="bi bi-question-circle-fill color6"></i> Help</a></span> --}}
 
-  <a class="ms-4 fs-6 link-dark-subtle" href="{{ url('users/add_multiple') }}"><i class="fa fa-user-plus text-success"></i> Add Users</a>
-  <a class="ms-4 fs-6 link-dark-subtle" href="{{ 'mailto:' .  App\Models\User::pluck('email')->join(',') }}"><i class="fas fa-mail-bulk    "></i> Email all users</a>
-  <a class="ms-4 fs-6 link-dark-subtle" href="{{route('users.set_trial') }}"><i class="fas fa-highlighter    "></i>Update multiple users trial time</a>
-	{{-- <span class="ms-4 fs-6"><a href="{{ url('users/list_excel') }}"><i class="fa fa-download color9"></i> Excel</a></span> --}}
+  <a class="ms-4 fs-6 link-dark-subtle" href="{{ url('users/add_multiple') }}"><i class="bi bi-person-plus-fill text-success"></i> Add Users</a>
+  <a class="ms-4 fs-6 link-dark-subtle" href="{{ 'mailto:' .  App\Models\User::pluck('email')->join(',') }}"><i class="bi bi-envelope-fill    "></i> Email all users</a>
+  <a class="ms-4 fs-6 link-dark-subtle" href="{{route('users.set_trial') }}"><i class="bi bi-highlighter    "></i>Update multiple users trial time</a>
+	{{-- <span class="ms-4 fs-6"><a href="{{ url('users/list_excel') }}"><i class="bi bi-download color9"></i> Excel</a></span> --}}
 @endsection
 
 @section('content')
-<a name="" id="copy_user_list" class="btn btn-primary my-2" href="#" role="button"><i class="fas fa-copy    "></i> copy user name list</a>
+<a name="" id="copy_user_list" class="btn btn-primary my-2" href="#" role="button"><i class="bi bi-copy    "></i> copy user name list</a>
 <div class="row">
   <div class="table-responsive">
     <table class="table table-striped table-bordered">
@@ -66,7 +66,7 @@ thead tr:after {
   </div>
 </div>
 
-{{-- <span><a href="{{ route('users.create') }}"><i class="fa fa-user-plus text-success"></i> Add 1 User</a></span> --}}
+{{-- <span><a href="{{ route('users.create') }}"><i class="bi bi-person-plus-fill text-success"></i> Add 1 User</a></span> --}}
 
 @endsection
 
@@ -117,11 +117,11 @@ function renderActions(row){
 	var editUrl = "{{ route('users.edit', ['user' => '__ID__']) }}".replace('__ID__', row.id);
 	var subsUrl = "{{ url('submissions/all/user/__USERNAME__') }}".replace('__USERNAME__', encodeURIComponent(row.username));
 
-	return '<a title="Profile" href="'+showUrl+'" class="fas fa-address-book fa-lg color0"></a> '
-		+ '<a title="Edit" href="'+editUrl+'"><i class="fas fa-user-edit fa-lg color9"></i></a> '
-		+ '<a title="Submissions" href="'+subsUrl+'"><i class="fa fa-bars fa-lg color12"></i></a> '
-		+ '<span title="Delete User" class="delete-btn delete_user pointer"><i title="Delete User" class="fa fa-user-times fa-lg color2"></i></span> '
-		+ '<span title="Delete Submissions" class="delete-btn delete_submissions pointer"><i class="far fa-trash-alt fa-lg text-danger"></i></span>';
+	return '<a title="Profile" href="'+showUrl+'" class="bi bi-person-vcard fs-5 color0"></a> '
+		+ '<a title="Edit" href="'+editUrl+'"><i class="bi bi-person-fill-gear fs-5 color9"></i></a> '
+		+ '<a title="Submissions" href="'+subsUrl+'"><i class="bi bi-list fs-5 color12"></i></a> '
+		+ '<span title="Delete User" class="delete-btn delete_user pointer"><i title="Delete User" class="bi bi-person-x-fill fs-5 color2"></i></span> '
+		+ '<span title="Delete Submissions" class="delete-btn delete_submissions pointer"><i class="bi bi-trash3 fs-5 text-danger"></i></span>';
 }
 
 /**

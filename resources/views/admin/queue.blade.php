@@ -1,7 +1,7 @@
 @php($selected = 'settings')
 @extends('layouts.app')
 @section('head_title','Submission queue')
-@section('icon', 'fas fa-play')
+@section('icon', 'bi bi-play-fill')
 
 @section('title', 'Submission queue')
 
@@ -14,13 +14,13 @@
   <div  class="col-auto pe-1">
     <form action="{{ route('queue.work') }}" method="POST">
       @csrf
-      <button href="#" class="shj_act btn btn-primary" id="spawn" data-bs-toggle="tooltip" data-placement="right" title="A queue processor process is spawned every time there is a submission or rejudging request. You can manually spawn one with this link" type="submit"><i class="fa fa-play"></i> Spawn new queue process </button>
+      <button href="#" class="shj_act btn btn-primary" id="spawn" data-bs-toggle="tooltip" data-placement="right" title="A queue processor process is spawned every time there is a submission or rejudging request. You can manually spawn one with this link" type="submit"><i class="bi bi-play-fill"></i> Spawn new queue process </button>
     </form>
   </div>
   <div  class=" col-auto  pb-3">
     <form action="{{ route('queue.empty') }}" method="POST">
       @csrf
-      <button href="#" class="shj_act btn btn-danger" id="empty_queue"  data-bs-toggle="tooltip" data-placement="right" title="Empty the queue, all queue processor process should exit on their own, leaving submission in PENDING state"><i class="fa fa-times-circle"></i> Empty Queue</button>
+      <button href="#" class="shj_act btn btn-danger" id="empty_queue"  data-bs-toggle="tooltip" data-placement="right" title="Empty the queue, all queue processor process should exit on their own, leaving submission in PENDING state"><i class="bi bi-x-circle-fill"></i> Empty Queue</button>
     </form>
   </div>
 </div>
@@ -36,7 +36,7 @@
     <th>Type (judge/rejudge)</th>
     <th>created at</th>
     <th>Process PID</th>
-    <th><i class="fas fa-toolbox"></i></th>
+    <th><i class="bi bi-tools"></i></th>
     </tr>
     </thead>
     @foreach ($queue as $item)
@@ -53,10 +53,10 @@
         @if ($item->processid)
             <form action="{{ route('queue.unlock', $item->id) }}" method="POST" >
             @csrf
-            <button href="#" type="submit" class="shj_act btn btn-danger" id="unlock/{{ $item->id }}"  data-bs-toggle="tooltip" data-placement="right" title="Unlock this queue item, allow it to be processed. Should only be used if its processor process has terminated somehow. MUST DOUBLE CHECK BEFORE USE"><i class="fas fa-lock-open"></i></button>
+            <button href="#" type="submit" class="shj_act btn btn-danger" id="unlock/{{ $item->id }}"  data-bs-toggle="tooltip" data-placement="right" title="Unlock this queue item, allow it to be processed. Should only be used if its processor process has terminated somehow. MUST DOUBLE CHECK BEFORE USE"><i class="bi bi-unlock-fill"></i></button>
             </form>
         @endif
-        <a class="btn btn-secondary btn-sm " href="{{ route('submissions.index', ['assignment_id' => $item->submission->assignment->id, 'user_id' => $item->submission->user->id, 'problem_id' => $item->submission->problem->id, 'choose' => 'all'] ) }}"   role="button"> jump<i class="fa fa-link" aria-hidden="true"></i> </a>
+        <a class="btn btn-secondary btn-sm " href="{{ route('submissions.index', ['assignment_id' => $item->submission->assignment->id, 'user_id' => $item->submission->user->id, 'problem_id' => $item->submission->problem->id, 'choose' => 'all'] ) }}"   role="button"> jump<i class="bi bi-link-45deg" aria-hidden="true"></i> </a>
         </td>
     </tr>
     @endforeach

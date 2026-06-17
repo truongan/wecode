@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('head_title','Edit by HTML')
-@section('icon', 'fas fa-edit')
+@section('icon', 'bi bi-pencil-square')
 
 @section('title', 'Edit by HTML')
 
@@ -172,7 +172,7 @@ document.addEventListener("DOMContentLoaded", function(){
         <input type="file" style="display: none;" id="opendialog">
 
         <div class="col-auto">
-            <a class="btn btn-primary" href="#" id="open"><i class="fa fa-folder-open-o" aria-hidden="true"></i> Open</a>
+            <a class="btn btn-primary" href="#" id="open"><i class="bi bi-folder2-open" aria-hidden="true"></i> Open</a>
         </div>
         
         <div class="col-auto me-auto ms-auto">		
@@ -182,7 +182,7 @@ document.addEventListener("DOMContentLoaded", function(){
         </div>
         
         <div id="save" class="col-auto">
-            <a class="btn btn-primary"  download href="#"><i class="fa fa-download" aria-hidden="true"></i>Download </a>
+            <a class="btn btn-primary"  download href="#"><i class="bi bi-download" aria-hidden="true"></i>Download </a>
         </div>
     </div>
 

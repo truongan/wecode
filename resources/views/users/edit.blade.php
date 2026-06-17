@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @php($selected="settings")
 @section('head_title','Edit User')
-@section('icon', 'fas fa-users')
+@section('icon', 'bi bi-people-fill')
 
 @section('title')
 Users - {{$user->username}}
@@ -9,8 +9,8 @@ Users - {{$user->username}}
 
 @section('title_menu')
 
-  <a class=" ms-4 fs-6 link-dark-subtle" href="{{ route('users.show', $user) }}"> <i class="fa fa-user-edit color2"></i>View user profile</a>
-  <a class="ms-2 fs-6 link-dark-subtle" href="{{ route('users.index') }}"> <i class="fa fa-list color2"></i>List all users</a>
+  <a class=" ms-4 fs-6 link-dark-subtle" href="{{ route('users.show', $user) }}"> <i class="bi bi-person-fill-gear color2"></i>View user profile</a>
+  <a class="ms-2 fs-6 link-dark-subtle" href="{{ route('users.index') }}"> <i class="bi bi-list color2"></i>List all users</a>
 
 @endsection
 

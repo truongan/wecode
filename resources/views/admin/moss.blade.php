@@ -1,7 +1,7 @@
 @php($selected = 'instructor_panel')
 @extends('layouts.app')
 @section('head_title','Detect similar codes')
-@section('icon', 'fas fa-user-secret')
+@section('icon', 'bi bi-incognito')
 
 @section('title', 'Detect similar codes')
 

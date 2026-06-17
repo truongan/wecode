@@ -1,7 +1,7 @@
 @php($selected = 'notifications')
 @extends('layouts.app')
 @section('head_title','Notifications')
-@section('icon', 'fas fa-bell')
+@section('icon', 'bi bi-bell-fill')
 
 @section('title', 'Notifications')
 
@@ -15,7 +15,7 @@
 
 @section('title_menu')
 @if ( in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
-    <span class="ms-4 fs-6"><a href="{{ route('notifications.create') }}"><i class="fa fa-plus color10"></i> New</a></span>
+    <span class="ms-4 fs-6"><a href="{{ route('notifications.create') }}"><i class="bi bi-plus color10"></i> New</a></span>
 @endif
 @endsection
 

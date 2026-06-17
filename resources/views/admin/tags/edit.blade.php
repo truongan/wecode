@@ -1,12 +1,12 @@
 @php($selected = 'instructor_panel')
 @extends('layouts.app')
 @section('head_title','Edit Tags')
-@section('icon', 'fas fa-tags')
+@section('icon', 'bi bi-tags-fill')
 
 @section('title', 'Edit Tags')
 
 @section('title_menu')
-	<span class="ms-4 fs-6"><a href="{{ route('tags.index') }}"><i class="fa fa-list text-success"></i>Back to list of tag</a></span>
+	<span class="ms-4 fs-6"><a href="{{ route('tags.index') }}"><i class="bi bi-list text-success"></i>Back to list of tag</a></span>
 @endsection
 
 @section('content')

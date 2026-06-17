@@ -14,8 +14,8 @@
 
 @section('title_menu')
 
-  <a class=" ms-4 fs-6 link-dark-subtle" href="{{ route('users.edit', $user) }}"> <i class="fa fa-user-edit color2"></i>Edit user profile</a>
-  <a class="ms-2 fs-6 link-dark-subtle" href="{{ route('users.index') }}"> <i class="fa fa-list color2"></i>List all users</a>
+  <a class=" ms-4 fs-6 link-dark-subtle" href="{{ route('users.edit', $user) }}"> <i class="bi bi-person-fill-gear color2"></i>Edit user profile</a>
+  <a class="ms-2 fs-6 link-dark-subtle" href="{{ route('users.index') }}"> <i class="bi bi-list color2"></i>List all users</a>
 
 @endsection
 
@@ -66,7 +66,7 @@ new frappe.Chart( "#pre_score", {
 @endsection
 
 @section('head_title','View User')
-@section('icon', 'fas fa-users')
+@section('icon', 'bi bi-people-fill')
 
 @section('title')
 Users - {{$user->username}}
@@ -182,7 +182,7 @@ Users - {{$user->username}}
         <button class="btn btn-info " disabled> {{ $as->total }} </button>
         {{-- ONE !! ONE fucking typo turn a useless if check into a massive query with zero usefuless --}}
         {{-- @if ($as->ass->score_board) --}}
-          <a href="{{ route('scoreboards.index', $as->ass->id) }} "><i class="fas fa-external-link-alt"></i></a>
+          <a href="{{ route('scoreboards.index', $as->ass->id) }} "><i class="bi bi-box-arrow-up-right"></i></a>
         {{-- @endif --}}
       </td>
 			<td>{{$as->accept}} ({{ round($as->accept / $as->total * 100, 2) }}%)</td>

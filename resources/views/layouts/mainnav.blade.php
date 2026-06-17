@@ -9,25 +9,25 @@
 		<ul class="navbar-nav navbar p-0 border-bottom-0 border-start-0 border-end-0 bg-dark navbar-dark navbar-sidenav color-{{ $selected }} align-items-start" id="exampleAccordion">
 			<li class="nav-item color-dashboard {{ ($selected=="dashboard") ? "selected" : ""}}">
 			<a class="nav-link" href="{{ url('home') }}">
-				<i class="fa fa-fw fa-tachometer-alt fa-lg"></i>
+				<i class="bi bi-speedometer2 fs-5"></i>
 				<span class="nav-link-text">Dashboard</span>
 			</a>
 			</li>
 			<li class="nav-item color-notifications {{ ($selected=="notifications") ? "selected" : ""}}">
 				<a class="nav-link" href="{{ url('notifications') }}">
-					<i class="fa fa-fw fa-bell fa-lg"></i>
+					<i class="bi bi-bell-fill fs-5"></i>
 					<span class="nav-link-text">Notifications</span>
 				</a>
 			</li>
 			<li class="nav-item color-problem_list {{ ($selected=="problem_list") ? "selected" : ""}}">
 				<a class="nav-link" href="{{ route('lops.index') }}">
-					<i class="fas fa-school fa-fw fa-lg"></i>
+					<i class="bi bi-mortarboard-fill fs-5"></i>
 					<span class="nav-link-text">Classes</span>
 				</a>
 			</li>
 			<li class="nav-item color-users {{ ($selected=="users") ? "selected" : ""}}">
 				<a href="{{route('practice')}}" class="nav-link">
-					<i class="fas fa-khanda fa-fw fa-lg"></i>
+					<i class="bi bi-activity fs-5"></i>
 					<span class="nav-link-text">Practice</span>
 				</a>
 			</li>
@@ -35,7 +35,7 @@
 			@if ( in_array( Auth::user()->role->name, ['admin', 'head_instructor', 'instructor']) )
 				<li class="nav-item color-instructor_panel {{ ($selected=="instructor_panel") ? "selected" : ""}}" >
 					<a class="nav-link" href="{{ route('problems.index') }}">
-						<i class="fa fa-fw fa-sliders-h fa-lg"></i>
+						<i class="bi bi-sliders fs-5"></i>
 						<span class="nav-link-text">Problems</span>
 					</a>
 				</li>
@@ -43,7 +43,7 @@
 
 			<li class="nav-item color-assignments {{ ($selected=="assignments") ? "selected" : ""}}">
 				<a class="nav-link" href="{{ url('assignments') }}">
-					<i class="fa fa-fw fa-folder-open fa-lg"></i>
+					<i class="bi bi-folder2-open fs-5"></i>
 					<span class="nav-link-text">Assignments</span>
 				</a>
 			</li>
@@ -53,7 +53,7 @@
 				@else
 					<a class="nav-link" href="{{ route('submissions.index', [(int)Auth::user()->selected_assignment_id, 'all', 'all', 'all'])}}">
 				@endif
-					<i class="fa fa-fw fa-bars fa-lg"></i>
+					<i class="bi bi-list fs-5"></i>
 					<span class="nav-link-text">Submissions</span>
 				</a>
 			</li>
@@ -66,7 +66,7 @@
 				@endif
 
 				>
-					<i class="fa fa-fw fa-star fa-lg"></i>
+					<i class="bi bi-star-fill fs-5"></i>
 					<span class="nav-link-text">Scoreboard</span>
 				</a>
 			</li>
@@ -94,7 +94,7 @@
 				</div>
 			</div>
 			<div class="top_object countdown" id="extra_time">
-				<i class="fa fa-fw fa-plus-square fa-2x"></i>
+				<i class="bi bi-plus-square-fill fs-4"></i>
 				<div class="time_block">
 					<span>Extra Time</span>
 				</div>
@@ -156,16 +156,16 @@
 		  </li>
 
 			<li class="nav-item dropdown">
-				<a class="dropdown-toggle nav-link" data-bs-toggle="dropdown" href="#" id="profile_link" rol="button" aria-expandd="false"><i class="fa fa-fw fa-user"></i>{{Auth::user()->username}}</a>
+				<a class="dropdown-toggle nav-link" data-bs-toggle="dropdown" href="#" id="profile_link" rol="button" aria-expandd="false"><i class="bi bi-person-fill"></i>{{Auth::user()->username}}</a>
 				<div class="dropdown-menu dropdown-menu-end ">
 					<div class="d-flex pe-3 ps-3">
 						<div class="">
 							<div class="d-inline-flex">
 								<form action="{{route('logout')}}" method="POST">
 								@csrf
-								<button type="submit" class="btn btn-danger me-2 text-nowrap"><i class="fas fa-fw fa-sign-out-alt"></i>Sign out</button>
+								<button type="submit" class="btn btn-danger me-2 text-nowrap"><i class="bi bi-box-arrow-right"></i>Sign out</button>
 								</form>
-								<a href="{{ route("users.show", Auth::user()->id) }}" class="btn btn-info text-nowrap"><i class="fas fa-fw fa-wrench"></i>Profile</a>
+								<a href="{{ route("users.show", Auth::user()->id) }}" class="btn btn-info text-nowrap"><i class="bi bi-wrench"></i>Profile</a>
 							</div>
 						</div>
 					</div>

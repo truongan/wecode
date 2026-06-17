@@ -9,7 +9,7 @@ $selected = 'assignments'
 <link rel="stylesheet" type='text/css' href="{{ asset('assets/styles/submit_page.css') }}"/>
   <meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
-@section('icon', 'fas fa-code')
+@section('icon', 'bi bi-code-slash')
 @section('title')</i> Assignment: {{ $assignment->name }}@endsection
 	
 @section('content')

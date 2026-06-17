@@ -1,12 +1,12 @@
 @php($selected = 'problem_list')
 @extends('layouts.app')
 @section('head_title','New Class')
-@section('icon', 'fas fa-school')
+@section('icon', 'bi bi-mortarboard-fill')
 
 @section('title', 'New Class')
 
 @section('title_menu')
-	<span class="ms-4 fs-6"><a href="{{ route('lops.index') }}"><i class="fa fa-list text-success"></i>Back to list of class</a></span>
+	<span class="ms-4 fs-6"><a href="{{ route('lops.index') }}"><i class="bi bi-list text-success"></i>Back to list of class</a></span>
 @endsection
 
 @section('body_end')

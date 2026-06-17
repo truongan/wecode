@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @php($selected="instructor_panel")
 @section('head_title','Problems')
-@section('icon', 'fas fa-clipboard-list')
+@section('icon', 'bi bi-clipboard-data-fill')
 @section('other_assets')
   <link rel='stylesheet' type='text/css' href='{{ asset('assets/DataTables/datatables.min.css') }}'/>
   <link rel="stylesheet" type="text/css" href="{{ asset('assets/slimselect/slimselect.css') }}">
@@ -13,8 +13,8 @@
 
 @section('title_menu')
 {{-- {% if user.level >= 2 %} --}}
-<a href="{{ route('problems.create') }}"><span class="ms-4 fs-6 text-dark-subtle"><i class="fas fa-plus fa-lg color8"></i> Add</span></a>
-<a href="{{ route('submissions.index',[0, Auth::user()->id, 'all', 'all'] ) }}"><span class="ms-4 fs-6 text-dark-subtle"><i class="fas fa-list-ul fa-lg color8"></i>Review practice submissions</span></a>
+<a href="{{ route('problems.create') }}"><span class="ms-4 fs-6 text-dark-subtle"><i class="bi bi-plus fs-5 color8"></i> Add</span></a>
+<a href="{{ route('submissions.index',[0, Auth::user()->id, 'all', 'all'] ) }}"><span class="ms-4 fs-6 text-dark-subtle"><i class="bi bi-list-ul fs-5 color8"></i>Review practice submissions</span></a>
 @endsection
 
 @section('content')
@@ -30,9 +30,9 @@
 			<div id="collapseOne" class="accordion-collapse collapse " data-bs-parent="#accordionExample">
 				<div class="accordion-body">
 					<div class="row mb-2">
-						<div class="col-md"><a href="" download id = "download_all_selected"><i class="fas fa-download fa-lg text-info"></i>Export selected problem (zip)</a></div>
-						<div class="col-md"><a href="" id="select_all_for_download"><i class="fas fa-check-square fa-lg text-info"></i>Select all problems</a></div>
-						<div class="col-md"><a href="" id="deselect_all_for_download"><i class="far fa-square fa-lg text-info"></i>Deselect all problems</a></div>
+						<div class="col-md"><a href="" download id = "download_all_selected"><i class="bi bi-download fs-5 text-info"></i>Export selected problem (zip)</a></div>
+						<div class="col-md"><a href="" id="select_all_for_download"><i class="bi bi-check-square fs-5 text-info"></i>Select all problems</a></div>
+						<div class="col-md"><a href="" id="deselect_all_for_download"><i class="bi bi-square fs-5 text-info"></i>Deselect all problems</a></div>
 						<div class="col-md-6">
 							<form 		enctype="multipart/form-data"			action="{{ route('problems.import') }}"  method="post"  class="row g-3 needs-validation" novalidate>
 							  <div class="col-md-10">
@@ -55,7 +55,7 @@
 			<div class="input-group">
 				<label class="input-group-text" for="search">Search by name</label>
 				<input type="text" name="search" id="search" class="form-control" placeholder="Search by name" aria-describedby="Search by name" value="{{ Request::get('search') }} " >
-				<button type="button" class="btn btn-outline-danger" onClick="document.getElementById('search').value = '' ;"><i class="fas fa-times    "></i></button>
+				<button type="button" class="btn btn-outline-danger" onClick="document.getElementById('search').value = '' ;"><i class="bi bi-x    "></i></button>
 
 				<label class="input-group-text">tag</label>
 				<select class="search-by-tags form-control " multiple="multiple" name="tag_id[]"></select>
@@ -129,10 +129,10 @@
 						@if($item->can_edit(Auth::user()))
 							<form action="{{ route('problems.edit_tags', $item->id) }}" method="post" class="edit-tag-form d-none">
 								<select  multiple="multiple" class="form-control edit-tag-list"></select>
-								<button type="button" class="btn btn-small btn-danger tags-edit-cancel"><i class="fas fa-window-close"></i></button>
-								<button type="submit" class="btn btn-small btn-primary" ><i class="fa fa-check" aria-hidden="true"></i></button>
+								<button type="button" class="btn btn-small btn-danger tags-edit-cancel"><i class="bi bi-window-x"></i></button>
+								<button type="submit" class="btn btn-small btn-primary" ><i class="bi bi-check" aria-hidden="true"></i></button>
 							</form>
-							<span  class = "edit-tag-list-handle"> <i title="Edit tag list" class="far fa-edit fa-lg text-warning"> </i> </span>
+							<span  class = "edit-tag-list-handle"> <i title="Edit tag list" class="bi bi-pencil-square fs-5 text-warning"> </i> </span>
 						@endif
 					</td>
 					{{-- LANG --}}
@@ -182,7 +182,7 @@
 					{{-- SHARE, PRACTICE, EDITORIAL --}}
 					<td>
 
-						<i  style="cursor:pointer" data-bs-toggle="tooltip" data-id='{{ "toggle." .  $item->id}}'  title='Green icon means this problem is available for practice, Black icon for otherwise' class="toggle_practice-share fas fa-dumbbell fa-2x clickable .stretched-link
+						<i  style="cursor:pointer" data-bs-toggle="tooltip" data-id='{{ "toggle." .  $item->id}}'  title='Green icon means this problem is available for practice, Black icon for otherwise' class="toggle_practice-share bi bi-activity fs-4 clickable .stretched-link
 							@if( $item->allow_practice)
 								text-success
 
@@ -192,7 +192,7 @@
 							@endif
 						">
 						</i>
-						<i style="cursor:pointer" data-bs-toggle="tooltip" data-id='{{'share.' . $item->id}}' title='Green icon means this problem is shared among instructors. Black icon means it is only visible  to its author and admins'  class="toggle_practice-share fas fa-share-alt fa-2x clickable .stretched-link
+						<i style="cursor:pointer" data-bs-toggle="tooltip" data-id='{{'share.' . $item->id}}' title='Green icon means this problem is shared among instructors. Black icon means it is only visible  to its author and admins'  class="toggle_practice-share bi bi-share-fill fs-4 clickable .stretched-link
 						@if( $item->sharable)
 							text-success
 
@@ -203,10 +203,10 @@
 						</i>
 
 						@if($item->editorial != '')
-							<a href="{{ $item->editorial }}" data-bs-toggle="tooltip" title='This problem has some linked editorial'><i class="fas fa-lightbulb fa-2x   "></i></a>
+							<a href="{{ $item->editorial }}" data-bs-toggle="tooltip" title='This problem has some linked editorial'><i class="bi bi-lightbulb-fill fs-4   "></i></a>
 						@endif
 						@if($item->author != '')
-							<i class="fas fa-user   "></i> {{$item->author}}
+							<i class="bi bi-person-fill   "></i> {{$item->author}}
 						@endif
 					{{-- </td> --}}
 					{{-- DOWNLOAD, EDIT, DELETE --}}
@@ -214,13 +214,13 @@
 						<div class="form-check">
 							<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault-{{$item->id}}" data-id="{{$item->id}}">
 							<label class="form-check-label" for="flexCheckDefault-{{$item->id}}"
-								<i title="Select for download" class="fa fa-cloud-download-alt fa-lg text-success"></i>
+								<i title="Select for download" class="bi bi-cloud-download-fill fs-5 text-success"></i>
 							</label>
 						  </div>
 						@if($item->can_edit(Auth::user()))
-							<a href="{{ route('problems.edit', $item) }}"> <i title="Edit" class="far fa-edit fa-lg color3"> </i> </a>
+							<a href="{{ route('problems.edit', $item) }}"> <i title="Edit" class="bi bi-pencil-square fs-5 color3"> </i> </a>
 							<span title="Delete problem" class="del_n delete_tag pointer">
-							<i title="Delete problem" class="far fa-trash-alt fa-lg text-danger"></i>
+							<i title="Delete problem" class="bi bi-trash3 fs-5 text-danger"></i>
 							</span>
 						@endif
 					</td>
