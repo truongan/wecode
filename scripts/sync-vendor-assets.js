@@ -57,7 +57,11 @@ copy("datatables.net-bs5/css/dataTables.bootstrap5.min.css", "DataTables/datatab
 //     header comment (themes=prism-solarizedlight&languages=clike+javascript
 //     +c+cpp+java+pascal+python&plugins=line-numbers+toolbar) --------------
 concat(
-	["core", "clike", "javascript", "c", "cpp", "java", "pascal", "python"].map((l) => `prismjs/components/prism-${l}.min.js`),
+	[
+		...["core", "clike", "javascript", "c", "cpp", "java", "pascal", "python"].map((l) => `prismjs/components/prism-${l}.min.js`),
+		"prismjs/plugins/line-numbers/prism-line-numbers.min.js",
+		"prismjs/plugins/toolbar/prism-toolbar.min.js",
+	],
 	"prismjs/prism.js",
 );
 concat(
