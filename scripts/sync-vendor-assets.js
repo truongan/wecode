@@ -6,114 +6,67 @@
 // Libraries with no clean npm equivalent (ckeditor, ckeditor5, sbadmin,
 // fullcalendar) are intentionally NOT handled here.
 
+const { execSync } = require("child_process");
 const fs = require("fs");
 const path = require("path");
 
 const root = path.join(__dirname, "..");
-const nodeModules = path.join(root, "node_modules");
+const nm = path.join(root, "node_modules");
 const assets = path.join(root, "public", "assets");
 
-function copyFile(src, dest) {
-	fs.mkdirSync(path.dirname(dest), { recursive: true });
-	fs.copyFileSync(src, dest);
-}
-
-function copyDir(src, dest, { exclude = [] } = {}) {
-	fs.rmSync(dest, { recursive: true, force: true });
-	fs.mkdirSync(dest, { recursive: true });
-	for (const entry of fs.readdirSync(src, { withFileTypes: true })) {
-		if (exclude.includes(entry.name)) {
-			continue;
-		}
-		const srcPath = path.join(src, entry.name);
-		const destPath = path.join(dest, entry.name);
-		if (entry.isDirectory()) {
-			copyDir(srcPath, destPath);
-		} else {
-			fs.copyFileSync(srcPath, destPath);
-		}
-	}
-}
-
-function concatFiles(srcPaths, dest) {
-	const content = srcPaths.map((p) => fs.readFileSync(p, "utf8")).join("\n");
-	fs.mkdirSync(path.dirname(dest), { recursive: true });
-	fs.writeFileSync(dest, content);
-}
-
-const nm = (...parts) => path.join(nodeModules, ...parts);
-const out = (...parts) => path.join(assets, ...parts);
+const sh = (cmd) => execSync(cmd, { cwd: root, shell: "/bin/bash", stdio: "inherit" });
+const copy = (src, dest) => sh(`mkdir -p "${assets}/${path.dirname(dest)}" && cp -R "${nm}/${src}" "${assets}/${dest}"`);
+const concat = (srcs, dest) => {
+	fs.mkdirSync(path.join(assets, path.dirname(dest)), { recursive: true });
+	fs.writeFileSync(path.join(assets, dest), srcs.map((s) => fs.readFileSync(path.join(nm, s), "utf8")).join("\n"));
+};
 
 // --- Simple 1:1 file copies ---------------------------------------------
-
-const copies = [
-	[nm("quill", "dist", "quill.js"), out("quill", "quill.js")],
-	[nm("quill", "dist", "quill.snow.css"), out("quill", "quill.snow.css")],
-
-	[nm("bootstrap-icons", "font", "bootstrap-icons.min.css"), out("bootstrap-icons", "bootstrap-icons.min.css")],
-	[nm("bootstrap-icons", "font", "fonts", "bootstrap-icons.woff"), out("bootstrap-icons", "fonts", "bootstrap-icons.woff")],
-	[nm("bootstrap-icons", "font", "fonts", "bootstrap-icons.woff2"), out("bootstrap-icons", "fonts", "bootstrap-icons.woff2")],
-
-	[nm("frappe-charts", "dist", "frappe-charts.min.umd.js"), out("frappe", "frappe-charts.min.iife.js")],
-
-	[nm("select2", "dist", "js", "select2.min.js"), out("select2", "select2.min.js")],
-	[nm("select2", "dist", "css", "select2.min.css"), out("select2", "select2.min.css")],
-	[nm("select2-bootstrap-5-theme", "dist", "select2-bootstrap-5-theme.min.css"), out("select2", "select2-bootstrap-5-theme.min.css")],
-
-	[nm("slim-select", "dist", "slimselect.js"), out("slimselect", "slimselect.js")],
-	[nm("slim-select", "dist", "slimselect.css"), out("slimselect", "slimselect.css")],
-
-	[nm("bootstrap", "dist", "js", "bootstrap.bundle.min.js"), out("js", "bootstrap.bundle.min.js")],
-	[nm("bootstrap", "dist", "js", "bootstrap.bundle.min.js.map"), out("js", "bootstrap.bundle.min.js.map")],
-	[nm("bootstrap", "dist", "css", "bootstrap.min.css"), out("styles", "bootstrap", "default.min.css")],
-
-	[nm("sortablejs", "Sortable.min.js"), out("js", "Sortable.min.js")],
-];
-
-for (const [src, dest] of copies) {
-	copyFile(src, dest);
-}
+copy("quill/dist/quill.js", "quill/quill.js");
+copy("quill/dist/quill.snow.css", "quill/quill.snow.css");
+copy("bootstrap-icons/font/bootstrap-icons.min.css", "bootstrap-icons/bootstrap-icons.min.css");
+copy("bootstrap-icons/font/fonts/bootstrap-icons.woff", "bootstrap-icons/fonts/bootstrap-icons.woff");
+copy("bootstrap-icons/font/fonts/bootstrap-icons.woff2", "bootstrap-icons/fonts/bootstrap-icons.woff2");
+copy("frappe-charts/dist/frappe-charts.min.umd.js", "frappe/frappe-charts.min.iife.js");
+copy("select2/dist/js/select2.min.js", "select2/select2.min.js");
+copy("select2/dist/css/select2.min.css", "select2/select2.min.css");
+copy("select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme.min.css", "select2/select2-bootstrap-5-theme.min.css");
+copy("slim-select/dist/slimselect.js", "slimselect/slimselect.js");
+copy("slim-select/dist/slimselect.css", "slimselect/slimselect.css");
+copy("bootstrap/dist/js/bootstrap.bundle.min.js", "js/bootstrap.bundle.min.js");
+copy("bootstrap/dist/js/bootstrap.bundle.min.js.map", "js/bootstrap.bundle.min.js.map");
+copy("bootstrap/dist/css/bootstrap.min.css", "styles/bootstrap/default.min.css");
+copy("sortablejs/Sortable.min.js", "js/Sortable.min.js");
 
 // --- Directory copies -----------------------------------------------------
-
-copyDir(nm("ace-builds", "src-min-noconflict"), out("ace"));
-
-copyDir(nm("mathjax"), out("mathjax"), {
-	exclude: ["package.json", "README.md", "LICENSE", "CONTRIBUTING.md", "test"],
-});
+sh(`rm -rf "${assets}/ace" && mkdir -p "${assets}/ace" && cp -R "${nm}/ace-builds/src-min-noconflict/." "${assets}/ace/"`);
+sh(`rm -rf "${assets}/mathjax" && mkdir -p "${assets}/mathjax" && cp -R "${nm}/mathjax/." "${assets}/mathjax/"`);
+sh(`rm -rf "${assets}/mathjax/"{package.json,README.md,LICENSE,CONTRIBUTING.md,test}`);
 
 // --- Bootswatch themes ------------------------------------------------------
-
-for (const theme of fs.readdirSync(nm("bootswatch", "dist"))) {
-	copyFile(nm("bootswatch", "dist", theme, "bootstrap.min.css"), out("styles", "bootstrap", `${theme}.min.css`));
+for (const theme of fs.readdirSync(`${nm}/bootswatch/dist`)) {
+	copy(`bootswatch/dist/${theme}/bootstrap.min.css`, `styles/bootstrap/${theme}.min.css`);
 }
 
 // --- DataTables: core + Bootstrap 5 styling, concatenated like the
 //     datatables.net/download builder produces ---------------------------
-
-concatFiles(
-	[nm("datatables.net", "js", "dataTables.js"), nm("datatables.net-bs5", "js", "dataTables.bootstrap5.js")],
-	out("DataTables", "datatables.min.js"),
-);
-concatFiles([nm("datatables.net-bs5", "css", "dataTables.bootstrap5.css")], out("DataTables", "datatables.min.css"));
+concat(["datatables.net/js/dataTables.js", "datatables.net-bs5/js/dataTables.bootstrap5.js"], "DataTables/datatables.min.js");
+concat(["datatables.net-bs5/css/dataTables.bootstrap5.css"], "DataTables/datatables.min.css");
 
 // --- Prism: matches the exact recipe baked into the current theme file's
 //     header comment (themes=prism-solarizedlight&languages=clike+javascript
 //     +c+cpp+java+pascal+python&plugins=line-numbers+toolbar) --------------
-
-concatFiles(
-	["core", "clike", "javascript", "c", "cpp", "java", "pascal", "python"].map((lang) =>
-		nm("prismjs", "components", `prism-${lang}.js`),
-	),
-	out("prismjs", "prism.js"),
+concat(
+	["core", "clike", "javascript", "c", "cpp", "java", "pascal", "python"].map((l) => `prismjs/components/prism-${l}.js`),
+	"prismjs/prism.js",
 );
-concatFiles(
+concat(
 	[
-		nm("prismjs", "themes", "prism-solarizedlight.css"),
-		nm("prismjs", "plugins", "line-numbers", "prism-line-numbers.css"),
-		nm("prismjs", "plugins", "toolbar", "prism-toolbar.css"),
+		"prismjs/themes/prism-solarizedlight.css",
+		"prismjs/plugins/line-numbers/prism-line-numbers.css",
+		"prismjs/plugins/toolbar/prism-toolbar.css",
 	],
-	out("prismjs", "prism.css"),
+	"prismjs/prism.css",
 );
 
 console.log("Synced vendor assets into public/assets.");
