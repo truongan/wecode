@@ -51,8 +51,13 @@ class moss_controller extends Controller
 
     public function update(Request $request, $assignment_id = FALSE)
 	{
+		if ( !in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
+			abort(403);
 		if ($assignment_id === FALSE)
 			abort(404);
+		$request->validate([
+			'moss_userid' => ['required', 'numeric'],
+		]);
 		$userid = $request->moss_userid;
 		Setting::set('moss_userid', $userid);
 		$moss_original = trim( file_get_contents(rtrim(Setting::get('tester_path'), '/').'/moss_original') );
@@ -66,6 +71,8 @@ class moss_controller extends Controller
 
 	public function detect(Request $request, $assignment_id = FALSE)
 	{
+		if ( !in_array( Auth::user()->role->name, ['admin', 'head_instructor']) )
+			abort(403);
 		$validated = $request->validate([
             'detect' => 'required|required_with_all:detect',
         ]);

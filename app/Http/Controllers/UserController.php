@@ -91,9 +91,7 @@ class UserController extends Controller
 				"display_name" => $user->display_name,
 				"email" => $user->email,
 				"role_name" => $user->role->name,
-				"trial_end" => $user->trial_time
-					? $user->created_at->addHours($user->trial_time)->diffForHumans()
-					: "Permanent user",
+				"trial_end" => $user->trial_time ? $user->created_at->addHours($user->trial_time)->diffForHumans() : "Permanent user",
 				"first_login" => $user->first_login_time
 					? $user->first_login_time->setTimezone($timezone)->locale("en-GB")->isoFormat("lll")
 					: null,
@@ -164,11 +162,7 @@ class UserController extends Controller
 			}
 		}
 
-		$hourly = $user
-			->submissions()
-			->selectRaw("hour(created_at) as hour, count(*) as count")
-			->groupByRaw("hour(created_at)")
-			->get();
+		$hourly = $user->submissions()->selectRaw("hour(created_at) as hour, count(*) as count")->groupByRaw("hour(created_at)")->get();
 		$offset = timezone_open(Setting::get("timezone"))->getOffset(now()) / 3600;
 
 		foreach ($hourly as $key => $value) {
@@ -207,9 +201,7 @@ class UserController extends Controller
 		$name_list = preg_split("/[\s,]+/", $request->get("names"));
 
 		$users = User::with("lops")->whereIn("username", $name_list)->get();
-		$subs = Submission::with("assignment", "assignment.lops", "assignment.user")
-			->whereIn("user_id", $users->pluck("id"))
-			->get();
+		$subs = Submission::with("assignment", "assignment.lops", "assignment.user")->whereIn("user_id", $users->pluck("id"))->get();
 		$stats = [];
 		// dd($users);
 		// dd($subs);
@@ -332,6 +324,9 @@ class UserController extends Controller
 			$a = $request->input();
 			if (isset($a["trial_time"])) {
 				abort(403, "Only site admin can update user trial time");
+			}
+			if (isset($a["role_id"])) {
+				abort(403, "Only site admin can update user role id ");
 			}
 		}
 
@@ -578,9 +573,7 @@ class UserController extends Controller
 			$zone = Carbon::now()->getTimezone();
 			// $request->validate(['new_trial_end_time' => 'required']);
 
-			$end_time = strval(
-				(new Carbon($request->get("new_trial_end_time") . " " . Setting::get("timezone")))->setTimezone($zone),
-			);
+			$end_time = strval((new Carbon($request->get("new_trial_end_time") . " " . Setting::get("timezone")))->setTimezone($zone));
 
 			// dd($end_time);
 			$count = $where_clause->update([
