@@ -9,70 +9,70 @@ use Tests\TestCase;
 
 class HtmlEditorControllerTest extends TestCase
 {
-    use DatabaseTransactions;
+	use DatabaseTransactions;
 
-    private function makeUser(int $roleId): User
-    {
-        return User::create([
-            'username' => 'html_editor_test_' . uniqid(),
-            'email' => uniqid() . '@example.test',
-            'password' => bcrypt('password'),
-            'role_id' => $roleId,
-        ]);
-    }
+	private function makeUser(int $roleId): User
+	{
+		return User::create([
+			"username" => "html_editor_test_" . uniqid(),
+			"email" => uniqid() . "@example.test",
+			"password" => bcrypt("password"),
+			"role_id" => $roleId,
+		]);
+	}
 
-    private function autosavePathFor(User $user): string
-    {
-        return sprintf('%s/%s/_htmleditor.auto.save.txt', Setting::get('assignments_root'), $user->id);
-    }
+	private function autosavePathFor(User $user): string
+	{
+		return sprintf("%s/%s/_htmleditor.auto.save.txt", Setting::get("assignments_root"), $user->id);
+	}
 
-    private function cleanupAutosaveFile(User $user): void
-    {
-        $path = $this->autosavePathFor($user);
-        @unlink($path);
-        @rmdir(dirname($path));
-    }
+	private function cleanupAutosaveFile(User $user): void
+	{
+		$path = $this->autosavePathFor($user);
+		@unlink($path);
+		@rmdir(dirname($path));
+	}
 
-    public function test_index_renders_default_content_for_admin(): void
-    {
-        $user = $this->makeUser(1);
+	public function test_index_renders_default_content_for_admin(): void
+	{
+		$user = $this->makeUser(1);
 
-        $response = $this->actingAs($user)->get('/htmleditor');
+		$response = $this->actingAs($user)->get("/htmleditor");
 
-        $response->assertOk();
-        $response->assertSee('INPUT', false);
-        $this->assertFileExists($this->autosavePathFor($user));
+		$response->assertOk();
+		$response->assertSee("INPUT", false);
+		$this->assertFileExists($this->autosavePathFor($user));
 
-        $this->cleanupAutosaveFile($user);
-    }
+		$this->cleanupAutosaveFile($user);
+	}
 
-    public function test_autosave_persists_content_and_returns_success(): void
-    {
-        $user = $this->makeUser(1);
-        $this->actingAs($user)->get('/htmleditor');
+	public function test_autosave_persists_content_and_returns_success(): void
+	{
+		$user = $this->makeUser(1);
+		$this->actingAs($user)->get("/htmleditor");
 
-        $response = $this->actingAs($user)->post('/htmleditor/autosave', ['content' => '<p>hello world</p>']);
+		$response = $this->actingAs($user)->post("/htmleditor/autosave", ["content" => "<p>hello world</p>"]);
 
-        $response->assertOk();
-        $this->assertSame('success', $response->getContent());
-        $this->assertSame('<p>hello world</p>', file_get_contents($this->autosavePathFor($user)));
+		$response->assertOk();
+		$this->assertSame("success", $response->getContent());
+		$this->assertSame("<p>hello world</p>", file_get_contents($this->autosavePathFor($user)));
 
-        $this->cleanupAutosaveFile($user);
-    }
+		$this->cleanupAutosaveFile($user);
+	}
 
-    public function test_student_cannot_access_editor(): void
-    {
-        $user = $this->makeUser(4);
+	public function test_student_cannot_access_editor(): void
+	{
+		$user = $this->makeUser(4);
 
-        $response = $this->actingAs($user)->get('/htmleditor');
+		$response = $this->actingAs($user)->get("/htmleditor");
 
-        $response->assertNotFound();
-    }
+		$response->assertNotFound();
+	}
 
-    public function test_guest_is_redirected_to_login(): void
-    {
-        $response = $this->get('/htmleditor');
+	public function test_guest_is_redirected_to_login(): void
+	{
+		$response = $this->get("/htmleditor");
 
-        $response->assertRedirect(route('login'));
-    }
+		$response->assertRedirect(route("login"));
+	}
 }
