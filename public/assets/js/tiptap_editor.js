@@ -51,6 +51,27 @@ function createTiptapEditor(config) {
 		}
 	}
 
+	// Also accept CKEditor's legacy MathJax widget markup, e.g.
+	// <span class="math-tex">\(s_1, \dots, s_K\)</span>, so old documents load
+	// as math nodes. Saving re-serializes them in the new
+	// <span data-type="inline-math" data-latex="..."> format.
+	const InlineMathWithLegacy = Tiptap.InlineMath.extend({
+		parseHTML() {
+			return [
+				...this.parent(),
+				{
+					tag: "span.math-tex",
+					getAttrs: (element) => ({
+						latex: element.textContent
+							.replace(/^\s*(\\\(|\\\[|\$)/, "")
+							.replace(/(\\\)|\\\]|\$)\s*$/, "")
+							.trim(),
+					}),
+				},
+			];
+		},
+	});
+
 	const editor = new Tiptap.Editor({
 		element: editor_element,
 		editorProps: {
@@ -62,7 +83,7 @@ function createTiptapEditor(config) {
 				link: { openOnClick: false },
 			}),
 			Tiptap.Image.configure({ allowBase64: true }),
-			Tiptap.InlineMath.configure({ onClick: editMathOnClick }),
+			InlineMathWithLegacy.configure({ onClick: editMathOnClick }),
 			Tiptap.TableKit.configure({
 				table: { resizable: true },
 			}),
