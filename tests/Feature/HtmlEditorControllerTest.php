@@ -55,7 +55,10 @@ class HtmlEditorControllerTest extends TestCase
 
 		$response->assertOk();
 		$response->assertSee("assets/tiptap/katex.min.css", false);
+		$response->assertSee("assets/styles/tiptap_editor.css", false);
+		$response->assertSee("assets/js/tiptap_editor.js", false);
 		$response->assertSee('data-cmd="inline_math"', false);
+		$response->assertSee("tiptap-toolbar", false);
 		$response->assertSee('data-cmd="source"', false);
 		$response->assertSee('id="source_editor"', false);
 		$this->assertFileExists(public_path("assets/tiptap/katex.min.css"));
