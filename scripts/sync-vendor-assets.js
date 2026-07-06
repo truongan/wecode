@@ -22,8 +22,6 @@ const concat = (srcs, dest) => {
 };
 
 // --- Simple 1:1 file copies ---------------------------------------------
-copy("quill/dist/quill.js", "quill/quill.js");
-copy("quill/dist/quill.snow.css", "quill/quill.snow.css");
 copy("bootstrap-icons/font/bootstrap-icons.min.css", "bootstrap-icons/bootstrap-icons.min.css");
 copy("bootstrap-icons/font/fonts/bootstrap-icons.woff", "bootstrap-icons/fonts/bootstrap-icons.woff");
 copy("bootstrap-icons/font/fonts/bootstrap-icons.woff2", "bootstrap-icons/fonts/bootstrap-icons.woff2");
@@ -52,6 +50,16 @@ for (const theme of fs.readdirSync(`${nm}/bootswatch/dist`)) {
 //     datatables.net/download builder produces ---------------------------
 concat(["datatables.net/js/dataTables.min.js", "datatables.net-bs5/js/dataTables.bootstrap5.min.js"], "DataTables/datatables.min.js");
 copy("datatables.net-bs5/css/dataTables.bootstrap5.min.css", "DataTables/datatables.min.css");
+
+// --- Tiptap: headless & ESM-only, so bundle resources/js/tiptap.js into a
+//     single script exposing the `Tiptap` browser global -------------------
+sh(
+	`npx esbuild "${root}/resources/js/tiptap.js" --bundle --minify --format=iife --global-name=Tiptap --outfile="${assets}/tiptap/tiptap.min.js" --log-level=warning`,
+);
+// KaTeX styles/fonts for @tiptap/extension-mathematics; the CSS resolves
+// fonts via a relative fonts/ directory, so keep them side by side.
+copy("katex/dist/katex.min.css", "tiptap/katex.min.css");
+sh(`rm -rf "${assets}/tiptap/fonts" && cp -R "${nm}/katex/dist/fonts" "${assets}/tiptap/fonts"`);
 
 // --- Prism: matches the exact recipe baked into the current theme file's
 //     header comment (themes=prism-solarizedlight&languages=clike+javascript

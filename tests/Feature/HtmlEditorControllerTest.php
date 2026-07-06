@@ -41,7 +41,25 @@ class HtmlEditorControllerTest extends TestCase
 
 		$response->assertOk();
 		$response->assertSee("INPUT", false);
+		$response->assertSee("assets/tiptap/tiptap.min.js", false);
 		$this->assertFileExists($this->autosavePathFor($user));
+
+		$this->cleanupAutosaveFile($user);
+	}
+
+	public function test_index_renders_editor_feature_controls(): void
+	{
+		$user = $this->makeUser(1);
+
+		$response = $this->actingAs($user)->get("/htmleditor");
+
+		$response->assertOk();
+		$response->assertSee("assets/tiptap/katex.min.css", false);
+		$response->assertSee('data-cmd="inline_math"', false);
+		$response->assertSee('data-cmd="block_math"', false);
+		$response->assertSee('data-cmd="source"', false);
+		$response->assertSee('id="source_editor"', false);
+		$this->assertFileExists(public_path("assets/tiptap/katex.min.css"));
 
 		$this->cleanupAutosaveFile($user);
 	}
