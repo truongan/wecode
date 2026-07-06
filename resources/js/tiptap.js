@@ -6,7 +6,7 @@
 export { Editor } from "@tiptap/core";
 export { default as StarterKit } from "@tiptap/starter-kit";
 export { default as Image } from "@tiptap/extension-image";
-export { Mathematics } from "@tiptap/extension-mathematics";
+export { InlineMath } from "@tiptap/extension-mathematics";
 export { default as Subscript } from "@tiptap/extension-subscript";
 export { default as Superscript } from "@tiptap/extension-superscript";
 export { default as TextAlign } from "@tiptap/extension-text-align";

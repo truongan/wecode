@@ -15,30 +15,26 @@
         width: 2.1rem;
         height: 100%;
     }
+    /* Inline editing surface: no box of its own, inherits the page theme. */
     #editor .tiptap {
-        background: #fff;
-        border: 1px solid #ced4da;
-        border-radius: .375rem;
         min-height: 65vh;
-        padding: 1rem 1.25rem;
+        padding: .5rem 0;
     }
     #editor .tiptap:focus {
         outline: none;
-        border-color: #86b7fe;
-        box-shadow: 0 0 0 .25rem rgba(13, 110, 253, .25);
     }
     #editor .tiptap img {
         max-width: 100%;
         height: auto;
     }
     #editor .tiptap blockquote {
-        border-left: 3px solid #adb5bd;
+        border-left: 3px solid var(--bs-border-color);
         margin-left: 0;
         padding-left: 1rem;
     }
     #editor .tiptap pre {
-        background: #212529;
-        color: #f8f9fa;
+        background: var(--bs-secondary-bg);
+        color: var(--bs-body-color);
         border-radius: .375rem;
         padding: .75rem 1rem;
     }
@@ -49,18 +45,18 @@
     }
     #editor .tiptap th,
     #editor .tiptap td {
-        border: 1px solid #adb5bd;
+        border: 1px solid var(--bs-border-color);
         padding: .25rem .5rem;
         vertical-align: top;
     }
     #editor .tiptap th {
-        background-color: #f8f9fa;
+        background-color: var(--bs-secondary-bg);
     }
     #editor .tiptap .selectedCell {
-        background-color: rgba(13, 110, 253, .1);
+        background-color: rgba(var(--bs-primary-rgb), .1);
     }
     #editor .tiptap .column-resize-handle {
-        background-color: #86b7fe;
+        background-color: var(--bs-primary);
         width: 3px;
         position: absolute;
         top: 0;
@@ -79,16 +75,11 @@
         display: flex;
         gap: .5rem;
     }
-    #editor .tiptap [data-type="inline-math"],
-    #editor .tiptap [data-type="block-math"] {
+    #editor .tiptap [data-type="inline-math"] {
         cursor: pointer;
     }
-    #editor .tiptap [data-type="block-math"] {
-        text-align: center;
-        padding: .25rem 0;
-    }
     #editor .tiptap .ProseMirror-selectednode {
-        outline: 2px solid #86b7fe;
+        outline: 2px solid rgba(var(--bs-primary-rgb), .5);
         border-radius: .125rem;
     }
     #source_editor {
@@ -137,19 +128,17 @@ document.addEventListener("DOMContentLoaded", function(){
         return true;
     }
 
-    function editMathOnClick(update_command, delete_command) {
-        return function (node, pos) {
-            const latex = window.prompt("Edit LaTeX formula (leave empty to remove)", node.attrs.latex);
-            if (latex === null) {
-                return;
-            }
-            const selected = editor.chain().focus().setNodeSelection(pos);
-            if (latex === "") {
-                selected[delete_command]().run();
-            } else {
-                selected[update_command]({ latex: latex }).run();
-            }
-        };
+    function editMathOnClick(node, pos) {
+        const latex = window.prompt("Edit LaTeX formula (leave empty to remove)", node.attrs.latex);
+        if (latex === null) {
+            return;
+        }
+        const selected = editor.chain().focus().setNodeSelection(pos);
+        if (latex === "") {
+            selected.deleteInlineMath().run();
+        } else {
+            selected.updateInlineMath({ latex: latex }).run();
+        }
     }
 
     const editor = new Tiptap.Editor({
@@ -163,10 +152,7 @@ document.addEventListener("DOMContentLoaded", function(){
                 link: { openOnClick: false },
             }),
             Tiptap.Image.configure({ allowBase64: true }),
-            Tiptap.Mathematics.configure({
-                inlineOptions: { onClick: editMathOnClick("updateInlineMath", "deleteInlineMath") },
-                blockOptions: { onClick: editMathOnClick("updateBlockMath", "deleteBlockMath") },
-            }),
+            Tiptap.InlineMath.configure({ onClick: editMathOnClick }),
             Tiptap.TableKit.configure({
                 table: { resizable: true },
             }),
@@ -231,12 +217,6 @@ document.addEventListener("DOMContentLoaded", function(){
                 chain().insertInlineMath({ latex: latex }).run();
             }
         },
-        block_math: () => {
-            const latex = window.prompt("LaTeX formula (own line), e.g. \\int_a^b f(x)\\,dx");
-            if (latex) {
-                chain().insertBlockMath({ latex: latex }).run();
-            }
-        },
         source: () => toggleSourceView(),
         insert_table: () => chain().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run(),
         add_row: () => chain().addRowAfter().run(),
@@ -298,6 +278,12 @@ document.addEventListener("DOMContentLoaded", function(){
             chain().toggleHeading({ level: parseInt(this.value, 10) }).run();
         }
     });
+
+    const body_rgb = getComputedStyle(document.body).color.match(/\d+/g);
+    if (body_rgb) {
+        document.querySelector("#text_color").value =
+            "#" + body_rgb.slice(0, 3).map((channel) => Number(channel).toString(16).padStart(2, "0")).join("");
+    }
 
     document.querySelector("#text_color").addEventListener("input", function(){
         chain().setColor(this.value).run();
@@ -484,13 +470,7 @@ document.addEventListener("DOMContentLoaded", function(){
                 <button type="button" class="btn btn-outline-secondary" data-cmd="image" title="Image (or paste/drop an image file)"><i class="bi bi-image"></i></button>
             </div>
 
-            <div class="btn-group" role="group" aria-label="Formula">
-                <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" title="LaTeX formula">&sum;</button>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#" data-cmd="inline_math">Inline formula</a></li>
-                    <li><a class="dropdown-item" href="#" data-cmd="block_math">Block formula</a></li>
-                </ul>
-            </div>
+            <button type="button" class="btn btn-outline-secondary" data-cmd="inline_math" title="LaTeX formula">&sum;</button>
 
             <div class="btn-group" role="group" aria-label="Table">
                 <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" title="Table"><i class="bi bi-table"></i></button>
