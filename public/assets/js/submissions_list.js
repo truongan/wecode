@@ -175,8 +175,9 @@ document.addEventListener("DOMContentLoaded", function () {
 update_status_interval = 6000;
 function update_status() {
 	last_pend = document.querySelectorAll(" div.btn.pending");
-
+	if (last_pend.length == 0) return;
 	last_pend = last_pend[last_pend.length - 1];
+
 	row = last_pend.parentElement.parentElement;
 
 	$.ajax({
