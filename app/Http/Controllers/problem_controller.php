@@ -604,11 +604,9 @@ class problem_controller extends Controller
 			abort(404);
 		}
 		if ($this->save_problem_description($problem, $request->content)) {
-			echo "success";
-			return;
-		} else {
-			echo "error";
+			return response("success");
 		}
+		return response("error", 500);
 	}
 
 

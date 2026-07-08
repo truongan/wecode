@@ -1,5 +1,6 @@
 @extends("layouts.app")
 @php($selected ?? ($selected = "assignments"))
+@php($can_edit_description = in_array(Auth::user()->role->name, ["admin", "head_instructor"]))
 @if ($all_problems != null)
 	@php($pdf_route = route("assignments.show_pdf", ["assignment" => $assignment, "problem" => $problem]))
 @else
@@ -29,6 +30,10 @@
 			border-width: 1px;
 		}
 	</style>
+	@if ($can_edit_description)
+		<link rel="stylesheet" href="{{ asset('assets/tiptap/katex.min.css') }}" />
+		<link rel="stylesheet" href="{{ asset('assets/styles/tiptap_editor.css') }}" />
+	@endif
 @endsection
 @if (!isset($error))
 	@section("title_menu")
@@ -55,52 +60,70 @@
 				></span
 			>
 		@endif
-		@if (in_array(Auth::user()->role->name, ["admin", "head_instructor"]))
+		@if ($can_edit_description)
 			<span class="fs-6 ms-4 ms-auto"
-				><a href="#" class="btn btn-info save-button"><i class="bi bi-save"></i> Save</a></span
+				><a href="#" class="btn btn-secondary save-button"><i class="bi bi-save"></i> Save</a></span
 			>
 		@endif
 
 	@endsection
 	@section("body_end")
-		<script type="text/x-mathjax-config">
-			MathJax.Hub.Config({
-			  tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
-			});
-		</script>
-		<script
-			type="text/javascript"
-			async
-			{{-- src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"> --}}
-			src="{{ asset('assets/mathjax') }}/MathJax.js?config=TeX-MML-AM_CHTML"
-		></script>
-		<script type="text/javascript">
-			mathjax_path = "{{ asset("assets/mathjax") }}/MathJax.js?config=TeX-MML-AM_CHTML";
-		</script>
-		<script src="{{ asset('assets/ckeditor/ckeditor.js') }}" charset="utf-8"></script>
-		<script type="text/javascript">
-			document.addEventListener("DOMContentLoaded", function () {
-				$(".save-button").click(function () {
-					$.ajax({
-						type: "POST",
-						url: "{{ route("problems.edit_description", $problem->id) }}",
-						data: {
-							_token: "{{ csrf_token() }}",
-							content: CKEDITOR.instances.problem_description.getData(),
-						},
-						success: function (response) {
-							if (response == "success") {
-								notify("Change sucessfully saved", { position: "bottom right", className: "success", autoHideDelay: 3500 });
-								$(".save-button").removeClass("btn-info").addClass("btn-secondary");
-							}
-						},
-						error: function (response) {
-							notify("Error while saving", { position: "bottom right", className: "error", autoHideDelay: 3500 });
+		@if ($can_edit_description)
+			<script src="{{ asset('assets/tiptap/tiptap.min.js') }}"></script>
+			<script src="{{ asset('assets/js/tiptap_editor.js') }}"></script>
+			<script type="text/javascript">
+				document.addEventListener("DOMContentLoaded", function () {
+					const { getCurrentHtml } = createTiptapEditor({
+						element: document.querySelector("#problem_description"),
+						source_element: document.querySelector("#source_editor"),
+						toolbar: document.querySelector("#toolbar"),
+						on_update: function () {
+							$(".save-button").removeClass("btn-secondary").addClass("btn-info");
 						},
 					});
+
+					$(".save-button").click(function () {
+						$.ajax({
+							type: "POST",
+							url: "{{ route("problems.edit_description", $problem->id) }}",
+							data: {
+								_token: "{{ csrf_token() }}",
+								content: getCurrentHtml(),
+							},
+							success: function (response) {
+								if (response == "success") {
+									notify("Change sucessfully saved", { position: "bottom right", className: "success", autoHideDelay: 3500 });
+									$(".save-button").removeClass("btn-info").addClass("btn-secondary");
+								}
+							},
+							error: function (response) {
+								notify("Error while saving", { position: "bottom right", className: "error", autoHideDelay: 3500 });
+							},
+						});
+					});
 				});
-			});
-		</script>
+			</script>
+		@else
+			<script type="text/javascript">
+				// Descriptions saved by the Tiptap editor store formulas as
+				// <span data-type="inline-math" data-latex="..."></span>; give
+				// MathJax delimited text to typeset before it loads below.
+				document.querySelectorAll('#problem_description [data-type="inline-math"]').forEach(function (span) {
+					span.textContent = "\\(" + span.getAttribute("data-latex") + "\\)";
+				});
+			</script>
+			<script type="text/x-mathjax-config">
+				MathJax.Hub.Config({
+				  tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+				});
+			</script>
+			<script
+				type="text/javascript"
+				async
+				{{-- src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"> --}}
+				src="{{ asset('assets/mathjax') }}/MathJax.js?config=TeX-MML-AM_CHTML"
+			></script>
+		@endif
 
 	@endsection
 @endif
@@ -117,17 +140,20 @@
 						</object>
 					</div>
 				@endif
-				<div
-					class="problem_description"
-					id="problem_description"
-					{{
-						in_array(Auth::user()->role->name, ["admin", "head_instructor"])
-							? "contenteditable=true"
-							: ""
-					}}
-				>
+				@if ($can_edit_description)
+					@include("html_editor.tiptap_toolbar")
+				@endif
+				<div class="problem_description" id="problem_description">
 					{!! $problem->description !!}
 				</div>
+				@if ($can_edit_description)
+					<textarea
+						id="source_editor"
+						class="form-control font-monospace d-none"
+						spellcheck="false"
+						aria-label="HTML source"
+					></textarea>
+				@endif
 			</div>
 
 			<div class="col-md-5 col-lg-4">
