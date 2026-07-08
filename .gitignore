@@ -8,6 +8,8 @@ node_modules
 .env
 .env.backup
 .phpunit.result.cache
+*phpunit.cache
+adminer-*
 Homestead.json
 Homestead.yaml
 npm-debug.log
