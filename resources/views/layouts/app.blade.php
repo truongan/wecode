@@ -45,8 +45,6 @@
 		<script type="text/javascript" src="{{ asset('assets/js/jquery-3.6.3.min.js') }}"></script>
 		<script type="text/javascript" src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
 
-		{{-- <script type='text/javascript' src="{{ asset('assets/sbadmin/js/sb-admin.min.js') }}"></script> --}}
-
 		<script src="{{ asset('assets/js/notify.js') }}"></script>
 
 		<script type="text/javascript">
