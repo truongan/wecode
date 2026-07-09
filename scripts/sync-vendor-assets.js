@@ -57,8 +57,11 @@ sh(
 	`npx esbuild "${root}/resources/js/tiptap.js" --bundle --minify --format=iife --global-name=Tiptap --outfile="${assets}/tiptap/tiptap.min.js" --log-level=warning`,
 );
 // KaTeX styles/fonts for @tiptap/extension-mathematics; the CSS resolves
-// fonts via a relative fonts/ directory, so keep them side by side.
+// fonts via a relative fonts/ directory, so keep them side by side. The
+// standalone script + auto-render typeset read-only problem descriptions.
 copy("katex/dist/katex.min.css", "tiptap/katex.min.css");
+copy("katex/dist/katex.min.js", "tiptap/katex.min.js");
+copy("katex/dist/contrib/auto-render.min.js", "tiptap/auto-render.min.js");
 sh(`rm -rf "${assets}/tiptap/fonts" && cp -R "${nm}/katex/dist/fonts" "${assets}/tiptap/fonts"`);
 
 // --- Prism: matches the exact recipe baked into the current theme file's

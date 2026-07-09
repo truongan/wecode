@@ -30,8 +30,8 @@
 			border-width: 1px;
 		}
 	</style>
+	<link rel="stylesheet" href="{{ asset('assets/tiptap/katex.min.css') }}" />
 	@if ($can_edit_description)
-		<link rel="stylesheet" href="{{ asset('assets/tiptap/katex.min.css') }}" />
 		<link rel="stylesheet" href="{{ asset('assets/styles/tiptap_editor.css') }}" />
 	@endif
 @endsection
@@ -104,25 +104,27 @@
 				});
 			</script>
 		@else
+			<script src="{{ asset('assets/tiptap/katex.min.js') }}"></script>
+			<script src="{{ asset('assets/tiptap/auto-render.min.js') }}"></script>
 			<script type="text/javascript">
-				// Descriptions saved by the Tiptap editor store formulas as
-				// <span data-type="inline-math" data-latex="..."></span>; give
-				// MathJax delimited text to typeset before it loads below.
-				document.querySelectorAll('#problem_description [data-type="inline-math"]').forEach(function (span) {
+				// Give formulas saved by the Tiptap editor as
+				// <span data-type="inline-math" data-latex="..."></span> the
+				// \(...\) delimiters, then typeset them together with legacy
+				// $...$ and \(...\) math.
+				const description = document.querySelector("#problem_description");
+				description.querySelectorAll('[data-type="inline-math"]').forEach(function (span) {
 					span.textContent = "\\(" + span.getAttribute("data-latex") + "\\)";
 				});
-			</script>
-			<script type="text/x-mathjax-config">
-				MathJax.Hub.Config({
-				  tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+				renderMathInElement(description, {
+					delimiters: [
+						{ left: "$$", right: "$$", display: true },
+						{ left: "$", right: "$", display: false },
+						{ left: "\\(", right: "\\)", display: false },
+						{ left: "\\[", right: "\\]", display: true },
+					],
+					throwOnError: false,
 				});
 			</script>
-			<script
-				type="text/javascript"
-				async
-				{{-- src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"> --}}
-				src="{{ asset('assets/mathjax') }}/MathJax.js?config=TeX-MML-AM_CHTML"
-			></script>
 		@endif
 
 	@endsection

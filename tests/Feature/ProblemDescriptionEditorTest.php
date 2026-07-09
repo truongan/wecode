@@ -59,7 +59,7 @@ class ProblemDescriptionEditorTest extends TestCase
 		$response->assertDontSee("contenteditable", false);
 	}
 
-	public function test_student_sees_mathjax_view_without_editor(): void
+	public function test_student_sees_katex_view_without_editor(): void
 	{
 		$student = $this->makeUser(4);
 		$problem = $this->makeProblem($this->makeUser(1));
@@ -67,7 +67,11 @@ class ProblemDescriptionEditorTest extends TestCase
 		$response = $this->actingAs($student)->get(route("practices.show", $problem));
 
 		$response->assertOk();
-		$response->assertSee("assets/mathjax", false);
+		$response->assertSee("assets/tiptap/katex.min.js", false);
+		$response->assertSee("assets/tiptap/auto-render.min.js", false);
+		$response->assertDontSee("mathjax", false);
+		$this->assertFileExists(public_path("assets/tiptap/katex.min.js"));
+		$this->assertFileExists(public_path("assets/tiptap/auto-render.min.js"));
 		$response->assertSee('[data-type="inline-math"]', false);
 		$response->assertDontSee("assets/tiptap/tiptap.min.js", false);
 		$response->assertDontSee("tiptap-toolbar", false);
