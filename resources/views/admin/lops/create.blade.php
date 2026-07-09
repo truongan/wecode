@@ -9,15 +9,6 @@
 	<span class="ms-4 fs-6"><a href="{{ route('lops.index') }}"><i class="bi bi-list text-success"></i>Back to list of class</a></span>
 @endsection
 
-@section('body_end')
-<script src="{{ asset('assets/ckeditor/ckeditor.js') }}" charset="utf-8"></script>
-<script>
-document.addEventListener("DOMContentLoaded", function(){
-	CKEDITOR.replace("notif_text");
-});
-</script>
-@endsection
-
 @section('content')
 <form action="{{route('lops.store')}}" method="POST" class="row g-3">
 @csrf

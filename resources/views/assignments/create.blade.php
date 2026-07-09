@@ -8,16 +8,8 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/slimselect/slimselect.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/slimselect/an.slimselect.bootstrap.hack.css') }}">
 <style>
-
-
-#choice_multi_assignment .select2-selection__choice{
-	display:none !important;
-}
 .problem-score{
 	width:8em!important;
-}
-.select2-container  textarea {
-	color: black;
 }
 </style>
 @endsection

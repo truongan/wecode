@@ -3,8 +3,8 @@
 // (see "postinstall" in package.json) so `npm update` actually takes effect
 // on the page instead of just bumping a version in node_modules.
 //
-// Libraries with no clean npm equivalent (ckeditor, ckeditor5, sbadmin,
-// fullcalendar) are intentionally NOT handled here.
+// Libraries with no clean npm equivalent (sbadmin, fullcalendar) are
+// intentionally NOT handled here.
 
 const { execSync } = require("child_process");
 const fs = require("fs");
@@ -26,9 +26,6 @@ copy("bootstrap-icons/font/bootstrap-icons.min.css", "bootstrap-icons/bootstrap-
 copy("bootstrap-icons/font/fonts/bootstrap-icons.woff", "bootstrap-icons/fonts/bootstrap-icons.woff");
 copy("bootstrap-icons/font/fonts/bootstrap-icons.woff2", "bootstrap-icons/fonts/bootstrap-icons.woff2");
 copy("frappe-charts/dist/frappe-charts.min.umd.js", "frappe/frappe-charts.min.iife.js");
-copy("select2/dist/js/select2.min.js", "select2/select2.min.js");
-copy("select2/dist/css/select2.min.css", "select2/select2.min.css");
-copy("select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme.min.css", "select2/select2-bootstrap-5-theme.min.css");
 copy("slim-select/dist/slimselect.js", "slimselect/slimselect.js");
 copy("slim-select/dist/slimselect.css", "slimselect/slimselect.css");
 copy("bootstrap/dist/js/bootstrap.bundle.min.js", "js/bootstrap.bundle.min.js");
@@ -38,8 +35,6 @@ copy("sortablejs/Sortable.min.js", "js/Sortable.min.js");
 
 // --- Directory copies -----------------------------------------------------
 sh(`rm -rf "${assets}/ace" && mkdir -p "${assets}/ace" && cp -R "${nm}/ace-builds/src-min-noconflict/." "${assets}/ace/"`);
-sh(`rm -rf "${assets}/mathjax" && mkdir -p "${assets}/mathjax" && cp -R "${nm}/mathjax/." "${assets}/mathjax/"`);
-sh(`rm -rf "${assets}/mathjax/"{package.json,README.md,LICENSE,CONTRIBUTING.md,test}`);
 
 // --- Bootswatch themes ------------------------------------------------------
 for (const theme of fs.readdirSync(`${nm}/bootswatch/dist`)) {

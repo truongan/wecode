@@ -166,8 +166,8 @@
 
 		<script
 			type="text/javascript"
-			integrity="sha384-pbfsVph9JyesvB+gHygG+hh8xNxUaZl71uglEZsQkGbJrpP970gpmw+ihwFrv5U2"
-			src="{{ asset('assets/js/shj_functions.js?v=20260617') }}"
+			integrity="sha384-e3JhiMLCWi6vH1Y/t483CKLUff7tBOMedXUp+HFDnFtcoxtDcGypCLVyNLPSQo6T"
+			src="{{ asset('assets/js/shj_functions.js?v=20260709') }}"
 		></script>
 		@yield("body_end")
 </body>

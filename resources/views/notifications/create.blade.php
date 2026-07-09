@@ -5,11 +5,25 @@
 
 @section('title', 'New Notification')
 
+@section('other_assets')
+<link rel="stylesheet" href="{{ asset('assets/tiptap/katex.min.css') }}" />
+<link rel="stylesheet" href="{{ asset('assets/styles/tiptap_editor.css') }}" />
+@endsection
+
 @section('body_end')
-<script src="{{ asset('assets/ckeditor/ckeditor.js') }}" charset="utf-8"></script>
+<script src="{{ asset('assets/tiptap/tiptap.min.js') }}"></script>
+<script src="{{ asset('assets/js/tiptap_editor.js') }}"></script>
 <script>
 document.addEventListener("DOMContentLoaded", function(){
-	CKEDITOR.replace("notif_text");
+	const notif_text = document.querySelector("#notif_text");
+	const { getCurrentHtml } = createTiptapEditor({
+		element: document.querySelector("#editor"),
+		source_element: document.querySelector("#source_editor"),
+		toolbar: document.querySelector("#toolbar"),
+	});
+	notif_text.form.addEventListener("submit", function(){
+		notif_text.value = getCurrentHtml();
+	});
 });
 </script>
 @endsection
@@ -22,15 +36,23 @@ document.addEventListener("DOMContentLoaded", function(){
 		<input id="form_title" name="title" type="text" class="sharif_input"/>
 	</p>
 	<p class="input_p">
-		<label for="notif_text" class="tiny">Description:</label>
-		<input type="text" name="description"></>
+		<label for="notif_description" class="tiny">Description:</label>
+		<input id="notif_description" type="text" name="description"/>
 	</p>
-	<p class="input_p">
-		<label for="notif_text" class="tiny">Text:</label>
-		<textarea id="notif_text" name="text"></textarea>
-	</p>
+	<div class="input_p">
+		<label class="tiny">Text:</label>
+		@include("html_editor.tiptap_toolbar")
+		<div class="edit_wrapper" id="editor"></div>
+		<textarea
+			id="source_editor"
+			class="form-control font-monospace d-none"
+			spellcheck="false"
+			aria-label="HTML source"
+		></textarea>
+		<textarea id="notif_text" name="text" class="d-none" aria-hidden="true"></textarea>
+	</div>
 	<p class="input_p">
 		<input type="submit" value="Add" class="btn btn-primary"/>
 	</p>
-</form>	
+</form>
 @endsection

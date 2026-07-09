@@ -11,6 +11,7 @@
 		display: none;
 	}
 </style>
+<link rel="stylesheet" href="{{ asset('assets/tiptap/katex.min.css') }}" />
 @endsection
 
 @section('title_menu')
@@ -71,6 +72,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 </script>
+<script src="{{ asset('assets/tiptap/katex.min.js') }}"></script>
+<script src="{{ asset('assets/tiptap/auto-render.min.js') }}"></script>
+<script type="text/javascript">
+	// Give formulas saved by the Tiptap editor as
+	// <span data-type="inline-math" data-latex="..."></span> the
+	// \(...\) delimiters, then typeset them together with legacy
+	// $...$ and \(...\) math.
+	document.querySelectorAll(".notif_text").forEach(function (notif_text) {
+		notif_text.querySelectorAll('[data-type="inline-math"]').forEach(function (span) {
+			span.textContent = "\\(" + span.getAttribute("data-latex") + "\\)";
+		});
+		renderMathInElement(notif_text, {
+			delimiters: [
+				{ left: "$$", right: "$$", display: true },
+				{ left: "$", right: "$", display: false },
+				{ left: "\\(", right: "\\)", display: false },
+				{ left: "\\[", right: "\\]", display: true },
+			],
+			throwOnError: false,
+		});
+	});
+</script>
 @endsection
 
 @section('content')
@@ -89,7 +112,7 @@ document.addEventListener("DOMContentLoaded", function () {
 					@endif
 				</div>
 			</div>
-			<div class="p-2">
+			<div class="notif_text p-2">
 				{!! $notification->text !!}
 			</div>
 		</div>
