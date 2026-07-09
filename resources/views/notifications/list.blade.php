@@ -20,14 +20,6 @@
 @endsection
 
 @section('body_end')
-<script type="text/x-mathjax-config">
-MathJax.Hub.Config({
-  tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
-});
-</script>
-<script type="text/javascript" async
-  src="{{ asset('assets/mathjax') }}/MathJax.js?config=TeX-MML-AM_CHTML">
-</script>
 <div class="modal fade" id="notification_delete" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">

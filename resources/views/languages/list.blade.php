@@ -60,9 +60,6 @@
 @endsection
 
 @section('body_end')
-{{-- <script type="text/javascript" async Language listing ? What for ?
-src="{{ asset('assets/mathjax') }}/MathJax.js?config=TeX-MML-AM_CHTML">
-</script> --}}
 <script>
 /**
 * Notifications

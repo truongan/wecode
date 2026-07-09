@@ -10,9 +10,6 @@
 @endsection
 
 @section('body_end')
-<script type="text/javascript">
-  mathjax_path = "{{ asset('assets/mathjax') }}/MathJax.js?config=TeX-MML-AM_CHTML"
-</script>
 <script src="{{ asset('assets/ckeditor/ckeditor.js') }}" charset="utf-8"></script>
 <script>
 document.addEventListener("DOMContentLoaded", function(){
