@@ -220,7 +220,7 @@
 							<input type="hidden" name="problem" value="{{ $problem->id }}" />
 
 							<div class="">
-								<label class="custom-file-label text-muted"><small>upload source code</small></label>
+								<label class="text-muted"><small>upload source code</small></label>
 								<input type="file" id="file" class="form-control" name="userfile" />
 							</div>
 
