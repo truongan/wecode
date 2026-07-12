@@ -9,15 +9,20 @@
 		</button>
 	</div>
 
-	<select class="form-select form-select-sm w-auto" id="heading_select" title="Paragraph format">
-		<option value="p">Normal</option>
-		<option value="1">Heading 1</option>
-		<option value="2">Heading 2</option>
-		<option value="3">Heading 3</option>
-		<option value="4">Heading 4</option>
-		<option value="5">Heading 5</option>
-		<option value="6">Heading 6</option>
-	</select>
+	<div class="btn-group" role="group" aria-label="Paragraph format">
+		<button type="button" class="btn btn-sm btn-dark dropdown-toggle" data-bs-toggle="dropdown" id="heading_dropdown" title="Paragraph format">
+			<i class="bi bi-paragraph"></i>
+		</button>
+		<ul class="dropdown-menu">
+			<li><a class="dropdown-item" href="#" data-heading="p"><i class="bi bi-paragraph"></i> Normal</a></li>
+			<li><a class="dropdown-item h1 mb-0" href="#" data-heading="1"><i class="bi bi-type-h1"></i> Heading 1</a></li>
+			<li><a class="dropdown-item h2 mb-0" href="#" data-heading="2"><i class="bi bi-type-h2"></i> Heading 2</a></li>
+			<li><a class="dropdown-item h3 mb-0" href="#" data-heading="3"><i class="bi bi-type-h3"></i> Heading 3</a></li>
+			<li><a class="dropdown-item h4 mb-0" href="#" data-heading="4"><i class="bi bi-type-h4"></i> Heading 4</a></li>
+			<li><a class="dropdown-item h5 mb-0" href="#" data-heading="5"><i class="bi bi-type-h5"></i> Heading 5</a></li>
+			<li><a class="dropdown-item h6 mb-0" href="#" data-heading="6"><i class="bi bi-type-h6"></i> Heading 6</a></li>
+		</ul>
+	</div>
 
 	<div class="btn-group" role="group" aria-label="Text style">
 		<button type="button" class="btn btn-sm btn-dark" data-cmd="bold" title="Bold">
@@ -115,6 +120,9 @@
 			value="#ffff00"
 			title="Background color"
 		/>
+		<button type="button" class="btn btn-sm btn-dark" data-cmd="unset_color" title="Remove text and background color">
+			<i class="bi bi-droplet"></i>
+		</button>
 	</div>
 
 	<div class="btn-group" role="group" aria-label="Align">

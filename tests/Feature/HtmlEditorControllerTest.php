@@ -60,7 +60,11 @@ class HtmlEditorControllerTest extends TestCase
 		$response->assertSee('data-cmd="inline_math"', false);
 		$response->assertSee("tiptap-toolbar", false);
 		$response->assertSee('data-cmd="source"', false);
+		$response->assertSee('data-cmd="unset_color"', false);
+		$response->assertSee('id="heading_dropdown"', false);
+		$response->assertSee('data-heading="1"', false);
 		$response->assertSee('id="source_editor"', false);
+		$this->assertStringContainsString("unset_color", file_get_contents(public_path("assets/js/tiptap_editor.js")));
 		$this->assertFileExists(public_path("assets/tiptap/katex.min.css"));
 
 		$this->cleanupAutosaveFile($user);

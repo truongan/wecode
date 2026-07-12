@@ -123,6 +123,7 @@ function createTiptapEditor(config) {
 		align_center: () => chain().setTextAlign("center").run(),
 		align_right: () => chain().setTextAlign("right").run(),
 		align_justify: () => chain().setTextAlign("justify").run(),
+		unset_color: () => chain().unsetColor().unsetBackgroundColor().run(),
 		clean: () => chain().unsetAllMarks().clearNodes().run(),
 		link: () => {
 			if (editor.isActive("link")) {
@@ -203,18 +204,19 @@ function createTiptapEditor(config) {
 		});
 	});
 
-	const heading_select = toolbar.querySelector("#heading_select");
-	if (heading_select) {
-		heading_select.addEventListener("change", function () {
-			if (this.value === "p") {
+	const heading_dropdown = toolbar.querySelector("#heading_dropdown");
+	toolbar.querySelectorAll("[data-heading]").forEach(function (item) {
+		item.addEventListener("click", function (e) {
+			e.preventDefault();
+			if (this.dataset.heading === "p") {
 				chain().setParagraph().run();
 			} else {
 				chain()
-					.toggleHeading({ level: parseInt(this.value, 10) })
+					.toggleHeading({ level: parseInt(this.dataset.heading, 10) })
 					.run();
 			}
 		});
-	}
+	});
 
 	const text_color = toolbar.querySelector("#text_color");
 	if (text_color) {
@@ -262,14 +264,17 @@ function createTiptapEditor(config) {
 				button.classList.toggle("active", editor.isActive(name));
 			}
 		});
-		if (heading_select) {
+		if (heading_dropdown) {
 			let heading = "p";
 			for (let level = 1; level <= 6; level++) {
 				if (editor.isActive("heading", { level: level })) {
 					heading = String(level);
 				}
 			}
-			heading_select.value = heading;
+			heading_dropdown.innerHTML = '<i class="bi ' + (heading === "p" ? "bi-paragraph" : "bi-type-h" + heading) + '"></i>';
+			toolbar.querySelectorAll("[data-heading]").forEach(function (item) {
+				item.classList.toggle("active", item.dataset.heading === heading);
+			});
 		}
 	});
 
