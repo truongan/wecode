@@ -1,280 +1,343 @@
-@php($selected = 'assignments')
-@extends('layouts.app')
-@section('head_title','Assignments')
-@section('icon', 'bi bi-folder2-open')
-@section('title', 'Assignments')
+@php($selected = "assignments")
+@extends("layouts.app")
+@section("head_title", "Assignments")
+@section("icon", "bi bi-folder2-open")
+@section("title", "Assignments")
 
-@section('other_assets')
-<link rel='stylesheet' type='text/css' href="{{ asset('assets/DataTables/datatables.min.css') }}"/>
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/slimselect/slimselect.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/slimselect/an.slimselect.bootstrap.hack.css') }}">
-<script>
-	if(!!window.performance && window.performance.navigation.type === 2)
-	{
-		window.location.reload();
-	}
-</script>
+@section("other_assets")
+	<link rel="stylesheet" type="text/css" href="{{ asset('assets/DataTables/datatables.min.css') }}" />
+	<link rel="stylesheet" type="text/css" href="{{ asset('assets/slimselect/slimselect.css') }}" />
+	<link rel="stylesheet" type="text/css" href="{{ asset('assets/slimselect/an.slimselect.bootstrap.hack.css') }}" />
+	<script>
+		if (!!window.performance && window.performance.navigation.type === 2) {
+			window.location.reload();
+		}
+	</script>
 @endsection
-@if (in_array( Auth::user()->role->name, ['admin',  'head_instructor', 'instructor']))
-@section('title_menu')
-<nav class=" ms-3 fs-6 nav nav-pills">
-	<a class="nav-link link-dark-subtle" href="{{ route('assignments.create') }}"><i class="bi bi-plus color8"></i> Add</a>
-	<a class="nav-link link-dark-subtle active" href="{{ route('assignments.index') }}"><i class="bi bi-star-fill text-danger"></i>Assignments setting</a>
-</nav>
-@endsection
+@if (in_array(Auth::user()->role->name, ["admin", "head_instructor", "instructor"]))
+	@section("title_menu")
+		<nav class="ms-3 fs-6 nav nav-pills">
+			<a class="nav-link link-dark-subtle" href="{{ route('assignments.create') }}"><i class="bi bi-plus color8"></i> Add</a>
+			<a class="nav-link link-dark-subtle active" href="{{ route('assignments.index') }}"
+				><i class="bi bi-star-fill text-danger"></i>Assignments setting</a
+			>
+		</nav>
+	@endsection
 @endif
-@section('content')
-@if (\Session::has('success'))
-	<div class="alert alert-success alert-dismissible fade show" role="alert">
-		<strong>Success!</strong> {!! \Session::get('success') !!}.
-		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-
-	</div>
-@endif
-<form class="row mb-3 gx-3 align-items-center" method="get" action="{{ route('assignments.index') }}">
-	<div class="col">
-		<div class="input-group">
-			<label class="input-group-text" for="search">Search by name</label>
-			<input type="text" name="search" id="search" class="form-control" placeholder="Search by name" value="{{ Request::get('search') }}">
-			<button type="button" class="btn btn-outline-danger" onClick="document.getElementById('search').value = '';"><i class="bi bi-x"></i></button>
-
-			<label class="input-group-text">lop</label>
-			<select class="search-by-lops form-control" multiple="multiple" name="lop_id[]"></select>
-
-			<label class="input-group-text">owner</label>
-			<select class="search-by-authors form-control" multiple="multiple" name="owners[]">
-				@foreach ($all_user_names as $user_name)
-				<option value="{{ $user_name }}">{{ $user_name }}</option>
-				@endforeach
-			</select>
+@section("content")
+	@if (\Session::has("success"))
+		<div class="alert alert-success alert-dismissible fade show" role="alert">
+			<strong>Success!</strong> {!! \Session::get("success") !!}.
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 		</div>
-	</div>
-	<div class="col-auto">
-		<button type="submit" class="btn btn-primary form-control">Search</button>
-	</div>
-</form>
+	@endif
+	<form class="row mb-3 gx-3 align-items-center" method="get" action="{{ route('assignments.index') }}">
+		<div class="col">
+			<div class="input-group">
+				<label class="input-group-text" for="search">Search by name</label>
+				<input
+					type="text"
+					name="search"
+					id="search"
+					class="form-control"
+					placeholder="Search by name"
+					value="{{ Request::get('search') }}"
+				/>
+				<button type="button" class="btn btn-outline-danger" onClick="document.getElementById('search').value = ''">
+					<i class="bi bi-x"></i>
+				</button>
 
-<div class="row ">
-	<div class = "table-responsive">
-		<table class=" table table-striped table-bordered">
-			<thead class="thead-old table-dark">
-				<tr>
-					<th>ID</th>
-					{{-- <th>Owner</th> --}}
-					{{-- <th><small>Select</small></th> --}}
-					<th width="15%">Class</th>
-					<th width="15%">Name</th>
-					<th width="15%"><small>Submit</small></th>
-					{{-- <th>Coef</th> --}}
-					<th>Start</th>
-					<th>Finish</th>
-					<th><small>Score-board</small></th>
-					@if (!in_array( Auth::user()->role->name, ['student', 'guest']))
-						<th><small>Open</small></th>
-						<th>Action</th>
-					@endif
-				</tr>
-			</thead>
+				<label class="input-group-text">lop</label>
+				<select class="search-by-lops form-control" multiple="multiple" name="lop_id[]"></select>
 
-			@foreach ($assignments as $assignment)
-				@if($assignment->id==0)
-					@continue
-				@endif
-			<tr data-id="{{$assignment->id}}">
-				<td><span  class ="
-						{{  (Auth::user()->selected_assignment->id ?? -1) == $assignment->id ? 'text-info' : 'text-body' }}
-					">
-						{{$assignment->id}}
-					</span>
-				</td>
-				<td>
-					@foreach ($assignment->lops as $lop)
-						<a href="{{ route('lops.show', $lop->id) }}" ><span class="badge rounded-pill bg-secondary">{{$lop->name}}</span></a><br>
+				<label class="input-group-text">owner</label>
+				<select class="search-by-authors form-control" multiple="multiple" name="owners[]">
+					@foreach ($all_user_names as $user_name)
+						<option value="{{ $user_name }}">{{ $user_name }}</option>
 					@endforeach
-				</td>
-				<td>
-					<a href="{{ route('assignments.show',['assignment'=>$assignment,'problem_id'=>0]) }}"
-					title="Click to view problem(s)"
-					>
-						<strong>{{ $assignment->name }}</strong>
-						<br/> (by:{{$assignment->user->username ?? "no owner"}})
-					</a>
-				</td>
-				<td>
-					<a href="
+				</select>
+			</div>
+		</div>
+		<div class="col-auto">
+			<button type="submit" class="btn btn-primary form-control">Search</button>
+		</div>
+	</form>
+	<div class="row">
+		<div class="table-responsive">
+			<table class="table table-striped table-bordered">
+				<thead class="thead-old table-dark">
+					<tr>
+						<th>ID</th>
+						{{-- <th>Owner</th> --}}
+						{{-- <th><small>Select</small></th> --}}
+						<th width="15%">Class</th>
+						<th width="15%">Name</th>
+						<th width="15%"><small>Submit</small></th>
+						{{-- <th>Coef</th> --}}
+						<th>Start</th>
+						<th>Finish</th>
+						<th><small>Score-board</small></th>
+						@if (!in_array(Auth::user()->role->name, ["student", "guest"]))
+							<th><small>Open</small></th>
+							<th>Action</th>
+						@endif
+					</tr>
+				</thead>
+
+				@foreach ($assignments as $assignment)
+					@if ($assignment->id == 0)
+						@continue
+					@endif
+					<tr data-id="{{$assignment->id}}">
+						<td>
+							<span
+								class="
+						{{  (Auth::user()->selected_assignment->id ?? -1) == $assignment->id ? 'text-info' : 'text-body' }}
+					"
+							>
+								{{ $assignment->id }}
+							</span>
+						</td>
+						<td>
+							@foreach ($assignment->lops as $lop)
+								<a href="{{ route('lops.show', $lop->id) }}"
+									><span class="badge rounded-pill bg-secondary">{{ $lop->name }}</span></a
+								><br />
+							@endforeach
+						</td>
+						<td>
+							<a
+								href="{{ route('assignments.show',['assignment'=>$assignment,'problem_id'=>0]) }}"
+								title="Click to view problem(s)"
+							>
+								<strong>{{ $assignment->name }}</strong>
+								<br />
+								(by:{{ $assignment->user->username ?? "no owner" }})
+							</a>
+						</td>
+						<td>
+							<a
+								href="
 						@if ( in_array( Auth::user()->role->name, ['student', 'guest']) )
 							 {{ route('submissions.index', [$assignment->id, Auth::user()->id, 'all', 'all'])}}
 						@else
 							{{ route('submissions.index', [$assignment->id, 'all', 'all', 'all'])}}
 						@endif
-					" title="View all submissions">
-						<small>{{$assignment->total_submits}} sub</small>
-					-
-					{{ $assignment->no_of_problems }} prob
-					</a>
-					<br/>
-					<small>
-					@if ($assignment->finished)
-						<span class="text-danger">Finished</span>
-					@else
-						@if($assignment->eval_coefficient() === "error")
-							<span class="text-danger">!Error late rule</span>
-						@else
-							<span class="text-info">{{$assignment->coefficient}}% if submit now</span>
-						@endif
-					@endif
-					</small>
-				</td>
-				<td><small>{{$assignment->start_time->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('llll') }}</small></td>
-				<td><small>{{$assignment->finish_time->setTimezone($settings['timezone'])->locale('en-GB')->isoFormat('llll') }}</small></td>
-				<td>
-					<a href="{{ route('scoreboards.index', $assignment->id)}}" title="Click to viewa assignment's scoreboard">
-						@if ($assignment->score_board)
-							View<i class="bi bi-box-arrow-up-right"></i>
-						@elseif (!in_array( Auth::user()->role->name, ['student', 'guest']))
-							<span class="text-black-50">View<i class="bi bi-box-arrow-up-right "></i></span>
-						@endif
-					</a>
-					<br/>
-				</td>
-				@if (!in_array( Auth::user()->role->name, ['student', 'guest']))
-				<td>
-					<div class="form-check form-switch">
-						<input id="ass{{$assignment->id}}" class="form-check-input"  type="checkbox" value="{{$assignment->open}}" {{$assignment->open ? 'checked' : ''}} />
-					</div>
-				</td>
-				<td>
-					<a href="{{ route('assignments.duplicate', $assignment->id) }}" title="Duplicate assignment" ><i title="Duplicate assignment" class="bi bi-copy fs-5 text-danger"></i></a>
-					<a href="{{ route('submissions.rejudge_view', $assignment->id) }}"><i title="Rejudge submissions" class="bi bi-arrow-repeat fs-5 text-success"></i></a>
-					<a title="Edit" href="{{ route('assignments.edit', $assignment) }}"><i class="bi bi-pencil-square fs-5 color9"></i></a>
-					<span title="Delete Assignment" class="del_n delete_Assignment pointer"><i title="Delete Assignment" class="bi bi-trash3 fs-5 text-danger"></i></span>
+					"
+								title="View all submissions"
+							>
+								<small>{{ $assignment->total_submits }} sub</small>
+								- {{ $assignment->no_of_problems }} prob
+							</a>
+							<br />
+							<small>
+								@if ($assignment->finished)
+									<span class="text-danger">Finished</span>
+								@else
+									@if ($assignment->eval_coefficient() === "error")
+										<span class="text-danger">!Error late rule</span>
+									@else
+										<span class="text-info">{{ $assignment->coefficient }}% if submit now</span>
+									@endif
+								@endif
+							</small>
+						</td>
+						<td>
+							<small>{{
+								$assignment->start_time
+									->setTimezone($settings["timezone"])
+									->locale("en-GB")
+									->isoFormat("llll")
+							}}</small>
+						</td>
+						<td>
+							<small>{{
+								$assignment->finish_time
+									->setTimezone($settings["timezone"])
+									->locale("en-GB")
+									->isoFormat("llll")
+							}}</small>
+						</td>
+						<td>
+							<a href="{{ route('scoreboards.index', $assignment->id)}}" title="Click to viewa assignment's scoreboard">
+								@if ($assignment->score_board)
+									View<i
+									 class="bi bi-box-arrow-up-right"></i>
+								@elseif (!in_array(Auth::user()->role->name, ["student", "guest"]))
+									<span class="text-black-50">View<i class="bi bi-box-arrow-up-right"></i></span>
+								@endif
+							</a>
+							<br />
+						</td>
+						@if (!in_array(Auth::user()->role->name, ["student", "guest"]))
+							<td>
+								<div class="form-check form-switch">
+									<input
+										id="ass{{$assignment->id}}"
+										class="form-check-input"
+										type="checkbox"
+										value="{{$assignment->open}}"
+										{{ $assignment->open ? "checked" : "" }}
+									/>
+								</div>
+							</td>
+							<td>
+								<a href="{{ route('assignments.duplicate', $assignment->id) }}" title="Duplicate assignment"
+									><i title="Duplicate assignment" class="bi bi-copy fs-5 text-danger"></i
+								></a>
+								<a href="{{ route('submissions.rejudge_view', $assignment->id) }}"
+									><i title="Rejudge submissions" class="bi bi-arrow-repeat fs-5 text-success"></i
+								></a>
+								<a title="Edit" href="{{ route('assignments.edit', $assignment) }}"
+									><i class="bi bi-pencil-square fs-5 color9"></i
+								></a>
+								<span title="Delete Assignment" class="del_n delete_Assignment pointer"
+									><i title="Delete Assignment" class="bi bi-trash3 fs-5 text-danger"></i
+								></span>
 
-					<a href="#extra_action_{{$assignment->id}}" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="#extra_action_{{$assignment->id}}" ><i class="bi bi-three-dots-vertical text-info m-2"></i></i></a>
-					<div class="collapse" id="extra_action_{{$assignment->id}}">
-						<a href="{{ route('assignments.download_submissions', ['type'=>'by_user', 'assignment_id'=>$assignment->id]) }}"><i title="Download Final Submissions (by user)" class="bi bi-download fs-5 color12"></i></a>
-						<a href="{{ route('assignments.download_submissions', ['type'=>'by_problem', 'assignment_id'=>$assignment->id]) }}"><i title="Download Final Submissions (by problem)" class="bi bi-download fs-5 color2"></i></a>
-						<a href="{{ route('assignments.download_all_submissions', $assignment->id) }}"><i title="Download all submissions" class="bi bi-cloud-download-fill"></i></a>
-						<a href="{{ route('moss.index', $assignment->id) }}"><i title="Detect Similar Codes" class="bi bi-incognito fs-5 color7"></i></a>
-						<a href="{{ route('assignments.reload_scoreboard', $assignment->id) }}"><i title="Force reload scoreboard" class="bi bi-arrow-clockwise fs-5 text-success"></i></a>
-					</div>
-				</td>
-				@endif
-			</tr>
-			@endforeach
-		</table>
-		<div class=" d-flex justify-content-center">{{$assignments->links(null, ['class'=>'justify-content-center'])}}</div>
-
+								<a
+									href="#extra_action_{{$assignment->id}}"
+									data-bs-toggle="collapse"
+									role="button"
+									aria-expanded="false"
+									aria-controls="#extra_action_{{$assignment->id}}"
+									><i class="bi bi-three-dots-vertical text-info m-2"></i></i>
+								>
+								<div class="collapse" id="extra_action_{{$assignment->id}}">
+									<a href="{{ route('assignments.download_submissions', ['type'=>'by_user', 'assignment_id'=>$assignment->id]) }}"
+										><i title="Download Final Submissions (by user)" class="bi bi-download fs-5 color12"></i
+									></a>
+									<a
+										href="{{ route('assignments.download_submissions', ['type'=>'by_problem', 'assignment_id'=>$assignment->id]) }}"
+										><i title="Download Final Submissions (by problem)" class="bi bi-download fs-5 color2"></i
+									></a>
+									<a href="{{ route('assignments.download_all_submissions', $assignment->id) }}"
+										><i title="Download all submissions" class="bi bi-cloud-download-fill"></i
+									></a>
+									<a href="{{ route('moss.index', $assignment->id) }}"
+										><i title="Detect Similar Codes" class="bi bi-incognito fs-5 color7"></i
+									></a>
+									<a href="{{ route('assignments.reload_scoreboard', $assignment->id) }}"
+										><i title="Force reload scoreboard" class="bi bi-arrow-clockwise fs-5 text-success"></i
+									></a>
+								</div>
+							</td>
+						@endif
+					</tr>
+				@endforeach
+			</table>
+			<div class="d-flex justify-content-center">{{ $assignments->links(null, ["class" => "justify-content-center"]) }}</div>
+		</div>
+		{{-- @php(dd(DB::getQueryLog())) --}}
 	</div>
-	{{-- @php(dd(DB::getQueryLog())) --}}
-</div>
-
 	<div class="modal fade" id="assignment_delete" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
 		<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-			<h5 class="modal-title" id="exampleModalLongTitle">Are you sure you want to delete this assignment?</h5>
-			<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLongTitle">Are you sure you want to delete this assignment?</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger confirm-assignment-delete">YES</button>
+					<button type="button" class="btn btn-primary" data-bs-dismiss="modal">NO</button>
+				</div>
 			</div>
-		<div class="modal-footer">
-			<button type="button" class="btn btn-danger confirm-assignment-delete">YES</button>
-		<button type="button" class="btn btn-primary" data-bs-dismiss="modal">NO</button>
-			</div>
-		</div>
 		</div>
 	</div>
 @endsection
 
+@section("body_end")
+	<script type="text/javascript" src="{{ asset('assets/DataTables/datatables.min.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('assets/slimselect/slimselect.js') }}"></script>
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+			var all_lops = {!! $all_lops !!};
+			var search_lop = new SlimSelect({ select: ".search-by-lops" });
+			search_lop.setData(
+				all_lops.map((i) => {
+					return { value: i.id, text: i.name };
+				}),
+			);
+			var searched_lops = {!! json_encode(Request::get("lop_id")) !!};
+			search_lop.setSelected(searched_lops, false);
 
+			var search_owner = new SlimSelect({
+				select: ".search-by-authors",
+			});
+			var searched_owners = {!! json_encode(Request::get("owners")) !!};
+			search_owner.setSelected(searched_owners, false);
+			$(".del_n").click(function () {
+				var row = $(this).parents("tr");
+				var id = row.data("id");
+				$(".confirm-assignment-delete").off();
+				$(".confirm-assignment-delete").click(function () {
+					$("#assignment_delete").modal("hide");
+					$.ajax({
+						type: "DELETE",
+						url: "{{ route("assignments.index") }}/" + id,
+						data: {
+							_token: "{{ csrf_token() }}",
+						},
+						error: shj.loading_error,
+						success: function (response) {
+							if (response.done) {
+								row.animate({ backgroundColor: "#FF7676" }, 100, function () {
+									row.remove();
+								});
+								notify("assignment deleted", { position: "bottom right", className: "success", autoHideDelay: 5000 });
+								$("#assignment_delete").modal("hide");
+							} else shj.loading_failed(response.message);
+						},
+					});
+				});
+				$("#assignment_delete").modal("show");
+			});
 
-@section('body_end')
-<script type='text/javascript' src="{{ asset('assets/DataTables/datatables.min.js') }}"></script>
-<script type="text/javascript" src="{{ asset('assets/slimselect/slimselect.js') }}"></script>
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-	var all_lops = {!! $all_lops !!};
-	var search_lop = new SlimSelect({ select: '.search-by-lops' });
-	search_lop.setData(all_lops.map((i) => { return { value: i.id, text: i.name }; }));
-	var searched_lops = {!! json_encode(Request::get('lop_id')) !!};
-	search_lop.setSelected(searched_lops, false);
+			$("input").change(function () {
+				var row = $(this).parents("tr");
+				var id = row.data("id");
+				console.log(id);
+				$.ajax({
+					type: "POST",
+					url: "{{ route("assignments.check_open") }}",
+					data: {
+						_token: "{{ csrf_token() }}",
+						assignment_id: id,
+					},
+					error: shj.loading_error,
+					success: function (response) {
+						if (response == "success") {
+							notify("Change sucessfully saved", { position: "bottom right", className: "success", autoHideDelay: 3500 });
+							$(".save-button").removeClass("btn-info").addClass("btn-secondary");
+						}
+					},
+					error: function (response) {
+						notify("Error while saving", { position: "bottom right", className: "error", autoHideDelay: 3500 });
+					},
+				});
+			});
 
-	var search_owner = new SlimSelect({
-		select: '.search-by-authors'
-	});
-	var searched_owners = {!! json_encode(Request::get('owners')) !!};
-	search_owner.setSelected(searched_owners, false);
-	$('.del_n').click(function () {
-	var row = $(this).parents('tr');
-		var id = row.data('id');
-	$(".confirm-assignment-delete").off();
-	$(".confirm-assignment-delete").click(function(){
-		$("#assignment_delete").modal("hide");
-		$.ajax({
-		type: 'DELETE',
-		url: '{{ route('assignments.index') }}/'+id,
-		data: {
-					'_token': "{{ csrf_token() }}",
-		},
-		error: shj.loading_error,
-		success: function (response) {
-			if (response.done) {
-			row.animate({backgroundColor: '#FF7676'},100, function(){row.remove();});
-			notify('assignment deleted'	, {position: 'bottom right', className: 'success', autoHideDelay: 5000});
-			$("#assignment_delete").modal("hide");
-			}
-			else
-			shj.loading_failed(response.message);
-		}
+			$("table").DataTable({
+				paging: false,
+				{{-- "pageLength": 60, --}}
+				{{-- "ordering":false, --}}
+				order: ["0", "desc"],
+				columns: [
+					null,
+					null,
+					null,
+					null,
+					null, //start
+					null, //finish
+					{ orderable: false }, //scoreboard
+					@if (!in_array(Auth::user()->role->name, ["student", "guest"]))
+					{ orderable: false }, //open
+					{ orderable: false }, //action
+					@endif
+				],
+				// "lengthMenu": [ [20, 60, 150, 500, -1], [20, 60, 150, 500, "All"] ]
+			});
+			document.querySelector(".dt-search > label").childNodes[0].data = "Filter in this page";
 		});
-	});
-	$("#assignment_delete").modal("show");
-	});
-
-	$('input').change(function(){
-		var row = $(this).parents('tr');
-		var id = row.data('id');
-		console.log(id);
-		$.ajax({
-		type: 'POST',
-		url: '{{ route('assignments.check_open') }}',
-		data: {
-					'_token': "{{ csrf_token() }}",
-					'assignment_id': id,
-		},
-		error: shj.loading_error,
-		success: function (response) {
-			if (response == "success"){
-				notify('Change sucessfully saved', {position: 'bottom right', className: 'success', autoHideDelay: 3500});
-				$('.save-button').removeClass('btn-info').addClass('btn-secondary');
-				}
-			},
-		error: function(response){
-			notify('Error while saving', {position: 'bottom right', className: 'error', autoHideDelay: 3500});
-			}
-		});
-	});
-
-	$("table").DataTable({
-		"paging": false,
-		{{-- "pageLength": 60, --}}
-		{{-- "ordering":false, --}}
-		"order":['0', 'desc'],
-		"columns": [
-			null,
-			null,
-			null,
-			null,
-			null,//start
-			null,//finish
-			{ "orderable": false }, //scoreboard
-			@if (!in_array( Auth::user()->role->name, ['student', 'guest']))
-				{ "orderable": false }, //open
-				{ "orderable": false }, //action
-			@endif
-		  ],
-		// "lengthMenu": [ [20, 60, 150, 500, -1], [20, 60, 150, 500, "All"] ]
-	});
-	document.querySelector('.dt-search > label').childNodes[0].data = "Filter in this page";
-
-});
-</script>
+	</script>
 @endsection

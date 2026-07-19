@@ -145,9 +145,7 @@
 				@if ($can_edit_description)
 					@include("html_editor.tiptap_toolbar")
 				@endif
-				<div class="problem_description" id="problem_description">
-					{!! $problem->description !!}
-				</div>
+				<div class="problem_description" id="problem_description">{!! $problem->description !!}</div>
 				@if ($can_edit_description)
 					<textarea
 						id="source_editor"

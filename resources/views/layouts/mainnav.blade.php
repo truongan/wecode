@@ -66,11 +66,13 @@
 						href="{{ route('submissions.index', [(int)Auth::user()->selected_assignment_id, Auth::user()->id, 'all', 'all'])}}"
 					>
 
+
 				@else
 					<a
 						class="nav-link"
 						href="{{ route('submissions.index', [(int)Auth::user()->selected_assignment_id, 'all', 'all', 'all'])}}"
 					>
+
 
 				@endif
 				<i class="bi bi-list fs-5"></i>

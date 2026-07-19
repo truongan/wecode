@@ -10,17 +10,37 @@
 	</div>
 
 	<div class="btn-group" role="group" aria-label="Paragraph format">
-		<button type="button" class="btn btn-sm btn-dark dropdown-toggle" data-bs-toggle="dropdown" id="heading_dropdown" title="Paragraph format">
+		<button
+			type="button"
+			class="btn btn-sm btn-dark dropdown-toggle"
+			data-bs-toggle="dropdown"
+			id="heading_dropdown"
+			title="Paragraph format"
+		>
 			<i class="bi bi-paragraph"></i>
 		</button>
 		<ul class="dropdown-menu">
-			<li><a class="dropdown-item" href="#" data-heading="p"><i class="bi bi-paragraph"></i> Normal</a></li>
-			<li><a class="dropdown-item h1 mb-0" href="#" data-heading="1"><i class="bi bi-type-h1"></i> Heading 1</a></li>
-			<li><a class="dropdown-item h2 mb-0" href="#" data-heading="2"><i class="bi bi-type-h2"></i> Heading 2</a></li>
-			<li><a class="dropdown-item h3 mb-0" href="#" data-heading="3"><i class="bi bi-type-h3"></i> Heading 3</a></li>
-			<li><a class="dropdown-item h4 mb-0" href="#" data-heading="4"><i class="bi bi-type-h4"></i> Heading 4</a></li>
-			<li><a class="dropdown-item h5 mb-0" href="#" data-heading="5"><i class="bi bi-type-h5"></i> Heading 5</a></li>
-			<li><a class="dropdown-item h6 mb-0" href="#" data-heading="6"><i class="bi bi-type-h6"></i> Heading 6</a></li>
+			<li>
+				<a class="dropdown-item" href="#" data-heading="p"><i class="bi bi-paragraph"></i> Normal</a>
+			</li>
+			<li>
+				<a class="dropdown-item h1 mb-0" href="#" data-heading="1"><i class="bi bi-type-h1"></i> Heading 1</a>
+			</li>
+			<li>
+				<a class="dropdown-item h2 mb-0" href="#" data-heading="2"><i class="bi bi-type-h2"></i> Heading 2</a>
+			</li>
+			<li>
+				<a class="dropdown-item h3 mb-0" href="#" data-heading="3"><i class="bi bi-type-h3"></i> Heading 3</a>
+			</li>
+			<li>
+				<a class="dropdown-item h4 mb-0" href="#" data-heading="4"><i class="bi bi-type-h4"></i> Heading 4</a>
+			</li>
+			<li>
+				<a class="dropdown-item h5 mb-0" href="#" data-heading="5"><i class="bi bi-type-h5"></i> Heading 5</a>
+			</li>
+			<li>
+				<a class="dropdown-item h6 mb-0" href="#" data-heading="6"><i class="bi bi-type-h6"></i> Heading 6</a>
+			</li>
 		</ul>
 	</div>
 

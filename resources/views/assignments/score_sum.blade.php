@@ -1,35 +1,45 @@
-@extends('layouts.app')
-@php ($selected="assignments")
-@section('head_title','Assignments')
-@section('icon', 'bi bi-folder2-open')
+@extends("layouts.app")
+@php($selected = "assignments")
+@section("head_title", "Assignments")
+@section("icon", "bi bi-folder2-open")
 
-@section('title', 'Assignments')
+@section("title", "Assignments")
 
-@section('other_assets')
-<link rel='stylesheet' type='text/css' href='{{ asset('assets/DataTables/datatables.min.css') }}'/>
+@section("other_assets")
+	<link rel="stylesheet" type="text/css" href='{{ asset('assets/DataTables/datatables.min.css') }}' />
 @endsection
-@if (!in_array( Auth::user()->role->name, ['student', 'guest']))
-    @section('title_menu')
-    <small><nav class="nav nav-pills">
-        <a class="nav-link" href="{{ route('assignments.create') }}"><i class="bi bi-plus color8"></i> Add</a>
-        <a class="nav-link" href="{{ route('assignments.index') }}"><i class="bi bi-star-fill text-danger"></i>Assingments setting</a>
-        <a class="nav-link" href="{{ route('assignments.score_accepted') }}"><i class="bi bi-star-fill text-danger"></i>Assignments score accepted</a>
-        <a class="nav-link active" href="{{ route('assignments.score_sum') }}"><i class="bi bi-star-fill text-danger"></i>Assignments score olp</a>
-    </nav></small>
-    @endsection
+@if (!in_array(Auth::user()->role->name, ["student", "guest"]))
+	@section("title_menu")
+		<small
+			><nav class="nav nav-pills">
+				<a class="nav-link" href="{{ route('assignments.create') }}"><i class="bi bi-plus color8"></i> Add</a>
+				<a class="nav-link" href="{{ route('assignments.index') }}"
+					><i class="bi bi-star-fill text-danger"></i>Assingments setting</a
+				>
+				<a class="nav-link" href="{{ route('assignments.score_accepted') }}"
+					><i class="bi bi-star-fill text-danger"></i>Assignments score accepted</a
+				>
+				<a class="nav-link active" href="{{ route('assignments.score_sum') }}"
+					><i class="bi bi-star-fill text-danger"></i>Assignments score olp</a
+				>
+			</nav></small
+		>
+	@endsection
 @endif
-@section('content')
-biết chi mô
+@section("content")
+	biết chi mô
 @endsection
-@section('body_end')
-
-<script type="text/javascript" src="{{ asset('assets/DataTables/datatables.min.js') }}"></script>
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    $("table").DataTable({
-		"pageLength": 10,
-		"lengthMenu": [ [10, 20, 30, 50, -1], [10, 20, 30, 50, "All"] ]
-	});
-});
-</script>
+@section("body_end")
+	<script type="text/javascript" src="{{ asset('assets/DataTables/datatables.min.js') }}"></script>
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+			$("table").DataTable({
+				pageLength: 10,
+				lengthMenu: [
+					[10, 20, 30, 50, -1],
+					[10, 20, 30, 50, "All"],
+				],
+			});
+		});
+	</script>
 @endsection

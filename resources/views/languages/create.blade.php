@@ -1,41 +1,39 @@
-@php($selected = 'settings')
-@extends('layouts.app')
-@section('head_title','New Language')
-@section('icon', 'bi bi-plus')
+@php($selected = "settings")
+@extends("layouts.app")
+@section("head_title", "New Language")
+@section("icon", "bi bi-plus")
 
-@section('title', 'New Language')
+@section("title", "New Language")
 
-@section('content')
-<form method="POST"  action="{!! route('languages.store') !!}">
-	<input type="hidden"  name ="_token" value="{!! csrf_token() !!}"/>
+@section("content")
+	<form method="POST" action="{!! route('languages.store') !!}">
+		<input type="hidden" name="_token" value="{!! csrf_token() !!}" />
 
-	<table class="table w-50">
-		<tr>
-					<td>Name:</td>
-					<td>	<input class="form-control" type="text" name="name">	</td>
-		</tr>
-		<tr>
-					<td>Extension:</td>
-					<td>	<input class="form-control" type="text" name="extension">	</td>
-		</tr>
-		<tr>
-					<td>Sorting:</td>
-					<td>	<input class="form-control" type="number" name="sorting">	</td>
-		</tr>
-		<tr>
-					<td>Default_time_limit:</td>
-					<td>	<input class="form-control" type="number" name="default_time_limit">	</td>
-		</tr>
-		<tr>
-					<td>Default_memory_limit:</td>
-					<td>	<input class="form-control" type="number" name="default_memory_limit">	</td>
-		</tr>
-	
-		
-	</table>
-	<br>
-	<div class="d-flex justify-content-center w-50">
-		<input type="submit" value="Add" class="form-control btn btn-primary"/>
-	</div>
-</form>	
+		<table class="table w-50">
+			<tr>
+				<td>Name:</td>
+				<td><input class="form-control" type="text" name="name" /></td>
+			</tr>
+			<tr>
+				<td>Extension:</td>
+				<td><input class="form-control" type="text" name="extension" /></td>
+			</tr>
+			<tr>
+				<td>Sorting:</td>
+				<td><input class="form-control" type="number" name="sorting" /></td>
+			</tr>
+			<tr>
+				<td>Default_time_limit:</td>
+				<td><input class="form-control" type="number" name="default_time_limit" /></td>
+			</tr>
+			<tr>
+				<td>Default_memory_limit:</td>
+				<td><input class="form-control" type="number" name="default_memory_limit" /></td>
+			</tr>
+		</table>
+		<br />
+		<div class="d-flex justify-content-center w-50">
+			<input type="submit" value="Add" class="form-control btn btn-primary" />
+		</div>
+	</form>
 @endsection
