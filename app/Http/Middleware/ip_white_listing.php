@@ -22,15 +22,21 @@ class ip_white_listing
 	{
 		$pass = false;
 
-		if (in_array(Auth::user()->role->name, ['admin', 'head_instructor']))
+		if (in_array(Auth::user()->role->name, ["admin", "head_instructor"])) {
 			$pass = true;
-		else foreach (preg_split('/\s+/', Setting::get('ip_white_list', '0.0.0.0/0')) as $range){
-			if (my_helpers::ip_in_range($request->ip(), $range)  ) $pass = true;
+		} else {
+			foreach (preg_split("/\s+/", Setting::get("ip_white_list", "0.0.0.0/0")) as $range) {
+				if (my_helpers::ip_in_range($request->ip(), $range)) {
+					$pass = true;
+				}
+			};
 		}
-		if ($pass == false){
-			Log::critical('user {username} login from {ip} outside white list: {white_list}'
-				, ['username' => Auth::user()->username, 'ip' => $request->ip(), 'white_list' => Setting::get('ip_white_list')]
-			);
+		if ($pass == false) {
+			Log::critical("user {username} login from {ip} outside white list: {white_list}", [
+				"username" => Auth::user()->username,
+				"ip" => $request->ip(),
+				"white_list" => Setting::get("ip_white_list"),
+			]);
 			abort(403, "Access from unauthorized network cannot proceed beyond this point");
 		}
 		return $next($request);

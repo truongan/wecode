@@ -15,62 +15,62 @@ use DOMDocument;
 
 class scoreboard_controller extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+	/**
+	 * Create a new controller instance.
+	 *
+	 * @return void
+	 */
+	public function __construct()
+	{
+		$this->middleware("auth");
+	}
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
-    public function index($assignment_id)
-    {
+	/**
+	 * Show the application dashboard.
+	 *
+	 * @return \Illuminate\Contracts\Support\Renderable
+	 */
+	public function index($assignment_id)
+	{
 		$assignment = Assignment::find($assignment_id);
-		if (in_array( Auth::user()->role->name, ['student']) && $assignment->score_board == false)
-		{
+		if (in_array(Auth::user()->role->name, ["student"]) && $assignment->score_board == false) {
 			//Student can only view scoreboard if allowed
 			abort(404, "This assignment does not have scoreboard");
 		}
-		$scoreboard = NULL;
-		if ($assignment)
-		{
-			// Scoreboard::update_scoreboard($assignment_id); 
+		$scoreboard = null;
+		if ($assignment) {
+			// Scoreboard::update_scoreboard($assignment_id);
 			$scoreboard = $this->get_scoreboard($assignment_id);
 		}
-		return view('scoreboard', ['selected' => 'scoreboard',
-									'place' => 'full',	
-									'assignment' => $assignment,
-									'scoreboard' => $scoreboard,					
-								]);
+		return view("scoreboard", [
+			"selected" => "scoreboard",
+			"place" => "full",
+			"assignment" => $assignment,
+			"scoreboard" => $scoreboard,
+		]);
 	}
-	
+
 	public function get_scoreboard($assignment_id)
 	{
-		$query =  DB::table('scoreboards')->where('assignment_id',$assignment_id)->get();
+		$query = DB::table("scoreboards")->where("assignment_id", $assignment_id)->get();
 
-		if ($query->count() != 1)
-			return false;//$message = array('error' => 'Scoreboard not found');
-		else
-		{
+		if ($query->count() != 1) {
+			return false;
+		}
+		//$message = array('error' => 'Scoreboard not found');
+		else {
 			return $query->first()->scoreboard;
 		}
 	}
 
-	private function _strip_scoreboard($assignment_id){
-	
+	private function _strip_scoreboard($assignment_id)
+	{
 		$a = $this->get_scoreboard($assignment_id);
 
-		$dom = new DOMDocument;
-		$dom->loadHTML('<?xml encoding="UTF-8">'. $a);
-		$ps = $dom->getElementsByTagName('p');
-		while($ps->length > 0){
+		$dom = new DOMDocument();
+		$dom->loadHTML('<?xml encoding="UTF-8">' . $a);
+		$ps = $dom->getElementsByTagName("p");
+		while ($ps->length > 0) {
 			$ps[0]->parentNode->removeChild($ps[0]);
 		}
 		//Remove excess info
@@ -89,34 +89,34 @@ class scoreboard_controller extends Controller
 		// }
 		// $a = substr($a, 0, $i);
 
-		return $dom->saveXML($dom->getElementsByTagName('table')[0]);
+		return $dom->saveXML($dom->getElementsByTagName("table")[0]);
 	}
-	
-	public function plain($assignment_id){
+
+	public function plain($assignment_id)
+	{
 		$assignment = Assignment::find($assignment_id);
 
-		$data = array(
-			'place' => 'plain',
-			'assignment' => $assignment,
-			'scoreboard' => strip_tags( $this->_strip_scoreboard($assignment_id), "<table><thead><th><tbody><tr><td><br>"),
-			'selected' => 'scoreboard'
-		);
-		
-		return view('scoreboard', $data);
+		$data = [
+			"place" => "plain",
+			"assignment" => $assignment,
+			"scoreboard" => strip_tags($this->_strip_scoreboard($assignment_id), "<table><thead><th><tbody><tr><td><br>"),
+			"selected" => "scoreboard",
+		];
+
+		return view("scoreboard", $data);
 	}
 
-	public function simplify($assignment_id){
+	public function simplify($assignment_id)
+	{
 		$assignment = Assignment::find($assignment_id);
 
-		$data = array(
-			'place' => 'simplify',
-			'assignment' => $assignment,
-			'scoreboard' => $this->_strip_scoreboard($assignment_id),
-			'selected' => 'scoreboard',
-		);
+		$data = [
+			"place" => "simplify",
+			"assignment" => $assignment,
+			"scoreboard" => $this->_strip_scoreboard($assignment_id),
+			"selected" => "scoreboard",
+		];
 
-		return view('scoreboard', $data);
+		return view("scoreboard", $data);
 	}
-    
-
 }

@@ -8,46 +8,46 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 class add_admin extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'add_admin {username} {email} {password}';
+	/**
+	 * The name and signature of the console command.
+	 *
+	 * @var string
+	 */
+	protected $signature = "add_admin {username} {email} {password}";
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Add an admin via console';
+	/**
+	 * The console command description.
+	 *
+	 * @var string
+	 */
+	protected $description = "Add an admin via console";
 
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
+	/**
+	 * Create a new command instance.
+	 *
+	 * @return void
+	 */
+	public function __construct()
+	{
+		parent::__construct();
+	}
 
-    /**
-     * Execute the console command.
-     *
-     * @return mixed
-     */
-    public function handle()
-    {
-        //
-        DB::table('users')->insert([
-        // User::insert([
-            'username' => $this->argument('username'),
-            'email' => $this->argument("email"),
-            'display_name' => 'Tao la admin',
-            // 'email' => Str::random(10).'@gmail.com',
-            'password' => Hash::make($this->argument('password')),
-            'role_id' => '1' //Admin
-        ]);
-    }
+	/**
+	 * Execute the console command.
+	 *
+	 * @return mixed
+	 */
+	public function handle()
+	{
+		//
+		DB::table("users")->insert([
+			// User::insert([
+			"username" => $this->argument("username"),
+			"email" => $this->argument("email"),
+			"display_name" => "Tao la admin",
+			// 'email' => Str::random(10).'@gmail.com',
+			"password" => Hash::make($this->argument("password")),
+			"role_id" => "1", //Admin
+		]);
+	}
 }

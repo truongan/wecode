@@ -15,11 +15,16 @@ class IPranges implements ValidationRule
 	public function validate(string $attribute, mixed $value, Closure $fail): void
 	{
 		//
-		$ranges = preg_split('/\s+/', $value);
+		$ranges = preg_split("/\s+/", $value);
 
-		foreach($ranges as $range){
-		    if (!preg_match('/^([01]?\d\d?|2[0-4]\d|25[0-5])(?:\.(?:[01]?\d\d?|2[0-4]\d|25[0-5])){3}(\/(?:[0-2]\d|3[0-2]|[0-9]))?$/', $range)){
-                $fail("In {$attribute}, the line {$range} is not a valid IP range");
+		foreach ($ranges as $range) {
+			if (
+				!preg_match(
+					'/^([01]?\d\d?|2[0-4]\d|25[0-5])(?:\.(?:[01]?\d\d?|2[0-4]\d|25[0-5])){3}(\/(?:[0-2]\d|3[0-2]|[0-9]))?$/',
+					$range,
+				)
+			) {
+				$fail("In {$attribute}, the line {$range} is not a valid IP range");
 			}
 		}
 	}

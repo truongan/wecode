@@ -93,7 +93,8 @@ class assignment_controller extends Controller
 
 		$assignments = $assignments
 			->with(["user", "lops", "problems"])
-			->paginate(Setting::get("results_per_page_all"))->withQueryString();
+			->paginate(Setting::get("results_per_page_all"))
+			->withQueryString();
 
 		foreach ($assignments as &$assignment) {
 			$delay = strtotime(date("Y-m-d H:i:s")) - strtotime($assignment->finish_time);
@@ -626,12 +627,7 @@ class assignment_controller extends Controller
 		$zip = new ZipArchive();
 		if ($type === "by_user") {
 			$zip_name =
-				$assignments_root .
-				"/assignment" .
-				(string) $assignment_id .
-				"_submissions_by_user_" .
-				(string) date("Y-m-d_H-i") .
-				".zip";
+				$assignments_root . "/assignment" . (string) $assignment_id . "_submissions_by_user_" . (string) date("Y-m-d_H-i") . ".zip";
 		} elseif ($type === "by_problem") {
 			$zip_name =
 				$assignments_root .
@@ -656,14 +652,12 @@ class assignment_controller extends Controller
 			$file = file_get_contents($file_path);
 			if ($type === "by_user") {
 				$zip->addFromString(
-					"{$final_sub->username}/problem_{$final_sub->problem_id}." .
-						(string) Language::find($final_sub->language_id)->extension,
+					"{$final_sub->username}/problem_{$final_sub->problem_id}." . (string) Language::find($final_sub->language_id)->extension,
 					$file,
 				);
 			} elseif ($type === "by_problem") {
 				$zip->addFromString(
-					"problem_{$final_sub->problem_id}/{$final_sub->username}." .
-						(string) Language::find($final_sub->language_id)->extension,
+					"problem_{$final_sub->problem_id}/{$final_sub->username}." . (string) Language::find($final_sub->language_id)->extension,
 					$file,
 				);
 			}

@@ -6,35 +6,33 @@ use Illuminate\Database\Eloquent\Model;
 
 class Lop extends Model
 {
-    //
-    protected $fillable = ["name", "open"];
-    function users()
-    {
-        return $this->belongsToMany("App\Models\User");
-    }
-    function creator()
-    {
-        return $this->belongsToMany("App\Models\User")->first();
-    }
-    function instructors()
-    {
-        return $this->belongsToMany("App\Models\User")->whereIn(
-            "users.role_id",
+	//
+	protected $fillable = ["name", "open"];
+	function users()
+	{
+		return $this->belongsToMany("App\Models\User");
+	}
+	function creator()
+	{
+		return $this->belongsToMany("App\Models\User")->first();
+	}
+	function instructors()
+	{
+		return $this->belongsToMany("App\Models\User")->whereIn(
+			"users.role_id",
 
-            [1, 2, 3],
-        );
-    }
-    function assignments()
-    {
-        return $this->belongsToMany("App\Models\Assignment");
-    }
+			[1, 2, 3],
+		);
+	}
+	function assignments()
+	{
+		return $this->belongsToMany("App\Models\Assignment");
+	}
 
-    static function available($user_id)
-    {
-        return Lop::where(["open" => 1])->orWhereHas("users", function (
-            $q,
-        ) use ($user_id) {
-            $q->where(["users.id" => $user_id]);
-        });
-    }
+	static function available($user_id)
+	{
+		return Lop::where(["open" => 1])->orWhereHas("users", function ($q) use ($user_id) {
+			$q->where(["users.id" => $user_id]);
+		});
+	}
 }

@@ -13,10 +13,53 @@ class my_expression_language_provider implements ExpressionFunctionProviderInter
 {
 	public function getFunctions(): array
 	{
-		$func_list = ['abs', 'acos', 'acosh', 'asin', 'asinh', 'atan', 'atan2', 'atanh', 'base_convert', 'bindec', 'ceil', 'cos', 'cosh', 'decbin', 'dechex', 'decoct', 'deg2rad', 'exp', 'expm1', 'fdiv', 'floor', 'fmod', 'hexdec', 'hypot', 'intdiv', 'is_finite', 'is_infinite', 'is_nan', 'log', 'log10', 'log1p', 'max', 'min', 'octdec', 'pi', 'pow', 'rad2deg', 'round', 'sin', 'sinh', 'sqrt', 'tan', 'tanh'] ;
+		$func_list = [
+			"abs",
+			"acos",
+			"acosh",
+			"asin",
+			"asinh",
+			"atan",
+			"atan2",
+			"atanh",
+			"base_convert",
+			"bindec",
+			"ceil",
+			"cos",
+			"cosh",
+			"decbin",
+			"dechex",
+			"decoct",
+			"deg2rad",
+			"exp",
+			"expm1",
+			"fdiv",
+			"floor",
+			"fmod",
+			"hexdec",
+			"hypot",
+			"intdiv",
+			"is_finite",
+			"is_infinite",
+			"is_nan",
+			"log",
+			"log10",
+			"log1p",
+			"max",
+			"min",
+			"octdec",
+			"pi",
+			"pow",
+			"rad2deg",
+			"round",
+			"sin",
+			"sinh",
+			"sqrt",
+			"tan",
+			"tanh",
+		];
 
-
-		return array_map(array('Symfony\Component\ExpressionLanguage\ExpressionFunction','fromPhp'), $func_list);
+		return array_map(["Symfony\Component\ExpressionLanguage\ExpressionFunction", "fromPhp"], $func_list);
 	}
 }
 
@@ -45,9 +88,7 @@ class Assignment extends Model
 
 	public function problems()
 	{
-		return $this->belongsToMany("App\Models\Problem")
-			->withPivot("score", "ordering", "problem_name")
-			->withTimestamps();
+		return $this->belongsToMany("App\Models\Problem")->withPivot("score", "ordering", "problem_name")->withTimestamps();
 	}
 	public function user()
 	{
@@ -77,14 +118,7 @@ class Assignment extends Model
 		} elseif ($actor->role->name == "head_instructor") {
 			if (
 				$this->user->id != $actor->id &&
-				!$actor
-					->lops()
-					->with("assignments")
-					->get()
-					->pluck("assignments")
-					->collapse()
-					->pluck("id")
-					->contains($this->id)
+				!$actor->lops()->with("assignments")->get()->pluck("assignments")->collapse()->pluck("id")->contains($this->id)
 			) {
 				return "You can only edit assignment you created or assignment belongs to one of your classes";
 			} else {
@@ -113,40 +147,25 @@ class Assignment extends Model
 		}
 
 		if (in_array($user->role->name, ["guest"])) {
-			$result->error_message =
-				" Guest can not make submissions. Contact site admin to upgrade your account ";
+			$result->error_message = " Guest can not make submissions. Contact site admin to upgrade your account ";
 		} elseif (
 			$this->id == 0 &&
 			!in_array($user->role->name, ["admin"]) && // Admin can submit to practice assignment on any problem
 			($problem == null || $problem->can_practice($user) == false)
 		) {
-			$result->error_message =
-				"You don't have permission to practice with this problem";
-		} elseif (
-			in_array($user->role->name, ["student"]) &&
-			$this->open == 0
-		) {
+			$result->error_message = "You don't have permission to practice with this problem";
+		} elseif (in_array($user->role->name, ["student"]) && $this->open == 0) {
 			// if assignment is closed, non-student users (admin, instructors) still can submit
-			$result->error_message =
-				" You cannot submit, selected assignment is closed.";
-		} elseif (
-			!$this->started() &&
-			in_array($user->role->name, ["student"])
-		) {
+			$result->error_message = " You cannot submit, selected assignment is closed.";
+		} elseif (!$this->started() && in_array($user->role->name, ["student"])) {
 			// non-student users can submit to not started assignments
-			$result->error_message =
-				"You cannot submit, Selected assignment has not started.";
-		} elseif (
-			$this->start_time < $this->finish_time &&
-			Carbon::now() > $this->finish_time->addSeconds($this->extra_time)
-		) {
+			$result->error_message = "You cannot submit, Selected assignment has not started.";
+		} elseif ($this->start_time < $this->finish_time && Carbon::now() > $this->finish_time->addSeconds($this->extra_time)) {
 			// deadline = finish_time + extra_time
 			// but if start time is before finish time, the deadline is NEVER
-			$result->error_message =
-				"You cannot submit, Selected assignment has finished.";
+			$result->error_message = "You cannot submit, Selected assignment has finished.";
 		} elseif (!$this->is_participant($user)) {
-			$result->error_message =
-				"You cannot submit, You are not registered for submitting.";
+			$result->error_message = "You cannot submit, You are not registered for submitting.";
 		} else {
 			$result->error_message = "none";
 			$result->can_submit = true;
@@ -162,15 +181,7 @@ class Assignment extends Model
 		if (in_array($user->role->name, ["admin"])) {
 			return true;
 		}
-		return in_array(
-			$user->id,
-			$this->lops
-				->pluck("users")
-				->collapse()
-				->pluck("id")
-				->unique()
-				->toArray(),
-		);
+		return in_array($user->id, $this->lops->pluck("users")->collapse()->pluck("id")->unique()->toArray());
 	}
 
 	public function started()
@@ -186,16 +197,16 @@ class Assignment extends Model
 			$expressionLanguage->registerProvider(new my_expression_language_provider());
 
 			$coefficient = $expressionLanguage->evaluate($this->late_rule, [
-				'delay' => $delay,
-				'extra_time' => $extra_time,
+				"delay" => $delay,
+				"extra_time" => $extra_time,
 			]);
 
 			$coefficient = round($coefficient, 1);
-			if ($coefficient < 0)
+			if ($coefficient < 0) {
 				$coefficient = max(-10000, $coefficient);
-			else
+			} else {
 				$coefficient = min(10000, $coefficient);
-
+			}
 		} catch (\Throwable $e) {
 			// dd($e);
 			$coefficient = "error";
@@ -226,8 +237,7 @@ class Assignment extends Model
 	public function is_finished()
 	{
 		$delay = $this->finish_time->diffInSeconds(Carbon::now());
-		return $this->start_time < $this->finish_time &&
-			$delay > $this->extra_time;
+		return $this->start_time < $this->finish_time && $delay > $this->extra_time;
 	}
 
 	public static function assignment_info($assignment_id)
@@ -262,35 +272,14 @@ class Assignment extends Model
 			if (isset($final_subs[$key])) {
 				$final = $subs[$final_subs[$key]];
 
-				$final_score = ceil(
-					($final->pre_score *
-						($problem_score[$final->problem_id] ?? 0)) /
-						10000,
-				);
-				$final_score = ceil(
-					$final_score *
-						($final->coefficient === "error"
-							? 0
-							: $final->coefficient / 100),
-				);
+				$final_score = ceil(($final->pre_score * ($problem_score[$final->problem_id] ?? 0)) / 10000);
+				$final_score = ceil($final_score * ($final->coefficient === "error" ? 0 : $final->coefficient / 100));
 
-				$sub_score = ceil(
-					($sub->pre_score *
-						($problem_score[$sub->problem_id] ?? 0)) /
-						10000,
-				);
-				$sub_score = ceil(
-					$sub_score *
-						($sub->coefficient === "error"
-							? 0
-							: $sub->coefficient / 100),
-				);
+				$sub_score = ceil(($sub->pre_score * ($problem_score[$sub->problem_id] ?? 0)) / 10000);
+				$sub_score = ceil($sub_score * ($sub->coefficient === "error" ? 0 : $sub->coefficient / 100));
 
 				if ($sub->pre_score == 10000) {
-					if (
-						$final->pre_score == 10000 &&
-						$sub_score <= $final_score
-					) {
+					if ($final->pre_score == 10000 && $sub_score <= $final_score) {
 						$change = false;
 					}
 				} else {

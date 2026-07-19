@@ -17,7 +17,7 @@ class work_queue extends Command
 	 *
 	 * @var string
 	 */
-	protected $signature = 'work_queue {--f|force}';
+	protected $signature = "work_queue {--f|force}";
 
 	/**
 	 * The console command description.
@@ -52,24 +52,25 @@ class work_queue extends Command
 		// Because we are in cli mode, base_url is not available, and we get
 		// it from an environment variable that we have set in shj_helper.php
 
-
-
-		$limit = Setting::get('concurent_queue_process', 2);
+		$limit = Setting::get("concurent_queue_process", 2);
 		// dd($limit);
 
-		if ($this->option('force')) $limit = 999999;
+		if ($this->option("force")) {
+			$limit = 999999;
+		}
 
 		$item = Queue_item::acquire($limit);
-		if ($item === NULL) {
+		if ($item === null) {
 			// Queue is full, exit this process
 			var_dump("Exit casue no item");
-			exit;
+			exit();
 		}
 
 		//To pause the queue when debugging, just exit here
 		// exit;
 
-		do { // loop over queue items
+		do {
+			// loop over queue items
 			// sleep(5);
 
 			// var_dump($item);
@@ -84,59 +85,55 @@ class work_queue extends Command
 			$result_file = "$userdir/result-{$submit_id}.html";
 			$log_file = "$userdir/log-{$submit_id}";
 
-			$tester_path = Setting::get('tester_path', '/');
+			$tester_path = Setting::get("tester_path", "/");
 			$problemdir = $item->submission->problem->get_directory_path();
 
-
-			if ($language == NULL){
+			if ($language == null) {
 				$item->submission->pre_score = 0;
-				$item->submission->status = 'SCORE';
+				$item->submission->status = "SCORE";
 
 				file_put_contents($log_file, "INVALID LANGUAGE");
 				file_put_contents($result_file, "INVALID LANGUAGE");
-
-			}
-			else
-			{
+			} else {
 				$file_extension = $language->extension;
 				$raw_filename = $item->submission->file_name;
 
-				$time_limit = $language->pivot->time_limit/1000;
+				$time_limit = $language->pivot->time_limit / 1000;
 				var_dump($time_limit);
 				$time_limit = round($time_limit, 3);
 				var_dump($time_limit);
 				$time_limit_int = floor($time_limit) + 1;
 				var_dump($time_limit_int);
 
-
 				$memory_limit = $language->pivot->memory_limit;
 				$diff_cmd = $item->submission->problem->diff_cmd;
 				$diff_arg = $item->submission->problem->diff_arg;
 
-				$output_size_limit = Setting::get('output_size_limit') * 1024;
+				$output_size_limit = Setting::get("output_size_limit") * 1024;
 				// AN - note: Since cmd start bash, this process have to be exit when run from cli to debugg
-				$cmd = "cd $tester_path;\n./tester.sh $problemdir $userdir $result_file $log_file ".escapeshellarg($raw_filename)." $file_extension $time_limit $time_limit_int $memory_limit $output_size_limit $diff_cmd '$diff_arg' 1 ";
+				$cmd =
+					"cd $tester_path;\n./tester.sh $problemdir $userdir $result_file $log_file " .
+					escapeshellarg($raw_filename) .
+					" $file_extension $time_limit $time_limit_int $memory_limit $output_size_limit $diff_cmd '$diff_arg' 1 ";
 
-				file_put_contents($userdir.'/log', $cmd);
+				file_put_contents($userdir . "/log", $cmd);
 
 				///////////////////////////////////////
 				// Running tester (judging the code) //
 				///////////////////////////////////////
-				putenv('LANG=en_US.UTF-8');
-				putenv('PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games');
-				putenv('APP_ENV=local');
+				putenv("LANG=en_US.UTF-8");
+				putenv("PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games");
+				putenv("APP_ENV=local");
 
-
-				echo ("about to exec: ");
+				echo "about to exec: ";
 				var_dump($cmd);
 
 				$output = trim(shell_exec($cmd));
 
 				if (is_numeric($output)) {
 					$item->submission->pre_score = $output;
-					$item->submission->status = 'SCORE';
-				}
-				else {
+					$item->submission->status = "SCORE";
+				} else {
 					$item->submission->pre_score = 0;
 					$item->submission->status = $output;
 				}
@@ -149,8 +146,7 @@ class work_queue extends Command
 
 			// Get next item from queue
 			$item = Queue_item::acquire($limit);
-
-		}while($item !== NULL);
+		} while ($item !== null);
 
 		var_dump("Exit, no more item");
 	}

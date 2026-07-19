@@ -56,31 +56,24 @@ class problem_controller extends Controller
 		}
 
 		if ($request->get("search") != "") {
-			$all_problem->where(
-				"name",
-				"like",
-				"%" . trim($request->get("search")) . "%",
-			);
+			$all_problem->where("name", "like", "%" . trim($request->get("search")) . "%");
 		}
 		if ($request->get("tag_id") != null) {
-			$all_problem->whereHas("tags", function (Builder $query) use (
-				$request,
-			) {
+			$all_problem->whereHas("tags", function (Builder $query) use ($request) {
 				$query->whereIn("tag_id", $request->get("tag_id"));
 			});
 		}
 		if ($request->get("owners") != null) {
 			// dd($request->get("owners"));
-			$all_problem->whereHas("user", function (Builder $query) use (
-				$request,
-			) {
+			$all_problem->whereHas("user", function (Builder $query) use ($request) {
 				$query->whereIn("username", $request->get("owners"));
 			});
 		}
 
 		$all_problem = $all_problem
 			->with("assignments", "languages")
-			->paginate(Setting::get("results_per_page_all"))->withQueryString();
+			->paginate(Setting::get("results_per_page_all"))
+			->withQueryString();
 		$all_problem->appends(["search" => $request->get("search")]);
 
 		$a = $all_problem->pluck("id");
@@ -100,14 +93,13 @@ class problem_controller extends Controller
 		foreach ($all_problem as $p) {
 			$p->total_submit = $total_subs[$p->id]->total_sub ?? 0;
 			$p->accepted_submit = $ac_subs[$p->id]->total_sub ?? 0;
-			$p->ratio =
-				round($p->accepted_submit / max($p->total_submit, 1), 2) * 100;
+			$p->ratio = round($p->accepted_submit / max($p->total_submit, 1), 2) * 100;
 		}
 		// dd(DB::getQueryLog());
 		return view("problems.list", [
 			"problems" => $all_problem,
 			"all_tags" => Tag::all(),
-			'all_user_names' => User::has('problems')->pluck('username'),
+			"all_user_names" => User::has("problems")->pluck("username"),
 		]);
 	}
 
@@ -118,13 +110,7 @@ class problem_controller extends Controller
 	 */
 	public function create()
 	{
-		if (
-			!in_array(Auth::user()->role->name, [
-				"admin",
-				"head_instructor",
-				"instructor",
-			])
-		) {
+		if (!in_array(Auth::user()->role->name, ["admin", "head_instructor", "instructor"])) {
 			abort(404);
 		}
 
@@ -167,13 +153,7 @@ class problem_controller extends Controller
 	public function store(Request $request)
 	{
 		//dd($request->input('tag_id'));
-		if (
-			!in_array(Auth::user()->role->name, [
-				"admin",
-				"head_instructor",
-				"instructor",
-			])
-		) {
+		if (!in_array(Auth::user()->role->name, ["admin", "head_instructor", "instructor"])) {
 			abort(404);
 		}
 
@@ -206,12 +186,8 @@ class problem_controller extends Controller
 		$problem["user_id"] = Auth::user()->id;
 		$problem["allow_practice"] = $request->has("allow_practice");
 		$problem["sharable"] = $request->has("sharable");
-		$problem["allow_input_download"] = $request->has(
-			"allow_input_download",
-		);
-		$problem["allow_output_download"] = $request->has(
-			"allow_output_download",
-		);
+		$problem["allow_input_download"] = $request->has("allow_input_download");
+		$problem["allow_output_download"] = $request->has("allow_output_download");
 		$p = Problem::create($problem);
 		if ($tags != null) {
 			$p->tags()->sync($tags);
@@ -256,9 +232,7 @@ class problem_controller extends Controller
 			"all_languages" => Language::orderBy("sorting")->get(),
 			"messages" => [],
 			"languages" => $lang_of_problems,
-			"tree_dump" => shell_exec(
-				"tree -h " . $problem->get_directory_path(),
-			),
+			"tree_dump" => shell_exec("tree -h " . $problem->get_directory_path()),
 			"max_file_uploads" => ini_get("max_file_uploads"),
 			"all_tags" => Tag::all(),
 			"tags" => $tags,
@@ -285,12 +259,8 @@ class problem_controller extends Controller
 		$req = $request->input();
 		$req["allow_practice"] = $request->has("allow_practice");
 		$req["sharable"] = $request->has("sharable");
-		$problem["allow_input_download"] = $request->has(
-			"allow_input_download",
-		);
-		$problem["allow_output_download"] = $request->has(
-			"allow_output_download",
-		);
+		$problem["allow_input_download"] = $request->has("allow_input_download");
+		$problem["allow_output_download"] = $request->has("allow_output_download");
 
 		$problem->update($req);
 
@@ -311,11 +281,8 @@ class problem_controller extends Controller
 			->withErrors(["messages" => $messages]);
 	}
 
-	private function _take_test_file_upload(
-		Request $request,
-		Problem $problem,
-		&$messages,
-	) {
+	private function _take_test_file_upload(Request $request, Problem $problem, &$messages)
+	{
 		$up_dir = $request->tests_dir;
 		$up_zip = $request->tests_zip;
 		if (!$up_dir && !$up_zip) {
@@ -328,55 +295,30 @@ class problem_controller extends Controller
 		if (!file_exists($problem_dir)) {
 			mkdir($problem_dir, 0700, true);
 		}
-        $this->tmp_dir_name = sprintf("problem_upload_tmp_dir_%s_%s", Auth::user()->username, time());
+		$this->tmp_dir_name = sprintf("problem_upload_tmp_dir_%s_%s", Auth::user()->username, time());
 		if ($up_zip) {
 			//Upload Tests (zip file)
 			shell_exec("rm -f " . $assignments_root . "/*.zip");
 
 			$name_zip = $request->tests_zip->getClientOriginalName();
-			$path_zip = $request->tests_zip->storeAs(
-				"",
-				$name_zip,
-				"assignment_root",
-			);
+			$path_zip = $request->tests_zip->storeAs("", $name_zip, "assignment_root");
 
-			$this->_unload_zip_test_file(
-				$request,
-				$assignments_root,
-				$problem_dir,
-				$messages,
-				$name_zip,
-			);
+			$this->_unload_zip_test_file($request, $assignments_root, $problem_dir, $messages, $name_zip);
 		} else {
 			if ($up_dir) {
-				$this->_handle_test_dir_upload(
-					$request,
-					$assignments_root,
-					$up_dir,
-					$problem_dir,
-					$messages,
-				);
+				$this->_handle_test_dir_upload($request, $assignments_root, $up_dir, $problem_dir, $messages);
 			}
 		}
 	}
-	private function _unload_zip_test_file(
-		Request $request,
-		$assignments_root,
-		$problem_dir,
-		&$messages,
-		$name_zip,
-	) {
+	private function _unload_zip_test_file(Request $request, $assignments_root, $problem_dir, &$messages, $name_zip)
+	{
 		$tmp_dir = "$assignments_root/$this->tmp_dir_name";
 		shell_exec("rm -rf $tmp_dir; mkdir $tmp_dir;");
 
 		// get new name
 		$rename_inputoutput = $request->rename_zip;
 		// extract file
-		shell_exec(
-			"cd $assignments_root; unzip " .
-				escapeshellarg($name_zip) .
-				" -d $tmp_dir",
-		);
+		shell_exec("cd $assignments_root; unzip " . escapeshellarg($name_zip) . " -d $tmp_dir");
 
 		// Remove the zip file
 		shell_exec("cd $assignments_root; rm -rf " . escapeshellarg($name_zip));
@@ -426,20 +368,10 @@ class problem_controller extends Controller
 				// var_dump($problem_dir);die();$problem_dir."/out/output$i.txt"
 				for ($i = 0; $i < count($in); $i++) {
 					$real_id = $i + 1;
-					if (
-						!in_array(
-							$problem_dir . "/in/input$real_id.txt",
-							$in,
-						)
-					) {
+					if (!in_array($problem_dir . "/in/input$real_id.txt", $in)) {
 						$messages[] = "A file name input$real_id.txt seem to be missing in your folder";
 					} else {
-						if (
-							!in_array(
-								$problem_dir . "/out/output$real_id.txt",
-								$out,
-							)
-						) {
+						if (!in_array($problem_dir . "/out/output$real_id.txt", $out)) {
 							$messages[] = "A file name output$real_id.txt seem to be missing in your folder";
 						}
 					}
@@ -447,27 +379,17 @@ class problem_controller extends Controller
 			}
 		}
 
-
 		// Remove temp directory
 		shell_exec("rm -rf $tmp_dir");
 	}
 
-	private function _handle_test_dir_upload(
-		Request $request,
-		$assignments_root,
-		$up_dir,
-		$problem_dir,
-		&$messages,
-	) {
+	private function _handle_test_dir_upload(Request $request, $assignments_root, $up_dir, $problem_dir, &$messages)
+	{
 		$tmp_dir = "$assignments_root/$this->tmp_dir_name";
 		shell_exec("rm -rf $tmp_dir; mkdir $tmp_dir;");
 
 		foreach ($request->tests_dir as $item) {
-			$item->storeAs(
-				$this->tmp_dir_name,
-				$item->getClientOriginalName(),
-				"assignment_root",
-			);
+			$item->storeAs($this->tmp_dir_name, $item->getClientOriginalName(), "assignment_root");
 		}
 
 		// path data
@@ -475,8 +397,7 @@ class problem_controller extends Controller
 
 		//
 		if (!in_array($tmp_dir . "/desc.html", $data)) {
-			$messages[] =
-				"Your test folder doesn't have desc.html file for problem description";
+			$messages[] = "Your test folder doesn't have desc.html file for problem description";
 		}
 		$in = $out = $files = [];
 
@@ -497,8 +418,7 @@ class problem_controller extends Controller
 		}
 
 		if (!isset($files["desc.html"])) {
-			$messages[] =
-				"Your test folder doesn't have desc.html file for problem description";
+			$messages[] = "Your test folder doesn't have desc.html file for problem description";
 		}
 
 		for ($i = 1; $i < count($in); $i++) {
@@ -526,10 +446,7 @@ class problem_controller extends Controller
 		}
 
 		shell_exec("rm -rf $tmp_dir");
-
 	}
-
-
 
 	/**
 	 * Remove the specified resource from storage.
@@ -539,13 +456,7 @@ class problem_controller extends Controller
 	 */
 	public function destroy($id = null)
 	{
-		if (
-			!in_array(Auth::user()->role->name, [
-				"admin",
-				"head_instructor",
-				"instructor",
-			])
-		) {
+		if (!in_array(Auth::user()->role->name, ["admin", "head_instructor", "instructor"])) {
 			abort(404);
 		} elseif ($id === null) {
 			$json_result = ["done" => 0, "message" => "Input Error"];
@@ -560,14 +471,10 @@ class problem_controller extends Controller
 
 			if ($problem == null) {
 				$json_result = ["done" => 0, "message" => "Not found detailed"];
-			} elseif (
-				($problem["no_of_ass"] != 0) &
-				($problem["no_of_sub"] != 0)
-			) {
+			} elseif (($problem["no_of_ass"] != 0) & ($problem["no_of_sub"] != 0)) {
 				$json_result = [
 					"done" => 0,
-					"message" =>
-						"Problem already appear in assignments and got some submission should not be delete",
+					"message" => "Problem already appear in assignments and got some submission should not be delete",
 				];
 			} else {
 				$problem->delete();
@@ -579,11 +486,8 @@ class problem_controller extends Controller
 		return $json_result;
 	}
 
-	private function save_problem_description(
-		Problem $problem,
-		$text,
-		$type = "html",
-	) {
+	private function save_problem_description(Problem $problem, $text, $type = "html")
+	{
 		$problem_dir = $problem->get_directory_path();
 		if (file_put_contents("$problem_dir/desc.html", $text)) {
 			return true;
@@ -594,13 +498,7 @@ class problem_controller extends Controller
 
 	public function edit_description(Request $request, Problem $problem)
 	{
-		if (
-			!in_array(Auth::user()->role->name, [
-				"admin",
-				"head_instructor",
-				"instructor",
-			])
-		) {
+		if (!in_array(Auth::user()->role->name, ["admin", "head_instructor", "instructor"])) {
 			abort(404);
 		}
 		if ($this->save_problem_description($problem, $request->content)) {
@@ -608,7 +506,6 @@ class problem_controller extends Controller
 		}
 		return response("error", 500);
 	}
-
 
 	private function clean_up_old_problem_dir($problem_dir)
 	{
@@ -619,11 +516,8 @@ class problem_controller extends Controller
 		mkdir("$problem_dir/out", 0700, true);
 	}
 
-	public function download_testcases(
-		Problem $problem,
-		Assignment $assignment,
-		$type = null,
-	) {
+	public function download_testcases(Problem $problem, Assignment $assignment, $type = null)
+	{
 		$check = $assignment->can_submit(Auth::user(), $problem);
 		if (!$check->can_submit) {
 			// dd($problem);
@@ -641,21 +535,8 @@ class problem_controller extends Controller
 		}
 
 		$assignments_root = Setting::get("assignments_root");
-		$zipFile =
-			$assignments_root .
-			"/problem" .
-			(string) $problem->id .
-			"_" .
-			$type .
-			(string) date("Y-m-d_H-i") .
-			".zip";
-		$pathdir =
-			$assignments_root .
-			"/problems/" .
-			(string) $problem->id .
-			"/" .
-			$type .
-			"/";
+		$zipFile = $assignments_root . "/problem" . (string) $problem->id . "_" . $type . (string) date("Y-m-d_H-i") . ".zip";
+		$pathdir = $assignments_root . "/problems/" . (string) $problem->id . "/" . $type . "/";
 
 		// dd("cd $pathdir && zip -r $zipFile *");
 		$a = shell_exec("cd $pathdir && zip -r $zipFile *");
@@ -669,10 +550,9 @@ class problem_controller extends Controller
 		$probs = Problem::whereIn("id", $ids)->get()->load("user");
 
 		if (!in_array(Auth::user()->role->name, ["admin"])) {
-			$probs = $probs->reject(fn(Problem $prob, int $key)
-				=> !(
-					$prob->sharable && Auth::user()->role->name != "student"
-				) && $prob->user->id != Auth::user()->id
+			$probs = $probs->reject(
+				fn(Problem $prob, int $key) => !($prob->sharable && Auth::user()->role->name != "student") &&
+					$prob->user->id != Auth::user()->id,
 			);
 		}
 		$probs->load("languages")->load("tags");
@@ -688,7 +568,7 @@ class problem_controller extends Controller
 
 		foreach ($probs as $prob) {
 			$pathdir = $prob->get_directory_path();
-			if (!file_exists($pathdir)){
+			if (!file_exists($pathdir)) {
 				// Nothing to export,
 				// dd($pathdir);
 				mkdir($pathdir, 0700, true);
@@ -696,11 +576,7 @@ class problem_controller extends Controller
 			$metadata_file = $pathdir . "/problem.wecode.metadata.json";
 
 			file_put_contents($metadata_file, $prob->toJSON(JSON_PRETTY_PRINT));
-			$a = shell_exec(
-				"cd $pathdir/.. && zip -r $zipFile  " .
-					(string) $prob->id .
-					"/*",
-			);
+			$a = shell_exec("cd $pathdir/.. && zip -r $zipFile  " . (string) $prob->id . "/*");
 			unlink($metadata_file);
 		}
 
@@ -740,13 +616,11 @@ class problem_controller extends Controller
 		}
 
 		$lang_to_id = Language::all()->pluck("id", "name");
-		$tag_to_id = Tag::all()->pluck('id', 'text');
+		$tag_to_id = Tag::all()->pluck("id", "text");
 		$error_message = [];
 		foreach ($storage->directories($tmp_dir) as $prob_folder) {
 			try {
-				$metadata = json_decode(
-					$storage->get("$prob_folder/problem.wecode.metadata.json"),
-				);
+				$metadata = json_decode($storage->get("$prob_folder/problem.wecode.metadata.json"));
 
 				$problem = new Problem((array) $metadata);
 				$problem->id = null;
@@ -773,26 +647,16 @@ class problem_controller extends Controller
 
 				$metadata->tags ??= [];
 				$tag_ids = [];
-				foreach ($metadata->tags as $tag){
-					$tag_ids[] = $tag_to_id[$tag->text] ?? Tag::create(['text' => $tag->text])->id;
+				foreach ($metadata->tags as $tag) {
+					$tag_ids[] = $tag_to_id[$tag->text] ?? Tag::create(["text" => $tag->text])->id;
 				}
 				$problem->tags()->sync($tag_ids);
 
 				$storage->makeDirectory("problems/{$problem->id}/");
 
-				shell_exec(
-					"cp -r " .
-						escapeshellarg($storage->path($prob_folder)) .
-						"/* " .
-						$storage->path("problems/{$problem->id}/"),
-				);
+				shell_exec("cp -r " . escapeshellarg($storage->path($prob_folder)) . "/* " . $storage->path("problems/{$problem->id}/"));
 			} catch (\Exception $e) {
-				$error_message[] =
-					"Error importing problem " .
-					basename($prob_folder) .
-					" ==> " .
-					$e->getMessage() .
-					"\n";
+				$error_message[] = "Error importing problem " . basename($prob_folder) . " ==> " . $e->getMessage() . "\n";
 			}
 		}
 		$storage->deleteDirectory($tmp_dir);

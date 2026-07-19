@@ -115,9 +115,7 @@ class Scoreboard extends Model
 				$final_score > 0 // Only count problem with larger than 0 score
 			) {
 				$penalty[$username]->add(
-					$time +
-						($number_of_submissions[$username][$submission->problem_id] - 1) *
-							Setting::get("submit_penalty"),
+					$time + ($number_of_submissions[$username][$submission->problem_id] - 1) * Setting::get("submit_penalty"),
 					"seconds",
 				);
 			}

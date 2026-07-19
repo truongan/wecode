@@ -70,19 +70,9 @@ class submission_controller extends Controller
 		) {
 			if (
 				$assignment->user != Auth::user() &&
-				!Auth::user()
-					->lops()
-					->with("assignments")
-					->get()
-					->pluck("assignments")
-					->collapse()
-					->pluck("id")
-					->contains($assignment->id)
+				!Auth::user()->lops()->with("assignments")->get()->pluck("assignments")->collapse()->pluck("id")->contains($assignment->id)
 			) {
-				abort(
-					403,
-					"You can only view submissions for assignment you created or assignment belongs to one of your classes",
-				);
+				abort(403, "You can only view submissions for assignment you created or assignment belongs to one of your classes");
 			}
 		}
 
@@ -193,11 +183,7 @@ class submission_controller extends Controller
 			"problem" => ["integer", "gt:0"],
 		]);
 		// dd($request->input('language'));
-		$this->_creation_guard_check(
-			$request->input("assignment"),
-			$request->input("problem"),
-			$request->input("language"),
-		);
+		$this->_creation_guard_check($request->input("assignment"), $request->input("problem"), $request->input("language"));
 		if ($this->upload($request)) {
 			return redirect()->route("submissions.index", [$request->assignment, "all", "all", "all"]);
 		} else {
@@ -214,11 +200,7 @@ class submission_controller extends Controller
 		// We use assignments submit count in the name beause newly created submission has not been assigned an id yet.
 		$file_name = "solution-upload-count" . $submission->assignment->total_submits;
 
-		$path = $request->userfile->storeAs(
-			$user_dir,
-			$file_name . "." . $submission->language->extension,
-			"assignment_root",
-		);
+		$path = $request->userfile->storeAs($user_dir, $file_name . "." . $submission->language->extension, "assignment_root");
 
 		$this->add_to_queue($submission, $submission->assignment, $file_name);
 
@@ -289,9 +271,7 @@ class submission_controller extends Controller
 		if ($request->problem_id == "all") {
 			$submissions = Submission::where("assignment_id", $assignment->id)->get();
 		} else {
-			$submissions = Submission::where("assignment_id", $assignment->id)
-				->where("problem_id", $request->problem_id)
-				->get();
+			$submissions = Submission::where("assignment_id", $assignment->id)->where("problem_id", $request->problem_id)->get();
 		}
 
 		if ($submissions->count() == 0) {
@@ -466,11 +446,7 @@ class submission_controller extends Controller
 		}
 		$this->_do_access_check($submission);
 
-		$submit_path = Submission::get_relative_path(
-			$submission->user->username,
-			$submission->assignment_id,
-			$submission->problem_id,
-		);
+		$submit_path = Submission::get_relative_path($submission->user->username, $submission->assignment_id, $submission->problem_id);
 		$file_extension = $submission->language->extension;
 
 		if ($type == "code") {

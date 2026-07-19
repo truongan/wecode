@@ -2,24 +2,21 @@
 
 namespace App\Models;
 
-
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 class Language extends Model
 {
-    protected $fillable = ['name', 'extension','default_time_limit','default_memory_limit','sorting'];
+	protected $fillable = ["name", "extension", "default_time_limit", "default_memory_limit", "sorting"];
 
-    public static function order_languages()
-    {
-        $result = DB::table('languages')
-                ->orderBy('sorting', 'asc')
-                ->get();
+	public static function order_languages()
+	{
+		$result = DB::table("languages")->orderBy("sorting", "asc")->get();
 
-        return collect($result);
-    }
+		return collect($result);
+	}
 
-    public function get_id()
-    {
-        return $this->belongsToMany('App\Models\Problem');
-    }
+	public function get_id()
+	{
+		return $this->belongsToMany("App\Models\Problem");
+	}
 }
