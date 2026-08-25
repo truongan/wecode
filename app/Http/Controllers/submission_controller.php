@@ -506,6 +506,6 @@ class submission_controller extends Controller
 		$a = new verdict($submission);
 
 		$submission->rendered_verdict = $a->resolveView()->with($a->data())->render();
-		echo json_encode($submission);
+		return response()->json( json_encode($submission) );
 	}
 }

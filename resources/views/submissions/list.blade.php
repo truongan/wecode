@@ -200,7 +200,7 @@
 							><br />
 						</td>
 						<td class="js-verdict">
-							<x-submission.verdict :submission="$submission/">
+							<x-submission.verdict :submission=$submission/>
 						</td>
 						<td class="js-time">
 							@if (count($submission->judgement->mems ?? []) > 0 && $submission->pre_score == 10000)
