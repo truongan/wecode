@@ -11,7 +11,7 @@
         "prettier-plugin-tailwindcss": "^0.7.4"
     },
     "dependencies": {
-        "@tiptap/core": "^3.27.2",
+        "@tiptap/core": "^3.30.4",
         "@tiptap/extension-image": "^3.27.2",
         "@tiptap/extension-list": "^3.27.2",
         "@tiptap/extension-mathematics": "^3.27.2",
