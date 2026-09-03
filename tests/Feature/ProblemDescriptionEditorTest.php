@@ -35,8 +35,18 @@ class ProblemDescriptionEditorTest extends TestCase
 
 	private function cleanupProblemDirectory(Problem $problem): void
 	{
-		@unlink($problem->get_directory_path() . "desc.html");
+		foreach (glob($problem->get_directory_path() . "desc*.html") ?: [] as $description_file) {
+			@unlink($description_file);
+		}
 		@rmdir($problem->get_directory_path());
+	}
+
+	private function writeDescription(Problem $problem, string $file_name, string $content): void
+	{
+		if (!is_dir($problem->get_directory_path())) {
+			mkdir($problem->get_directory_path(), 0700, true);
+		}
+		file_put_contents($problem->get_directory_path() . $file_name, $content);
 	}
 
 	public function test_admin_sees_tiptap_editor_instead_of_ckeditor(): void
@@ -110,5 +120,35 @@ class ProblemDescriptionEditorTest extends TestCase
 		]);
 
 		$response->assertNotFound();
+	}
+	public function test_available_languages_lists_every_suffixed_description(): void
+	{
+		$problem = $this->makeProblem($this->makeUser(1));
+		$this->writeDescription($problem, "desc.vi.html", "<p>mô tả</p>");
+		$this->writeDescription($problem, "desc.en.html", "<p>statement</p>");
+		$this->writeDescription($problem, "desc.pt-br.html", "<p>enunciado</p>");
+
+		$this->assertSame(["en", "pt-br", "vi"], $problem->available_languages());
+
+		$this->cleanupProblemDirectory($problem);
+	}
+
+	public function test_available_languages_ignores_the_unsuffixed_and_unrelated_files(): void
+	{
+		$problem = $this->makeProblem($this->makeUser(1));
+		$this->writeDescription($problem, "desc.html", "<p>legacy</p>");
+		$this->writeDescription($problem, "desc.backup.old.html", "<p>backup</p>");
+		$this->writeDescription($problem, "desc.en.html", "<p>statement</p>");
+
+		$this->assertSame(["en"], $problem->available_languages());
+
+		$this->cleanupProblemDirectory($problem);
+	}
+
+	public function test_available_languages_is_empty_without_any_description(): void
+	{
+		$problem = $this->makeProblem($this->makeUser(1));
+
+		$this->assertSame([], $problem->available_languages());
 	}
 }

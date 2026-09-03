@@ -285,15 +285,16 @@ class problem_controller extends Controller
 	{
 		$up_dir = $request->tests_dir;
 		$up_zip = $request->tests_zip;
-		if (!$up_dir && !$up_zip) {
-			//             $messages = "Notice: You did not upload test case and description. If needed, upload by editing assignment.";
-			return;
-		}
 		$assignments_root = Setting::get("assignments_root");
 		$problem_dir = $problem->get_directory_path();
 
 		if (!file_exists($problem_dir)) {
 			mkdir($problem_dir, 0700, true);
+		}
+		
+		if (!$up_dir && !$up_zip) {
+			//             $messages = "Notice: You did not upload test case and description. If needed, upload by editing assignment.";
+			return;
 		}
 		$this->tmp_dir_name = sprintf("problem_upload_tmp_dir_%s_%s", Auth::user()->username, time());
 		if ($up_zip) {

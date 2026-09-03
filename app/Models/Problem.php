@@ -123,6 +123,27 @@ class Problem extends Model
 		return $template_file;
 	}
 
+	/**
+	 * Language codes this problem has a `desc.<language>.html` file for,
+	 * sorted alphabetically.
+	 *
+	 * @return list<string>
+	 */
+	public function available_languages(): array
+	{
+		$languages = [];
+
+		foreach (glob($this->get_directory_path() . "desc.*.html") ?: [] as $description_file) {
+			if (preg_match("/^desc\\.([a-z]{2}(?:-[a-z]{2})?)\\.html$/", basename($description_file), $matches)) {
+				$languages[] = $matches[1];
+			}
+		}
+
+		sort($languages);
+
+		return $languages;
+	}
+
 	public function description()
 	{
 		$problem_dir = $this->get_directory_path($this->id);
