@@ -321,7 +321,7 @@
 				paging: false,
 				{{-- "pageLength": 60, --}}
 				{{-- "ordering":false, --}}
-				order: ["0", "desc"],
+					order: [0, "desc"],
 				columns: [
 					null,
 					null,

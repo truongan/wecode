@@ -26,13 +26,13 @@
         "bootstrap": "^5.3.8",
         "bootstrap-icons": "^1.13.1",
         "bootswatch": "^5.3.8",
-        "datatables.net": "^2.3.8",
-        "datatables.net-bs5": "^2.3.8",
+        "datatables.net": "^3.0.3",
+        "datatables.net-bs5": "^3.0.3",
         "frappe-charts": "^1.6.2",
         "katex": "^0.18.5",
         "npm-check": "^6.0.1",
         "prismjs": "^1.30.0",
-        "slim-select": "^3.6.1",
+        "slim-select": "^4.2.2",
         "sortablejs": "^1.15.7"
     }
 }

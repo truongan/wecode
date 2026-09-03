@@ -3,7 +3,7 @@
 	/* Colors */
 	--ss-primary-color: var(--bs-primary-text-emphasis);
 	--ss-bg-color: var(--bs-body-bg);
-	--ss-font-color: color: var(--bs-body-color);
+	--ss-font-color: var(--bs-body-color);
 	--ss-border-color: var(--bs-border-color);
 	--ss-border-radius: 14px;
 }
