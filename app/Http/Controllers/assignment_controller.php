@@ -243,7 +243,7 @@ class assignment_controller extends Controller
 		return redirect("assignments");
 	}
 
-	private function collect_problem_data_to_show(Assignment $assignment, $problem_id)
+	private function collect_problem_data_to_show(Assignment $assignment, $problem_id, ?string $language = "")
 	{
 		$assignment_id = $assignment->id;
 
@@ -268,7 +268,7 @@ class assignment_controller extends Controller
 		}
 
 		$problem = Problem::find($problem_id);
-		$result = $problem->description();
+		$result = $problem->description($language);
 		$problem["has_pdf"] = $result["has_pdf"];
 		$problem["description"] = $result["description"];
 		$problem["has_template"] = $result["has_template"];
@@ -347,9 +347,9 @@ class assignment_controller extends Controller
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function show(Assignment $assignment, $problem_id)
+	public function show(Assignment $assignment, $problem_id, ?string $language = "")
 	{
-		$data = $this->collect_problem_data_to_show($assignment, $problem_id);
+		$data = $this->collect_problem_data_to_show($assignment, $problem_id, $language);
 
 		$user = Auth::user();
 		$user->selected_assignment_id = $assignment->id;

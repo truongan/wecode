@@ -1,6 +1,12 @@
 @extends("layouts.app")
 @php($selected ?? ($selected = "assignments"))
 @php($can_edit_description = in_array(Auth::user()->role->name, ["admin", "head_instructor"]))
+{{-- Both practices.show and assignments.show carry the description language as an optional {language?} segment. --}}
+@php($description_language = request()->route("language") ?? "")
+{{-- Same page, same route parameters, only the language segment swapped out. --}}
+@php($language_route_parameters = array_merge(request()->route()->parameters(), ["language" => "__language__"]))
+@php($add_language_link = route(request()->route()->getName(), $language_route_parameters))
+@php($edit_description_link = route("problems.edit_description", [ "problem" => $problem->id, "language" => $description_language ]))
 @if ($all_problems != null)
 	@php($pdf_route = route("assignments.show_pdf", ["assignment" => $assignment, "problem" => $problem]))
 @else
@@ -47,7 +53,7 @@
 				><a
 					href="{{ route('problems.download_testcases', ['problem' => $problem->id, 'assignment' => ($all_problems != NULL ? $assignment->id : 0), 'type' => 'in'] ) }}"
 					class="link-dark"
-					><i class="bi bi-download text-success"></i> Download testcases' input</a
+					><i class="bi bi-download text-success"></i>testcases' input</a
 				></span
 			>
 		@endif
@@ -56,13 +62,30 @@
 				><a
 					href="{{ route('problems.download_testcases', ['problem' => $problem->id, 'assignment' => ($all_problems != NULL ? $assignment->id : 0), 'type' => 'out'] ) }}"
 					class="link-dark"
-					><i class="bi bi-download text-primary"></i> Download testcases' output</a
+					><i class="bi bi-download text-primary"></i>testcases' output</a
 				></span
 			>
 		@endif
+		<span class="fs-6 ms-4">
+			<i class="bi bi-translate"></i>
+			@foreach ($problem->available_languages() as $one_language)
+				<a
+					href="{{ route(request()->route()->getName(), array_merge(request()->route()->parameters(), ["language" => $one_language])) }}"
+					class="ms-1 {{ $one_language === $description_language ? "fw-bold link-dark" : "link-dark-subtle" }}"
+					>{{ $one_language === "" ? "default" : $one_language }}</a
+				>
+			@endforeach
+			@if ($can_edit_description)
+
+			@endif
+		</span>
 		@if ($can_edit_description)
 			<span class="fs-6 ms-4 ms-auto"
-				><a href="#" class="btn btn-secondary save-button"><i class="bi bi-save"></i> Save</a></span
+				>
+					<a href="#" class="add-language-button link-dark-subtle ms-2" title="Add a description in another language"
+						><i class="bi bi-plus-lg"></i> Add language</a
+					>
+					<a href="#" class="btn btn-secondary save-button"><i class="bi bi-save"></i> Save</a></span
 			>
 		@endif
 
@@ -85,7 +108,7 @@
 					$(".save-button").click(function () {
 						$.ajax({
 							type: "POST",
-							url: "{{ route("problems.edit_description", $problem->id) }}",
+							url: "{{ $edit_description_link }}",
 							data: {
 								_token: "{{ csrf_token() }}",
 								content: getCurrentHtml(),
@@ -100,6 +123,21 @@
 								notify("Error while saving", { position: "bottom right", className: "error", autoHideDelay: 3500 });
 							},
 						});
+					});
+
+					// Adding a language only opens its (still empty) description;
+					// saving there is what creates desc.<language>.html.
+					$(".add-language-button").click(function (event) {
+						event.preventDefault();
+						const language = (window.prompt("Language code of the new description (e.g. en, vi, ja)") || "").trim().toLowerCase();
+						if (language === "") {
+							return;
+						}
+						if (!/^[a-z]{2}(-[a-z]{2})?$/.test(language)) {
+							notify("Invalid language code", { position: "bottom right", className: "error", autoHideDelay: 3500 });
+							return;
+						}
+						window.location = "{{ $add_language_link }}".replace("__language__", language);
 					});
 				});
 			</script>

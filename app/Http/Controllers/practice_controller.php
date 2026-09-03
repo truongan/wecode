@@ -64,14 +64,14 @@ class practice_controller extends Controller
 		return view("practice", ["problems" => $problems, "selected" => "practice"]);
 	}
 
-	public function show(Problem $problem)
+	public function show(Problem $problem, ?string $language = "")
 	{
 		// $problem = Problem::find($problem_id);
 		if (!$problem->can_practice(Auth::user())) {
 			abort(403, "This problem is not available for practice to you");
 		}
 
-		$result = $problem->description();
+		$result = $problem->description($language);
 
 		$problem = Problem::find($problem->id);
 		$problem["has_pdf"] = $result["has_pdf"];

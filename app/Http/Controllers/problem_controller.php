@@ -487,22 +487,22 @@ class problem_controller extends Controller
 		return $json_result;
 	}
 
-	private function save_problem_description(Problem $problem, $text, $type = "html")
+	private function save_problem_description(Problem $problem, $text, ?string $language = "")
 	{
 		$problem_dir = $problem->get_directory_path();
-		if (file_put_contents("$problem_dir/desc.html", $text)) {
+		if (file_put_contents($problem_dir . $problem->description_file_name($language), $text)) {
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	public function edit_description(Request $request, Problem $problem)
+	public function edit_description(Request $request, Problem $problem, ?string $language = "")
 	{
 		if (!in_array(Auth::user()->role->name, ["admin", "head_instructor", "instructor"])) {
 			abort(404);
 		}
-		if ($this->save_problem_description($problem, $request->content)) {
+		if ($this->save_problem_description($problem, $request->content, $language)) {
 			return response("success");
 		}
 		return response("error", 500);

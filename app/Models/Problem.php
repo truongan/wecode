@@ -125,7 +125,8 @@ class Problem extends Model
 
 	/**
 	 * Language codes this problem has a `desc.<language>.html` file for,
-	 * sorted alphabetically.
+	 * sorted alphabetically. The unsuffixed `desc.html` counts as the empty
+	 * language code, so it sorts first.
 	 *
 	 * @return list<string>
 	 */
@@ -133,9 +134,9 @@ class Problem extends Model
 	{
 		$languages = [];
 
-		foreach (glob($this->get_directory_path() . "desc.*.html") ?: [] as $description_file) {
-			if (preg_match("/^desc\\.([a-z]{2}(?:-[a-z]{2})?)\\.html$/", basename($description_file), $matches)) {
-				$languages[] = $matches[1];
+		foreach (glob($this->get_directory_path() . "desc*.html") ?: [] as $description_file) {
+			if (preg_match("/^desc(?:\\.([a-z]{2}(?:-[a-z]{2})?))?\\.html$/", basename($description_file), $matches)) {
+				$languages[] = $matches[1] ?? "";
 			}
 		}
 
@@ -144,7 +145,27 @@ class Problem extends Model
 		return $languages;
 	}
 
-	public function description()
+	/**
+	 * Name of the description file of one language. Anything that is not a
+	 * plain language tag, the empty default included, is the unsuffixed
+	 * `desc.html`.
+	 */
+	public function description_file_name(?string $language = ""): string
+	{
+		if (!preg_match("/^[a-z]{2}(-[a-z]{2})?$/", (string) $language)) {
+			return "desc.html";
+		}
+
+		return "desc." . $language . ".html";
+	}
+
+	/**
+	 * Description of the problem, taken from the `desc.<language>.html` file
+	 * of `$language`, or from `desc.html` for the default empty language.
+	 *
+	 * @return array{description: string, has_pdf: bool, has_template: bool}
+	 */
+	public function description(?string $language = "")
 	{
 		$problem_dir = $this->get_directory_path($this->id);
 
@@ -154,7 +175,7 @@ class Problem extends Model
 			"has_template" => glob("$problem_dir/template.cpp") != false,
 		];
 
-		$path = "$problem_dir/desc.html";
+		$path = $problem_dir . $this->description_file_name($language);
 
 		if (file_exists($path)) {
 			$result["description"] = file_get_contents($path);

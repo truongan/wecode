@@ -58,7 +58,7 @@ Route::get("/problems/downloadtestcases/{problem}/{assignment}/{type}", [
 ])->name("problems.download_testcases");
 Route::get("/problems/export", [App\Http\Controllers\problem_controller::class, "export"])->name("problems.export");
 Route::post("/problems/import", [App\Http\Controllers\problem_controller::class, "import"])->name("problems.import");
-Route::post("/problems/edit_description/{problem}", [
+Route::post("/problems/edit_description/{problem}/{language?}", [
 	App\Http\Controllers\problem_controller::class,
 	"edit_description",
 ])->name("problems.edit_description");
@@ -114,9 +114,9 @@ Route::post("/queue/{item}/unlock", [App\Http\Controllers\queue_controller::clas
 Route::post("/queue/empty", [App\Http\Controllers\queue_controller::class, "empty"])->name("queue.empty");
 
 Route::get("/practice", [App\Http\Controllers\practice_controller::class, "index"])->name("practice");
-Route::get("/practice/show/{problem}", [App\Http\Controllers\practice_controller::class, "show"])->name(
-	"practices.show",
-);
+Route::get("/practice/show/{problem}/{language?}", [App\Http\Controllers\practice_controller::class, "show"])
+	->where(["language" => "[a-z]{2}(-[a-z]{2})?"])
+	->name("practices.show");
 Route::get("/practice/show/{problem}/pdf", [App\Http\Controllers\practice_controller::class, "show_pdf"])->name(
 	"practices.show_pdf",
 );
@@ -125,8 +125,11 @@ Route::get("/scoreboard/full/{id}", [App\Http\Controllers\scoreboard_controller:
 	"scoreboards.index",
 );
 
-Route::get("/assignment/{assignment}/{problem_id}/", [App\Http\Controllers\assignment_controller::class, "show"])
-	->where(["assignment" => "[0-9]+", "problem_id" => "[0-9]+"])
+Route::get("/assignment/{assignment}/{problem_id}/{language?}", [
+	App\Http\Controllers\assignment_controller::class,
+	"show",
+])
+	->where(["assignment" => "[0-9]+", "problem_id" => "[0-9]+", "language" => "[a-z]{2}(-[a-z]{2})?"])
 	->name("assignments.show");
 Route::get("/assignment/{assignment}/{problem}/pdf", [App\Http\Controllers\assignment_controller::class, "show_pdf"])
 	->where(["assignment" => "[0-9]+", "problem" => "[0-9]+"])
