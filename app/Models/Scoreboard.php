@@ -250,7 +250,7 @@ class Scoreboard extends Model
 		// Minify the scoreboard's html code
 		// $scoreboard_table = $this->output->minify($scoreboard_table, 'text/html');
 
-		$scoreboard_table = str_replace(["\n", "\r", "\t"], "", $scoreboard_table);
+		$scoreboard_table = str_replace(["\n", "\r", "\t"], " ", $scoreboard_table);
 		$scoreboard_table = preg_replace("/ {2,}/", " ", $scoreboard_table);
 
 		//

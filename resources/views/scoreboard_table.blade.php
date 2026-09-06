@@ -33,10 +33,9 @@
 		<tr>
 			<td>{{ $loop->index + 1 }}</td>
 			<td>
-				<a
-					href="{{ route('submissions.index', ['assignment_id' => $assignment_id, 'problem_id' => 'all', 'user_id' => $scores[$sc_username]['id'] , 'choose' => 'all']) }}"
-					>{{ $sc_username }}</a
-				>
+				<a href="{{ route('submissions.index', ['assignment_id' => $assignment_id, 'problem_id' => 'all', 'user_id' => $scores[$sc_username]['id'] , 'choose' => 'all']) }}">
+					{{ $sc_username }}
+				</a>
 			</td>
 			<td>{{ $names[$sc_username] }}</td>
 			<td>{{ $scoreboard["lops"][$sc_username] ?? "none" }}</td>
@@ -61,8 +60,7 @@
 			@foreach ($problems as $problem)
 				<td>
 					@if (isset($scores[$sc_username][$problem->id]["score"]))
-						<a
-							href="{{ route('submissions.index', ['assignment_id' => $assignment_id, 'problem_id' => $problem->id, 'user_id' => $scores[$sc_username]['id'] , 'choose' => 'all']) }}"
+						<a href="{{ route('submissions.index', ['assignment_id' => $assignment_id, 'problem_id' => $problem->id, 'user_id' => $scores[$sc_username]['id'] , 'choose' => 'all']) }}"
 							class="lead
                     @if ($scores[$sc_username][$problem->id]['fullmark'] == true)
                         text-success"

@@ -80,12 +80,11 @@
 			@endif
 		</span>
 		@if ($can_edit_description)
-			<span class="fs-6 ms-4 ms-auto"
+			<span class="fs-6 ms-4 ms-auto">
+				<a href="#" class="add-language-button link-dark-subtle ms-2" title="Add a description in another language"
+					><i class="bi bi-plus-lg"></i> Add language</a
 				>
-					<a href="#" class="add-language-button link-dark-subtle ms-2" title="Add a description in another language"
-						><i class="bi bi-plus-lg"></i> Add language</a
-					>
-					<a href="#" class="btn btn-secondary save-button"><i class="bi bi-save"></i> Save</a></span
+				<a href="#" class="btn btn-secondary save-button"><i class="bi bi-save"></i> Save</a></span
 			>
 		@endif
 
@@ -127,9 +126,9 @@
 
 					// Adding a language only opens its (still empty) description;
 					// saving there is what creates desc.<language>.html.
-					$(".add-language-button").click(function (event) {
+					document.querySelector(".add-language-button").addEventListener("click", function (event) {
 						event.preventDefault();
-						const language = (window.prompt("Language code of the new description (e.g. en, vi, ja)") || "").trim().toLowerCase();
+						const language = (window.prompt("Language code of the new description (you can view list of languages code here: https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes)") || "").trim().toLowerCase();
 						if (language === "") {
 							return;
 						}

@@ -175,7 +175,7 @@
 											"--- removed ---"
 									}}
 							@endif
-							</a> />
+							</a>
 							<a href="{{route('submissions.create', [$assignment->id,$submission->problem_id,$submission->id])}}"
 								><span class="btn btn-dark btn-sm"><i class="bi bi-pencil-square"></i></span
 							></a>
