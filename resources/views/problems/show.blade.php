@@ -68,16 +68,15 @@
 		@endif
 		<span class="fs-6 ms-4">
 			<i class="bi bi-translate"></i>
-			@foreach ($problem->available_languages() as $one_language)
-				<a
-					href="{{ route(request()->route()->getName(), array_merge(request()->route()->parameters(), ["language" => $one_language])) }}"
-					class="ms-1 {{ $one_language === $description_language ? "fw-bold link-dark" : "link-dark-subtle" }}"
-					>{{ $one_language === "" ? "default" : $one_language }}</a
-				>
-			@endforeach
-			@if ($can_edit_description)
-
-			@endif
+			<div class="list-group list-group-horizontal d-inline-flex align-middle ms-1">
+				@foreach ($problem->available_languages() as $one_language)
+					<a
+						href="{{ route(request()->route()->getName(), array_merge(request()->route()->parameters(), ["language" => $one_language])) }}"
+						class="list-group-item list-group-item-action py-1 px-2 {{ $one_language === $description_language ? "active" : "" }}"
+						>{{ $one_language === "" ? "default" : $one_language }}</a
+					>
+				@endforeach
+			</div>
 		</span>
 		@if ($can_edit_description)
 			<span class="fs-6 ms-4 ms-auto">
