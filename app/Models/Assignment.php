@@ -80,11 +80,25 @@ class Assignment extends Model
 		"description",
 		"user_id",
 		"language_ids",
+		"allowed_problem_description_languages",
 	];
 	protected $casts = [
 		"start_time" => "datetime",
 		"finish_time" => "datetime",
 	];
+
+	/**
+	 * Description language codes this assignment is limited to, or null when
+	 * every language is allowed.
+	 *
+	 * @return list<string>|null
+	 */
+	public function allowed_description_languages(): ?array
+	{
+		$codes = preg_split("/\\s*,\\s*/", trim((string) $this->allowed_problem_description_languages), -1, PREG_SPLIT_NO_EMPTY);
+
+		return $codes ? array_values($codes) : null;
+	}
 
 	public function problems()
 	{

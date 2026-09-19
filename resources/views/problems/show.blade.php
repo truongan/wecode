@@ -2,7 +2,8 @@
 @php($selected ?? ($selected = "assignments"))
 @php($can_edit_description = in_array(Auth::user()->role->name, ["admin", "head_instructor"]))
 {{-- Both practices.show and assignments.show carry the description language as an optional {language?} segment. --}}
-@php($description_language = request()->route("language") ?? "")
+@php($description_language = $description_language ?? (request()->route("language") ?? ""))
+@php($available_languages = $available_languages ?? $problem->available_languages())
 {{-- Same page, same route parameters, only the language segment swapped out. --}}
 @php($language_route_parameters = array_merge(request()->route()->parameters(), ["language" => "__language__"]))
 @php($add_language_link = route(request()->route()->getName(), $language_route_parameters))
@@ -69,7 +70,7 @@
 		<span class="fs-6 ms-4">
 			<i class="bi bi-translate"></i>
 			<div class="list-group list-group-horizontal d-inline-flex align-middle ms-1">
-				@foreach ($problem->available_languages() as $one_language)
+				@foreach ($available_languages as $one_language)
 					<a
 						href="{{ route(request()->route()->getName(), array_merge(request()->route()->parameters(), ["language" => $one_language])) }}"
 						class="list-group-item list-group-item-action py-1 px-2 {{ $one_language === $description_language ? "active" : "" }}"

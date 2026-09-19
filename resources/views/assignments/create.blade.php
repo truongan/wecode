@@ -310,6 +310,31 @@
 							</select>
 						</div>
 					</div>
+
+					<div class="mt-2 row">
+						<div class="col-sm-4">
+							<label for="form_description_languages">
+								Limit description language
+								<small class="form-text text-muted"
+									>comma separated language codes such as <code>en, vi</code>; leave empty to show every description language
+								</small>
+							</label>
+						</div>
+
+						<div class="col-sm-8">
+							<input
+								type="text"
+								name="allowed_problem_description_languages"
+								id="form_description_languages"
+								class="form-control @error('allowed_problem_description_languages') is-invalid @enderror"
+								placeholder="en, vi"
+								value="{{ $edit ? $assignment->allowed_problem_description_languages : old('allowed_problem_description_languages') }}"
+							/>
+							@error('allowed_problem_description_languages')
+								<div class="invalid-feedback">Use language codes like en or pt-br, separated by commas.</div>
+							@enderror
+						</div>
+					</div>
 				</div>
 			</div>
 

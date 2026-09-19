@@ -22,6 +22,8 @@ use ZipArchive;
 
 class assignment_controller extends Controller
 {
+	private const ALLOWED_PROBLEM_DESCRIPTION_LANGUAGES_PATTERN = "/^\\s*[a-z]{2}(-[a-z]{2})?(\\s*,\\s*[a-z]{2}(-[a-z]{2})?)*\\s*$/i";
+
 	protected static function dummy_problem()
 	{
 		$problem = new class {};
@@ -184,6 +186,11 @@ class assignment_controller extends Controller
 		))->setTimezone($zone);
 
 		$request["language_ids"] = implode(", ", $request["language_ids"]);
+
+		$allowed_problem_description_languages = array_unique(
+			preg_split("/\\s*,\\s*/", strtolower(trim($request["allowed_problem_description_languages"] ?? "")), -1, PREG_SPLIT_NO_EMPTY),
+		);
+		$request["allowed_problem_description_languages"] = $allowed_problem_description_languages ? implode(", ", $allowed_problem_description_languages) : null;
 	}
 
 	/**
@@ -201,6 +208,7 @@ class assignment_controller extends Controller
 		$validated = $request->validate([
 			"name" => ["required", "max:150"],
 			"pdf_file" => "mimes:pdf",
+			"allowed_problem_description_languages" => ["nullable", "regex:" . self::ALLOWED_PROBLEM_DESCRIPTION_LANGUAGES_PATTERN],
 		]);
 
 		$input = $request->input();
@@ -268,6 +276,8 @@ class assignment_controller extends Controller
 		}
 
 		$problem = Problem::find($problem_id);
+		$data["available_languages"] = $assignment->allowed_description_languages() ?? $problem->available_languages();
+
 		$result = $problem->description($language);
 		$problem["has_pdf"] = $result["has_pdf"];
 		$problem["description"] = $result["description"];
@@ -349,6 +359,15 @@ class assignment_controller extends Controller
 	 */
 	public function show(Assignment $assignment, $problem_id, ?string $language = "")
 	{
+		$allowed_languages = $assignment->allowed_description_languages();
+		if (Auth::user()->role->name == "student" && $allowed_languages !== null && !in_array($language, $allowed_languages, true)) {
+			return redirect()->route("assignments.show", [
+				"assignment" => $assignment->id,
+				"problem_id" => $problem_id,
+				"language" => $allowed_languages[0],
+			]);
+		}
+
 		$data = $this->collect_problem_data_to_show($assignment, $problem_id, $language);
 
 		$user = Auth::user();
@@ -471,6 +490,7 @@ class assignment_controller extends Controller
 		$validated = $request->validate([
 			"name" => ["required", "max:150"],
 			"pdf" => "mimes:pdf",
+			"allowed_problem_description_languages" => ["nullable", "regex:" . self::ALLOWED_PROBLEM_DESCRIPTION_LANGUAGES_PATTERN],
 		]);
 
 		$input = $request->input();
