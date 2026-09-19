@@ -490,7 +490,7 @@
 			});
 		});
 
-		$("table").DataTable({
+		new DataTable("table", {
 			paging: false,
 			{{-- "ordering": false, --}}
 			order: [[0, "desc"]],

@@ -80,7 +80,7 @@
 	<script type="text/javascript" src="{{ asset('assets/DataTables/datatables.min.js') }}"></script>
 	<script>
 		document.addEventListener("DOMContentLoaded", function () {
-			var t = $("table").DataTable({
+			var t = new DataTable("table", {
 				paging: false,
 				ordering: true,
 				order: [[3, "desc"]],

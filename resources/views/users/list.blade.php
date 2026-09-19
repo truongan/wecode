@@ -143,7 +143,7 @@ thead tr:after {
 		 * "Users" page
 		 */
 		document.addEventListener("DOMContentLoaded", function () {
-			var table = $("table").DataTable({
+			var table = new DataTable("table", {
 				serverSide: true,
 				ajax: "{{ route("users.data") }}",
 				pageLength: 50,
@@ -158,17 +158,17 @@ thead tr:after {
 						name: "id",
 						orderable: true,
 						searchable: false,
-						render: $.fn.dataTable.render.number(),
+						render: DataTable.render.number(),
 					},
 					{
 						data: "username",
 						name: "username",
-						render: $.fn.dataTable.render.text(),
+						render: DataTable.render.text(),
 						createdCell: function (cell) {
 							cell.id = "un";
 						},
 					},
-					{ data: "display_name", name: "display_name", render: $.fn.dataTable.render.text() },
+					{ data: "display_name", name: "display_name", render: DataTable.render.text() },
 					{
 						data: null,
 						name: "email",
@@ -176,7 +176,7 @@ thead tr:after {
 							return escapeHtml(row.email) + "<br>" + escapeHtml(row.role_name);
 						},
 					},
-					{ data: "trial_end", orderable: false, searchable: false, render: $.fn.dataTable.render.text() },
+					{ data: "trial_end", orderable: false, searchable: false, render: DataTable.render.text() },
 					{
 						data: "first_login",
 						name: "first_login_time",

@@ -40,17 +40,16 @@ class DataTablesUpgradeTest extends TestCase
 	}
 
 	/**
-	 * The Blade views drive DataTables through jQuery ($("table").DataTable()) and
-	 * the render helpers ($.fn.dataTable.render.text/number), which DataTables 3
-	 * only wires up when jQuery is already on the page.
+	 * The Blade views drive DataTables through the standalone entry points
+	 * (`new DataTable(selector, options)` and `DataTable.render.text/number`),
+	 * so the bundle has to keep exposing the browser global without jQuery.
 	 */
-	public function test_synced_bundle_keeps_the_jquery_entry_points_the_views_use(): void
+	public function test_synced_bundle_exposes_the_standalone_entry_points_the_views_use(): void
 	{
 		$contents = file_get_contents(public_path("assets/DataTables/datatables.min.js"));
 
-		$this->assertStringContainsString("fn.dataTable", $contents);
-		$this->assertStringContainsString("fn.DataTable", $contents);
-		$this->assertMatchesRegularExpression('/\.jQuery\s*&&/', $contents);
+		$this->assertStringContainsString("window.DataTable", $contents);
+		$this->assertStringContainsString(".render", $contents);
 	}
 
 	public function test_synced_stylesheet_is_the_bootstrap5_theme(): void

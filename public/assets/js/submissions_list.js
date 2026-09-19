@@ -163,7 +163,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	setTimeout(update_status, update_status_interval);
 
-	$(".data-table").DataTable({
+	new DataTable(".data-table", {
 		pageLength: 50,
 		lengthMenu: [
 			[20, 50, 100, 200, -1],

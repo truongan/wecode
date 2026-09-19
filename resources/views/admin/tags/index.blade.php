@@ -101,7 +101,7 @@
 				$("#tag_delete").modal("show");
 			});
 
-			$("table").DataTable({
+			new DataTable("table", {
 				pageLength: 10,
 				lengthMenu: [
 					[10, 20, 30, 50, -1],

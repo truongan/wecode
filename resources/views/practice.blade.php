@@ -92,7 +92,7 @@
 	<script type="text/javascript" src="{{ asset('assets/DataTables/datatables.min.js') }}"></script>
 	<script>
 		document.addEventListener("DOMContentLoaded", function () {
-			$("table").DataTable({
+			new DataTable("table", {
 				paging: false,
 				ordering: false,
 			});

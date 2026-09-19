@@ -33,7 +33,7 @@
 	<script type="text/javascript" src="{{ asset('assets/DataTables/datatables.min.js') }}"></script>
 	<script>
 		document.addEventListener("DOMContentLoaded", function () {
-			$("table").DataTable({
+			new DataTable("table", {
 				pageLength: 10,
 				lengthMenu: [
 					[10, 20, 30, 50, -1],

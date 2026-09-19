@@ -317,7 +317,7 @@
 				});
 			});
 
-			$("table").DataTable({
+			new DataTable("table", {
 				paging: false,
 				{{-- "pageLength": 60, --}}
 				{{-- "ordering":false, --}}
