@@ -252,7 +252,7 @@
 									<i
 										style="cursor: pointer"
 										data-bs-toggle="tooltip"
-										data-id='{{ "toggle." .  $item->id}}'
+										data-id='{{ "practice." .  $item->id}}'
 										title="Green icon means this problem is available for practice, Black icon for otherwise"
 										class="toggle_practice-share bi bi-activity fs-4 clickable .stretched-link
 							@if( $item->allow_practice)
@@ -268,7 +268,7 @@
 									<i
 										style="cursor: pointer"
 										data-bs-toggle="tooltip"
-										data-id='{{'share.' . $item->id}}'
+										data-id='{{'sharable.' . $item->id}}'
 										title="Green icon means this problem is shared among instructors. Black icon means it is only visible  to its author and admins"
 										class="toggle_practice-share bi bi-share-fill fs-4 clickable .stretched-link
 						@if( $item->sharable)
@@ -327,7 +327,7 @@
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLongTitle">Are you sure you want to delete this tag?</h5>
+					<h5 class="modal-title" id="exampleModalLongTitle">Are you sure you want to delete this Problem?</h5>
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-footer">
@@ -464,32 +464,32 @@
 					}).toString();
 			};
 
-			$(".del_n").click(function () {
-				var row = $(this).parents("tr");
-				var id = row.data("id");
-				$(".confirm-tag-delete").off();
-				$(".confirm-tag-delete").click(function () {
-					$("#problem_delete").modal("hide");
-					$.ajax({
-						type: "DELETE",
-						url: "{{ route("problems.index") }}/" + id,
-						data: {
-							_token: "{{ csrf_token() }}",
-						},
-						error: shj.loading_error,
-						success: function (response) {
-							if (response.done) {
-								row.animate({ backgroundColor: "#FF7676" }, 100, function () {
+			document.querySelectorAll(".del_n").forEach((button) =>
+				button.addEventListener("click", () => {
+					var row = button.closest("tr");
+					var id = row.dataset.id;
+					var modal = bootstrap.Modal.getOrCreateInstance(document.getElementById("problem_delete"));
+					document.querySelector(".confirm-tag-delete").onclick = () => {
+						modal.hide();
+						fetch("{{ route("problems.index") }}/" + id, {
+							method: "DELETE",
+							headers: {
+								Accept: "application/json",
+								"X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
+							},
+						})
+							.then((response) => response.json())
+							.then((response) => {
+								if (response.done) {
 									row.remove();
-								});
-								notify("problem deleted", { position: "bottom right", className: "success", autoHideDelay: 5000 });
-								$("#problem_delete").modal("hide");
-							} else shj.loading_failed(response.message);
-						},
-					});
-				});
-				$("#problem_delete").modal("show");
-			});
+									notify("problem deleted", { position: "bottom right", className: "success", autoHideDelay: 5000 });
+								} else shj.loading_failed(response.message);
+							})
+							.catch(() => shj.loading_error());
+					};
+					modal.show();
+				}),
+			);
 		});
 
 		new DataTable("table", {
@@ -503,26 +503,26 @@
 				"click",
 				(ev) => {
 					var icon = ev.target;
-					console.log(icon);
-					$.ajax({
-						type: "POST",
-						url: "{{ route("problems.toggle_practice") }}/" + icon.dataset.id,
-						data: {
-							_token: "{{ csrf_token() }}",
+					fetch("{{ route("problems.toggle_practice") }}/" + icon.dataset.id, {
+						method: "POST",
+						headers: {
+							"X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
 						},
-						error: shj.loading_error,
-						success: function (response) {
-							console.log(response);
-							console.log(icon);
+					})
+						.then((response) => {
+							if (!response.ok) throw new Error(response.statusText);
+							return response.text();
+						})
+						.then((response) => {
 							icon.classList.remove("text-success");
 							icon.classList.remove("text-body-tertiary");
 							if (response == "1") {
 								icon.classList.add("text-success");
 							} else if (response == "") {
 								icon.classList.add("text-body-tertiary");
-							} else shj.loading_failed(response.message);
-						},
-					});
+							} else shj.loading_failed(response);
+						})
+						.catch(() => shj.loading_error());
 				},
 				false,
 			);

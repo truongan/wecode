@@ -291,7 +291,7 @@ class problem_controller extends Controller
 		if (!file_exists($problem_dir)) {
 			mkdir($problem_dir, 0700, true);
 		}
-		
+
 		if (!$up_dir && !$up_zip) {
 			//             $messages = "Notice: You did not upload test case and description. If needed, upload by editing assignment.";
 			return;
@@ -696,6 +696,7 @@ class problem_controller extends Controller
 		// dd($a);
 		$task = $a[0];
 		$id = $a[1];
+		// dd($a);
 
 		$problem = Problem::find($id);
 		$this->_can_edit_or_404($problem);
