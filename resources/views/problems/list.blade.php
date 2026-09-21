@@ -385,10 +385,12 @@
 							addable: (params) => {
 								var term = params.trim();
 								if (term === "") return false;
-								if (term[0] != "#") return false;
 
 								return term;
 							},
+						},
+						settings: {
+							closeOnSelect: false,
 						},
 					});
 
