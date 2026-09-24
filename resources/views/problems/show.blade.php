@@ -53,7 +53,7 @@
 			<span class="fs-6 ms-4"
 				><a
 					href="{{ route('problems.download_testcases', ['problem' => $problem->id, 'assignment' => ($all_problems != NULL ? $assignment->id : 0), 'type' => 'in'] ) }}"
-					class="link-dark"
+					class="link-dark-subtle"
 					><i class="bi bi-download text-success"></i>testcases' input</a
 				></span
 			>
@@ -62,7 +62,7 @@
 			<span class="fs-6 ms-4"
 				><a
 					href="{{ route('problems.download_testcases', ['problem' => $problem->id, 'assignment' => ($all_problems != NULL ? $assignment->id : 0), 'type' => 'out'] ) }}"
-					class="link-dark"
+					class="link-dark-subtle"
 					><i class="bi bi-download text-primary"></i>testcases' output</a
 				></span
 			>
@@ -95,33 +95,38 @@
 			<script src="{{ asset('assets/js/tiptap_editor.js') }}"></script>
 			<script type="text/javascript">
 				document.addEventListener("DOMContentLoaded", function () {
+					const save_button = document.querySelector(".save-button");
+
 					const { getCurrentHtml } = createTiptapEditor({
 						element: document.querySelector("#problem_description"),
 						source_element: document.querySelector("#source_editor"),
 						toolbar: document.querySelector("#toolbar"),
 						on_update: function () {
-							$(".save-button").removeClass("btn-secondary").addClass("btn-info");
+							save_button.classList.remove("btn-secondary");
+							save_button.classList.add("btn-info");
 						},
 					});
 
-					$(".save-button").click(function () {
-						$.ajax({
-							type: "POST",
-							url: "{{ $edit_description_link }}",
-							data: {
-								_token: "{{ csrf_token() }}",
-								content: getCurrentHtml(),
+					save_button.addEventListener("click", function () {
+						fetch("{{ $edit_description_link }}", {
+							method: "POST",
+							headers: {
+								"Content-Type": "application/x-www-form-urlencoded",
+								"X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
 							},
-							success: function (response) {
+							body: new URLSearchParams({ content: getCurrentHtml() }),
+						})
+							.then((response) => response.text())
+							.then((response) => {
 								if (response == "success") {
 									notify("Change sucessfully saved", { position: "bottom right", className: "success", autoHideDelay: 3500 });
-									$(".save-button").removeClass("btn-info").addClass("btn-secondary");
+									save_button.classList.remove("btn-info");
+									save_button.classList.add("btn-secondary");
 								}
-							},
-							error: function (response) {
+							})
+							.catch(function () {
 								notify("Error while saving", { position: "bottom right", className: "error", autoHideDelay: 3500 });
-							},
-						});
+							});
 					});
 
 					// Adding a language only opens its (still empty) description;
