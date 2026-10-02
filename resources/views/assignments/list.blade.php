@@ -107,7 +107,13 @@
 						</td>
 						<td>
 							<a
-								href="{{ route('assignments.show',['assignment'=>$assignment,'problem_id'=>0]) }}"
+								href="{{
+									route('assignments.show',[
+										'assignment'=>$assignment
+										,'problem_id'=>0
+										, 'language' => $assignment->allowed_description_languages()[0] ?? ""
+									])
+								}}"
 								title="Click to view problem(s)"
 							>
 								<strong>{{ $assignment->name }}</strong>
@@ -202,25 +208,25 @@
 									aria-expanded="false"
 									aria-controls="#extra_action_{{$assignment->id}}"
 									><i class="bi bi-three-dots-vertical text-info m-2"></i></i>
-								>
-								<div class="collapse" id="extra_action_{{$assignment->id}}">
-									<a href="{{ route('assignments.download_submissions', ['type'=>'by_user', 'assignment_id'=>$assignment->id]) }}"
-										><i title="Download Final Submissions (by user)" class="bi bi-download fs-5 color12"></i
-									></a>
-									<a
-										href="{{ route('assignments.download_submissions', ['type'=>'by_problem', 'assignment_id'=>$assignment->id]) }}"
-										><i title="Download Final Submissions (by problem)" class="bi bi-download fs-5 color2"></i
-									></a>
-									<a href="{{ route('assignments.download_all_submissions', $assignment->id) }}"
-										><i title="Download all submissions" class="bi bi-cloud-download-fill"></i
-									></a>
-									<a href="{{ route('moss.index', $assignment->id) }}"
-										><i title="Detect Similar Codes" class="bi bi-incognito fs-5 color7"></i
-									></a>
-									<a href="{{ route('assignments.reload_scoreboard', $assignment->id) }}"
-										><i title="Force reload scoreboard" class="bi bi-arrow-clockwise fs-5 text-success"></i
-									></a>
-								</div>
+									>
+									<div class="collapse" id="extra_action_{{$assignment->id}}">
+										<a href="{{ route('assignments.download_submissions', ['type'=>'by_user', 'assignment_id'=>$assignment->id]) }}"
+											><i title="Download Final Submissions (by user)" class="bi bi-download fs-5 color12"></i
+										></a>
+										<a
+											href="{{ route('assignments.download_submissions', ['type'=>'by_problem', 'assignment_id'=>$assignment->id]) }}"
+											><i title="Download Final Submissions (by problem)" class="bi bi-download fs-5 color2"></i
+										></a>
+										<a href="{{ route('assignments.download_all_submissions', $assignment->id) }}"
+											><i title="Download all submissions" class="bi bi-cloud-download-fill"></i
+										></a>
+										<a href="{{ route('moss.index', $assignment->id) }}"
+											><i title="Detect Similar Codes" class="bi bi-incognito fs-5 color7"></i
+										></a>
+										<a href="{{ route('assignments.reload_scoreboard', $assignment->id) }}"
+											><i title="Force reload scoreboard" class="bi bi-arrow-clockwise fs-5 text-success"></i
+										></a>
+									</div>
 							</td>
 						@endif
 					</tr>
@@ -321,7 +327,7 @@
 				paging: false,
 				{{-- "pageLength": 60, --}}
 				{{-- "ordering":false, --}}
-					order: [0, "desc"],
+				order: [0, "desc"],
 				columns: [
 					null,
 					null,

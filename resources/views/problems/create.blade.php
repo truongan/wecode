@@ -393,7 +393,6 @@
 								<th>Remove</th>
 							</tr>
 						</thead>
-						class="form-inline">
 						<tbody>
 							@foreach ($all_languages as $lang)
 								<tr class="lang_row_{{ $lang->id }} {{ isset($languages[$lang->id]) ? "" : "d-none" }}">

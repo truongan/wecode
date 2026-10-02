@@ -226,7 +226,7 @@
 									<td>
 										@php($t = $assignment != null ? $assignment->id : "")
 										<a
-											href="{{route('assignments.show', ['assignment'=>$assignment,'problem_id'=>$one_problem->id])}}"
+											href="{{route('assignments.show', ['assignment'=>$assignment,'problem_id'=>$one_problem->id,'language'=>$description_language])}}"
 											>{{ $one_problem->pivot->problem_name }}</a
 										>
 									</td>
