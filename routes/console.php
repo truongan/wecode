@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\Queue_item;
 use Illuminate\Foundation\Inspiring;
+use Illuminate\Support\Facades\Schedule;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +18,7 @@ use Illuminate\Foundation\Inspiring;
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->describe('Display an inspiring quote');
+
+Schedule::call(function () {
+    Queue_item::where('updated_at', '<', now()->subDays(1))->update(['processid' => null]);
+})->daily()->name('release_stale_queue_items');
